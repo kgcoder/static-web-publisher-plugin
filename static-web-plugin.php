@@ -70,7 +70,9 @@ function strip_unwanted_tags($content, $allowed_tags = []) {
 function custom_post_endpoints_template_redirect() {
     global $wp_query;
 
-    if (strpos($_SERVER['REQUEST_URI'], '/sw/') !== false && isset($wp_query->query_vars['p'])) {
+    $permalink_structure = get_option( 'permalink_structure' );
+
+    if (empty($permalink_structure) && strpos( $_SERVER['REQUEST_URI'], '/sw/') !== false && isset($wp_query->query_vars['p'])) {
         $post_id = (int) $wp_query->query_vars['p'];
         $post = get_post($post_id);
 
