@@ -1,6 +1,6 @@
 <?php
 
-function send_post($post){
+function send_hdoc_for_post($post){
     if ($post) {
 
         $permalink = get_permalink($post->ID);
