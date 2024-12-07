@@ -6,12 +6,17 @@ function custom_post_endpoints_add_link_to_content( $content ) {
     global $wp_query;
 
 
-    if ( is_single() && $post && 'post' === $post->post_type ) {
+    if (( is_single() || is_page()) && $post && ('post' === $post->post_type || 'page' === $post->post_type) ) {
 
 
         // if (isset($wp_query->query_vars['custom_post_slug'])) {
         //     $slug = $wp_query->query_vars['custom_post_slug'];
-        $link = preg_replace('/^http/', "sw", home_url( "/sw/v1/{$post->post_name}"));
+        if(is_page()){
+            $link = preg_replace('/^http/', "sw", home_url( "/sw/v1/page/{$post->post_name}"));
+        }else{
+            $link = preg_replace('/^http/', "sw", home_url( "/sw/v1/{$post->post_name}"));
+
+        }
 
         $simplified_link = sprintf('<a href="%s">[SW]</a>',$link);
 

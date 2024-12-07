@@ -11,6 +11,10 @@ Author URI: https://github.com/kgcoder
 require_once plugin_dir_path(__FILE__) . 'includes/download-link.php';
 require_once plugin_dir_path(__FILE__) . 'includes/comments-page.php';
 require_once plugin_dir_path(__FILE__) . 'includes/panels.php';
+require_once plugin_dir_path(__FILE__) . 'includes/post.php';
+require_once plugin_dir_path(__FILE__) . 'includes/page.php';
+
+
 
 
 
@@ -78,14 +82,24 @@ require_once plugin_dir_path(__FILE__) . 'includes/panels.php';
 
 
 function custom_post_endpoints_rewrite_rules() {
+
+  
+
+
+
     add_rewrite_rule(
         '^sw/v1/([^/]+)/?$',
         'index.php?custom_post_slug=$matches[1]',
         'top'
     );
     add_rewrite_rule(
-        '^sw/v1/comments/([^/]+)/?$',
+        '^comments/([^/]+)/?$',
         'index.php?comments_custom_post_slug=$matches[1]',
+        'top'
+    );
+    add_rewrite_rule(
+        '^sw/v1/page/([^/]+)/?$',
+        'index.php?custom_page_slug=$matches[1]',
         'top'
     );
 }
@@ -94,6 +108,8 @@ add_action('init', 'custom_post_endpoints_rewrite_rules');
 function custom_post_endpoints_query_vars($query_vars) {
     $query_vars[] = 'custom_post_slug';
     $query_vars[] = 'comments_custom_post_slug';
+    $query_vars[] = 'custom_page_slug';
+
     return $query_vars;
 }
 add_filter('query_vars', 'custom_post_endpoints_query_vars');
@@ -133,80 +149,28 @@ function custom_post_endpoints_template_redirect() {
         // Fetch the post by slug
         $post = get_page_by_path($slug, OBJECT, 'post');
 
+        send_post($post);
 
-        
-        if ($post) {
-
-            $permalink = get_permalink($post->ID);
-            
-            $title = $post->post_title;
-            $htmlContent = $post->post_content;
-
-            // header('Content-Type: text/plain');
-            // echo  $htmlContent;
-
-            $pattern = '/<!-- wp:embed \{"url":"https:\/\/www\.youtube\.com\/watch\?v=([^"]+)",.*"className":"wp-embed-aspect-(\d+)-(\d+) wp-has-aspect-ratio"\} -->.*<div class="wp-block-embed__wrapper">\s*(https:\/\/www\.youtube\.com\/watch\?v=[^<]+)\s*<\/div>.*<!-- \/wp:embed -->/sU';
-            
-            $callback = function ($matches) {
-                $youtubeId = $matches[1];
-                $width = 560;// $matches[2];
-                $height = 315;// $matches[3];
-                return "<iframe width=\"$width\" height=\"$height\" src=\"https://www.youtube.com/embed/$youtubeId\" frameborder=\"0\" allowfullscreen=\"allowfullscreen\"></iframe><h3>hello</h3>";
-            };
-
-            $htmlContent = preg_replace_callback($pattern, $callback, $htmlContent);
-
-            $htmlContent = strip_wp_tags($htmlContent);
-            
-            //$allowed_tags = ['p', 'a', 'strong', 'h1', 'h2', 'h3', 'h4', 'img', 'figure'];
-            
-           // $htmlContent = strip_unwanted_tags($htmlContent,$allowed_tags);
-            
-            // $htmlContent = preg_replace('/<img[^>]*>/', "<br>$0<br>", $htmlContent);
-
-
-
-
-
-
-            //$testVideo = "<p>sfsdfdsflkj</p><iframe width=\"560px\" height=\"315px\" src=\"https://www.youtube.com/embed/oVfHeWTKjag\" frameborder=\"0\" allowfullscreen=\"allowfullscreen\"></iframe><h3 class=\"p1\"><span class=\"s1\">What I did about it</span></h3>";
-
-//wp_strip_all_tags
-
-//http://swplugintest.local/my-test-post/
-            $finalContent = '<h1>' . $title . "</h1>" . /*$testVideo .*/ $htmlContent . "<p>---</p><p><a href=\"" . $permalink . "\">" . "Original page</a></p>";
-
-           // $link = home_url( "/sw/v1/comments/{$post->post_name}");
-            $panels = get_panels($post);
-
-            // Output the simplified content
-            header('Content-Type: text/plain');
-            echo '<hdoc>' . $panels .'<body>' . $finalContent . '</body></hdoc>';
-        } else {
-            // Handle post not found
-            status_header(404);
-            echo 'Post not found';
-        }
         exit;
     }
     if (isset($wp_query->query_vars['comments_custom_post_slug'])) {
         $slug = $wp_query->query_vars['comments_custom_post_slug'];
 
-        
         //Fetch the post by slug
         $post = get_page_by_path($slug, OBJECT, 'post');
 
-
-
         send_comments_from_post($post);
-
-
         exit;
-    
+    }
 
- 
+    if (isset($wp_query->query_vars['custom_page_slug'])) {
+        $slug = $wp_query->query_vars['custom_page_slug'];
 
+        //Fetch the page by slug
+        $page = get_page_by_path($slug);
 
+        send_page($page);
+        exit;
     }
     
 
