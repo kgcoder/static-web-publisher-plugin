@@ -2,8 +2,11 @@
 
 function get_panels($post) {
 
+    $permalink = get_permalink($post->ID);
 
-    $link = home_url( "/sw/v1/comments/{$post->post_name}");
+    $path_part = preg_replace('#^' . preg_quote(home_url(), '#') . '#', '', $permalink);
+
+    $link = home_url( "/comments{$path_part}");
 
     ob_start();
 
@@ -18,7 +21,14 @@ function get_panels($post) {
 <a href="https://youtube.com">YouTube</a>
 
 </top-panel>
+
+<?php if (has_comment_section($post)): ?>
 <side-panel><?php echo $link ?></side-panel>
+          
+        <?php endif; ?>
+
+
+
 <bottom-panel>
 <!-- <panel-style textColor="yellow" bgColor="black" borderWidth="5px" borderColor="red"></panel-style> -->
 <section>
@@ -44,14 +54,23 @@ function get_panels($post) {
 
 
 </bottom-panel>
-</panels>
-
-
-
-    <?php
+</panels><?php
 
     $output = ob_get_clean();
 
     return $output;
 
+}
+
+
+function has_comment_section($post) {
+    // Check if comments are globally allowed and post-specific status
+    $global_comments_setting = get_option('default_comment_status');
+    $theme_supports_comments = function_exists('comments_template');
+
+    if ($post && $post->comment_status === 'open' && $global_comments_setting === 'open' && $theme_supports_comments) {
+        return true;
+    }
+
+    return false;
 }

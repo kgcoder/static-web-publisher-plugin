@@ -73,10 +73,20 @@ function custom_post_endpoints_template_redirect() {
     $permalink_structure = get_option( 'permalink_structure' );
 
     if (empty($permalink_structure) && strpos( $_SERVER['REQUEST_URI'], '/sw/') !== false && isset($wp_query->query_vars['p'])) {
-        $post_id = (int) $wp_query->query_vars['p'];
-        $post = get_post($post_id);
 
-        send_hdoc_for_post($post);
+        $post_id = (int) $wp_query->query_vars['p'];
+        
+        $expected_path1 = '/sw/?p=' . $post_id;
+        $expected_path2 = '/sw/?page_id=' . $post_id;
+        
+        
+        $current_path = $_SERVER['REQUEST_URI'];
+        
+        if ($current_path === $expected_path1 || $current_path === $expected_path2) {
+            $post = get_post($post_id);
+            send_hdoc_for_post($post);
+            exit;
+        }
      
         exit;
     }
@@ -108,13 +118,35 @@ function custom_post_endpoints_template_redirect() {
     }
 
 
-    if (isset($wp_query->query_vars['sw_custom_matches'])) {
+    if (!empty($permalink_structure) && isset($wp_query->query_vars['sw_custom_matches'])) {
         $path = $wp_query->query_vars['sw_custom_matches'];
+
+
+        if (strpos($permalink_structure, '%post_id%') !== false) {
+            // Get the current path
+            $current_path = $_SERVER['REQUEST_URI'];
+            $site_url = home_url(); // Base site URL
+            $path = str_replace($site_url, '', $current_path);
         
+            // Generate a regex based on the permalink structure
+            $pattern = preg_quote($permalink_structure, '/'); // Escape all special characters except for '%'
+            $pattern = '\/sw' . str_replace('%post_id%', '(\d+)\/?', $pattern); // Replace %post_id% with (\d+)
+        
+         
+            if (preg_match("/^" . $pattern . "$/", $path, $matches)) {
+                $post_id = $matches[1]; // Extracted post ID
+                $slug = $post_id;
+            } else {
+                // Remove any trailing slash if it exists
+                $path = rtrim($path, '/');
+                // Use basename to get the last part of the path
+                $slug = basename($path);
+            }
+        }else{
+            $slug = basename(get_permalink());
+        }
 
-       $slug = basename(get_permalink());
-
-
+  
         if (is_numeric($slug)) {
             $post_id = (int)$slug;
             $post = get_post($post_id);
