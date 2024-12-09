@@ -1,0 +1,242 @@
+<?php
+
+
+function static_web_plugin_settings_page() {
+
+     //delete_option('static_web_plugin_settings');
+
+
+    $settings = get_option('static_web_plugin_settings', [
+        'top_panel' => ['main_title' => '', 'links' => []],
+        'bottom_panel' => ['sections' => []],
+    ]);
+
+    $top_panel = $settings['top_panel'];
+    $bottom_panel = $settings['bottom_panel'];
+    ?>
+    <div class="wrap">
+        <h1>Static Web Plugin Settings</h1>
+        <h2>Top panel</h2>
+        <span>Settings: <?php echo json_encode($settings, JSON_PRETTY_PRINT); ?></span>
+        <script>
+    console.log(<?php echo json_encode($settings); ?>);
+</script>
+        <form method="post" action="options.php">
+        <?php
+            // Outputs nonce, action, and option_page fields for the settings
+            settings_fields('static_web_plugin_options_group');
+            ?>
+            <div id="top-panel-links-container">
+              
+                <label>Site name (optional): </label>
+                <input type="text" name="static_web_plugin_settings[top_panel][main_title]" value="<?php echo esc_attr($top_panel['main_title']); ?>" />
+                <div class="links">
+                    <?php
+                    if (!empty($top_panel['links'])) {
+                        foreach ($top_panel['links'] as $link_index => $link) {
+                            ?>
+                            <div class="link">
+                                <label>Link text: </label>
+                                <input type="text" name="static_web_plugin_settings[top_panel][links][<?php echo $link_index; ?>][text]" value="<?php echo esc_attr($link['text']); ?>" />
+                                <label>Link URL: </label>
+                                <input type="text" name="static_web_plugin_settings[top_panel][links][<?php echo $link_index; ?>][url]" value="<?php echo esc_url($link['url']); ?>" />
+
+                                <button type="button" class="remove-link">Remove Link</button>
+                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+                <button type="button" class="add-link">Add Link</button>
+          
+              
+            </div>
+            <h2>Bottom panel</h2>
+          
+            <div id="sections-container">
+                <?php
+                if (!empty($bottom_panel['sections'])) {
+                    foreach ($bottom_panel['sections'] as $section_index => $section) {
+                        ?>
+                        <div class="section">
+                            <label>Section Title: </label>
+                            <input type="text" name="static_web_plugin_settings[bottom_panel][sections][<?php echo $section_index; ?>][title]" value="<?php echo esc_attr($section['title']); ?>" />
+                            <div class="links">
+                                <?php
+                                if (!empty($section['links'])) {
+                                    foreach ($section['links'] as $link_index => $link) {
+                                        ?>
+                                        <div class="link">
+                                            <label>Link text: </label>
+                                            <input type="text" name="static_web_plugin_settings[bottom_panel][sections][<?php echo $section_index; ?>][links][<?php echo $link_index; ?>][text]" value="<?php echo esc_attr($link['text']); ?>" />
+                                            <label>Link URL: </label>
+                                            <input type="text" name="static_web_plugin_settings[bottom_panel][sections][<?php echo $section_index; ?>][links][<?php echo $link_index; ?>][url]" value="<?php echo esc_url($link['url']); ?>" />
+                                            <button type="button" class="remove-link">Remove Link</button>
+                                        </div>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </div>
+                            <button type="button" class="add-link">Add Link</button>
+                            <button type="button" class="remove-section">Remove Section</button>
+                        </div>
+                        <?php
+                    }
+                }
+                ?>
+            </div>
+            <button type="button" id="add-section">Add Section</button>
+            <?php submit_button(); ?>
+        </form>
+    </div>
+    <?php
+}
+
+function static_web_plugin_settings_init() {
+    // register_setting('static_web_plugin_options_group', 'static_web_plugin_options');
+
+    // add_settings_section(
+    //     'static_web_plugin_section', 
+    //     'Manage Sections', 
+    //     'static_web_plugin_section_callback', 
+    //     'static_web_plugin_settings'
+    // );
+
+    // add_settings_field(
+    //     'static_web_plugin_field', 
+    //     'Section and Links', 
+    //     'static_web_plugin_field_callback', 
+    //     'static_web_plugin_settings', 
+    //     'static_web_plugin_section'
+    // );
+
+    // Register a single option for storing all settings
+    register_setting(
+        'static_web_plugin_options_group', // Option group
+        'static_web_plugin_settings',      // Option name
+        [
+            'type' => 'string',
+            'sanitize_callback' => 'static_web_plugin_sanitize_settings',
+            'default' => json_encode([
+                'top_panel' => ['main_title' => '', 'links' => []],
+                'bottom_panel' => ['sections' => []],
+            ])
+        ]
+    );
+}
+
+function static_web_plugin_sanitize_settings($input) {
+    $sanitized = [];
+
+    // Sanitize top_panel
+    if (isset($input['top_panel']) && is_array($input['top_panel'])) {
+        $sanitized['top_panel'] = [
+            'main_title' => isset($input['top_panel']['main_title']) ? sanitize_text_field($input['top_panel']['main_title']) : '',
+            'links' => []
+        ];
+
+        if (isset($input['top_panel']['links']) && is_array($input['top_panel']['links'])) {
+            foreach ($input['top_panel']['links'] as $link) {
+                if (is_array($link)) {
+                    $sanitized['top_panel']['links'][] = [
+                        'text' => isset($link['text']) ? sanitize_text_field($link['text']) : '',
+                        'url' => isset($link['url']) ? esc_url_raw($link['url']) : ''
+                    ];
+                }
+            }
+        }
+    }
+
+    // Sanitize bottom_panel
+    if (isset($input['bottom_panel']) && is_array($input['bottom_panel'])) {
+        $sanitized['bottom_panel'] = ['sections' => []];
+
+        foreach ($input['bottom_panel']['sections'] as $section) {
+            if (is_array($section)) {
+                $sanitized_section = [
+                    'title' => isset($section['title']) ? sanitize_text_field($section['title']) : '',
+                    'links' => []
+                ];
+
+                if (isset($section['links']) && is_array($section['links'])) {
+                    foreach ($section['links'] as $link) {
+                        if (is_array($link)) {
+                            $sanitized_section['links'][] = [
+                                'text' => isset($link['text']) ? sanitize_text_field($link['text']) : '',
+                                'url' => isset($link['url']) ? esc_url_raw($link['url']) : ''
+                            ];
+                        }
+                    }
+                }
+
+                $sanitized['bottom_panel']['sections'][] = $sanitized_section;
+            }
+        }
+    }
+
+    return $sanitized;
+}
+
+
+
+
+// function static_web_plugin_section_callback() {
+//     echo 'Enter the sections and links you want to include in the XML.';
+// }
+
+// function static_web_plugin_field_callback() {
+//     $options = get_option('static_web_plugin_options');
+//     // Example of output for adding multiple sections dynamically
+//     echo '<textarea name="static_web_plugin_options[sections]" rows="10" cols="50">' . esc_textarea($options['sections']) . '</textarea>';
+// }
+
+function static_web_plugin_menu() {
+    // Add a menu item to the sidebar
+    add_menu_page(
+        'Static Web Plugin Settings',          // Page title
+        'Static Web Plugin',                   // Menu title
+        'manage_options',              // Capability required
+        'static_web_plugin_settings',          // Menu slug
+        'static_web_plugin_settings_page',     // Callback function to render the settings page
+        'dashicons-admin-generic',     // Icon (optional)
+        100                            // Position in the menu
+    );
+}
+add_action('admin_menu', 'static_web_plugin_menu');
+
+add_action('admin_init', 'static_web_plugin_settings_init');
+
+
+
+function static_web_plugin_enqueue_scripts($hook) {
+    // Only enqueue on the settings page for the plugin
+    if ($hook !== 'toplevel_page_static_web_plugin_settings') {
+        return;
+    }
+
+    wp_enqueue_script(
+        'static-web-plugin-admin',
+        plugin_dir_url(__FILE__) . 'admin.js',
+        [], // No dependencies
+        null,
+        true // Load in the footer
+    );
+
+    // wp_enqueue_style(
+    //     'static-web-plugin-admin-style',
+    //     plugin_dir_url(__FILE__) . 'admin.css',
+    //     [],
+    //     null
+    // );
+}
+add_action('admin_enqueue_scripts', 'static_web_plugin_enqueue_scripts');
+
+
+function allow_custom_url_schemes($protocols) {
+    $protocols[] = 'sw';
+    $protocols[] = 'sws';
+    return $protocols;
+}
+add_filter('kses_allowed_protocols', 'allow_custom_url_schemes');

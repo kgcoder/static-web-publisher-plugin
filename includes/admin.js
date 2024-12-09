@@ -1,0 +1,85 @@
+document.addEventListener('DOMContentLoaded', function () {
+   // let topPanelLinkIndex = document.querySelectorAll('#top-panel-links-container .section').length;
+    let sectionIndex = document.querySelectorAll('#sections-container .section').length;
+
+    // Add a new section
+     // Delegate event for dynamically added elements
+     document.getElementById('top-panel-links-container').addEventListener('click', function (event) {
+        const target = event.target;
+
+        // Add a new link
+        if (target.classList.contains('add-link')) {
+            const section = target.closest('#top-panel-links-container');
+            const linkIndex = section.querySelectorAll('.link').length;
+            const linkTemplate = `
+            <div class="link">
+                <label>Link text: </label>
+                <input type="text" name="static_web_plugin_settings[top_panel][links][${linkIndex}][text]" value="" />
+                <label>Link URL: </label>
+                <input type="text" name="static_web_plugin_settings[top_panel][links][${linkIndex}][url]" value="" />
+                <button type="button" class="remove-link">Remove Link</button>
+            </div>`;
+            section.querySelector('.links').insertAdjacentHTML('beforeend', linkTemplate);
+        }
+
+        // Remove a link
+        if (target.classList.contains('remove-link')) {
+            target.closest('.link').remove();
+        }
+
+        // Remove a section
+        if (target.classList.contains('remove-section')) {
+            target.closest('.section').remove();
+        }
+    });
+    // Add a new section
+    document.getElementById('add-section').addEventListener('click', function () {
+        const sectionTemplate = `
+        <div class="section">
+            <label>Section Title: </label>
+            <input type="text" name="static_web_plugin_settings[bottom_panel][sections][${sectionIndex}][title]" value="" />
+            <div class="links"></div>
+            <button type="button" class="add-link">Add Link</button>
+            <button type="button" class="remove-section">Remove Section</button>
+        </div>`;
+        document.getElementById('sections-container').insertAdjacentHTML('beforeend', sectionTemplate);
+        sectionIndex++;
+    });
+
+    // Delegate event for dynamically added elements
+    document.getElementById('sections-container').addEventListener('click', function (event) {
+        const target = event.target;
+
+        // Add a new link
+        if (target.classList.contains('add-link')) {
+            const section = target.closest('.section');
+            // Get the parent container of all sections
+            const sectionsContainer = document.querySelector('#sections-container');
+            
+            // Find the index of the current section
+            const sections = Array.from(sectionsContainer.querySelectorAll('.section'));
+            const sectionIndex = sections.indexOf(section); // Get the correct index
+            const linkIndex = section.querySelectorAll('.link').length;
+            //const sectionName = section.querySelector('input[type="text"]').name.replace('title', `links[${linkIndex}][url]`);
+            const linkTemplate = `
+            <div class="link">
+                <label>Link text: </label>
+                <input type="text" name="static_web_plugin_settings[bottom_panel][sections][${sectionIndex}][links][${linkIndex}][text]" value="" />
+                <label>Link URL: </label>
+                <input type="text" name="static_web_plugin_settings[bottom_panel][sections][${sectionIndex}][links][${linkIndex}][url]" value="" />
+                <button type="button" class="remove-link">Remove Link</button>
+            </div>`;
+            section.querySelector('.links').insertAdjacentHTML('beforeend', linkTemplate);
+        }
+
+        // Remove a link
+        if (target.classList.contains('remove-link')) {
+            target.closest('.link').remove();
+        }
+
+        // Remove a section
+        if (target.classList.contains('remove-section')) {
+            target.closest('.section').remove();
+        }
+    });
+});

@@ -12,6 +12,8 @@ require_once plugin_dir_path(__FILE__) . 'includes/download-link.php';
 require_once plugin_dir_path(__FILE__) . 'includes/comments-page.php';
 require_once plugin_dir_path(__FILE__) . 'includes/panels.php';
 require_once plugin_dir_path(__FILE__) . 'includes/hdoc.php';
+require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
+
 
 
 
@@ -170,6 +172,5 @@ function custom_post_endpoints_template_redirect() {
 
 }
 add_action('template_redirect', 'custom_post_endpoints_template_redirect');
-
 
 
