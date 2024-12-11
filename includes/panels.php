@@ -8,6 +8,15 @@ function get_panels($post) {
 
     $link = home_url( "/comments{$path_part}");
 
+    $settings = get_option('static_web_plugin_settings', [
+        'top_panel' => ['main_title' => '', 'links' => []],
+        'bottom_panel' => ['sections' => []],
+    ]);
+
+    $top_panel = $settings['top_panel'];
+    $bottom_panel = $settings['bottom_panel'];
+
+
     ob_start();
 
     ?>

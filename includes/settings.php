@@ -17,19 +17,37 @@ function static_web_plugin_settings_page() {
     <div class="wrap">
         <h1>Static Web Plugin Settings</h1>
         <h2>Top panel</h2>
-        <span>Settings: <?php echo json_encode($settings, JSON_PRETTY_PRINT); ?></span>
+        <!-- <span>Settings: <?php echo json_encode($settings, JSON_PRETTY_PRINT); ?></span> -->
         <script>
     console.log(<?php echo json_encode($settings); ?>);
 </script>
+
         <form method="post" action="options.php">
         <?php
             // Outputs nonce, action, and option_page fields for the settings
             settings_fields('static_web_plugin_options_group');
             ?>
+            <label>Site name (optional): </label>
+            <input class="single-text-input" type="text" name="static_web_plugin_settings[top_panel][main_title]" value="<?php echo esc_attr($top_panel['main_title']); ?>" />
+            <div>
+                <label for="static_web_plugin_settings[image_url]">Image URL:</label>
+                <input type="text" id="image-url" name="static_web_plugin_settings[image_url]" value="<?php echo esc_url($settings['image_url'] ?? ''); ?>" />
+                <button type="button" id="select-image">Select Image</button>
+            </div>
+
+            <div>
+                <label for="plugin_color_field">Select Color:</label>
+                <input 
+                    type="text" 
+                    id="plugin_color_field" 
+                    name="static_web_plugin_settings[color]" 
+                    value="<?php echo esc_attr($settings['color']); ?>" 
+                    class="my-color-field" 
+                />
+            </div>
+
             <div id="top-panel-links-container">
               
-                <label>Site name (optional): </label>
-                <input type="text" name="static_web_plugin_settings[top_panel][main_title]" value="<?php echo esc_attr($top_panel['main_title']); ?>" />
                 <div class="links">
                     <?php
                     if (!empty($top_panel['links'])) {
@@ -61,7 +79,7 @@ function static_web_plugin_settings_page() {
                         ?>
                         <div class="section">
                             <label>Section Title: </label>
-                            <input type="text" name="static_web_plugin_settings[bottom_panel][sections][<?php echo $section_index; ?>][title]" value="<?php echo esc_attr($section['title']); ?>" />
+                            <input class="single-text-input" type="text" name="static_web_plugin_settings[bottom_panel][sections][<?php echo $section_index; ?>][title]" value="<?php echo esc_attr($section['title']); ?>" />
                             <div class="links">
                                 <?php
                                 if (!empty($section['links'])) {
@@ -216,6 +234,9 @@ function static_web_plugin_enqueue_scripts($hook) {
         return;
     }
 
+    wp_enqueue_media(); // Enqueues the media uploader
+
+    wp_enqueue_style('wp-color-picker');
     wp_enqueue_script(
         'static-web-plugin-admin',
         plugin_dir_url(__FILE__) . 'admin.js',
@@ -224,12 +245,20 @@ function static_web_plugin_enqueue_scripts($hook) {
         true // Load in the footer
     );
 
-    // wp_enqueue_style(
-    //     'static-web-plugin-admin-style',
-    //     plugin_dir_url(__FILE__) . 'admin.css',
-    //     [],
-    //     null
-    // );
+    wp_enqueue_script(
+        'my-plugin-color-picker',
+        plugin_dir_url(__FILE__) . 'my-plugin-color-picker.js', // Your JS file
+        ['wp-color-picker'], // Dependency for the color picker
+        null,
+        true
+    );
+
+    wp_enqueue_style(
+        'static-web-plugin-admin-style',
+        plugin_dir_url(__FILE__) . 'admin.css',
+        [],
+        null
+    );
 }
 add_action('admin_enqueue_scripts', 'static_web_plugin_enqueue_scripts');
 

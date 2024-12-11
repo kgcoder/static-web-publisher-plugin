@@ -2,6 +2,24 @@ document.addEventListener('DOMContentLoaded', function () {
    // let topPanelLinkIndex = document.querySelectorAll('#top-panel-links-container .section').length;
     let sectionIndex = document.querySelectorAll('#sections-container .section').length;
 
+    const selectImageButton = document.getElementById('select-image');
+    const imageUrlInput = document.getElementById('image-url');
+
+    selectImageButton.addEventListener('click', () => {
+        // Open WordPress Media Library
+        const mediaFrame = wp.media({
+            title: 'Select Image',
+            button: { text: 'Use This Image' },
+            multiple: false,
+        });
+
+        mediaFrame.on('select', () => {
+            const attachment = mediaFrame.state().get('selection').first().toJSON();
+            imageUrlInput.value = attachment.url; // Set the URL of the selected image
+        });
+
+        mediaFrame.open();
+    });
     // Add a new section
      // Delegate event for dynamically added elements
      document.getElementById('top-panel-links-container').addEventListener('click', function (event) {
@@ -37,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const sectionTemplate = `
         <div class="section">
             <label>Section Title: </label>
-            <input type="text" name="static_web_plugin_settings[bottom_panel][sections][${sectionIndex}][title]" value="" />
+            <input class="single-text-input" type="text" name="static_web_plugin_settings[bottom_panel][sections][${sectionIndex}][title]" value="" />
             <div class="links"></div>
             <button type="button" class="add-link">Add Link</button>
             <button type="button" class="remove-section">Remove Section</button>
