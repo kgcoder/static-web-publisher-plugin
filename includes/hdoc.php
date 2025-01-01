@@ -47,7 +47,7 @@ function send_hdoc_for_post($post){
 
         // Output the simplified content
         header('Content-Type: text/plain');
-        echo '<hdoc>' . $panels . '<body>' . $finalContent . '</body></hdoc>';
+        echo '<hdoc>' . $panels . '<html>' . $finalContent . '</html></hdoc>';
     } else {
         // Handle post not found
         status_header(404);

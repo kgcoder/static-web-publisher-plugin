@@ -7,8 +7,24 @@ function static_web_plugin_settings_page() {
 
 
     $settings = get_option('static_web_plugin_settings', [
-        'top_panel' => ['main_title' => '', 'links' => []],
-        'bottom_panel' => ['sections' => []],
+        'global_background_color' => '',
+        'global_text_color' => '',
+        'top_panel' => [
+            'top_background_color' => '',
+            'top_text_color' => '',
+            'main_link' => '',
+            'main_title' => '',
+            'logo_url' => '', 
+            'links' => []
+        ],
+        'bottom_panel' => [
+            'bottom_background_color' => '',
+            'bottom_text_color' => '',
+            'bottom_message' => '',
+            'sections' => []
+        ],
+
+
     ]);
 
     $top_panel = $settings['top_panel'];
@@ -16,7 +32,7 @@ function static_web_plugin_settings_page() {
     ?>
     <div class="wrap">
         <h1>Static Web Plugin Settings</h1>
-        <h2>Top panel</h2>
+        <!-- <h2>Top panel</h2> -->
         <!-- <span>Settings: <?php echo json_encode($settings, JSON_PRETTY_PRINT); ?></span> -->
         <script>
     console.log(<?php echo json_encode($settings); ?>);
@@ -27,21 +43,63 @@ function static_web_plugin_settings_page() {
             // Outputs nonce, action, and option_page fields for the settings
             settings_fields('static_web_plugin_options_group');
             ?>
+
+            <div>
+                <label for="main_background_color_field">Select global background color:</label>
+                <input 
+                    type="text" 
+                    id="main_background_color_field" 
+                    name="static_web_plugin_settings[global_background_color]" 
+                    value="<?php echo esc_attr($settings['global_background_color']); ?>" 
+                    class="my-color-field" 
+                />
+            </div>
+
+            <div>
+                <label for="main_text_color_field">Select global text color:</label>
+                <input 
+                    type="text" 
+                    id="main_text_color_field" 
+                    name="static_web_plugin_settings[global_text_color]" 
+                    value="<?php echo esc_attr($settings['global_text_color']); ?>" 
+                    class="my-color-field" 
+                />
+            </div>
+
+
+            <h2>Top panel</h2>
+
+            <div>
+                <label>Main link: </label>
+                <input class="single-text-input" type="text" name="static_web_plugin_settings[top_panel][main_link]" value="<?php echo esc_url($top_panel['main_link']); ?>" />
+            </div>
+
             <label>Site name (optional): </label>
             <input class="single-text-input" type="text" name="static_web_plugin_settings[top_panel][main_title]" value="<?php echo esc_attr($top_panel['main_title']); ?>" />
             <div>
-                <label for="static_web_plugin_settings[image_url]">Image URL:</label>
-                <input type="text" id="image-url" name="static_web_plugin_settings[image_url]" value="<?php echo esc_url($settings['image_url'] ?? ''); ?>" />
+                <label for="static_web_plugin_settings[top_panel][logo_url]">Image URL:</label>
+                <input type="text" id="image-url" name="static_web_plugin_settings[top_panel][logo_url]" value="<?php echo esc_url($top_panel['logo_url'] ?? ''); ?>" />
                 <button type="button" id="select-image">Select Image</button>
             </div>
 
             <div>
-                <label for="plugin_color_field">Select Color:</label>
+                <label for="top_background_color_field">Select top bar background color:</label>
                 <input 
                     type="text" 
-                    id="plugin_color_field" 
-                    name="static_web_plugin_settings[color]" 
-                    value="<?php echo esc_attr($settings['color']); ?>" 
+                    id="top_background_color_field" 
+                    name="static_web_plugin_settings[top_panel][top_background_color]" 
+                    value="<?php echo esc_attr($top_panel['top_background_color']); ?>" 
+                    class="my-color-field" 
+                />
+            </div>
+
+            <div>
+                <label for="top_text_color_field">Select top bar text color:</label>
+                <input 
+                    type="text" 
+                    id="top_text_color_field" 
+                    name="static_web_plugin_settings[top_panel][top_text_color]" 
+                    value="<?php echo esc_attr($top_panel['top_text_color']); ?>" 
                     class="my-color-field" 
                 />
             </div>
@@ -71,6 +129,27 @@ function static_web_plugin_settings_page() {
               
             </div>
             <h2>Bottom panel</h2>
+            <div>
+                <label for="bottom_background_color_field">Select bottom bar background color:</label>
+                <input 
+                    type="text" 
+                    id="bottom_background_color_field" 
+                    name="static_web_plugin_settings[bottom_panel][bottom_background_color]" 
+                    value="<?php echo esc_attr($bottom_panel['bottom_background_color']); ?>" 
+                    class="my-color-field" 
+                />
+            </div>
+
+            <div>
+                <label for="bottom_text_color_field">Select bottom bar text color:</label>
+                <input 
+                    type="text" 
+                    id="bottom_text_color_field" 
+                    name="static_web_plugin_settings[bottom_panel][bottom_text_color]" 
+                    value="<?php echo esc_attr($bottom_panel['bottom_text_color']); ?>" 
+                    class="my-color-field" 
+                />
+            </div>
           
             <div id="sections-container">
                 <?php
@@ -106,6 +185,10 @@ function static_web_plugin_settings_page() {
                 ?>
             </div>
             <button type="button" id="add-section">Add Section</button>
+            <br/>
+            <label>Bottom message (optional): </label>
+            <input class="single-text-input" type="text" name="static_web_plugin_settings[bottom_panel][bottom_message]" value="<?php echo esc_attr($bottom_panel['bottom_message']); ?>" />
+        
             <?php submit_button(); ?>
         </form>
     </div>
@@ -138,8 +221,21 @@ function static_web_plugin_settings_init() {
             'type' => 'string',
             'sanitize_callback' => 'static_web_plugin_sanitize_settings',
             'default' => json_encode([
-                'top_panel' => ['main_title' => '', 'links' => []],
-                'bottom_panel' => ['sections' => []],
+                'global_background_color' => '',
+                'global_text_color' => '',
+                'top_panel' => [
+                    'top_background_color' => '',
+                    'top_text_color' => '',
+                    'main_link' => '',
+                    'main_title' => '', 
+                    'logo_url' => '', 
+                    'links' => []
+                ],
+                'bottom_panel' => [
+                    'bottom_background_color' => '',
+                    'bottom_text_color' => '',
+                    'bottom_message' => '',
+                    'sections' => []],
             ])
         ]
     );
@@ -148,10 +244,25 @@ function static_web_plugin_settings_init() {
 function static_web_plugin_sanitize_settings($input) {
     $sanitized = [];
 
+
+    //Sanitize main object
+
+    if(isset($input['global_background_color'])){
+        $sanitized['global_background_color'] = sanitize_text_field($input['global_background_color']);
+    }
+
+    if(isset($input['global_text_color'])){
+        $sanitized['global_text_color'] = sanitize_text_field($input['global_text_color']);
+    }
+
     // Sanitize top_panel
     if (isset($input['top_panel']) && is_array($input['top_panel'])) {
         $sanitized['top_panel'] = [
+            'top_background_color' => isset($input['top_panel']['top_background_color']) ? sanitize_text_field($input['top_panel']['top_background_color']) : '',
+            'top_text_color' => isset($input['top_panel']['top_text_color']) ? sanitize_text_field($input['top_panel']['top_text_color']) : '',
+            'main_link' => isset($input['top_panel']['main_link']) ? esc_url_raw($input['top_panel']['main_link']) : '',
             'main_title' => isset($input['top_panel']['main_title']) ? sanitize_text_field($input['top_panel']['main_title']) : '',
+            'logo_url' => isset($input['top_panel']['logo_url']) ? esc_url_raw($input['top_panel']['logo_url']) : '',
             'links' => []
         ];
 
@@ -169,7 +280,11 @@ function static_web_plugin_sanitize_settings($input) {
 
     // Sanitize bottom_panel
     if (isset($input['bottom_panel']) && is_array($input['bottom_panel'])) {
-        $sanitized['bottom_panel'] = ['sections' => []];
+        $sanitized['bottom_panel'] = [
+            'bottom_background_color' => isset($input['bottom_panel']['bottom_background_color']) ? sanitize_text_field($input['bottom_panel']['bottom_background_color']) : '',
+            'bottom_text_color' => isset($input['bottom_panel']['bottom_text_color']) ? sanitize_text_field($input['bottom_panel']['bottom_text_color']) : '',
+            'bottom_message' =>  isset($input['bottom_panel']['bottom_message']) ? sanitize_text_field($input['bottom_panel']['bottom_message']) : '',
+            'sections' => []];
 
         foreach ($input['bottom_panel']['sections'] as $section) {
             if (is_array($section)) {

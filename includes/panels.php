@@ -9,60 +9,120 @@ function get_panels($post) {
     $link = home_url( "/comments{$path_part}");
 
     $settings = get_option('static_web_plugin_settings', [
-        'top_panel' => ['main_title' => '', 'links' => []],
-        'bottom_panel' => ['sections' => []],
+        'global_background_color' => '',
+        'global_text_color' => '',
+        'top_panel' => [
+            'top_background_color' => '',
+            'top_text_color' => '',
+            'main_link' => '',
+            'main_title' => '', 
+            'logo_url' => '', 
+            'links' => []
+        ],
+        'bottom_panel' => [
+            'bottom_background_color' => '',
+            'bottom_text_color' => '',
+            'bottom_message' => '',
+            'sections' => []
+        ],
     ]);
 
     $top_panel = $settings['top_panel'];
     $bottom_panel = $settings['bottom_panel'];
 
+    $main_link = $top_panel['main_link'];
+    $main_link_attribute = $main_link ? ' href="' . $main_link . '"' : '';
+    
+    $site_name = $top_panel['main_title'];
+    $site_name_element = $site_name ? '<site-name' . $main_link_attribute . '>' . $site_name . '</site-name>' : '';
 
+    $logo_url = $top_panel['logo_url'];
+    $logo_url_element = $logo_url ? '<logo src="' . $logo_url . '"' . $main_link_attribute . '/>' : '';
+
+    $global_background_color = $settings['global_background_color'];
+    $global_background_color_attribute = $global_background_color ? ' bgColor="' . esc_attr($global_background_color) . '"' : '';
+
+    $global_text_color = $settings['global_text_color'];
+    $global_text_color_attribute = $global_text_color ? ' textColor="' . esc_attr($global_text_color) . '"' : '';
+
+    $top_background_color = $top_panel['top_background_color'];
+    $top_background_color_attribute = $top_background_color ? ' bgColor="' . esc_attr($top_background_color) . '"' : '';
+
+    $top_text_color = $top_panel['top_text_color'];
+    $top_text_color_attribute = $top_text_color ? ' textColor="' . esc_attr($top_text_color) . '"' : '';
+
+    $bottom_background_color = $bottom_panel['bottom_background_color'];
+    $bottom_background_color_attribute = $bottom_background_color ? ' bgColor="' . esc_attr($bottom_background_color) . '"' : '';
+
+    $bottom_text_color = $bottom_panel['bottom_text_color'];
+    $bottom_text_color_attribute = $bottom_text_color ? ' textColor="' . esc_attr($bottom_text_color) . '"' : '';
+
+    $bottom_message = $bottom_panel['bottom_message'];
+    $bottom_message_element = $bottom_message ? '<bottom-message>' . $bottom_message . '</bottom-message>' : '';
+
+
+    $should_show_top_panel = !empty($site_name_element) || !empty($logo_url) || !empty($top_panel['links']);
+    $should_show_bottom_panel = !empty($bottom_message) || !empty($bottom_panel['sections']);
+
+    $should_show_panels = $should_show_top_panel || $should_show_bottom_panel;
+    
+    if(!$should_show_panels){
+        return '';
+    }
+    
     ob_start();
 
     ?>
 
-<panels>
-<panel-style textColor="white" bgColor="black" borderWidth="1px" borderColor="black"></panel-style>
-<top-panel>
-<!-- <panel-style textColor="red" bgColor="green" borderWidth="1px" borderColor="black"></panel-style> -->
-<logo src="https://www.shutterstock.com/shutterstock/photos/2370919043/display_1500/stock-vector-red-box-circle-cursive-text-cocaine-blow-snow-crack-spoof-parody-funny-wave-label-logo-icon-sign-2370919043.jpg" href="https://google.com"></logo>
-<a href="https://google.com">Google</a>
-<a href="https://youtube.com">YouTube</a>
+<panels<?php echo $global_background_color_attribute; echo $global_text_color_attribute;?>>
+<?php if($should_show_top_panel){ ?>
+<top-panel<?php echo $top_background_color_attribute; echo $top_text_color_attribute;?>>
+<?php echo $site_name_element; ?>
 
+<?php echo $logo_url_element; ?>
+<?php
+if (!empty($top_panel['links'])) {
+    foreach ($top_panel['links'] as $index => $link) {
+        echo '<a href="' . esc_url($link['url']) . '">' . esc_html($link['text']) . '</a>' . PHP_EOL; 
+    }
+}
+?>
 </top-panel>
-
+<?php
+}
+?>
 <?php if (has_comment_section($post)): ?>
-<side-panel><?php echo $link ?></side-panel>
-          
-        <?php endif; ?>
+<side-panel side="left"><?php echo $link ?></side-panel>
+<?php endif; ?>
+<?php if($should_show_bottom_panel){ ?>
+<bottom-panel<?php echo $bottom_background_color_attribute; echo $bottom_text_color_attribute;?>>
+<?php
+if (!empty($bottom_panel['sections'])) {
+    foreach ($bottom_panel['sections'] as $section) {
+        $section_title = $section['title'];
+        $title_element =  $section_title ? '<title>' . $section_title . '</title>' : '';
 
-
-
-<bottom-panel>
-<!-- <panel-style textColor="yellow" bgColor="black" borderWidth="5px" borderColor="red"></panel-style> -->
-<section>
-<title>About</title>
-<a href="https://google.com">Google</a>
-<a href="https://youtube.com">YouTube</a>
-<a href="https:/x.com">X.com</a>
+        $title_attribute = $section_title ? ' title="' . $section_title . '"' : '';
+?>
+<section<?php echo $title_attribute; ?>>
+<?php
+if (!empty($section['links'])) {
+    foreach ($section['links'] as $index => $link) {
+        echo '<a href="' . esc_url($link['url']) . '">' . esc_html($link['text']) . '</a>' . PHP_EOL; 
+    }
+}
+?>
 </section>
-
-<section>
-<title>About2</title>
-<a href="https://google.com">Google2</a>
-<a href="https://youtube.com">YouTube2</a>
-<a href="https:/x.com">X.com2</a>
-</section>
-
-<section>
-<title>About3</title>
-<a href="https://google.com">Google3</a>
-<a href="https://youtube.com">YouTube3</a>
-<a href="https:/x.com">X.com3</a>
-</section>
-
-
+<?php
+    }
+}
+?>
+<?php echo $bottom_message_element; ?>
 </bottom-panel>
+<?php
+}
+?>
+
 </panels><?php
 
     $output = ob_get_clean();
