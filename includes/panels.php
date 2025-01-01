@@ -11,6 +11,7 @@ function get_panels($post) {
     $settings = get_option('static_web_plugin_settings', [
         'global_background_color' => '',
         'global_text_color' => '',
+        'user_defined_info_url' => '',
         'top_panel' => [
             'top_background_color' => '',
             'top_text_color' => '',

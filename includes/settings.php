@@ -9,6 +9,7 @@ function static_web_plugin_settings_page() {
     $settings = get_option('static_web_plugin_settings', [
         'global_background_color' => '',
         'global_text_color' => '',
+        'user_defined_info_url' => '',
         'top_panel' => [
             'top_background_color' => '',
             'top_text_color' => '',
@@ -43,6 +44,11 @@ function static_web_plugin_settings_page() {
             // Outputs nonce, action, and option_page fields for the settings
             settings_fields('static_web_plugin_options_group');
             ?>
+
+            <div>
+                <label>Custom info link : </label>
+                <input class="single-text-input" type="text" name="static_web_plugin_settings[user_defined_info_url]" value="<?php echo esc_url($settings['user_defined_info_url']); ?>" />
+            </div>
 
             <div>
                 <label for="main_background_color_field">Select global background color:</label>
@@ -223,6 +229,7 @@ function static_web_plugin_settings_init() {
             'default' => json_encode([
                 'global_background_color' => '',
                 'global_text_color' => '',
+                'user_defined_info_url' => '',
                 'top_panel' => [
                     'top_background_color' => '',
                     'top_text_color' => '',
@@ -254,6 +261,11 @@ function static_web_plugin_sanitize_settings($input) {
     if(isset($input['global_text_color'])){
         $sanitized['global_text_color'] = sanitize_text_field($input['global_text_color']);
     }
+
+    if(isset($input['user_defined_info_url'])){
+        $sanitized['user_defined_info_url'] = sanitize_text_field($input['user_defined_info_url']);
+    }
+
 
     // Sanitize top_panel
     if (isset($input['top_panel']) && is_array($input['top_panel'])) {
