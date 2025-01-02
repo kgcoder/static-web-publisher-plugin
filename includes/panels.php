@@ -6,12 +6,13 @@ function get_panels($post) {
 
     $path_part = preg_replace('#^' . preg_quote(home_url(), '#') . '#', '', $permalink);
 
-    $link = home_url( "/comments{$path_part}");
+    $comments_link = home_url( "/comments{$path_part}");
 
     $settings = get_option('static_web_plugin_settings', [
         'global_background_color' => '',
         'global_text_color' => '',
         'user_defined_info_url' => '',
+        'side_panel_on_the_left' => false,
         'top_panel' => [
             'top_background_color' => '',
             'top_text_color' => '',
@@ -66,6 +67,10 @@ function get_panels($post) {
     $should_show_bottom_panel = !empty($bottom_message) || !empty($bottom_panel['sections']);
 
     $should_show_panels = $should_show_top_panel || $should_show_bottom_panel;
+
+    $side_panel_left = !!$settings['side_panel_on_the_left'];
+
+    $side_panel_attribute = $side_panel_left ? ' side="left"' : '';
     
     if(!$should_show_panels){
         return '';
@@ -93,7 +98,7 @@ if (!empty($top_panel['links'])) {
 }
 ?>
 <?php if (has_comment_section($post)): ?>
-<side-panel side="left"><?php echo $link ?></side-panel>
+<side-panel<?php echo $side_panel_attribute; ?>><?php echo $comments_link; ?></side-panel>
 <?php endif; ?>
 <?php if($should_show_bottom_panel){ ?>
 <bottom-panel<?php echo $bottom_background_color_attribute; echo $bottom_text_color_attribute;?>>

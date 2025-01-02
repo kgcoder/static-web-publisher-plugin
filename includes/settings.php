@@ -10,6 +10,7 @@ function static_web_plugin_settings_page() {
         'global_background_color' => '',
         'global_text_color' => '',
         'user_defined_info_url' => '',
+        'side_panel_on_the_left' => false,
         'top_panel' => [
             'top_background_color' => '',
             'top_text_color' => '',
@@ -134,6 +135,14 @@ function static_web_plugin_settings_page() {
           
               
             </div>
+
+            <h2>Side panel</h2>
+
+            <div>
+                <label>Side panel on the left? </label>
+                <input class="single-checkbox-input" type="checkbox" name="static_web_plugin_settings[side_panel_on_the_left]" value="1" <?php echo !empty($settings['side_panel_on_the_left']) ? 'checked' : ''; ?>/>
+            </div>
+
             <h2>Bottom panel</h2>
             <div>
                 <label for="bottom_background_color_field">Select bottom bar background color:</label>
@@ -230,6 +239,7 @@ function static_web_plugin_settings_init() {
                 'global_background_color' => '',
                 'global_text_color' => '',
                 'user_defined_info_url' => '',
+                'side_panel_on_the_left' => false,
                 'top_panel' => [
                     'top_background_color' => '',
                     'top_text_color' => '',
@@ -265,6 +275,11 @@ function static_web_plugin_sanitize_settings($input) {
     if(isset($input['user_defined_info_url'])){
         $sanitized['user_defined_info_url'] = sanitize_text_field($input['user_defined_info_url']);
     }
+
+    if(isset($input['side_panel_on_the_left'])){
+        $sanitized['side_panel_on_the_left'] = boolval($input['side_panel_on_the_left']);
+    }
+
 
 
     // Sanitize top_panel
