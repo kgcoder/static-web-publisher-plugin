@@ -23,6 +23,8 @@ function send_hdoc_for_post($post){
         $htmlContent = preg_replace_callback($pattern, $callback, $htmlContent);
 
         $htmlContent = strip_wp_tags($htmlContent);
+
+        $htmlContent = modify_internal_links_in_html($htmlContent);
         
         //$allowed_tags = ['p', 'a', 'strong', 'h1', 'h2', 'h3', 'h4', 'img', 'figure'];
         
@@ -53,6 +55,47 @@ function send_hdoc_for_post($post){
         status_header(404);
         echo 'Post not found';
     }
+}
+
+
+function modify_internal_links_in_html($htmlContent) {
+    // Get the site's base URL
+    $site_url = home_url();
+
+    // Parse the site's URL to extract the domain
+    $parsed_url = parse_url($site_url);
+    $site_domain = $parsed_url['host']; // e.g., 'mywebsite.com'
+
+    // Regex pattern to find all <a> tags with href attributes
+    $pattern = '/<a\s+[^>]*href=["\'](.*?)["\']/i';
+
+    // Callback function to modify URLs
+    $modifiedHtml = preg_replace_callback($pattern, function ($matches) use ($site_domain) {
+        $original_url = $matches[1];
+
+        // Check if the URL belongs to the site's domain
+        if (strpos($original_url, 'http://' . $site_domain) === 0 || strpos($original_url, 'https://' . $site_domain) === 0) {
+            // Replace http/https with sw/sws
+            $protocol_replacement = strpos($original_url, 'https://') === 0 ? 'sws://' : 'sw://';
+
+            // Remove the protocol and add the new one
+            $url_without_protocol = preg_replace('/^https?:\/\//', '', $original_url);
+
+            // Add '/sw/' after the domain name
+            $modified_url = preg_replace("/^{$site_domain}/", "{$site_domain}/sw", $url_without_protocol);
+
+            // Combine the new protocol with the modified URL
+            $modified_url = $protocol_replacement . $modified_url;
+
+            // Replace the original URL in the anchor tag
+            return str_replace($original_url, $modified_url, $matches[0]);
+        }
+
+        // Return the original match if not internal
+        return $matches[0];
+    }, $htmlContent);
+
+    return $modifiedHtml;
 }
 
 
