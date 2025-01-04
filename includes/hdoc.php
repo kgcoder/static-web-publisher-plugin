@@ -25,6 +25,7 @@ function send_hdoc_for_post($post){
         $htmlContent = strip_wp_tags($htmlContent);
 
         $htmlContent = modify_internal_links_in_html($htmlContent);
+        $htmlContent = modify_external_links_in_html($htmlContent);
         
         //$allowed_tags = ['p', 'a', 'strong', 'h1', 'h2', 'h3', 'h4', 'img', 'figure'];
         
@@ -93,6 +94,29 @@ function modify_internal_links_in_html($htmlContent) {
 
         // Return the original match if not internal
         return $matches[0];
+    }, $htmlContent);
+
+    return $modifiedHtml;
+}
+
+
+function modify_external_links_in_html($htmlContent) {
+    // Regex pattern to find <a> tags with a data-sw attribute
+    $pattern = '/<a\s+[^>]*href=["\'](.*?)["\'][^>]*data-sw=["\'](.*?)["\'][^>]*>/i';
+
+    // Callback function to replace href and remove data-sw
+    $modifiedHtml = preg_replace_callback($pattern, function ($matches) {
+        $original_href = $matches[1]; // Original href value
+        $data_sw_value = $matches[2]; // Value from data-sw attribute
+
+        // Replace href with data-sw value and remove the data-sw attribute
+        $modified_tag = preg_replace(
+            ['/href=["\'].*?["\']/', '/\s+data-sw=["\'].*?["\']/'], // Patterns to replace
+            ["href=\"$data_sw_value\"", ''], // Replacements
+            $matches[0]
+        );
+
+        return $modified_tag;
     }, $htmlContent);
 
     return $modifiedHtml;
