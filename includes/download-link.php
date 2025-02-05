@@ -27,7 +27,7 @@ function custom_post_endpoints_add_link_to_content( $content ) {
         $user_defined_info_url = get_option('static_web_plugin_settings')['user_defined_info_url'] ?? '';
 
     
-        $default_info_url = "https://google.com";
+        $default_info_url = "https://reinventingtheweb.com/how-to-use-sw-links/";
 
         $info_url = !empty($user_defined_info_url) ? $user_defined_info_url : $default_info_url;
 
