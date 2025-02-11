@@ -11,6 +11,7 @@ function static_web_plugin_settings_page() {
         'global_text_color' => '',
         'user_defined_info_url' => '',
         'side_panel_on_the_left' => false,
+        'modify_internal_links' => false,
         'top_panel' => [
             'top_background_color' => '',
             'top_text_color' => '',
@@ -204,6 +205,10 @@ function static_web_plugin_settings_page() {
             <label>Bottom message (optional): </label>
             <input class="single-text-input" type="text" name="static_web_plugin_settings[bottom_panel][bottom_message]" value="<?php echo esc_attr($bottom_panel['bottom_message']); ?>" />
         
+            <div>
+                <label>Modify internal links? </label>
+                <input class="single-checkbox-input" type="checkbox" name="static_web_plugin_settings[modify_internal_links]" value="1" <?php echo !empty($settings['modify_internal_links']) ? 'checked' : ''; ?>/>
+            </div>
             <?php submit_button(); ?>
         </form>
     </div>
@@ -240,6 +245,7 @@ function static_web_plugin_settings_init() {
                 'global_text_color' => '',
                 'user_defined_info_url' => '',
                 'side_panel_on_the_left' => false,
+                'modify_internal_links' => false,
                 'top_panel' => [
                     'top_background_color' => '',
                     'top_text_color' => '',
@@ -278,6 +284,9 @@ function static_web_plugin_sanitize_settings($input) {
 
     if(isset($input['side_panel_on_the_left'])){
         $sanitized['side_panel_on_the_left'] = boolval($input['side_panel_on_the_left']);
+    }
+    if(isset($input['modify_internal_links'])){
+        $sanitized['modify_internal_links'] = boolval($input['modify_internal_links']);
     }
 
 

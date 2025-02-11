@@ -1,12 +1,76 @@
 
 <?php
 
+
+function custom_post_endpoints_add_meta_box() {
+    add_meta_box(
+        'custom_post_endpoints_meta_box',
+        'Static Web Link Settings',
+        'custom_post_endpoints_meta_box_callback',
+        ['post', 'page'], // Enable for posts and pages
+        'side',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'custom_post_endpoints_add_meta_box');
+
+function custom_post_endpoints_meta_box_callback($post) {
+    $value = get_post_meta($post->ID, '_disable_static_web_link', true);
+    $connections_info = get_post_meta($post->ID, '_static_web_connections_info', true);
+
+    wp_nonce_field('custom_post_endpoints_meta_box_nonce', 'custom_post_endpoints_nonce');
+    ?>
+    <label for="disable_static_web_link">
+        <input type="checkbox" name="disable_static_web_link" id="disable_static_web_link" value="1" <?php checked($value, '1'); ?> />
+        Disable Static Web Link on this post/page
+    </label>
+    <br><br>
+    <label for="static_web_connections_info"><strong>Connections Info:</strong></label>
+    <textarea name="static_web_connections_info" id="static_web_connections_info" rows="3" style="width:100%;"><?php echo esc_textarea($connections_info); ?></textarea>
+    <p class="description">Add connections info</p>
+    <?php
+}
+
+function custom_post_endpoints_save_meta_box($post_id) {
+    if (!isset($_POST['custom_post_endpoints_nonce']) || !wp_verify_nonce($_POST['custom_post_endpoints_nonce'], 'custom_post_endpoints_meta_box_nonce')) {
+        return;
+    }
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    $value = isset($_POST['disable_static_web_link']) ? '1' : '';
+    update_post_meta($post_id, '_disable_static_web_link', $value);
+
+    $allowed_tags = [
+        'doc'  => ['url' => true, 'title' => true, 'hash' => true], 
+    ];
+
+    if (isset($_POST['static_web_connections_info'])) {
+        update_post_meta($post_id, '_static_web_connections_info', wp_kses($_POST['static_web_connections_info'], $allowed_tags));
+    }
+}
+add_action('save_post', 'custom_post_endpoints_save_meta_box');
+
+
+
+
+
+
 function custom_post_endpoints_add_link_to_content( $content ) {
     global $post;
     global $wp_query;
 
 
     if (( is_single() || is_page()) && $post && ('post' === $post->post_type || 'page' === $post->post_type) ) {
+
+        // Check if the user has disabled the link for this post
+        if (get_post_meta($post->ID, '_disable_static_web_link', true) === '1') {
+            return $content;
+        }
 
         $permalink = get_permalink($post->ID);
 

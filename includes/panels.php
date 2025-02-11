@@ -13,6 +13,7 @@ function get_panels($post) {
         'global_text_color' => '',
         'user_defined_info_url' => '',
         'side_panel_on_the_left' => false,
+        'modify_internal_links' => false,
         'top_panel' => [
             'top_background_color' => '',
             'top_text_color' => '',

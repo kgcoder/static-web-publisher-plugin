@@ -8,6 +8,9 @@ function send_hdoc_for_post($post){
         $title = $post->post_title;
         $htmlContent = $post->post_content;
 
+        $connections_info = get_post_meta($post->ID, '_static_web_connections_info', true);
+
+
         // header('Content-Type: text/plain');
         // echo  $htmlContent;
 
@@ -24,7 +27,13 @@ function send_hdoc_for_post($post){
 
         $htmlContent = strip_wp_tags($htmlContent);
 
-        $htmlContent = modify_internal_links_in_html($htmlContent);
+
+        $modify_internal_links = get_option('static_web_plugin_settings')['modify_internal_links'] ?? '';
+
+        if(!empty($modify_internal_links)){
+            $htmlContent = modify_internal_links_in_html($htmlContent);
+        }
+
         $htmlContent = modify_external_links_in_html($htmlContent);
         
         //$allowed_tags = ['p', 'a', 'strong', 'h1', 'h2', 'h3', 'h4', 'img', 'figure'];
@@ -48,9 +57,15 @@ function send_hdoc_for_post($post){
        // $link = home_url( "/sw/v1/comments/{$post->post_name}");
         $panels = get_panels($post);
 
+        $connectionsSection = '';
+        if(!empty($connections_info)){
+            $connectionsSection = '<connections>' . $connections_info . '</connections>';
+
+        }
+
         // Output the simplified content
         header('Content-Type: text/plain');
-        echo '<hdoc>' . $panels . '<html>' . $finalContent . '</html></hdoc>';
+        echo '<hdoc>' . $panels . '<html>' . $finalContent . '</html>' . $connectionsSection . '</hdoc>';
     } else {
         // Handle post not found
         status_header(404);
