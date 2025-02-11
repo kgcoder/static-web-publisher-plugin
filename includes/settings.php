@@ -12,6 +12,7 @@ function static_web_plugin_settings_page() {
         'user_defined_info_url' => '',
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,
+        'modify_external_links' => false,
         'top_panel' => [
             'top_background_color' => '',
             'top_text_color' => '',
@@ -209,6 +210,11 @@ function static_web_plugin_settings_page() {
                 <label>Modify internal links? </label>
                 <input class="single-checkbox-input" type="checkbox" name="static_web_plugin_settings[modify_internal_links]" value="1" <?php echo !empty($settings['modify_internal_links']) ? 'checked' : ''; ?>/>
             </div>
+
+            <div>
+                <label>Modify external links? </label>
+                <input class="single-checkbox-input" type="checkbox" name="static_web_plugin_settings[modify_external_links]" value="1" <?php echo !empty($settings['modify_external_links']) ? 'checked' : ''; ?>/>
+            </div>
             <?php submit_button(); ?>
         </form>
     </div>
@@ -246,6 +252,7 @@ function static_web_plugin_settings_init() {
                 'user_defined_info_url' => '',
                 'side_panel_on_the_left' => false,
                 'modify_internal_links' => false,
+                'modify_external_links' => false,
                 'top_panel' => [
                     'top_background_color' => '',
                     'top_text_color' => '',
@@ -287,6 +294,9 @@ function static_web_plugin_sanitize_settings($input) {
     }
     if(isset($input['modify_internal_links'])){
         $sanitized['modify_internal_links'] = boolval($input['modify_internal_links']);
+    }
+    if(isset($input['modify_external_links'])){
+        $sanitized['modify_external_links'] = boolval($input['modify_external_links']);
     }
 
 

@@ -14,6 +14,7 @@ function get_panels($post) {
         'user_defined_info_url' => '',
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,
+        'modify_external_links' => false,
         'top_panel' => [
             'top_background_color' => '',
             'top_text_color' => '',

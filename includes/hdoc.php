@@ -3,7 +3,15 @@
 function send_hdoc_for_post($post){
     if ($post) {
 
+        if (get_post_meta($post->ID, '_disable_static_web_link', true) === '1') {
+            status_header(404);
+            echo 'Page not found';
+            return;
+        }
+        
+        
         $permalink = get_permalink($post->ID);
+
         
         $title = $post->post_title;
         $htmlContent = $post->post_content;
@@ -34,7 +42,11 @@ function send_hdoc_for_post($post){
             $htmlContent = modify_internal_links_in_html($htmlContent);
         }
 
-        $htmlContent = modify_external_links_in_html($htmlContent);
+        $modify_external_links = get_option('static_web_plugin_settings')['modify_external_links'] ?? '';
+
+        if(!empty($modify_external_links)){
+            $htmlContent = modify_external_links_in_html($htmlContent);
+        }
         
         //$allowed_tags = ['p', 'a', 'strong', 'h1', 'h2', 'h3', 'h4', 'img', 'figure'];
         
@@ -69,7 +81,7 @@ function send_hdoc_for_post($post){
     } else {
         // Handle post not found
         status_header(404);
-        echo 'Post not found';
+        echo 'Page not found';
     }
 }
 

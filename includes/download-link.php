@@ -16,6 +16,8 @@ add_action('add_meta_boxes', 'custom_post_endpoints_add_meta_box');
 
 function custom_post_endpoints_meta_box_callback($post) {
     $value = get_post_meta($post->ID, '_disable_static_web_link', true);
+    $disable_original_page_value = get_post_meta($post->ID, '_disable_original_page', true);
+
     $connections_info = get_post_meta($post->ID, '_static_web_connections_info', true);
 
     wp_nonce_field('custom_post_endpoints_meta_box_nonce', 'custom_post_endpoints_nonce');
@@ -23,6 +25,11 @@ function custom_post_endpoints_meta_box_callback($post) {
     <label for="disable_static_web_link">
         <input type="checkbox" name="disable_static_web_link" id="disable_static_web_link" value="1" <?php checked($value, '1'); ?> />
         Disable Static Web Link on this post/page
+    </label>
+    <br><br>
+    <label for="disable_original_page">
+        <input type="checkbox" name="disable_original_page" id="disable_original_page" value="1" <?php checked($disable_original_page_value, '1'); ?> />
+        Disable the original post/page
     </label>
     <br><br>
     <label for="static_web_connections_info"><strong>Connections Info:</strong></label>
@@ -45,6 +52,11 @@ function custom_post_endpoints_save_meta_box($post_id) {
     $value = isset($_POST['disable_static_web_link']) ? '1' : '';
     update_post_meta($post_id, '_disable_static_web_link', $value);
 
+    $value = isset($_POST['disable_original_page']) ? '1' : '';
+    update_post_meta($post_id, '_disable_original_page', $value);
+
+    
+
     $allowed_tags = [
         'doc'  => ['url' => true, 'title' => true, 'hash' => true], 
     ];
@@ -56,6 +68,30 @@ function custom_post_endpoints_save_meta_box($post_id) {
 add_action('save_post', 'custom_post_endpoints_save_meta_box');
 
 
+
+
+function custom_redirect_logic() {
+    if (is_single() || is_page()) {  // Applies to posts and pages
+
+        global $post;
+        if (!$post) return; // Prevent errors if $post is undefined
+
+        if (get_post_meta($post->ID, '_disable_original_page', true) === '1') {
+            $permalink = get_permalink($post->ID);
+        
+            $path_part = preg_replace('#^' . preg_quote(home_url(), '#') . '#', '', $permalink);
+            
+            
+            $link = preg_replace('/^http/', "sw", home_url( "/sw{$path_part}"));
+            wp_redirect($link);
+            exit;
+        }
+
+        
+    
+    }
+}
+add_action('template_redirect', 'custom_redirect_logic');
 
 
 
@@ -72,13 +108,16 @@ function custom_post_endpoints_add_link_to_content( $content ) {
             return $content;
         }
 
+
+        
+        
         $permalink = get_permalink($post->ID);
-
-       $path_part = preg_replace('#^' . preg_quote(home_url(), '#') . '#', '', $permalink);
-
-
+        
+        $path_part = preg_replace('#^' . preg_quote(home_url(), '#') . '#', '', $permalink);
+        
+        
         $link = preg_replace('/^http/', "sw", home_url( "/sw{$path_part}"));
-     
+        
 
         $icon = static_web_plugin_add_icon_with_srcset('sw_download_logo');
 
