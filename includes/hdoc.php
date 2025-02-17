@@ -40,13 +40,18 @@ function send_hdoc_for_post($post){
         $htmlContent = strip_wp_tags($htmlContent);
 
 
-        $modify_internal_links = get_option('static_web_plugin_settings')['modify_internal_links'] ?? '';
+
+        $settings = get_option('static_web_plugin_settings', array()); // Ensure a default empty array
+        $modify_internal_links = isset($settings['modify_internal_links']) ? $settings['modify_internal_links'] : '';
+
 
         if(!empty($modify_internal_links)){
             $htmlContent = modify_internal_links_in_html($htmlContent);
         }
 
-        $modify_external_links = get_option('static_web_plugin_settings')['modify_external_links'] ?? '';
+        $modify_external_links = isset($settings['modify_external_links']) ? $settings['modify_external_links'] : '';
+
+
 
         if(!empty($modify_external_links)){
             $htmlContent = modify_external_links_in_html($htmlContent);
@@ -142,8 +147,8 @@ function modify_external_links_in_html($htmlContent) {
 
         // Replace href with data-sw value and remove the data-sw attribute
         $modified_tag = preg_replace(
-            ['/href=["\'].*?["\']/', '/\s+data-sw=["\'].*?["\']/'], // Patterns to replace
-            ["href=\"$data_sw_value\"", ''], // Replacements
+            array('/href=["\'].*?["\']/', '/\s+data-sw=["\'].*?["\']/'), // Patterns to replace
+            array("href=\"$data_sw_value\"", ''), // Replacements
             $matches[0]
         );
 

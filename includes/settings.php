@@ -9,30 +9,30 @@ function static_web_plugin_settings_page() {
      //delete_option('static_web_plugin_settings');
 
 
-    $settings = get_option('static_web_plugin_settings', [
+    $settings = get_option('static_web_plugin_settings', array(
         'global_background_color' => '',
         'global_text_color' => '',
         'user_defined_info_url' => '',
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,
         'modify_external_links' => false,
-        'top_panel' => [
+        'top_panel' => array(
             'top_background_color' => '',
             'top_text_color' => '',
             'main_link' => '',
             'main_title' => '',
             'logo_url' => '', 
-            'links' => []
-        ],
-        'bottom_panel' => [
+            'links' => array()
+        ),
+        'bottom_panel' => array(
             'bottom_background_color' => '',
             'bottom_text_color' => '',
             'bottom_message' => '',
-            'sections' => []
-        ],
+            'sections' => array()
+        ),
 
 
-    ]);
+    ));
 
     $top_panel = $settings['top_panel'];
     $bottom_panel = $settings['bottom_panel'];
@@ -90,7 +90,7 @@ function static_web_plugin_settings_page() {
             <input class="single-text-input" type="text" name="static_web_plugin_settings[top_panel][main_title]" value="<?php echo esc_attr($top_panel['main_title']); ?>" />
             <div>
                 <label for="static_web_plugin_settings[top_panel][logo_url]">Image URL:</label>
-                <input type="text" id="image-url" name="static_web_plugin_settings[top_panel][logo_url]" value="<?php echo esc_url($top_panel['logo_url'] ?? ''); ?>" />
+                <input type="text" id="image-url" name="static_web_plugin_settings[top_panel][logo_url]" value="<?php echo esc_url(isset($top_panel['logo_url']) ? $top_panel['logo_url'] : ''); ?>" />
                 <button type="button" id="select-image">Select Image</button>
             </div>
 
@@ -246,36 +246,37 @@ function static_web_plugin_settings_init() {
     register_setting(
         'static_web_plugin_options_group', // Option group
         'static_web_plugin_settings',      // Option name
-        [
+        array(
             'type' => 'string',
             'sanitize_callback' => 'static_web_plugin_sanitize_settings',
-            'default' => json_encode([
+            'default' => json_encode(array(
                 'global_background_color' => '',
                 'global_text_color' => '',
                 'user_defined_info_url' => '',
                 'side_panel_on_the_left' => false,
                 'modify_internal_links' => false,
                 'modify_external_links' => false,
-                'top_panel' => [
+                'top_panel' => array(
                     'top_background_color' => '',
                     'top_text_color' => '',
                     'main_link' => '',
                     'main_title' => '', 
                     'logo_url' => '', 
-                    'links' => []
-                ],
-                'bottom_panel' => [
+                    'links' => array()
+                ),
+                'bottom_panel' => array(
                     'bottom_background_color' => '',
                     'bottom_text_color' => '',
                     'bottom_message' => '',
-                    'sections' => []],
-            ])
-        ]
+                    'sections' => array()
+                ),
+            ))
+        )
     );
 }
 
 function static_web_plugin_sanitize_settings($input) {
-    $sanitized = [];
+    $sanitized = array();
 
 
     //Sanitize main object
@@ -306,22 +307,22 @@ function static_web_plugin_sanitize_settings($input) {
 
     // Sanitize top_panel
     if (isset($input['top_panel']) && is_array($input['top_panel'])) {
-        $sanitized['top_panel'] = [
+        $sanitized['top_panel'] = array(
             'top_background_color' => isset($input['top_panel']['top_background_color']) ? sanitize_text_field($input['top_panel']['top_background_color']) : '',
             'top_text_color' => isset($input['top_panel']['top_text_color']) ? sanitize_text_field($input['top_panel']['top_text_color']) : '',
             'main_link' => isset($input['top_panel']['main_link']) ? esc_url_raw($input['top_panel']['main_link']) : '',
             'main_title' => isset($input['top_panel']['main_title']) ? sanitize_text_field($input['top_panel']['main_title']) : '',
             'logo_url' => isset($input['top_panel']['logo_url']) ? esc_url_raw($input['top_panel']['logo_url']) : '',
-            'links' => []
-        ];
+            'links' => array()
+        );
 
         if (isset($input['top_panel']['links']) && is_array($input['top_panel']['links'])) {
             foreach ($input['top_panel']['links'] as $link) {
                 if (is_array($link)) {
-                    $sanitized['top_panel']['links'][] = [
+                    $sanitized['top_panel']['links'][] = array(
                         'text' => isset($link['text']) ? sanitize_text_field($link['text']) : '',
                         'url' => isset($link['url']) ? esc_url_raw($link['url']) : ''
-                    ];
+                    );
                 }
             }
         }
@@ -329,26 +330,27 @@ function static_web_plugin_sanitize_settings($input) {
 
     // Sanitize bottom_panel
     if (isset($input['bottom_panel']) && is_array($input['bottom_panel'])) {
-        $sanitized['bottom_panel'] = [
+        $sanitized['bottom_panel'] = array(
             'bottom_background_color' => isset($input['bottom_panel']['bottom_background_color']) ? sanitize_text_field($input['bottom_panel']['bottom_background_color']) : '',
             'bottom_text_color' => isset($input['bottom_panel']['bottom_text_color']) ? sanitize_text_field($input['bottom_panel']['bottom_text_color']) : '',
             'bottom_message' =>  isset($input['bottom_panel']['bottom_message']) ? sanitize_text_field($input['bottom_panel']['bottom_message']) : '',
-            'sections' => []];
+            'sections' => array()
+        );
 
         foreach ($input['bottom_panel']['sections'] as $section) {
             if (is_array($section)) {
-                $sanitized_section = [
+                $sanitized_section = array(
                     'title' => isset($section['title']) ? sanitize_text_field($section['title']) : '',
-                    'links' => []
-                ];
+                    'links' => array()
+                );
 
                 if (isset($section['links']) && is_array($section['links'])) {
                     foreach ($section['links'] as $link) {
                         if (is_array($link)) {
-                            $sanitized_section['links'][] = [
+                            $sanitized_section['links'][] = array(
                                 'text' => isset($link['text']) ? sanitize_text_field($link['text']) : '',
                                 'url' => isset($link['url']) ? esc_url_raw($link['url']) : ''
-                            ];
+                            );
                         }
                     }
                 }
@@ -404,7 +406,7 @@ function static_web_plugin_enqueue_scripts($hook) {
     wp_enqueue_script(
         'static-web-plugin-admin',
         plugin_dir_url(__FILE__) . 'admin.js',
-        [], // No dependencies
+        array(), // No dependencies
         null,
         true // Load in the footer
     );
@@ -412,7 +414,7 @@ function static_web_plugin_enqueue_scripts($hook) {
     wp_enqueue_script(
         'my-plugin-color-picker',
         plugin_dir_url(__FILE__) . 'my-plugin-color-picker.js', // Your JS file
-        ['wp-color-picker'], // Dependency for the color picker
+        array('wp-color-picker'), // Dependency for the color picker
         null,
         true
     );
@@ -420,7 +422,7 @@ function static_web_plugin_enqueue_scripts($hook) {
     wp_enqueue_style(
         'static-web-plugin-admin-style',
         plugin_dir_url(__FILE__) . 'admin.css',
-        [],
+        array(),
         null
     );
 }

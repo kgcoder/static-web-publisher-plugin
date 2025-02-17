@@ -12,28 +12,28 @@ function get_panels($post) {
 
     $comments_link = home_url( "/comments{$path_part}");
 
-    $settings = get_option('static_web_plugin_settings', [
+    $settings = get_option('static_web_plugin_settings', array(
         'global_background_color' => '',
         'global_text_color' => '',
         'user_defined_info_url' => '',
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,
         'modify_external_links' => false,
-        'top_panel' => [
+        'top_panel' => array(
             'top_background_color' => '',
             'top_text_color' => '',
             'main_link' => '',
             'main_title' => '', 
             'logo_url' => '', 
-            'links' => []
-        ],
-        'bottom_panel' => [
+            'links' => array()
+        ),
+        'bottom_panel' => array(
             'bottom_background_color' => '',
             'bottom_text_color' => '',
             'bottom_message' => '',
-            'sections' => []
-        ],
-    ]);
+            'sections' => array()
+        ),
+    ));
 
     $top_panel = $settings['top_panel'];
     $bottom_panel = $settings['bottom_panel'];

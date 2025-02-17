@@ -1,4 +1,3 @@
-
 <?php
 
 if (!defined('ABSPATH')) {
@@ -8,15 +7,15 @@ if (!defined('ABSPATH')) {
 function send_comments_from_post( $post ) {
 
     if (empty($post)) {
-        return new WP_Error('post_not_found', 'Post not found', ['status' => 404]);
+        return new WP_Error('post_not_found', 'Post not found', array('status' => 404));
     }
 
     $post_id = $post->ID;
 
-    $comments = get_comments(['post_id' => $post_id, 'status' => 'approve']);
+    $comments = get_comments(array('post_id' => $post_id, 'status' => 'approve'));
 
     if (empty($comments)) {
-        return new WP_Error('no_comments', 'No comments found for this post', ['status' => 404]);
+        return new WP_Error('no_comments', 'No comments found for this post', array('status' => 404));
     }
 
 
@@ -42,11 +41,11 @@ function send_comments_from_post( $post ) {
 <div class="comment-section">
 <h3>Comments</h3>
 <?php
-wp_list_comments([
+wp_list_comments(array(
     'style'       => 'div',
     'short_ping'  => true,
     'avatar_size' => 32,
-], $comments);
+), $comments);
 ?>
 </div>
 </body>
@@ -62,4 +61,3 @@ echo $html_output;
 
 
 ?>
-

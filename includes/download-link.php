@@ -1,4 +1,3 @@
-
 <?php
 
 
@@ -12,7 +11,7 @@ function custom_post_endpoints_add_meta_box() {
         'custom_post_endpoints_meta_box',
         'Static Web Link Settings',
         'custom_post_endpoints_meta_box_callback',
-        ['post', 'page'], // Enable for posts and pages
+        array('post', 'page'), // Enable for posts and pages
         'side',
         'high'
     );
@@ -62,9 +61,9 @@ function custom_post_endpoints_save_meta_box($post_id) {
 
     
 
-    $allowed_tags = [
-        'doc'  => ['url' => true, 'title' => true, 'hash' => true], 
-    ];
+    $allowed_tags = array(
+        'doc'  => array('url' => true, 'title' => true, 'hash' => true), 
+    );
 
     if (isset($_POST['static_web_connections_info'])) {
         update_post_meta($post_id, '_static_web_connections_info', wp_kses($_POST['static_web_connections_info'], $allowed_tags));
@@ -127,12 +126,14 @@ function custom_post_endpoints_add_link_to_content( $content ) {
         $icon = static_web_plugin_add_icon_with_srcset('sw_download_logo');
 
         $link_text = 'Download this page using Static Web';
-        $simplified_link = '<a title="' . $link_text . '" href="' . $link . '" rel="alternate">' . $icon . '</a>';
+        $simplified_link = '<a style="border:none;" title="' . $link_text . '" href="' . $link . '" rel="alternate">' . $icon . '</a>';
 
         // Get the position setting (assuming you have a setting for this)
         $position = get_option( 'custom_post_endpoints_button_position', 'bottom' );
 
-        $user_defined_info_url = get_option('static_web_plugin_settings')['user_defined_info_url'] ?? '';
+       $settings = get_option('static_web_plugin_settings', array()); // Ensure a default empty array
+        $user_defined_info_url = isset($settings['user_defined_info_url']) ? $settings['user_defined_info_url'] : '';
+    
 
     
         $default_info_url = "https://reinventingtheweb.com/how-to-use-sw-links/";
@@ -143,10 +144,10 @@ function custom_post_endpoints_add_link_to_content( $content ) {
 
         $info_link_text = 'Learn about Static Web';
 
-        $info_link = '<a title="' . $info_link_text . '" href="' . $info_url . '" rel="nofollow noopener" target="_blank">' . $question_icon . '</a>';
+        $info_link = '<a style="border:none;" title="' . $info_link_text . '" href="' . $info_url . '" rel="nofollow noopener" target="_blank">' . $question_icon . '</a>';
 
 
-        $links_paragraph = '<p>' . $simplified_link . '&nbsp;' . $info_link . '</p>';
+        $links_paragraph = '<div style="display:flex;margin-bottom:10px;">' . $simplified_link . '&nbsp;' . $info_link . '</div>';
 
 
         if ( 'top' === $position ) {
