@@ -1,5 +1,8 @@
 <?php
 
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
 
 function static_web_plugin_settings_page() {
 

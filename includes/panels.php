@@ -1,5 +1,9 @@
 <?php
 
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
 function get_panels($post) {
 
     $permalink = get_permalink($post->ID);

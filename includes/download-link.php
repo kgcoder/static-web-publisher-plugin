@@ -2,6 +2,11 @@
 <?php
 
 
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
+
 function custom_post_endpoints_add_meta_box() {
     add_meta_box(
         'custom_post_endpoints_meta_box',

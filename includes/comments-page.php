@@ -1,6 +1,10 @@
 
 <?php
 
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
+
 function send_comments_from_post( $post ) {
 
     if (empty($post)) {

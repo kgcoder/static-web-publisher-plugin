@@ -14,7 +14,22 @@ require_once plugin_dir_path(__FILE__) . 'includes/panels.php';
 require_once plugin_dir_path(__FILE__) . 'includes/hdoc.php';
 require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
 
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
 
+// Run on plugin activation
+function static_web_plugin_activate() {
+    custom_post_endpoints_rewrite_rules();
+    flush_rewrite_rules(); // Refresh permalinks
+}
+register_activation_hook(__FILE__, 'static_web_plugin_activate');
+
+// Run on plugin deactivation (optional cleanup)
+function static_web_plugin_deactivate() {
+    flush_rewrite_rules(); // Clean up permalinks
+}
+register_deactivation_hook(__FILE__, 'static_web_plugin_deactivate');
 
 
 function custom_post_endpoints_rewrite_rules() {
