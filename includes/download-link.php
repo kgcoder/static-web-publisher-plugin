@@ -126,7 +126,7 @@ function custom_post_endpoints_add_link_to_content( $content ) {
         $icon = static_web_plugin_add_icon_with_srcset('sw_download_logo');
 
         $link_text = 'Download this page using Static Web';
-        $simplified_link = '<a style="border:none;" title="' . $link_text . '" href="' . $link . '" rel="alternate">' . $icon . '</a>';
+        $simplified_link = '<a class="swp-link" style="border:none;box-shadow:none;" title="' . $link_text . '" href="' . $link . '" rel="alternate">' . $icon . '</a>';
 
         // Get the position setting (assuming you have a setting for this)
         $position = get_option( 'custom_post_endpoints_button_position', 'bottom' );
@@ -144,7 +144,7 @@ function custom_post_endpoints_add_link_to_content( $content ) {
 
         $info_link_text = 'Learn about Static Web';
 
-        $info_link = '<a style="border:none;" title="' . $info_link_text . '" href="' . $info_url . '" rel="nofollow noopener" target="_blank">' . $question_icon . '</a>';
+        $info_link = '<a class="swp-link" style="border:none;box-shadow:none;" title="' . $info_link_text . '" href="' . $info_url . '" rel="nofollow noopener" target="_blank">' . $question_icon . '</a>';
 
 
         $links_paragraph = '<div style="display:flex;margin-bottom:10px;">' . $simplified_link . '&nbsp;' . $info_link . '</div>';

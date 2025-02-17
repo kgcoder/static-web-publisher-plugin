@@ -47,6 +47,12 @@ function custom_post_endpoints_rewrite_rules() {
         'top'
     );
 
+    add_rewrite_rule(
+        '^sw/?$',
+        'index.php?sw_custom_matches=main_page',
+        'top'
+    );
+
 }
 add_action('init', 'custom_post_endpoints_rewrite_rules');
 
@@ -104,9 +110,13 @@ function custom_post_endpoints_template_redirect() {
             send_hdoc_for_post($post);
             exit;
         }
+
+
      
         exit;
     }
+
+   
 
     if (isset($wp_query->query_vars['comments_custom_matches'])) {
         $path = $wp_query->query_vars['comments_custom_matches'];
@@ -170,8 +180,30 @@ function custom_post_endpoints_template_redirect() {
     if (!empty($permalink_structure) && isset($wp_query->query_vars['sw_custom_matches'])) {
         $path = $wp_query->query_vars['sw_custom_matches'];
 
+      
 
-        if (strpos($permalink_structure, '%post_id%') !== false) {
+        if($path === 'main_page'){
+
+            
+
+            if (get_option('show_on_front') === 'page') {
+                $front_page_id = get_option('page_on_front');
+                $post = get_post($front_page_id);
+    
+                if ($post) {
+                    // Front page content found, send it
+                    send_hdoc_for_post($post);
+                } else {
+                    // Front page set, but no content found, send 404
+                    wp_die('Page not found', '', array('response' => 404));
+                }
+            } else {
+                // No front page set, return 404
+                wp_die('Page not found', '', array('response' => 404));
+            }
+          exit;
+
+        }else if (strpos($permalink_structure, '%post_id%') !== false) {
             // Get the current path
             $current_path = $_SERVER['REQUEST_URI'];
             $site_url = home_url(); // Base site URL
@@ -224,9 +256,6 @@ function custom_post_endpoints_template_redirect() {
 
         exit;
     }
-
- 
-    
 
 }
 add_action('template_redirect', 'custom_post_endpoints_template_redirect');
