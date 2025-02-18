@@ -134,17 +134,22 @@ function custom_post_endpoints_add_link_to_content( $content ) {
        $settings = get_option('static_web_plugin_settings', array()); // Ensure a default empty array
         $user_defined_info_url = isset($settings['user_defined_info_url']) ? $settings['user_defined_info_url'] : '';
     
+        $info_link_variant = $settings['info_link_variant'];
 
     
         $default_info_url = "https://reinventingtheweb.com/how-to-use-sw-links/";
 
-        $info_url = !empty($user_defined_info_url) ? $user_defined_info_url : $default_info_url;
+
+        $info_url = $info_link_variant === 'custom' ? $user_defined_info_url : $default_info_url;
 
         $question_icon = static_web_plugin_add_icon_with_srcset('sw_question');
 
         $info_link_text = 'Learn about Static Web';
 
-        $info_link = '<a class="swp-link" style="border:none;box-shadow:none;" title="' . $info_link_text . '" href="' . $info_url . '" rel="nofollow noopener" target="_blank">' . $question_icon . '</a>';
+        $info_link = '';
+        if($info_link_variant !== 'none'){
+            $info_link = '&nbsp;<a class="swp-link" style="border:none;box-shadow:none;" title="' . $info_link_text . '" href="' . $info_url . '" rel="nofollow noopener" target="_blank">' . $question_icon . '</a>';
+        }
 
 
         $links_paragraph = '<div style="display:flex;margin-bottom:10px;">' . $simplified_link . '&nbsp;' . $info_link . '</div>';
