@@ -12,6 +12,7 @@ function static_web_plugin_settings_page() {
     $settings = get_option('static_web_plugin_settings', array(
         'global_background_color' => '',
         'global_text_color' => '',
+        'info_link_variant' => 'none',
         'user_defined_info_url' => '',
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,
@@ -51,13 +52,33 @@ function static_web_plugin_settings_page() {
             settings_fields('static_web_plugin_options_group');
             ?>
 
-            <div>
-                <label>Custom info link : </label>
+
+
+            <div class="settings-option-div">
+                <label>
+                <input type="radio" name="static_web_plugin_settings[info_link_variant]" value="none" <?php checked($settings['info_link_variant'], 'none'); ?>>
+                Don't enable "How to Use" link (<strong>Not recommended!</strong>)
+                </label>
+            </div>
+            <div class="settings-option-div">
+            <label>
+                <input type="radio" name="static_web_plugin_settings[info_link_variant]" value="default" <?php checked($settings['info_link_variant'], 'default'); ?>>
+                Use default "How to Use" link (<?php echo "https://reinventingtheweb.com/how-to-use-sw-links/" ?>)
+            </label>
+            </div>
+           
+            <div class="settings-option-div">
+                <label>
+                    <input type="radio" name="static_web_plugin_settings[info_link_variant]" value="custom" <?php checked($settings['info_link_variant'], 'custom'); ?>>
+                    Use custom "How to Use" link
+                </label>
+                <div class="spacerW10"></div>
                 <input class="single-text-input" type="text" name="static_web_plugin_settings[user_defined_info_url]" value="<?php echo esc_url($settings['user_defined_info_url']); ?>" />
             </div>
 
-            <div>
+            <div class="settings-option-div">
                 <label for="main_background_color_field">Select global background color:</label>
+                <div class="spacerW10"></div>
                 <input 
                     type="text" 
                     id="main_background_color_field" 
@@ -67,8 +88,9 @@ function static_web_plugin_settings_page() {
                 />
             </div>
 
-            <div>
+            <div class="settings-option-div">
                 <label for="main_text_color_field">Select global text color:</label>
+                <div class="spacerW10"></div>
                 <input 
                     type="text" 
                     id="main_text_color_field" 
@@ -81,21 +103,28 @@ function static_web_plugin_settings_page() {
 
             <h2>Top panel</h2>
 
-            <div>
+            <div class="settings-option-div">
                 <label>Main link: </label>
+                <div class="spacerW10"></div>
                 <input class="single-text-input" type="text" name="static_web_plugin_settings[top_panel][main_link]" value="<?php echo esc_url($top_panel['main_link']); ?>" />
             </div>
 
-            <label>Site name (optional): </label>
-            <input class="single-text-input" type="text" name="static_web_plugin_settings[top_panel][main_title]" value="<?php echo esc_attr($top_panel['main_title']); ?>" />
-            <div>
+            <div class="settings-option-div">
+                <label>Site name (optional): </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="static_web_plugin_settings[top_panel][main_title]" value="<?php echo esc_attr($top_panel['main_title']); ?>" />
+            </div>
+            <div class="settings-option-div">
                 <label for="static_web_plugin_settings[top_panel][logo_url]">Image URL:</label>
+                <div class="spacerW10"></div>
                 <input type="text" id="image-url" name="static_web_plugin_settings[top_panel][logo_url]" value="<?php echo esc_url(isset($top_panel['logo_url']) ? $top_panel['logo_url'] : ''); ?>" />
+                <div class="spacerW10"></div>
                 <button type="button" id="select-image">Select Image</button>
             </div>
 
-            <div>
+            <div class="settings-option-div">
                 <label for="top_background_color_field">Select top bar background color:</label>
+                <div class="spacerW10"></div>
                 <input 
                     type="text" 
                     id="top_background_color_field" 
@@ -105,8 +134,9 @@ function static_web_plugin_settings_page() {
                 />
             </div>
 
-            <div>
+            <div class="settings-option-div">
                 <label for="top_text_color_field">Select top bar text color:</label>
+                <div class="spacerW10"></div>
                 <input 
                     type="text" 
                     id="top_text_color_field" 
@@ -126,9 +156,10 @@ function static_web_plugin_settings_page() {
                             <div class="link">
                                 <label>Link text: </label>
                                 <input type="text" name="static_web_plugin_settings[top_panel][links][<?php echo $link_index; ?>][text]" value="<?php echo esc_attr($link['text']); ?>" />
+                                <div class="spacerH10"></div>
                                 <label>Link URL: </label>
                                 <input type="text" name="static_web_plugin_settings[top_panel][links][<?php echo $link_index; ?>][url]" value="<?php echo esc_url($link['url']); ?>" />
-
+                                <div class="spacerH10"></div>
                                 <button type="button" class="remove-link">Remove Link</button>
                             </div>
                             <?php
@@ -143,14 +174,16 @@ function static_web_plugin_settings_page() {
 
             <h2>Side panel</h2>
 
-            <div>
+            <div class="settings-option-div">
                 <label>Side panel on the left? </label>
+                <div class="spacerW10"></div>
                 <input class="single-checkbox-input" type="checkbox" name="static_web_plugin_settings[side_panel_on_the_left]" value="1" <?php echo !empty($settings['side_panel_on_the_left']) ? 'checked' : ''; ?>/>
             </div>
 
             <h2>Bottom panel</h2>
-            <div>
+            <div class="settings-option-div">
                 <label for="bottom_background_color_field">Select bottom bar background color:</label>
+                <div class="spacerW10"></div>
                 <input 
                     type="text" 
                     id="bottom_background_color_field" 
@@ -160,8 +193,9 @@ function static_web_plugin_settings_page() {
                 />
             </div>
 
-            <div>
+            <div class="settings-option-div">
                 <label for="bottom_text_color_field">Select bottom bar text color:</label>
+                <div class="spacerW10"></div>
                 <input 
                     type="text" 
                     id="bottom_text_color_field" 
@@ -179,6 +213,7 @@ function static_web_plugin_settings_page() {
                         <div class="section">
                             <label>Section Title: </label>
                             <input class="single-text-input" type="text" name="static_web_plugin_settings[bottom_panel][sections][<?php echo $section_index; ?>][title]" value="<?php echo esc_attr($section['title']); ?>" />
+                            <div class="spacerH10"></div>
                             <div class="links">
                                 <?php
                                 if (!empty($section['links'])) {
@@ -187,9 +222,12 @@ function static_web_plugin_settings_page() {
                                         <div class="link">
                                             <label>Link text: </label>
                                             <input type="text" name="static_web_plugin_settings[bottom_panel][sections][<?php echo $section_index; ?>][links][<?php echo $link_index; ?>][text]" value="<?php echo esc_attr($link['text']); ?>" />
-                                            <label>Link URL: </label>
-                                            <input type="text" name="static_web_plugin_settings[bottom_panel][sections][<?php echo $section_index; ?>][links][<?php echo $link_index; ?>][url]" value="<?php echo esc_url($link['url']); ?>" />
-                                            <button type="button" class="remove-link">Remove Link</button>
+                                            <div class="spacerH10"></div>
+
+                                            <label style="margin-top:10px;">Link URL: </label>
+                                            <input type="text" name="static_web_plugin_settings[bottom_panel][sections][<?php echo $section_index; ?>][links][<?php echo $link_index; ?>][url]" value="<?php echo isset($link['url']) ? esc_url($link['url']) : ''; ?>" />
+                                            <div class="spacerH10"></div>
+                                            <button style="margin-top:10px;" type="button" class="remove-link">Remove Link</button>
                                         </div>
                                         <?php
                                     }
@@ -197,6 +235,7 @@ function static_web_plugin_settings_page() {
                                 ?>
                             </div>
                             <button type="button" class="add-link">Add Link</button>
+                            <div class="spacerH10"></div>
                             <button type="button" class="remove-section">Remove Section</button>
                         </div>
                         <?php
@@ -205,17 +244,23 @@ function static_web_plugin_settings_page() {
                 ?>
             </div>
             <button type="button" id="add-section">Add Section</button>
+            <div class="spacerH10"></div>
+
             <br/>
-            <label>Bottom message (optional): </label>
-            <input class="single-text-input" type="text" name="static_web_plugin_settings[bottom_panel][bottom_message]" value="<?php echo esc_attr($bottom_panel['bottom_message']); ?>" />
-        
-            <div>
+            <div class="settings-option-div">
+                <label>Bottom message (optional): </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="static_web_plugin_settings[bottom_panel][bottom_message]" value="<?php echo esc_attr($bottom_panel['bottom_message']); ?>" />
+            </div>
+            <div class="settings-option-div">
                 <label>Modify internal links? </label>
+                <div class="spacerW10"></div>
                 <input class="single-checkbox-input" type="checkbox" name="static_web_plugin_settings[modify_internal_links]" value="1" <?php echo !empty($settings['modify_internal_links']) ? 'checked' : ''; ?>/>
             </div>
 
-            <div>
+            <div class="settings-option-div">
                 <label>Modify external links? </label>
+                <div class="spacerW10"></div>
                 <input class="single-checkbox-input" type="checkbox" name="static_web_plugin_settings[modify_external_links]" value="1" <?php echo !empty($settings['modify_external_links']) ? 'checked' : ''; ?>/>
             </div>
             <?php submit_button(); ?>
@@ -252,6 +297,7 @@ function static_web_plugin_settings_init() {
             'default' => json_encode(array(
                 'global_background_color' => '',
                 'global_text_color' => '',
+                'info_link_variant' => 'none',
                 'user_defined_info_url' => '',
                 'side_panel_on_the_left' => false,
                 'modify_internal_links' => false,
@@ -278,6 +324,7 @@ function static_web_plugin_settings_init() {
 function static_web_plugin_sanitize_settings($input) {
     $sanitized = array();
 
+    $valid_info_link_variants = array('none', 'default', 'custom');
 
     //Sanitize main object
 
@@ -288,6 +335,14 @@ function static_web_plugin_sanitize_settings($input) {
     if(isset($input['global_text_color'])){
         $sanitized['global_text_color'] = sanitize_text_field($input['global_text_color']);
     }
+
+    // Ensure `info_link_variant` is a valid value
+    $sanitized['info_link_variant'] = in_array($input['info_link_variant'], $valid_info_link_variants, true) ? $input['info_link_variant'] : 'none';
+
+    // Sanitize the custom URL
+    // $settings['user_defined_info_url'] = ($settings['info_link_variant'] === 'custom' && !empty($input['user_defined_info_url'])) 
+    //     ? esc_url_raw($input['user_defined_info_url']) 
+    //     : '';
 
     if(isset($input['user_defined_info_url'])){
         $sanitized['user_defined_info_url'] = sanitize_text_field($input['user_defined_info_url']);
@@ -359,6 +414,8 @@ function static_web_plugin_sanitize_settings($input) {
             }
         }
     }
+
+    
 
     return $sanitized;
 }

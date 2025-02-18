@@ -15,6 +15,7 @@ function get_panels($post) {
     $settings = get_option('static_web_plugin_settings', array(
         'global_background_color' => '',
         'global_text_color' => '',
+        'info_link_variant' => 'none',
         'user_defined_info_url' => '',
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,

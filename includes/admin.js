@@ -1,6 +1,28 @@
 document.addEventListener('DOMContentLoaded', function () {
    // let topPanelLinkIndex = document.querySelectorAll('#top-panel-links-container .section').length;
-    let sectionIndex = document.querySelectorAll('#sections-container .section').length;
+    
+   const sectionsContainer = document.getElementById('sections-container')
+
+    const sections = document.getElementsByClassName('section')
+    if(!sections.length){
+        sectionsContainer.style.display = 'none'
+    }
+
+
+    const radios = document.querySelectorAll('input[name="static_web_plugin_settings[info_link_variant]"]');
+    const textInput = document.querySelector('input[name="static_web_plugin_settings[user_defined_info_url]"]');
+
+    function toggleTextInput() {
+        textInput.disabled = document.querySelector('input[name="static_web_plugin_settings[info_link_variant]"]:checked').value !== 'custom';
+    }
+
+
+    radios.forEach(radio => radio.addEventListener('change', toggleTextInput));
+
+    textInput.disabled = !radios[2].checked
+           
+   
+   let sectionIndex = document.querySelectorAll('#sections-container .section').length;
 
     const selectImageButton = document.getElementById('select-image');
     const imageUrlInput = document.getElementById('image-url');
@@ -33,8 +55,10 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="link">
                 <label>Link text: </label>
                 <input type="text" name="static_web_plugin_settings[top_panel][links][${linkIndex}][text]" value="" />
+                <div class="spacerH10"></div>
                 <label>Link URL: </label>
                 <input type="text" name="static_web_plugin_settings[top_panel][links][${linkIndex}][url]" value="" />
+                <div class="spacerH10"></div>
                 <button type="button" class="remove-link">Remove Link</button>
             </div>`;
             section.querySelector('.links').insertAdjacentHTML('beforeend', linkTemplate);
@@ -56,11 +80,17 @@ document.addEventListener('DOMContentLoaded', function () {
         <div class="section">
             <label>Section Title: </label>
             <input class="single-text-input" type="text" name="static_web_plugin_settings[bottom_panel][sections][${sectionIndex}][title]" value="" />
+            <div class="spacerH10"></div>
             <div class="links"></div>
             <button type="button" class="add-link">Add Link</button>
+            <div class="spacerH10"></div>
             <button type="button" class="remove-section">Remove Section</button>
         </div>`;
-        document.getElementById('sections-container').insertAdjacentHTML('beforeend', sectionTemplate);
+
+        const sectionsContainer = document.getElementById('sections-container')
+        sectionsContainer.insertAdjacentHTML('beforeend', sectionTemplate);
+        sectionsContainer.style.display = 'block'
+        
         sectionIndex++;
     });
 
@@ -83,8 +113,10 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="link">
                 <label>Link text: </label>
                 <input type="text" name="static_web_plugin_settings[bottom_panel][sections][${sectionIndex}][links][${linkIndex}][text]" value="" />
+                <div class="spacerH10"></div>
                 <label>Link URL: </label>
                 <input type="text" name="static_web_plugin_settings[bottom_panel][sections][${sectionIndex}][links][${linkIndex}][url]" value="" />
+                <div class="spacerH10"></div>
                 <button type="button" class="remove-link">Remove Link</button>
             </div>`;
             section.querySelector('.links').insertAdjacentHTML('beforeend', linkTemplate);
@@ -98,6 +130,12 @@ document.addEventListener('DOMContentLoaded', function () {
         // Remove a section
         if (target.classList.contains('remove-section')) {
             target.closest('.section').remove();
+            const sectionsContainer = document.getElementById('sections-container')
+
+            const sections = document.getElementsByClassName('section')
+            if(!sections.length){
+                sectionsContainer.style.display = 'none'
+            }
         }
     });
 });
