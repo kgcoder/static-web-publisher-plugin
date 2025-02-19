@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
-function static_web_plugin_settings_page() {
+function stwebplgn_settings_page() {
 
      //delete_option('static_web_plugin_settings');
 
@@ -40,8 +40,6 @@ function static_web_plugin_settings_page() {
     ?>
     <div class="wrap">
         <h1>Static Web Plugin Settings</h1>
-        <!-- <h2>Top panel</h2> -->
-        <!-- <span>Settings: <?php echo json_encode($settings, JSON_PRETTY_PRINT); ?></span> -->
         <script>
     console.log(<?php echo json_encode($settings); ?>);
 </script>
@@ -269,31 +267,15 @@ function static_web_plugin_settings_page() {
     <?php
 }
 
-function static_web_plugin_settings_init() {
-    // register_setting('static_web_plugin_options_group', 'static_web_plugin_options');
-
-    // add_settings_section(
-    //     'static_web_plugin_section', 
-    //     'Manage Sections', 
-    //     'static_web_plugin_section_callback', 
-    //     'static_web_plugin_settings'
-    // );
-
-    // add_settings_field(
-    //     'static_web_plugin_field', 
-    //     'Section and Links', 
-    //     'static_web_plugin_field_callback', 
-    //     'static_web_plugin_settings', 
-    //     'static_web_plugin_section'
-    // );
-
+function stwebplgn_settings_init() {
+   
     // Register a single option for storing all settings
     register_setting(
         'static_web_plugin_options_group', // Option group
         'static_web_plugin_settings',      // Option name
         array(
             'type' => 'string',
-            'sanitize_callback' => 'static_web_plugin_sanitize_settings',
+            'sanitize_callback' => 'stwebplgn_sanitize_settings',
             'default' => json_encode(array(
                 'global_background_color' => '',
                 'global_text_color' => '',
@@ -321,7 +303,7 @@ function static_web_plugin_settings_init() {
     );
 }
 
-function static_web_plugin_sanitize_settings($input) {
+function stwebplgn_sanitize_settings($input) {
     $sanitized = array();
 
     $valid_info_link_variants = array('none', 'default', 'custom');
@@ -336,13 +318,7 @@ function static_web_plugin_sanitize_settings($input) {
         $sanitized['global_text_color'] = sanitize_text_field($input['global_text_color']);
     }
 
-    // Ensure `info_link_variant` is a valid value
     $sanitized['info_link_variant'] = in_array($input['info_link_variant'], $valid_info_link_variants, true) ? $input['info_link_variant'] : 'none';
-
-    // Sanitize the custom URL
-    // $settings['user_defined_info_url'] = ($settings['info_link_variant'] === 'custom' && !empty($input['user_defined_info_url'])) 
-    //     ? esc_url_raw($input['user_defined_info_url']) 
-    //     : '';
 
     if(isset($input['user_defined_info_url'])){
         $sanitized['user_defined_info_url'] = sanitize_text_field($input['user_defined_info_url']);
@@ -423,35 +399,25 @@ function static_web_plugin_sanitize_settings($input) {
 
 
 
-// function static_web_plugin_section_callback() {
-//     echo 'Enter the sections and links you want to include in the XML.';
-// }
-
-// function static_web_plugin_field_callback() {
-//     $options = get_option('static_web_plugin_options');
-//     // Example of output for adding multiple sections dynamically
-//     echo '<textarea name="static_web_plugin_options[sections]" rows="10" cols="50">' . esc_textarea($options['sections']) . '</textarea>';
-// }
-
-function static_web_plugin_menu() {
+function stwebplgn_menu() {
     // Add a menu item to the sidebar
     add_menu_page(
         'Static Web Plugin Settings',          // Page title
         'Static Web Plugin',                   // Menu title
         'manage_options',              // Capability required
         'static_web_plugin_settings',          // Menu slug
-        'static_web_plugin_settings_page',     // Callback function to render the settings page
+        'stwebplgn_settings_page',     // Callback function to render the settings page
         'dashicons-admin-generic',     // Icon (optional)
         100                            // Position in the menu
     );
 }
-add_action('admin_menu', 'static_web_plugin_menu');
+add_action('admin_menu', 'stwebplgn_menu');
 
-add_action('admin_init', 'static_web_plugin_settings_init');
+add_action('admin_init', 'stwebplgn_settings_init');
 
 
 
-function static_web_plugin_enqueue_scripts($hook) {
+function stwebplgn_enqueue_scripts($hook) {
     // Only enqueue on the settings page for the plugin
     if ($hook !== 'toplevel_page_static_web_plugin_settings') {
         return;
@@ -483,12 +449,12 @@ function static_web_plugin_enqueue_scripts($hook) {
         null
     );
 }
-add_action('admin_enqueue_scripts', 'static_web_plugin_enqueue_scripts');
+add_action('admin_enqueue_scripts', 'stwebplgn_enqueue_scripts');
 
 
-function allow_custom_url_schemes($protocols) {
+function stwebplgn_allow_custom_url_schemes($protocols) {
     $protocols[] = 'sw';
     $protocols[] = 'sws';
     return $protocols;
 }
-add_filter('kses_allowed_protocols', 'allow_custom_url_schemes');
+add_filter('kses_allowed_protocols', 'stwebplgn_allow_custom_url_schemes');

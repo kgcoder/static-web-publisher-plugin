@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 
-function custom_comment_callback($comment, $args, $depth) {
+function stwebplgn_custom_comment_callback($comment, $args, $depth) {
     $GLOBALS['comment'] = $comment;
     ?>
     <li class="comment-item" id="comment-<?php comment_ID(); ?>">
@@ -33,7 +33,7 @@ function custom_comment_callback($comment, $args, $depth) {
     <?php
 }
 
-function send_comments_from_post( $post ) {
+function stwebplgn_send_comments_from_post( $post ) {
 
     if (empty($post)) {
         return new WP_Error('post_not_found', 'Post not found', array('status' => 404));
@@ -42,10 +42,6 @@ function send_comments_from_post( $post ) {
     $post_id = $post->ID;
 
     $comments = get_comments(array('post_id' => $post_id, 'status' => 'approve'));
-
-    // if (empty($comments)) {
-    //     return new WP_Error('no_comments', 'No comments found for this post', array('status' => 404));
-    // }
 
 
     // Start output buffering
@@ -72,7 +68,7 @@ function send_comments_from_post( $post ) {
                 'style'       => 'ul',
                 'short_ping'  => true,
                 'avatar_size' => 32,
-                'callback'    => 'custom_comment_callback',
+                'callback'    => 'stwebplgn_custom_comment_callback',
                 'max_depth'   => 5,
             ), $comments);
             ?>

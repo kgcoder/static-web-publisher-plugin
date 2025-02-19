@@ -4,7 +4,22 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
-function send_hdoc_for_post($post){
+function stwebplgn_strip_wp_tags($content) {
+    // Define the regular expression pattern to match WordPress-specific tags
+    $pattern = '/<!--\s*\/?wp:.*?-->/i';
+    // Remove the tags from the content
+    $content = preg_replace($pattern, '', $content);
+
+    $pattern = '/<\/?figure.*?>/i';
+
+    $content = preg_replace($pattern, '', $content);
+
+
+    return $content;
+}
+
+
+function stwebplgn_send_hdoc_for_post($post){
     if ($post) {
 
         if (get_post_meta($post->ID, '_disable_static_web_link', true) === '1') {
@@ -37,7 +52,7 @@ function send_hdoc_for_post($post){
 
         $htmlContent = preg_replace_callback($pattern, $callback, $htmlContent);
 
-        $htmlContent = strip_wp_tags($htmlContent);
+        $htmlContent = stwebplgn_strip_wp_tags($htmlContent);
 
 
 
@@ -46,7 +61,7 @@ function send_hdoc_for_post($post){
 
 
         if(!empty($modify_internal_links)){
-            $htmlContent = modify_internal_links_in_html($htmlContent);
+            $htmlContent = stwebplgn_modify_internal_links_in_html($htmlContent);
         }
 
         $modify_external_links = isset($settings['modify_external_links']) ? $settings['modify_external_links'] : '';
@@ -54,7 +69,7 @@ function send_hdoc_for_post($post){
 
 
         if(!empty($modify_external_links)){
-            $htmlContent = modify_external_links_in_html($htmlContent);
+            $htmlContent = stwebplgn_modify_external_links_in_html($htmlContent);
         }
         
         //$allowed_tags = ['p', 'a', 'strong', 'h1', 'h2', 'h3', 'h4', 'img', 'figure'];
@@ -76,7 +91,7 @@ function send_hdoc_for_post($post){
         $finalContent = '<h1>' . $title . "</h1>" . /*$testVideo .*/ $htmlContent . "<p>---</p><p><a href=\"" . $permalink . "\">" . "Original page</a></p>";
 
        // $link = home_url( "/sw/v1/comments/{$post->post_name}");
-        $panels = get_panels($post);
+        $panels = stwebplgn_get_panels($post);
 
         $connectionsSection = '';
         if(!empty($connections_info)){
@@ -95,7 +110,7 @@ function send_hdoc_for_post($post){
 }
 
 
-function modify_internal_links_in_html($htmlContent) {
+function stwebplgn_modify_internal_links_in_html($htmlContent) {
     // Get the site's base URL
     $site_url = home_url();
 
@@ -136,7 +151,7 @@ function modify_internal_links_in_html($htmlContent) {
 }
 
 
-function modify_external_links_in_html($htmlContent) {
+function stwebplgn_modify_external_links_in_html($htmlContent) {
     // Regex pattern to find <a> tags with a data-sw attribute
     $pattern = '/<a\s+[^>]*href=["\'](.*?)["\'][^>]*data-sw=["\'](.*?)["\'][^>]*>/i';
 
