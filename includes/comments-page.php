@@ -4,6 +4,35 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
+
+function custom_comment_callback($comment, $args, $depth) {
+    $GLOBALS['comment'] = $comment;
+    ?>
+    <li class="comment-item" id="comment-<?php comment_ID(); ?>">
+        <div class="comment-top-row">
+            <div class="comment-avatar">
+                <?php echo get_avatar($comment, 40); ?>
+            </div>
+            <div class="comment-info-column">
+                <strong class="comment-author"><?php comment_author_link(); ?></strong>
+                <span class="comment-date"><?php echo get_comment_date(); ?></span>
+            </div>
+        </div>
+        <div class="comment-content">
+            <?php comment_text(); ?>
+            <div class="comment-reply">
+                <?php 
+                comment_reply_link(array_merge($args, array(
+                    'depth'  => $depth,
+                    'max_depth' => $args['max_depth']
+                ))); 
+                ?>
+            </div>
+        </div>
+    </li>
+    <?php
+}
+
 function send_comments_from_post( $post ) {
 
     if (empty($post)) {
@@ -14,9 +43,9 @@ function send_comments_from_post( $post ) {
 
     $comments = get_comments(array('post_id' => $post_id, 'status' => 'approve'));
 
-    if (empty($comments)) {
-        return new WP_Error('no_comments', 'No comments found for this post', array('status' => 404));
-    }
+    // if (empty($comments)) {
+    //     return new WP_Error('no_comments', 'No comments found for this post', array('status' => 404));
+    // }
 
 
     // Start output buffering
@@ -29,27 +58,36 @@ function send_comments_from_post( $post ) {
 <head>
 <meta charset="<?php bloginfo('charset'); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Comments for <?php echo esc_html($post->post_title); ?></title>
-    <?php
-    // Include only required theme styles
-    wp_enqueue_style('style', get_stylesheet_uri());
-    wp_print_styles();
-    ?>
+<title>Comments for <?php echo esc_html($post->post_title); ?></title>
+<link rel="stylesheet" href="<?php echo plugins_url('comments.css', __FILE__); ?>">
 </head>
 <body>
 <div class="comment-section">
-<h3>Comments</h3>
-<?php
-wp_list_comments(array(
-    'style'       => 'div',
-    'short_ping'  => true,
-    'avatar_size' => 32,
-), $comments);
-?>
+    <h3>Comments</h3>
+
+    <?php if ($comments) : ?>
+        <ul class="comment-list">
+            <?php
+            wp_list_comments(array(
+                'style'       => 'ul',
+                'short_ping'  => true,
+                'avatar_size' => 32,
+                'callback'    => 'custom_comment_callback',
+                'max_depth'   => 5,
+            ), $comments);
+            ?>
+        </ul>
+    <?php else : ?>
+        <p class="no-comments">No comments yet. Be the first to comment!</p>
+        <a href="<?php echo get_permalink($post->ID) . '#respond'; ?>" class="go-to-comments">
+            Reply
+        </a>
+
+    <?php endif; ?>
 </div>
 </body>
 </html>
+
 
 <?php
 
