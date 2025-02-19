@@ -19,20 +19,20 @@ if (!defined('ABSPATH')) {
 }
 
 // Run on plugin activation
-function stwebplgn_activate() {
-    stwebplgn_custom_post_endpoints_rewrite_rules();
+function stwbplgn_activate() {
+    stwbplgn_custom_post_endpoints_rewrite_rules();
     flush_rewrite_rules(); // Refresh permalinks
 }
-register_activation_hook(__FILE__, 'stwebplgn_activate');
+register_activation_hook(__FILE__, 'stwbplgn_activate');
 
 // Run on plugin deactivation (optional cleanup)
-function stwebplgn_deactivate() {
+function stwbplgn_deactivate() {
     flush_rewrite_rules(); // Clean up permalinks
 }
-register_deactivation_hook(__FILE__, 'stwebplgn_deactivate');
+register_deactivation_hook(__FILE__, 'stwbplgn_deactivate');
 
 
-function stwebplgn_custom_post_endpoints_rewrite_rules() {
+function stwbplgn_custom_post_endpoints_rewrite_rules() {
 
   
     add_rewrite_rule(
@@ -54,15 +54,15 @@ function stwebplgn_custom_post_endpoints_rewrite_rules() {
     );
 
 }
-add_action('init', 'stwebplgn_custom_post_endpoints_rewrite_rules');
+add_action('init', 'stwbplgn_custom_post_endpoints_rewrite_rules');
 
-function stwebplgn_custom_post_endpoints_query_vars($query_vars) {
+function stwbplgn_custom_post_endpoints_query_vars($query_vars) {
     $query_vars[] = 'sw_custom_matches';
     $query_vars[] = 'comments_custom_matches';
 
     return $query_vars;
 }
-add_filter('query_vars', 'stwebplgn_custom_post_endpoints_query_vars');
+add_filter('query_vars', 'stwbplgn_custom_post_endpoints_query_vars');
 
 
 
@@ -78,7 +78,7 @@ add_filter('query_vars', 'stwebplgn_custom_post_endpoints_query_vars');
 // }
 
 
-function stwebplgn_custom_post_endpoints_template_redirect() {
+function stwbplgn_custom_post_endpoints_template_redirect() {
     global $wp_query;
 
     $permalink_structure = get_option( 'permalink_structure' );
@@ -95,7 +95,7 @@ function stwebplgn_custom_post_endpoints_template_redirect() {
         
         if ($current_path === $expected_path1 || $current_path === $expected_path2) {
             $post = get_post($post_id);
-            stwebplgn_send_hdoc_for_post($post);
+            stwbplgn_send_hdoc_for_post($post);
             exit;
         }
 
@@ -146,7 +146,7 @@ function stwebplgn_custom_post_endpoints_template_redirect() {
             $post_id = (int)$slug;
             $post = get_post($post_id);
             if ($post) {
-                stwebplgn_send_comments_from_post($post);
+                stwbplgn_send_comments_from_post($post);
             } else {
                 echo 'Post not found by ID';
             }
@@ -154,7 +154,7 @@ function stwebplgn_custom_post_endpoints_template_redirect() {
         }else{
             $post = get_page_by_path($slug, OBJECT, array('post','page'));
             if ($post) {
-                stwebplgn_send_comments_from_post($post);
+                stwbplgn_send_comments_from_post($post);
             } else {
                 echo 'Post not found by ID';
             }
@@ -180,7 +180,7 @@ function stwebplgn_custom_post_endpoints_template_redirect() {
     
                 if ($post) {
                     // Front page content found, send it
-                    stwebplgn_send_hdoc_for_post($post);
+                    stwbplgn_send_hdoc_for_post($post);
                 } else {
                     // Front page set, but no content found, send 404
                     wp_die('Page not found', '', array('response' => 404));
@@ -231,13 +231,13 @@ function stwebplgn_custom_post_endpoints_template_redirect() {
             $post_id = (int)$slug;
             $post = get_post($post_id);
 
-            stwebplgn_send_hdoc_for_post($post);
+            stwbplgn_send_hdoc_for_post($post);
           
 
         }else{
             $post = get_page_by_path($slug, OBJECT, array('post','page'));
        
-            stwebplgn_send_hdoc_for_post($post);
+            stwbplgn_send_hdoc_for_post($post);
            
 
         }
@@ -246,6 +246,6 @@ function stwebplgn_custom_post_endpoints_template_redirect() {
     }
 
 }
-add_action('template_redirect', 'stwebplgn_custom_post_endpoints_template_redirect');
+add_action('template_redirect', 'stwbplgn_custom_post_endpoints_template_redirect');
 
 

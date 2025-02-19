@@ -4,12 +4,12 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
-function stwebplgn_settings_page() {
+function stwbplgn_settings_page() {
 
-     //delete_option('static_web_plugin_settings');
+     //delete_option('stwbplgn_settings');
 
 
-    $settings = get_option('static_web_plugin_settings', array(
+    $settings = get_option('stwbplgn_settings', array(
         'global_background_color' => '',
         'global_text_color' => '',
         'info_link_variant' => 'none',
@@ -47,31 +47,31 @@ function stwebplgn_settings_page() {
         <form method="post" action="options.php">
         <?php
             // Outputs nonce, action, and option_page fields for the settings
-            settings_fields('static_web_plugin_options_group');
+            settings_fields('stwbplgn_options_group');
             ?>
 
 
 
             <div class="settings-option-div">
                 <label>
-                <input type="radio" name="static_web_plugin_settings[info_link_variant]" value="none" <?php checked($settings['info_link_variant'], 'none'); ?>>
+                <input type="radio" name="stwbplgn_settings[info_link_variant]" value="none" <?php checked($settings['info_link_variant'], 'none'); ?>>
                 Don't use info link (<strong>Not recommended!</strong>)
                 </label>
             </div>
             <div class="settings-option-div">
             <label>
-                <input type="radio" name="static_web_plugin_settings[info_link_variant]" value="default" <?php checked($settings['info_link_variant'], 'default'); ?>>
+                <input type="radio" name="stwbplgn_settings[info_link_variant]" value="default" <?php checked($settings['info_link_variant'], 'default'); ?>>
                 Use default info link (<?php echo "https://reinventingtheweb.com/how-to-use-sw-links/" ?>)
             </label>
             </div>
            
             <div class="settings-option-div">
                 <label>
-                    <input type="radio" name="static_web_plugin_settings[info_link_variant]" value="custom" <?php checked($settings['info_link_variant'], 'custom'); ?>>
+                    <input type="radio" name="stwbplgn_settings[info_link_variant]" value="custom" <?php checked($settings['info_link_variant'], 'custom'); ?>>
                     Use custom info link
                 </label>
                 <div class="spacerW10"></div>
-                <input class="single-text-input" type="text" name="static_web_plugin_settings[user_defined_info_url]" value="<?php echo esc_url($settings['user_defined_info_url']); ?>" />
+                <input class="single-text-input" type="text" name="stwbplgn_settings[user_defined_info_url]" value="<?php echo esc_url($settings['user_defined_info_url']); ?>" />
             </div>
 
             <div class="settings-option-div">
@@ -80,7 +80,7 @@ function stwebplgn_settings_page() {
                 <input 
                     type="text" 
                     id="main_background_color_field" 
-                    name="static_web_plugin_settings[global_background_color]" 
+                    name="stwbplgn_settings[global_background_color]" 
                     value="<?php echo esc_attr($settings['global_background_color']); ?>" 
                     class="my-color-field" 
                 />
@@ -92,7 +92,7 @@ function stwebplgn_settings_page() {
                 <input 
                     type="text" 
                     id="main_text_color_field" 
-                    name="static_web_plugin_settings[global_text_color]" 
+                    name="stwbplgn_settings[global_text_color]" 
                     value="<?php echo esc_attr($settings['global_text_color']); ?>" 
                     class="my-color-field" 
                 />
@@ -104,18 +104,18 @@ function stwebplgn_settings_page() {
             <div class="settings-option-div">
                 <label>Main link: </label>
                 <div class="spacerW10"></div>
-                <input class="single-text-input" type="text" name="static_web_plugin_settings[top_panel][main_link]" value="<?php echo esc_url($top_panel['main_link']); ?>" />
+                <input class="single-text-input" type="text" name="stwbplgn_settings[top_panel][main_link]" value="<?php echo esc_url($top_panel['main_link']); ?>" />
             </div>
 
             <div class="settings-option-div">
                 <label>Site name (optional): </label>
                 <div class="spacerW10"></div>
-                <input class="single-text-input" type="text" name="static_web_plugin_settings[top_panel][main_title]" value="<?php echo esc_attr($top_panel['main_title']); ?>" />
+                <input class="single-text-input" type="text" name="stwbplgn_settings[top_panel][main_title]" value="<?php echo esc_attr($top_panel['main_title']); ?>" />
             </div>
             <div class="settings-option-div">
-                <label for="static_web_plugin_settings[top_panel][logo_url]">Image URL:</label>
+                <label for="stwbplgn_settings[top_panel][logo_url]">Image URL:</label>
                 <div class="spacerW10"></div>
-                <input type="text" id="image-url" name="static_web_plugin_settings[top_panel][logo_url]" value="<?php echo esc_url(isset($top_panel['logo_url']) ? $top_panel['logo_url'] : ''); ?>" />
+                <input type="text" id="image-url" name="stwbplgn_settings[top_panel][logo_url]" value="<?php echo esc_url(isset($top_panel['logo_url']) ? $top_panel['logo_url'] : ''); ?>" />
                 <div class="spacerW10"></div>
                 <button type="button" id="select-image">Select Image</button>
             </div>
@@ -126,7 +126,7 @@ function stwebplgn_settings_page() {
                 <input 
                     type="text" 
                     id="top_background_color_field" 
-                    name="static_web_plugin_settings[top_panel][top_background_color]" 
+                    name="stwbplgn_settings[top_panel][top_background_color]" 
                     value="<?php echo esc_attr($top_panel['top_background_color']); ?>" 
                     class="my-color-field" 
                 />
@@ -138,7 +138,7 @@ function stwebplgn_settings_page() {
                 <input 
                     type="text" 
                     id="top_text_color_field" 
-                    name="static_web_plugin_settings[top_panel][top_text_color]" 
+                    name="stwbplgn_settings[top_panel][top_text_color]" 
                     value="<?php echo esc_attr($top_panel['top_text_color']); ?>" 
                     class="my-color-field" 
                 />
@@ -153,10 +153,10 @@ function stwebplgn_settings_page() {
                             ?>
                             <div class="link">
                                 <label>Link text: </label>
-                                <input type="text" name="static_web_plugin_settings[top_panel][links][<?php echo $link_index; ?>][text]" value="<?php echo esc_attr($link['text']); ?>" />
+                                <input type="text" name="stwbplgn_settings[top_panel][links][<?php echo $link_index; ?>][text]" value="<?php echo esc_attr($link['text']); ?>" />
                                 <div class="spacerH10"></div>
                                 <label>Link URL: </label>
-                                <input type="text" name="static_web_plugin_settings[top_panel][links][<?php echo $link_index; ?>][url]" value="<?php echo esc_url($link['url']); ?>" />
+                                <input type="text" name="stwbplgn_settings[top_panel][links][<?php echo $link_index; ?>][url]" value="<?php echo esc_url($link['url']); ?>" />
                                 <div class="spacerH10"></div>
                                 <button type="button" class="remove-link">Remove Link</button>
                             </div>
@@ -175,7 +175,7 @@ function stwebplgn_settings_page() {
             <div class="settings-option-div">
                 <label>Side panel on the left? </label>
                 <div class="spacerW10"></div>
-                <input class="single-checkbox-input" type="checkbox" name="static_web_plugin_settings[side_panel_on_the_left]" value="1" <?php echo !empty($settings['side_panel_on_the_left']) ? 'checked' : ''; ?>/>
+                <input class="single-checkbox-input" type="checkbox" name="stwbplgn_settings[side_panel_on_the_left]" value="1" <?php echo !empty($settings['side_panel_on_the_left']) ? 'checked' : ''; ?>/>
             </div>
 
             <h2>Bottom panel</h2>
@@ -185,7 +185,7 @@ function stwebplgn_settings_page() {
                 <input 
                     type="text" 
                     id="bottom_background_color_field" 
-                    name="static_web_plugin_settings[bottom_panel][bottom_background_color]" 
+                    name="stwbplgn_settings[bottom_panel][bottom_background_color]" 
                     value="<?php echo esc_attr($bottom_panel['bottom_background_color']); ?>" 
                     class="my-color-field" 
                 />
@@ -197,7 +197,7 @@ function stwebplgn_settings_page() {
                 <input 
                     type="text" 
                     id="bottom_text_color_field" 
-                    name="static_web_plugin_settings[bottom_panel][bottom_text_color]" 
+                    name="stwbplgn_settings[bottom_panel][bottom_text_color]" 
                     value="<?php echo esc_attr($bottom_panel['bottom_text_color']); ?>" 
                     class="my-color-field" 
                 />
@@ -210,7 +210,7 @@ function stwebplgn_settings_page() {
                         ?>
                         <div class="section">
                             <label>Section Title: </label>
-                            <input class="single-text-input" type="text" name="static_web_plugin_settings[bottom_panel][sections][<?php echo $section_index; ?>][title]" value="<?php echo esc_attr($section['title']); ?>" />
+                            <input class="single-text-input" type="text" name="stwbplgn_settings[bottom_panel][sections][<?php echo $section_index; ?>][title]" value="<?php echo esc_attr($section['title']); ?>" />
                             <div class="spacerH10"></div>
                             <div class="links">
                                 <?php
@@ -219,11 +219,11 @@ function stwebplgn_settings_page() {
                                         ?>
                                         <div class="link">
                                             <label>Link text: </label>
-                                            <input type="text" name="static_web_plugin_settings[bottom_panel][sections][<?php echo $section_index; ?>][links][<?php echo $link_index; ?>][text]" value="<?php echo esc_attr($link['text']); ?>" />
+                                            <input type="text" name="stwbplgn_settings[bottom_panel][sections][<?php echo $section_index; ?>][links][<?php echo $link_index; ?>][text]" value="<?php echo esc_attr($link['text']); ?>" />
                                             <div class="spacerH10"></div>
 
                                             <label style="margin-top:10px;">Link URL: </label>
-                                            <input type="text" name="static_web_plugin_settings[bottom_panel][sections][<?php echo $section_index; ?>][links][<?php echo $link_index; ?>][url]" value="<?php echo isset($link['url']) ? esc_url($link['url']) : ''; ?>" />
+                                            <input type="text" name="stwbplgn_settings[bottom_panel][sections][<?php echo $section_index; ?>][links][<?php echo $link_index; ?>][url]" value="<?php echo isset($link['url']) ? esc_url($link['url']) : ''; ?>" />
                                             <div class="spacerH10"></div>
                                             <button style="margin-top:10px;" type="button" class="remove-link">Remove Link</button>
                                         </div>
@@ -248,18 +248,18 @@ function stwebplgn_settings_page() {
             <div class="settings-option-div">
                 <label>Bottom message (optional): </label>
                 <div class="spacerW10"></div>
-                <input class="single-text-input" type="text" name="static_web_plugin_settings[bottom_panel][bottom_message]" value="<?php echo esc_attr($bottom_panel['bottom_message']); ?>" />
+                <input class="single-text-input" type="text" name="stwbplgn_settings[bottom_panel][bottom_message]" value="<?php echo esc_attr($bottom_panel['bottom_message']); ?>" />
             </div>
             <div class="settings-option-div">
                 <label>Modify internal links? </label>
                 <div class="spacerW10"></div>
-                <input class="single-checkbox-input" type="checkbox" name="static_web_plugin_settings[modify_internal_links]" value="1" <?php echo !empty($settings['modify_internal_links']) ? 'checked' : ''; ?>/>
+                <input class="single-checkbox-input" type="checkbox" name="stwbplgn_settings[modify_internal_links]" value="1" <?php echo !empty($settings['modify_internal_links']) ? 'checked' : ''; ?>/>
             </div>
 
             <div class="settings-option-div">
                 <label>Modify external links? </label>
                 <div class="spacerW10"></div>
-                <input class="single-checkbox-input" type="checkbox" name="static_web_plugin_settings[modify_external_links]" value="1" <?php echo !empty($settings['modify_external_links']) ? 'checked' : ''; ?>/>
+                <input class="single-checkbox-input" type="checkbox" name="stwbplgn_settings[modify_external_links]" value="1" <?php echo !empty($settings['modify_external_links']) ? 'checked' : ''; ?>/>
             </div>
             <?php submit_button(); ?>
         </form>
@@ -267,15 +267,15 @@ function stwebplgn_settings_page() {
     <?php
 }
 
-function stwebplgn_settings_init() {
+function stwbplgn_settings_init() {
    
     // Register a single option for storing all settings
     register_setting(
-        'static_web_plugin_options_group', // Option group
-        'static_web_plugin_settings',      // Option name
+        'stwbplgn_options_group', // Option group
+        'stwbplgn_settings',      // Option name
         array(
             'type' => 'string',
-            'sanitize_callback' => 'stwebplgn_sanitize_settings',
+            'sanitize_callback' => 'stwbplgn_sanitize_settings',
             'default' => json_encode(array(
                 'global_background_color' => '',
                 'global_text_color' => '',
@@ -303,7 +303,7 @@ function stwebplgn_settings_init() {
     );
 }
 
-function stwebplgn_sanitize_settings($input) {
+function stwbplgn_sanitize_settings($input) {
     $sanitized = array();
 
     $valid_info_link_variants = array('none', 'default', 'custom');
@@ -399,25 +399,25 @@ function stwebplgn_sanitize_settings($input) {
 
 
 
-function stwebplgn_menu() {
+function stwbplgn_menu() {
     // Add a menu item to the sidebar
     add_menu_page(
         'Static Web Plugin Settings',          // Page title
         'Static Web Plugin',                   // Menu title
         'manage_options',              // Capability required
         'static_web_plugin_settings',          // Menu slug
-        'stwebplgn_settings_page',     // Callback function to render the settings page
+        'stwbplgn_settings_page',     // Callback function to render the settings page
         'dashicons-admin-generic',     // Icon (optional)
         100                            // Position in the menu
     );
 }
-add_action('admin_menu', 'stwebplgn_menu');
+add_action('admin_menu', 'stwbplgn_menu');
 
-add_action('admin_init', 'stwebplgn_settings_init');
+add_action('admin_init', 'stwbplgn_settings_init');
 
 
 
-function stwebplgn_enqueue_scripts($hook) {
+function stwbplgn_enqueue_scripts($hook) {
     // Only enqueue on the settings page for the plugin
     if ($hook !== 'toplevel_page_static_web_plugin_settings') {
         return;
@@ -435,8 +435,8 @@ function stwebplgn_enqueue_scripts($hook) {
     );
 
     wp_enqueue_script(
-        'my-plugin-color-picker',
-        plugin_dir_url(__FILE__) . 'my-plugin-color-picker.js', // Your JS file
+        'static-web-plugin-color-picker',
+        plugin_dir_url(__FILE__) . 'color-picker.js', 
         array('wp-color-picker'), // Dependency for the color picker
         null,
         true
@@ -449,12 +449,12 @@ function stwebplgn_enqueue_scripts($hook) {
         null
     );
 }
-add_action('admin_enqueue_scripts', 'stwebplgn_enqueue_scripts');
+add_action('admin_enqueue_scripts', 'stwbplgn_enqueue_scripts');
 
 
-function stwebplgn_allow_custom_url_schemes($protocols) {
+function stwbplgn_allow_custom_url_schemes($protocols) {
     $protocols[] = 'sw';
     $protocols[] = 'sws';
     return $protocols;
 }
-add_filter('kses_allowed_protocols', 'stwebplgn_allow_custom_url_schemes');
+add_filter('kses_allowed_protocols', 'stwbplgn_allow_custom_url_schemes');
