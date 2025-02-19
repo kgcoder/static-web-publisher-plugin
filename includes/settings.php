@@ -57,20 +57,20 @@ function static_web_plugin_settings_page() {
             <div class="settings-option-div">
                 <label>
                 <input type="radio" name="static_web_plugin_settings[info_link_variant]" value="none" <?php checked($settings['info_link_variant'], 'none'); ?>>
-                Don't enable "How to Use" link (<strong>Not recommended!</strong>)
+                Don't use info link (<strong>Not recommended!</strong>)
                 </label>
             </div>
             <div class="settings-option-div">
             <label>
                 <input type="radio" name="static_web_plugin_settings[info_link_variant]" value="default" <?php checked($settings['info_link_variant'], 'default'); ?>>
-                Use default "How to Use" link (<?php echo "https://reinventingtheweb.com/how-to-use-sw-links/" ?>)
+                Use default info link (<?php echo "https://reinventingtheweb.com/how-to-use-sw-links/" ?>)
             </label>
             </div>
            
             <div class="settings-option-div">
                 <label>
                     <input type="radio" name="static_web_plugin_settings[info_link_variant]" value="custom" <?php checked($settings['info_link_variant'], 'custom'); ?>>
-                    Use custom "How to Use" link
+                    Use custom info link
                 </label>
                 <div class="spacerW10"></div>
                 <input class="single-text-input" type="text" name="static_web_plugin_settings[user_defined_info_url]" value="<?php echo esc_url($settings['user_defined_info_url']); ?>" />

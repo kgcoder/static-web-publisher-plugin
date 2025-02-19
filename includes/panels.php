@@ -71,9 +71,10 @@ function get_panels($post) {
 
 
     $should_show_top_panel = !empty($site_name_element) || !empty($logo_url) || !empty($top_panel['links']);
+    $should_show_side_panel = has_comment_section($post);
     $should_show_bottom_panel = !empty($bottom_message) || !empty($bottom_panel['sections']);
 
-    $should_show_panels = $should_show_top_panel || $should_show_bottom_panel;
+    $should_show_panels = $should_show_top_panel || $should_show_side_panel || $should_show_bottom_panel;
 
     $side_panel_left = !!$settings['side_panel_on_the_left'];
 
@@ -104,7 +105,7 @@ if (!empty($top_panel['links'])) {
 <?php
 }
 ?>
-<?php if (has_comment_section($post)): ?>
+<?php if ($should_show_side_panel): ?>
 <side-panel<?php echo $side_panel_attribute; ?>><?php echo $comments_link; ?></side-panel>
 <?php endif; ?>
 <?php if($should_show_bottom_panel){ ?>

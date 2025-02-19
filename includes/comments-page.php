@@ -63,7 +63,7 @@ function send_comments_from_post( $post ) {
 </head>
 <body>
 <div class="comment-section">
-    <h3>Comments</h3>
+    <h1>Comments</h1>
 
     <?php if ($comments) : ?>
         <ul class="comment-list">
