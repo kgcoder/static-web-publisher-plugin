@@ -22,10 +22,27 @@ function stwbplgn_custom_comment_callback($comment, $args, $depth) {
             <?php comment_text(); ?>
             <div class="comment-reply">
                 <?php 
-                comment_reply_link(array_merge($args, array(
+                $reply_link = get_comment_reply_link(array_merge($args, array(
                     'depth'  => $depth,
                     'max_depth' => $args['max_depth']
-                ))); 
+                )));
+
+                if ($reply_link) {
+                    // Extract the href attribute using a regex
+                    if (preg_match('/href=["\'](.*?)["\']/', $reply_link, $matches)) {
+                        $href = $matches[1];
+
+                        // If the href is relative, make it absolute
+                        if (!preg_match('/^https?:\/\//', $href)) {
+                            // Remove "/comments" if it appears at the start
+                            $clean_href = preg_replace('/^\/comments/', '', $href);
+                            $absolute_href = home_url($clean_href);
+                            $reply_link = str_replace($href, $absolute_href, $reply_link);
+                        }
+                    }
+                }
+
+                echo $reply_link;
                 ?>
             </div>
         </div>
@@ -58,8 +75,8 @@ function stwbplgn_send_comments_from_post( $post ) {
 <link rel="stylesheet" href="<?php echo plugins_url('comments.css', __FILE__); ?>">
 </head>
 <body>
+<h1>Comments</h1>
 <div class="comment-section">
-    <h1>Comments</h1>
 
     <?php if ($comments) : ?>
         <ul class="comment-list">
@@ -70,6 +87,7 @@ function stwbplgn_send_comments_from_post( $post ) {
                 'avatar_size' => 32,
                 'callback'    => 'stwbplgn_custom_comment_callback',
                 'max_depth'   => 5,
+                'reverse_top_level' => true, 
             ), $comments);
             ?>
         </ul>
