@@ -40,37 +40,27 @@ function stwbplgn_get_panels($post) {
     $bottom_panel = $settings['bottom_panel'];
 
     $main_link = $top_panel['main_link'];
-    $main_link_attribute = $main_link ? ' href="' . $main_link . '"' : '';
     
     $site_name = $top_panel['main_title'];
-    $site_name_element = $site_name ? '<site-name' . $main_link_attribute . '>' . $site_name . '</site-name>' : '';
 
     $logo_url = $top_panel['logo_url'];
-    $logo_url_element = $logo_url ? '<logo src="' . $logo_url . '"' . $main_link_attribute . '/>' : '';
 
     $global_background_color = $settings['global_background_color'];
-    $global_background_color_attribute = $global_background_color ? ' bgColor="' . esc_attr($global_background_color) . '"' : '';
 
     $global_text_color = $settings['global_text_color'];
-    $global_text_color_attribute = $global_text_color ? ' textColor="' . esc_attr($global_text_color) . '"' : '';
 
     $top_background_color = $top_panel['top_background_color'];
-    $top_background_color_attribute = $top_background_color ? ' bgColor="' . esc_attr($top_background_color) . '"' : '';
 
     $top_text_color = $top_panel['top_text_color'];
-    $top_text_color_attribute = $top_text_color ? ' textColor="' . esc_attr($top_text_color) . '"' : '';
 
     $bottom_background_color = $bottom_panel['bottom_background_color'];
-    $bottom_background_color_attribute = $bottom_background_color ? ' bgColor="' . esc_attr($bottom_background_color) . '"' : '';
 
     $bottom_text_color = $bottom_panel['bottom_text_color'];
-    $bottom_text_color_attribute = $bottom_text_color ? ' textColor="' . esc_attr($bottom_text_color) . '"' : '';
 
     $bottom_message = $bottom_panel['bottom_message'];
-    $bottom_message_element = $bottom_message ? '<bottom-message>' . $bottom_message . '</bottom-message>' : '';
 
 
-    $should_show_top_panel = !empty($site_name_element) || !empty($logo_url) || !empty($top_panel['links']);
+    $should_show_top_panel = !empty($site_name) || !empty($main_link) || !empty($logo_url) || !empty($top_panel['links']);
     $should_show_side_panel = stwbplgn_has_comment_section($post);
     $should_show_bottom_panel = !empty($bottom_message) || !empty($bottom_panel['sections']);
 
@@ -88,12 +78,40 @@ function stwbplgn_get_panels($post) {
 
     ?>
 
-<panels<?php echo $global_background_color_attribute; echo $global_text_color_attribute;?>>
+<panels<?php 
+if(!empty($global_background_color)){
+    echo ' bgColor="' . esc_attr($global_background_color) . '"';
+}
+if(!empty($global_text_color)){
+    echo ' textColor="' . esc_attr($global_text_color) . '"';
+}
+?>>
 <?php if($should_show_top_panel){ ?>
-<top-panel<?php echo $top_background_color_attribute; echo $top_text_color_attribute;?>>
-<?php echo $site_name_element; ?>
+<top-panel<?php 
+if(!empty($top_background_color)){
+    echo ' bgColor="' . esc_attr($top_background_color) . '"';
+}
+if(!empty($top_text_color)){
+    echo ' textColor="' . esc_attr($top_text_color) . '"';
+}
+?>>
+<?php 
+if(!empty($site_name)){
+    echo '<site-name';
+    if(!empty($main_link)){
+        echo ' href="' . esc_url($main_link) . '"';
+    }
+    echo '>' . esc_attr($site_name) . '</site-name>';
+}
 
-<?php echo $logo_url_element; ?>
+if(!empty($logo_url)){
+    echo '<logo src="' . esc_url($logo_url) . '"';
+    if(!empty($main_link)){
+        echo ' href="' . esc_url($main_link) . '"';
+    }
+    echo '/>';
+}
+?>
 <?php
 if (!empty($top_panel['links'])) {
     foreach ($top_panel['links'] as $index => $link) {
@@ -106,19 +124,31 @@ if (!empty($top_panel['links'])) {
 }
 ?>
 <?php if ($should_show_side_panel): ?>
-<side-panel<?php echo $side_panel_attribute; ?>><?php echo $comments_link; ?></side-panel>
+<side-panel<?php
+if(!empty($side_panel_left)){
+    echo ' side="left"';
+}
+?>><?php echo esc_url($comments_link); ?></side-panel>
 <?php endif; ?>
 <?php if($should_show_bottom_panel){ ?>
-<bottom-panel<?php echo $bottom_background_color_attribute; echo $bottom_text_color_attribute;?>>
+<bottom-panel<?php 
+if(!empty($bottom_background_color)){
+    echo ' bgColor="' . esc_attr($bottom_background_color) . '"';
+}
+if(!empty($bottom_text_color)){
+    echo ' textColor="' . esc_attr($bottom_text_color) . '"';
+}
+?>>
 <?php
 if (!empty($bottom_panel['sections'])) {
     foreach ($bottom_panel['sections'] as $section) {
         $section_title = $section['title'];
-        $title_element =  $section_title ? '<title>' . $section_title . '</title>' : '';
-
-        $title_attribute = $section_title ? ' title="' . $section_title . '"' : '';
 ?>
-<section<?php echo $title_attribute; ?>>
+<section<?php 
+if(!empty($section_title)){
+    echo ' title="' . esc_attr($section_title) . '"';
+}
+?>>
 <?php
 if (!empty($section['links'])) {
     foreach ($section['links'] as $index => $link) {
@@ -131,7 +161,10 @@ if (!empty($section['links'])) {
     }
 }
 ?>
-<?php echo $bottom_message_element; ?>
+<?php if(!empty($bottom_message)){
+    echo '<bottom-message>' . esc_attr($bottom_message) . '</bottom-message>';
+}
+?>
 </bottom-panel>
 <?php
 }

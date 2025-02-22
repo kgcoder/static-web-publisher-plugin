@@ -169,8 +169,8 @@ add_filter( 'the_content', 'stwbplgn_custom_post_endpoints_add_link_to_content' 
 
 function stwbplgn_add_icon_with_srcset($filename) {
     $icon_1x = plugins_url('assets/images/' . $filename . '.png', __FILE__);
-    $icon_2x = plugins_url('assets/images/' . $filename . '@2x.png', __FILE__);
-    $icon_3x = plugins_url('assets/images/' . $filename . '@3x.png', __FILE__);
+    $icon_2x = plugins_url('assets/images/' . $filename . '_2x.png', __FILE__);
+    $icon_3x = plugins_url('assets/images/' . $filename . '_3x.png', __FILE__);
 
     ob_start();
     ?><img 
