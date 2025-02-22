@@ -115,7 +115,7 @@ function stwbplgn_modify_internal_links_in_html($htmlContent) {
     $site_url = home_url();
 
     // Parse the site's URL to extract the domain
-    $parsed_url = parse_url($site_url);
+    $parsed_url = wp_parse_url($site_url);
     $site_domain = $parsed_url['host']; // e.g., 'mywebsite.com'
 
     // Regex pattern to find all <a> tags with href attributes

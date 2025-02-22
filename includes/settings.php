@@ -153,10 +153,10 @@ function stwbplgn_settings_page() {
                             ?>
                             <div class="link">
                                 <label>Link text: </label>
-                                <input type="text" name="stwbplgn_settings[top_panel][links][<?php echo $link_index; ?>][text]" value="<?php echo esc_attr($link['text']); ?>" />
+                                <input type="text" name="stwbplgn_settings[top_panel][links][<?php echo esc_attr($link_index); ?>][text]" value="<?php echo esc_attr($link['text']); ?>" />
                                 <div class="spacerH10"></div>
                                 <label>Link URL: </label>
-                                <input type="text" name="stwbplgn_settings[top_panel][links][<?php echo $link_index; ?>][url]" value="<?php echo esc_url($link['url']); ?>" />
+                                <input type="text" name="stwbplgn_settings[top_panel][links][<?php echo esc_attr($link_index); ?>][url]" value="<?php echo esc_url($link['url']); ?>" />
                                 <div class="spacerH10"></div>
                                 <button type="button" class="remove-link">Remove Link</button>
                             </div>
@@ -210,7 +210,7 @@ function stwbplgn_settings_page() {
                         ?>
                         <div class="section">
                             <label>Section Title: </label>
-                            <input class="single-text-input" type="text" name="stwbplgn_settings[bottom_panel][sections][<?php echo $section_index; ?>][title]" value="<?php echo esc_attr($section['title']); ?>" />
+                            <input class="single-text-input" type="text" name="stwbplgn_settings[bottom_panel][sections][<?php echo esc_attr($section_index); ?>][title]" value="<?php echo esc_attr($section['title']); ?>" />
                             <div class="spacerH10"></div>
                             <div class="links">
                                 <?php
@@ -219,11 +219,11 @@ function stwbplgn_settings_page() {
                                         ?>
                                         <div class="link">
                                             <label>Link text: </label>
-                                            <input type="text" name="stwbplgn_settings[bottom_panel][sections][<?php echo $section_index; ?>][links][<?php echo $link_index; ?>][text]" value="<?php echo esc_attr($link['text']); ?>" />
+                                            <input type="text" name="stwbplgn_settings[bottom_panel][sections][<?php echo esc_attr($section_index); ?>][links][<?php echo esc_attr($link_index); ?>][text]" value="<?php echo esc_attr($link['text']); ?>" />
                                             <div class="spacerH10"></div>
 
                                             <label style="margin-top:10px;">Link URL: </label>
-                                            <input type="text" name="stwbplgn_settings[bottom_panel][sections][<?php echo $section_index; ?>][links][<?php echo $link_index; ?>][url]" value="<?php echo isset($link['url']) ? esc_url($link['url']) : ''; ?>" />
+                                            <input type="text" name="stwbplgn_settings[bottom_panel][sections][<?php echo esc_attr($section_index); ?>][links][<?php echo esc_attr($link_index); ?>][url]" value="<?php echo isset($link['url']) ? esc_url($link['url']) : ''; ?>" />
                                             <div class="spacerH10"></div>
                                             <button style="margin-top:10px;" type="button" class="remove-link">Remove Link</button>
                                         </div>
@@ -430,7 +430,7 @@ function stwbplgn_enqueue_scripts($hook) {
         'static-web-plugin-admin',
         plugin_dir_url(__FILE__) . 'admin.js',
         array(), // No dependencies
-        null,
+        filemtime(plugin_dir_path(__FILE__) . 'admin.js'),
         true // Load in the footer
     );
 
@@ -438,7 +438,7 @@ function stwbplgn_enqueue_scripts($hook) {
         'static-web-plugin-color-picker',
         plugin_dir_url(__FILE__) . 'color-picker.js', 
         array('wp-color-picker'), // Dependency for the color picker
-        null,
+        filemtime(plugin_dir_path(__FILE__) . 'color-picker.js'),
         true
     );
 
@@ -446,7 +446,7 @@ function stwbplgn_enqueue_scripts($hook) {
         'static-web-plugin-admin-style',
         plugin_dir_url(__FILE__) . 'admin.css',
         array(),
-        null
+        filemtime(plugin_dir_path(__FILE__) . 'admin.css')
     );
 }
 add_action('admin_enqueue_scripts', 'stwbplgn_enqueue_scripts');

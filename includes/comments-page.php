@@ -15,7 +15,7 @@ function stwbplgn_custom_comment_callback($comment, $args, $depth) {
             </div>
             <div class="comment-info-column">
                 <strong class="comment-author"><?php comment_author_link(); ?></strong>
-                <span class="comment-date"><?php echo get_comment_date(); ?></span>
+                <span class="comment-date"><?php echo esc_attr(get_comment_date()); ?></span>
             </div>
         </div>
         <div class="comment-content">
@@ -42,7 +42,7 @@ function stwbplgn_custom_comment_callback($comment, $args, $depth) {
                     }
                 }
 
-                echo $reply_link;
+                echo wp_kses_post($reply_link);
                 ?>
             </div>
         </div>
@@ -72,7 +72,7 @@ function stwbplgn_send_comments_from_post( $post ) {
 <meta charset="<?php bloginfo('charset'); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Comments for <?php echo esc_html($post->post_title); ?></title>
-<link rel="stylesheet" href="<?php echo plugins_url('comments.css', __FILE__); ?>">
+<link rel="stylesheet" href="<?php echo esc_url(plugins_url('comments.css', __FILE__)); ?>">
 </head>
 <body>
 <h1>Comments</h1>
@@ -93,7 +93,7 @@ function stwbplgn_send_comments_from_post( $post ) {
         </ul>
     <?php else : ?>
         <p class="no-comments">No comments yet. Be the first to comment!</p>
-        <a href="<?php echo get_permalink($post->ID) . '#respond'; ?>" class="go-to-comments">
+        <a href="<?php echo esc_url(get_permalink($post->ID)) . '#respond'; ?>" class="go-to-comments">
             Reply
         </a>
 
@@ -108,7 +108,29 @@ function stwbplgn_send_comments_from_post( $post ) {
 // Get the buffered content
 $html_output = ob_get_clean();
 header('Content-Type: text/html');
-echo $html_output; 
+$allowed_html = array(
+    'html' => [],
+    'head' => [],
+    'meta' => ['charset' => [],'name' => [], 'content' => []],
+    'title' => [],
+    'body' => [],
+    'div' => ['class' => [], 'id' => []],
+    'h1' => ['class' => [], 'id' => []],
+    'ul' => ['class' => [], 'id' => []],
+    'li' => ['class' => [], 'id' => []],
+    'img' => ['class' => [], 'id' => [], 'src' => [], 'alt' => [], 'srcset' => [], 'height' => [], 'width' => [], 'loading' => [], 'decoding' => []],
+
+    'span' => ['class' => [], 'id' => []],
+    'a' => ['href' => [], 'title' => [], 'rel' => []],
+    'p' => ['class' => [], 'id' => []],
+    'i' => [],
+    'b' => [],
+    'strong' => ['class' => [], 'id' => []],
+    'em' => [],
+    'link' => ['rel' => [], 'href' => [], 'type' => []],
+);
+
+echo wp_kses($html_output, $allowed_html);
 }
 
 
