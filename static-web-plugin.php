@@ -18,6 +18,8 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
+
+
 // Run on plugin activation
 function stwbplgn_activate() {
     stwbplgn_custom_post_endpoints_rewrite_rules();
@@ -36,7 +38,7 @@ function stwbplgn_custom_post_endpoints_rewrite_rules() {
 
   
     add_rewrite_rule(
-        '^comments/(.+)?$',
+        '^sw-comments/(.+)?$',
         'index.php?comments_custom_matches=$matches[1]',
         'top'
     );
@@ -66,24 +68,12 @@ add_filter('query_vars', 'stwbplgn_custom_post_endpoints_query_vars');
 
 
 
-// function strip_unwanted_tags($content, $allowed_tags = array()) {
-//     // Create a string of allowed tags for use with wp_kses
-//     $allowed_html = array();
-//     foreach ($allowed_tags as $tag) {
-//         $allowed_html[$tag] = array();
-//     }
-//     // Use wp_kses to filter the content
-//     $content = wp_kses($content, $allowed_html);
-//     return $content;
-// }
-
-
 function stwbplgn_custom_post_endpoints_template_redirect() {
     global $wp_query;
 
     $permalink_structure = get_option( 'permalink_structure' );
 
-    if (empty($permalink_structure) && strpos( $_SERVER['REQUEST_URI'], '/sw/') !== false && isset($wp_query->query_vars['p'])) {
+    if (empty($permalink_structure) && isset($_SERVER['REQUEST_URI']) && strpos(sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'])), '/sw/') !== false && isset($wp_query->query_vars['p'])) {
 
         $post_id = (int) $wp_query->query_vars['p'];
         
@@ -91,7 +81,7 @@ function stwbplgn_custom_post_endpoints_template_redirect() {
         $expected_path2 = '/sw/?page_id=' . $post_id;
         
         
-        $current_path = $_SERVER['REQUEST_URI'];
+        $current_path = sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI']));
         
         if ($current_path === $expected_path1 || $current_path === $expected_path2) {
             $post = get_post($post_id);
@@ -111,7 +101,7 @@ function stwbplgn_custom_post_endpoints_template_redirect() {
         
         if (strpos($permalink_structure, '%post_id%') !== false) {
             // Get the current path
-            $current_path = $_SERVER['REQUEST_URI'];
+            $current_path = sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI']));
             $site_url = home_url(); // Base site URL
             $path = str_replace($site_url, '', $current_path);
         
@@ -193,7 +183,7 @@ function stwbplgn_custom_post_endpoints_template_redirect() {
 
         }else if (strpos($permalink_structure, '%post_id%') !== false) {
             // Get the current path
-            $current_path = $_SERVER['REQUEST_URI'];
+            $current_path = sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI']));
             $site_url = home_url(); // Base site URL
             $path = str_replace($site_url, '', $current_path);
         

@@ -5,6 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 
+
 function stwbplgn_custom_comment_callback($comment, $args, $depth) {
     $GLOBALS['comment'] = $comment;
     ?>
@@ -35,7 +36,7 @@ function stwbplgn_custom_comment_callback($comment, $args, $depth) {
                         // If the href is relative, make it absolute
                         if (!preg_match('/^https?:\/\//', $href)) {
                             // Remove "/comments" if it appears at the start
-                            $clean_href = preg_replace('/^\/comments/', '', $href);
+                            $clean_href = preg_replace('/^\/sw-comments/', '', $href);
                             $absolute_href = home_url($clean_href);
                             $reply_link = str_replace($href, $absolute_href, $reply_link);
                         }
@@ -72,7 +73,8 @@ function stwbplgn_send_comments_from_post( $post ) {
 <meta charset="<?php bloginfo('charset'); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Comments for <?php echo esc_html($post->post_title); ?></title>
-<link rel="stylesheet" href="<?php echo esc_url(plugins_url('comments.css', __FILE__)); ?>">
+<?php wp_head(); ?>
+
 </head>
 <body>
 <h1>Comments</h1>
@@ -107,27 +109,32 @@ function stwbplgn_send_comments_from_post( $post ) {
 
 // Get the buffered content
 $html_output = ob_get_clean();
+
+error_log($html_output);
+
 header('Content-Type: text/html');
 $allowed_html = array(
-    'html' => [],
-    'head' => [],
-    'meta' => ['charset' => [],'name' => [], 'content' => []],
-    'title' => [],
-    'body' => [],
-    'div' => ['class' => [], 'id' => []],
-    'h1' => ['class' => [], 'id' => []],
-    'ul' => ['class' => [], 'id' => []],
-    'li' => ['class' => [], 'id' => []],
-    'img' => ['class' => [], 'id' => [], 'src' => [], 'alt' => [], 'srcset' => [], 'height' => [], 'width' => [], 'loading' => [], 'decoding' => []],
+    'html' => array(),
+    'head' => array(),
+    'meta' => array('charset' => array(),'name' => array(), 'content' => array()),
+    'title' => array(),
+    'body' => array(),
+    'div' => array('class' => array(), 'id' => array()),
+    'h1' => array('class' => array(), 'id' => array()),
+    'ul' => array('class' => array(), 'id' => array()),
+    'li' => array('class' => array(), 'id' => array()),
+    'img' => array('class' => array(), 'id' => array(), 'src' => array(), 'alt' => array(), 'srcset' => array(), 'height' => array(), 'width' => array(), 'loading' => array(), 'decoding' => array()),
 
-    'span' => ['class' => [], 'id' => []],
-    'a' => ['href' => [], 'title' => [], 'rel' => []],
-    'p' => ['class' => [], 'id' => []],
-    'i' => [],
-    'b' => [],
-    'strong' => ['class' => [], 'id' => []],
-    'em' => [],
-    'link' => ['rel' => [], 'href' => [], 'type' => []],
+    'span' => array('class' => array(), 'id' => array()),
+    'a' => array('href' => array(), 'title' => array(), 'rel' => array()),
+    'p' => array('class' => array(), 'id' => array()),
+    'i' => array(),
+    'b' => array(),
+    'strong' => array('class' => array(), 'id' => array()),
+    'em' => array(),
+    'link' => array('rel' => array(), 'href' => array(), 'type' => array()),
+    'style' => array(),
+    'script' => array('src' => array(), 'type' => array()),
 );
 
 echo wp_kses($html_output, $allowed_html);

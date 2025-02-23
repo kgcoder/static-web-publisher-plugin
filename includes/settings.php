@@ -267,38 +267,48 @@ function stwbplgn_settings_page() {
     <?php
 }
 
+
+
+
+
+
+
 function stwbplgn_settings_init() {
    
+    $default_settings = wp_json_encode(array(
+        'global_background_color' => '',
+        'global_text_color' => '',
+        'info_link_variant' => 'none',
+        'user_defined_info_url' => '',
+        'side_panel_on_the_left' => false,
+        'modify_internal_links' => false,
+        'modify_external_links' => false,
+        'top_panel' => array(
+            'top_background_color' => '',
+            'top_text_color' => '',
+            'main_link' => '',
+            'main_title' => '',
+            'logo_url' => '',
+            'links' => array()
+        ),
+        'bottom_panel' => array(
+            'bottom_background_color' => '',
+            'bottom_text_color' => '',
+            'bottom_message' => '',
+            'sections' => array()
+        ),
+    ));
+
+
     // Register a single option for storing all settings
+    // phpcs:ignore PluginCheck.CodeAnalysis.SettingSanitization.register_settingDynamic
     register_setting(
         'stwbplgn_options_group', // Option group
         'stwbplgn_settings',      // Option name
         array(
             'type' => 'string',
             'sanitize_callback' => 'stwbplgn_sanitize_settings',
-            'default' => json_encode(array(
-                'global_background_color' => '',
-                'global_text_color' => '',
-                'info_link_variant' => 'none',
-                'user_defined_info_url' => '',
-                'side_panel_on_the_left' => false,
-                'modify_internal_links' => false,
-                'modify_external_links' => false,
-                'top_panel' => array(
-                    'top_background_color' => '',
-                    'top_text_color' => '',
-                    'main_link' => '',
-                    'main_title' => '', 
-                    'logo_url' => '', 
-                    'links' => array()
-                ),
-                'bottom_panel' => array(
-                    'bottom_background_color' => '',
-                    'bottom_text_color' => '',
-                    'bottom_message' => '',
-                    'sections' => array()
-                ),
-            ))
+            'default' => $default_settings
         )
     );
 }
@@ -419,6 +429,7 @@ add_action('admin_init', 'stwbplgn_settings_init');
 
 function stwbplgn_enqueue_scripts($hook) {
     // Only enqueue on the settings page for the plugin
+    
     if ($hook !== 'toplevel_page_static_web_plugin_settings') {
         return;
     }
@@ -448,9 +459,39 @@ function stwbplgn_enqueue_scripts($hook) {
         array(),
         filemtime(plugin_dir_path(__FILE__) . 'admin.css')
     );
+
+   
 }
 add_action('admin_enqueue_scripts', 'stwbplgn_enqueue_scripts');
 
+function stwbplgn_enqueue_comment_style($hook) {
+    if (strpos($_SERVER['REQUEST_URI'], '/sw-comments/') !== false) {
+
+        global $wp_styles;
+        
+        // Dequeue all styles
+        foreach( $wp_styles->registered as $handle => $style ) {
+            wp_dequeue_style( $handle );
+        }
+
+
+        wp_enqueue_style(
+            'static-web-plugin-comments-style',
+            plugin_dir_url(__FILE__) . 'comments.css',
+            array(),
+            filemtime(plugin_dir_path(__FILE__) . 'comments.css')
+        );
+
+
+        
+        // echo '<pre>';
+        // var_dump($wp_styles);
+        // echo '</pre>';
+      
+    }   
+}
+
+add_action('wp_enqueue_scripts', 'stwbplgn_enqueue_comment_style');
 
 function stwbplgn_allow_custom_url_schemes($protocols) {
     $protocols[] = 'sw';

@@ -71,27 +71,10 @@ function stwbplgn_send_hdoc_for_post($post){
         if(!empty($modify_external_links)){
             $htmlContent = stwbplgn_modify_external_links_in_html($htmlContent);
         }
-        
-        //$allowed_tags = ['p', 'a', 'strong', 'h1', 'h2', 'h3', 'h4', 'img', 'figure'];
-        
-       // $htmlContent = strip_unwanted_tags($htmlContent,$allowed_tags);
-        
-        // $htmlContent = preg_replace('/<img[^>]*>/', "<br>$0<br>", $htmlContent);
+  
+        $finalContent = '<h1>' . $title . "</h1>" .  $htmlContent . "<p>---</p><p><a href=\"" . $permalink . "\">" . "Original page</a></p>";
 
-
-
-
-
-
-        //$testVideo = "<p>sfsdfdsflkj</p><iframe width=\"560px\" height=\"315px\" src=\"https://www.youtube.com/embed/oVfHeWTKjag\" frameborder=\"0\" allowfullscreen=\"allowfullscreen\"></iframe><h3 class=\"p1\"><span class=\"s1\">What I did about it</span></h3>";
-
-//wp_strip_all_tags
-
-//http://swplugintest.local/my-test-post/
-        $finalContent = '<h1>' . $title . "</h1>" . /*$testVideo .*/ $htmlContent . "<p>---</p><p><a href=\"" . $permalink . "\">" . "Original page</a></p>";
-
-       // $link = home_url( "/sw/v1/comments/{$post->post_name}");
-        $panels = stwbplgn_get_panels($post);
+        $panels_escaped = stwbplgn_get_panels($post);
 
         $connectionsSection = '';
         if(!empty($connections_info)){
@@ -99,9 +82,30 @@ function stwbplgn_send_hdoc_for_post($post){
 
         }
 
-        // Output the simplified content
+        $allowed_tags = wp_kses_allowed_html('post'); // Get default allowed tags
+        $allowed_tags['iframe'] = array(
+            'src'             => true,
+            'width'           => true,
+            'height'          => true,
+            'frameborder'     => true,
+            'allowfullscreen' => true,
+            'referrerpolicy'  => true,
+            'sandbox'         => true
+        );
+
+        $connections_allowed_tags = array(
+            'connections' =>  array(),
+            'doc'  => array('url' => true, 'title' => true, 'hash' => true), 
+        );
+
+
+       
         header('Content-Type: text/plain');
-        echo '<hdoc>' . $panels . '<html>' . $finalContent . '</html>' . $connectionsSection . '</hdoc>';
+        echo '<hdoc>';
+        echo $panels_escaped; // phpcs:ignore WordPress.Security.EscapeOutput
+        echo '<html>' . wp_kses($finalContent,$allowed_tags) . '</html>'; 
+        echo wp_kses($connectionsSection, $connections_allowed_tags);
+        echo '</hdoc>';
     } else {
         // Handle post not found
         status_header(404);

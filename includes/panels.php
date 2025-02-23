@@ -10,7 +10,7 @@ function stwbplgn_get_panels($post) {
 
     $path_part = preg_replace('#^' . preg_quote(home_url(), '#') . '#', '', $permalink);
 
-    $comments_link = home_url( "/comments{$path_part}");
+    $comments_link = home_url( "/sw-comments{$path_part}");
 
     $settings = get_option('stwbplgn_settings', array(
         'global_background_color' => '',
