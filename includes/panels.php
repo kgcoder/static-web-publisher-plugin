@@ -96,14 +96,6 @@ if(!empty($top_text_color)){
 }
 ?>>
 <?php 
-if(!empty($site_name)){
-    echo '<site-name';
-    if(!empty($main_link)){
-        echo ' href="' . esc_url($main_link) . '"';
-    }
-    echo '>' . esc_attr($site_name) . '</site-name>';
-}
-
 if(!empty($logo_url)){
     echo '<logo src="' . esc_url($logo_url) . '"';
     if(!empty($main_link)){
@@ -111,6 +103,14 @@ if(!empty($logo_url)){
     }
     echo '/>';
 }
+if(!empty($site_name)){
+    echo '<site-name';
+    if(!empty($main_link) && empty($logo_url)){ 
+        echo ' href="' . esc_url($main_link) . '"';
+    }
+    echo '>' . esc_attr($site_name) . '</site-name>';
+}
+
 ?>
 <?php
 if (!empty($top_panel['links'])) {

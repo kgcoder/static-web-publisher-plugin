@@ -1,7 +1,7 @@
 <?php
 
 /*
-Plugin Name: Static Web Plugin
+Plugin Name: Static Web Publisher
 Description: Publishes your posts and pages on the Static Web
 Version: 1.0
 Author: Karen Grigorian
