@@ -6,19 +6,19 @@ if (!defined('ABSPATH')) {
 }
 
 
-function stwbplgn_custom_post_endpoints_add_meta_box() {
+function stwbpb_custom_post_endpoints_add_meta_box() {
     add_meta_box(
         'custom_post_endpoints_meta_box',
         'Static Web Link Settings',
-        'stwbplgn_custom_post_endpoints_meta_box_callback',
+        'stwbpb_custom_post_endpoints_meta_box_callback',
         array('post', 'page'), // Enable for posts and pages
         'side',
         'high'
     );
 }
-add_action('add_meta_boxes', 'stwbplgn_custom_post_endpoints_add_meta_box');
+add_action('add_meta_boxes', 'stwbpb_custom_post_endpoints_add_meta_box');
 
-function stwbplgn_custom_post_endpoints_meta_box_callback($post) {
+function stwbpb_custom_post_endpoints_meta_box_callback($post) {
     $value = get_post_meta($post->ID, '_disable_static_web_link', true);
     $disable_original_page_value = get_post_meta($post->ID, '_disable_original_page', true);
 
@@ -42,7 +42,7 @@ function stwbplgn_custom_post_endpoints_meta_box_callback($post) {
     <?php
 }
 
-function stwbplgn_custom_post_endpoints_save_meta_box($post_id) {
+function stwbpb_custom_post_endpoints_save_meta_box($post_id) {
     if (!isset($_POST['custom_post_endpoints_nonce'])) {
         return;
     }
@@ -77,12 +77,12 @@ function stwbplgn_custom_post_endpoints_save_meta_box($post_id) {
         update_post_meta($post_id, '_static_web_connections_info', $connections_info);
     }
 }
-add_action('save_post', 'stwbplgn_custom_post_endpoints_save_meta_box');
+add_action('save_post', 'stwbpb_custom_post_endpoints_save_meta_box');
 
 
 
 
-function stwbplgn_custom_redirect_logic() {
+function stwbpb_custom_redirect_logic() {
     if (is_single() || is_page()) {  // Applies to posts and pages
 
         global $post;
@@ -103,12 +103,12 @@ function stwbplgn_custom_redirect_logic() {
     
     }
 }
-add_action('template_redirect', 'stwbplgn_custom_redirect_logic');
+add_action('template_redirect', 'stwbpb_custom_redirect_logic');
 
 
 
 
-function stwbplgn_custom_post_endpoints_add_link_to_content( $content ) {
+function stwbpb_custom_post_endpoints_add_link_to_content( $content ) {
     global $post;
     global $wp_query;
 
@@ -131,7 +131,7 @@ function stwbplgn_custom_post_endpoints_add_link_to_content( $content ) {
         $link = preg_replace('/^http/', "sw", home_url( "/sw{$path_part}"));
         
 
-        $icon = stwbplgn_add_icon_with_srcset('sw_download_logo');
+        $icon = stwbpb_add_icon_with_srcset('sw_download_logo');
 
         $link_text = 'Download this page using Static Web';
         $simplified_link = '<a class="swp-link" style="border:none;box-shadow:none;" title="' . $link_text . '" href="' . $link . '" rel="alternate">' . $icon . '</a>';
@@ -139,7 +139,7 @@ function stwbplgn_custom_post_endpoints_add_link_to_content( $content ) {
         // Get the position setting (assuming you have a setting for this)
         $position = get_option( 'custom_post_endpoints_button_position', 'bottom' );
 
-        $settings = get_option('stwbplgn_settings', array()); // Ensure a default empty array
+        $settings = get_option('stwbpb_settings', array()); // Ensure a default empty array
         $user_defined_info_url = isset($settings['user_defined_info_url']) ? $settings['user_defined_info_url'] : '';
     
         $info_link_variant = $settings['info_link_variant'];
@@ -150,7 +150,7 @@ function stwbplgn_custom_post_endpoints_add_link_to_content( $content ) {
 
         $info_url = $info_link_variant === 'custom' ? $user_defined_info_url : $default_info_url;
 
-        $question_icon = stwbplgn_add_icon_with_srcset('sw_question');
+        $question_icon = stwbpb_add_icon_with_srcset('sw_question');
 
         $info_link_text = 'Learn about Static Web';
 
@@ -173,9 +173,9 @@ function stwbplgn_custom_post_endpoints_add_link_to_content( $content ) {
     return $content;
 }
 
-add_filter( 'the_content', 'stwbplgn_custom_post_endpoints_add_link_to_content' );
+add_filter( 'the_content', 'stwbpb_custom_post_endpoints_add_link_to_content' );
 
-function stwbplgn_add_icon_with_srcset($filename) {
+function stwbpb_add_icon_with_srcset($filename) {
     $icon_1x = plugins_url('assets/images/' . $filename . '.png', __FILE__);
     $icon_2x = plugins_url('assets/images/' . $filename . '_2x.png', __FILE__);
     $icon_3x = plugins_url('assets/images/' . $filename . '_3x.png', __FILE__);

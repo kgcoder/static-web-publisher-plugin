@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
-function stwbplgn_get_panels($post) {
+function stwbpb_get_panels($post) {
 
     $permalink = get_permalink($post->ID);
 
@@ -12,7 +12,7 @@ function stwbplgn_get_panels($post) {
 
     $comments_link = home_url( "/sw-comments{$path_part}");
 
-    $settings = get_option('stwbplgn_settings', array(
+    $settings = get_option('stwbpb_settings', array(
         'global_background_color' => '',
         'global_text_color' => '',
         'info_link_variant' => 'none',
@@ -61,7 +61,7 @@ function stwbplgn_get_panels($post) {
 
 
     $should_show_top_panel = !empty($site_name) || !empty($main_link) || !empty($logo_url) || !empty($top_panel['links']);
-    $should_show_side_panel = stwbplgn_has_comment_section($post);
+    $should_show_side_panel = stwbpb_has_comment_section($post);
     $should_show_bottom_panel = !empty($bottom_message) || !empty($bottom_panel['sections']);
 
     $should_show_panels = $should_show_top_panel || $should_show_side_panel || $should_show_bottom_panel;
@@ -179,7 +179,7 @@ if (!empty($section['links'])) {
 }
 
 
-function stwbplgn_has_comment_section($post) {
+function stwbpb_has_comment_section($post) {
     // Check if comments are globally allowed and post-specific status
     $global_comments_setting = get_option('default_comment_status');
     $theme_supports_comments = function_exists('comments_template');

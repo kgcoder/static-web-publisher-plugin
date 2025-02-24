@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
 
 
 
-function stwbplgn_custom_comment_callback($comment, $args, $depth) {
+function stwbpb_custom_comment_callback($comment, $args, $depth) {
     $GLOBALS['comment'] = $comment;
     ?>
     <li class="comment-item" id="comment-<?php comment_ID(); ?>">
@@ -51,7 +51,7 @@ function stwbplgn_custom_comment_callback($comment, $args, $depth) {
     <?php
 }
 
-function stwbplgn_send_comments_from_post( $post ) {
+function stwbpb_send_comments_from_post( $post ) {
 
     if (empty($post)) {
         return new WP_Error('post_not_found', 'Post not found', array('status' => 404));
@@ -87,7 +87,7 @@ function stwbplgn_send_comments_from_post( $post ) {
                 'style'       => 'ul',
                 'short_ping'  => true,
                 'avatar_size' => 32,
-                'callback'    => 'stwbplgn_custom_comment_callback',
+                'callback'    => 'stwbpb_custom_comment_callback',
                 'max_depth'   => 5,
                 'reverse_top_level' => true, 
             ), $comments);

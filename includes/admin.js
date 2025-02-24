@@ -9,11 +9,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    const radios = document.querySelectorAll('input[name="stwbplgn_settings[info_link_variant]"]');
-    const textInput = document.querySelector('input[name="stwbplgn_settings[user_defined_info_url]"]');
+    const radios = document.querySelectorAll('input[name="stwbpb_settings[info_link_variant]"]');
+    const textInput = document.querySelector('input[name="stwbpb_settings[user_defined_info_url]"]');
 
     function toggleTextInput() {
-        textInput.disabled = document.querySelector('input[name="stwbplgn_settings[info_link_variant]"]:checked').value !== 'custom';
+        textInput.disabled = document.querySelector('input[name="stwbpb_settings[info_link_variant]"]:checked').value !== 'custom';
     }
 
 
@@ -54,10 +54,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const linkTemplate = `
             <div class="link">
                 <label>Link text: </label>
-                <input type="text" name="stwbplgn_settings[top_panel][links][${linkIndex}][text]" value="" />
+                <input type="text" name="stwbpb_settings[top_panel][links][${linkIndex}][text]" value="" />
                 <div class="spacerH10"></div>
                 <label>Link URL: </label>
-                <input type="text" name="stwbplgn_settings[top_panel][links][${linkIndex}][url]" value="" />
+                <input type="text" name="stwbpb_settings[top_panel][links][${linkIndex}][url]" value="" />
                 <div class="spacerH10"></div>
                 <button type="button" class="remove-link">Remove Link</button>
             </div>`;
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const sectionTemplate = `
         <div class="section">
             <label>Section Title: </label>
-            <input class="single-text-input" type="text" name="stwbplgn_settings[bottom_panel][sections][${sectionIndex}][title]" value="" />
+            <input class="single-text-input" type="text" name="stwbpb_settings[bottom_panel][sections][${sectionIndex}][title]" value="" />
             <div class="spacerH10"></div>
             <div class="links"></div>
             <button type="button" class="add-link">Add Link</button>
@@ -112,10 +112,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const linkTemplate = `
             <div class="link">
                 <label>Link text: </label>
-                <input type="text" name="stwbplgn_settings[bottom_panel][sections][${sectionIndex}][links][${linkIndex}][text]" value="" />
+                <input type="text" name="stwbpb_settings[bottom_panel][sections][${sectionIndex}][links][${linkIndex}][text]" value="" />
                 <div class="spacerH10"></div>
                 <label>Link URL: </label>
-                <input type="text" name="stwbplgn_settings[bottom_panel][sections][${sectionIndex}][links][${linkIndex}][url]" value="" />
+                <input type="text" name="stwbpb_settings[bottom_panel][sections][${sectionIndex}][links][${linkIndex}][url]" value="" />
                 <div class="spacerH10"></div>
                 <button type="button" class="remove-link">Remove Link</button>
             </div>`;
