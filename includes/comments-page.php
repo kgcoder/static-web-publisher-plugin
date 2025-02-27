@@ -110,8 +110,6 @@ function stwbpb_send_comments_from_post( $post ) {
 // Get the buffered content
 $html_output = ob_get_clean();
 
-error_log($html_output);
-
 header('Content-Type: text/html');
 $allowed_html = array(
     'html' => array(),

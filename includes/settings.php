@@ -412,8 +412,8 @@ function stwbpb_sanitize_settings($input) {
 function stwbpb_menu() {
     // Add a menu item to the sidebar
     add_menu_page(
-        'Static Web Plugin Settings',          // Page title
-        'Static Web Plugin',                   // Menu title
+        'Static Web Publisher Settings',          // Page title
+        'Static Web Publisher',                   // Menu title
         'manage_options',              // Capability required
         'static_web_publisher_settings',          // Menu slug
         'stwbpb_settings_page',     // Callback function to render the settings page
@@ -465,7 +465,7 @@ function stwbpb_enqueue_scripts($hook) {
 add_action('admin_enqueue_scripts', 'stwbpb_enqueue_scripts');
 
 function stwbpb_enqueue_comment_style($hook) {
-    if (strpos($_SERVER['REQUEST_URI'], '/sw-comments/') !== false) {
+    if(isset($_SERVER['REQUEST_URI']) && strpos(sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'])), '/sw-comments/') !== false){
 
         global $wp_styles;
         

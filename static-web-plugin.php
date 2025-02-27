@@ -6,6 +6,8 @@ Description: Publishes your posts and pages on the Static Web
 Version: 1.0
 Author: Karen Grigorian
 Author URI: https://github.com/kgcoder
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 */
 
 require_once plugin_dir_path(__FILE__) . 'includes/download-link.php';

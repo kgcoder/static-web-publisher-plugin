@@ -9,9 +9,43 @@ Requires PHP: 7.3.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin let's you publish your website on the Static Web (Web 1.1).
+This plugin lets you publish your website on the Static Web (Web 1.1).
 
 == Description ==
+
+You can let your readers download pages from your website and place them on their desktop. This will increase the retention on your website. Static Web or Web 1.1 is a big topic and you can read more about it on [this website](https://reinventingtheweb.com).
+
+Here I will explain what this plugin does to your website. 
+
+For each page and post it creates an additional endpoint. For example, for a page https://example.com/some-page it will create an endpoint https://example.com/sw/some-page. Notice the 'sw' part. A download link will be placed on the bottom of the original page. The link will have another url scheme (sws instead of https). So the link will look like sws://example.com/se/some-page. This is needed so that when you click on the link you are sent to another app, that supports data formats of the Web 1.1. 
+
+The new endpoints provide the content of the page in a slightly different format. That format uses HTML but it's not your regular HTML. 
+
+This is an example of regular HTML:
+`<html>
+    <head>
+        <title>My page</title>
+    </head>
+    <body>
+        <h1>My page</h1>
+        <p>Content</p>
+    </body>
+
+</html>`
+
+This is an example of the new data format called HDOC (short for HTML documents, because it is based on HTML):
+`<hdoc>
+    <head>
+        <title>My page</title>
+    </head>
+    <html>
+        <h1>My page</h1>
+        <p>Content</p>
+    </html>
+</hdoc>`
+
+The main difference is that HDOC doesn't allow any scripts. 
+When 
 
 This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
 
