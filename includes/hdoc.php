@@ -74,7 +74,7 @@ function stwbpb_send_hdoc_for_post($post){
   
         $finalContent = '<h1>' . $title . "</h1>" .  $htmlContent . "<p>---</p><p><a href=\"" . $permalink . "\">" . "Original page</a></p>";
 
-        $panels = stwbpb_get_panels($post);
+        $panels_escaped = stwbpb_get_panels($post);
 
         $connectionsSection = '';
         if(!empty($connections_info)){
@@ -94,30 +94,15 @@ function stwbpb_send_hdoc_for_post($post){
         );
 
 
-        $panels_allowed_tags = array(
-            'panels' => array('bgColor' => true, 'textColor' => true),
-            'top-panel' => array('bgColor' => true, 'textColor' => true),
-            'logo' => array('src' => true, 'href' => true),
-            'site-name' => array('href' => true),
-            'a' => array('href' => true),
-            'side-panel' => array('side' => true),
-            'bottom-panel' => array('bgColor' => true, 'textColor' => true),
-            'section' => array('title' => true),
-            'bottom-message' => array(),
-        );
-
         $connections_allowed_tags = array(
             'connections' =>  array(),
             'doc'  => array('url' => true, 'title' => true, 'hash' => true), 
         );
 
-
-
-
        
         header('Content-Type: text/plain');
         echo '<hdoc>';
-        echo wp_kses($panels, $panels_allowed_tags);
+        echo $panels_escaped;
         echo '<html>' . wp_kses($finalContent,$allowed_tags) . '</html>'; 
         echo wp_kses($connectionsSection, $connections_allowed_tags);
         echo '</hdoc>';

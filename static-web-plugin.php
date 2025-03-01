@@ -35,6 +35,12 @@ function stwbpb_deactivate() {
 }
 register_deactivation_hook(__FILE__, 'stwbpb_deactivate');
 
+function stwbpb_uninstall() {
+    delete_option('stwbpb_settings');
+}
+register_uninstall_hook(__FILE__, 'stwbpb_uninstall');
+
+
 
 function stwbpb_custom_post_endpoints_rewrite_rules() {
 
@@ -67,7 +73,6 @@ function stwbpb_custom_post_endpoints_query_vars($query_vars) {
     return $query_vars;
 }
 add_filter('query_vars', 'stwbpb_custom_post_endpoints_query_vars');
-
 
 
 function stwbpb_custom_post_endpoints_template_redirect() {
