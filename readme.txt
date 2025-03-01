@@ -1,7 +1,7 @@
 === Static Web Publisher ===
 Contributors: kgcoder
 Donate link: https://reinventingtheweb.com/donate
-Tags: tag1, tag2
+Tags: static, web, publish
 Requires at least: 5.1
 Tested up to: 6.7
 Stable tag: 1.0
@@ -13,15 +13,22 @@ This plugin lets you publish your website on the Static Web (Web 1.1).
 
 == Description ==
 
-You can let your readers download pages from your website and place them on their desktop. This will increase the retention on your website. Static Web or Web 1.1 is a big topic and you can read more about it on [this website](https://reinventingtheweb.com).
+This plugin allows your readers to download pages from your website and store them on their desktop, enhancing audience retention. Web 1.1 is a new concept, and you can read about it on [this website](https://reinventingtheweb.com).
 
-Here I will explain what this plugin does to your website. 
+Here’s how the plugin works:
 
-For each page and post it creates an additional endpoint. For example, for a page https://example.com/some-page it will create an endpoint https://example.com/sw/some-page. Notice the 'sw' part. A download link will be placed on the bottom of the original page. The link will have another url scheme (sws instead of https). So the link will look like sws://example.com/se/some-page. This is needed so that when you click on the link you are sent to another app, that supports data formats of the Web 1.1. 
+* For each page and post, it creates an additional endpoint.
+* For example, if your page URL is: https://example.com/some-page, the plugin generates a new endpoint: https://example.com/sw/some-page
+* A download link pointing to the new URL will be placed at the bottom of the original page.
+* The link will use a different URL scheme (sws:// instead of https://), allowing users to open the content in apps that support Web 1.1 formats.
 
-The new endpoints provide the content of the page in a slightly different format. That format uses HTML but it's not your regular HTML. 
+Here is a short [video](https://www.youtube.com/watch?v=DX2-G7zy32k) demonstrating how saving of a page works.
 
-This is an example of regular HTML:
+The new endpoint provides content in a modified format called HDOC (short for "HTML Document"), which is similar to HTML but does not support scripts.
+
+Example comparison
+
+Standard HTML:
 `<html>
     <head>
         <title>My page</title>
@@ -30,10 +37,9 @@ This is an example of regular HTML:
         <h1>My page</h1>
         <p>Content</p>
     </body>
-
 </html>`
 
-This is an example of the new data format called HDOC (short for HTML documents, because it is based on HTML):
+HDOC format:
 `<hdoc>
     <head>
         <title>My page</title>
@@ -42,88 +48,52 @@ This is an example of the new data format called HDOC (short for HTML documents,
         <h1>My page</h1>
         <p>Content</p>
     </html>
+    <panels>...</panels> <!-- Navigational panels (optional) -->
+    <connections>...</connections> <!-- Links to related documents (optional) -->
 </hdoc>`
 
-The main difference is that HDOC doesn't allow any scripts. 
-When 
+== Installation ==
 
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
+Setting up Static Web Publisher is quick and easy:
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+1. Go to Plugins in your WordPress dashboard and click Add New.
+2. In the "Search plugins..." field, type Static Web Publisher.
+3. Find the plugin in the search results, hover over it, and click Install.
+4. Once installed, click Activate.
+5. Go to the plugin's Settings page and configure the plugin (e.g., top and bottom panels).
+6. Enable the info link (optional but important, see below).
 
-A few notes about the sections above:
+*Info link*
 
-* "Contributors" is a comma separated list of wordpress.org usernames
-* "Tags" is a comma separated list of tags that apply to the plugin
-* "Requires at least" is the lowest version that the plugin will work on
-* "Tested up to" is the highest version that you've *successfully used to test the plugin*
-* Stable tag must indicate the Subversion "tag" of the latest stable version
+Since Web 1.1 is a new concept, most visitors won’t be familiar with it. The info link helps users understand how to use SW links.
 
-Note that the `readme.txt` value of stable tag is the one that is the defining one for the plugin.  If the `/trunk/readme.txt` file says that the stable tag is `4.3`, then it is `/tags/4.3/readme.txt` that'll be used for displaying information about the plugin.
+* The info link appears as a black button with a question mark next to the orange download button.
+* Clicking it takes users to an explanation page.
 
-If you develop in trunk, you can update the trunk `readme.txt` to reflect changes in your in-development version, without having that information incorrectly disclosed about the current stable version that lacks those changes -- as long as the trunk's `readme.txt` points to the correct stable tag.
+By default, this feature is disabled because it requires adding an external link. You have two activation options:
 
-If no stable tag is provided, your users may not get the correct version of your code.
+* Use the default external link (SEO-safe, uses rel=nofollow).
+* Create your own explanation page and link to it from the plugin settings.
 
-== Frequently Asked Questions ==
+If you choose the second option, you can create a page that says:
+"To learn about Static Web, click here."
 
-= A question that someone might have =
+The correct link to use is available in the plugin settings. This way, you minimize external links while still providing necessary information.
 
-An answer to that question.
 
-= What about foo bar? =
+== Frequently Asked Questions ==  
 
-Answer to foo bar dilemma.
+No frequently asked questions yet. Feel free to ask!
 
-== Screenshots ==
+== Changelog ==  
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Screenshots are stored in the /assets directory.
-2. This is the second screen shot
+= 1.0 =  
+Initial release.  
 
-== Changelog ==
+== Upgrade Notice ==  
 
-= 1.0 =
-* A change since the previous version.
-* Another change.
+= 1.0 =  
+First release. No upgrade steps required. 
 
-= 0.5 =
-* List versions from most recent at top to oldest at bottom.
 
-== Upgrade Notice ==
 
-= 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
-
-= 0.5 =
-This version fixes a security related bug.  Upgrade immediately.
-
-== A brief Markdown Example ==
-
-Markdown is what the parser uses to process much of the readme file.
-
-[markdown syntax]: https://daringfireball.net/projects/markdown/syntax
-
-Ordered list:
-
-1. Some feature
-1. Another feature
-1. Something else about the plugin
-
-Unordered list:
-
-* something
-* something else
-* third thing
-
-Links require brackets and parenthesis:
-
-Here's a link to [WordPress](https://wordpress.org/ "Your favorite software") and one to [Markdown's Syntax Documentation][markdown syntax]. Link titles are optional, naturally.
-
-Blockquotes are email style:
-
-> Asterisks for *emphasis*. Double it up  for **strong**.
-
-And Backticks for code:
-
-`<?php code(); ?>`

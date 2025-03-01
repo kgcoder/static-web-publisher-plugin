@@ -136,8 +136,6 @@ function stwbpb_custom_post_endpoints_add_link_to_content( $content ) {
         $link_text = 'Download this page using Static Web';
         $simplified_link = '<a class="swp-link" style="border:none;box-shadow:none;" title="' . $link_text . '" href="' . $link . '" rel="alternate">' . $icon . '</a>';
 
-        // Get the position setting (assuming you have a setting for this)
-        $position = get_option( 'custom_post_endpoints_button_position', 'bottom' );
 
         $settings = get_option('stwbpb_settings', array()); // Ensure a default empty array
         $user_defined_info_url = isset($settings['user_defined_info_url']) ? $settings['user_defined_info_url'] : '';
@@ -162,12 +160,8 @@ function stwbpb_custom_post_endpoints_add_link_to_content( $content ) {
 
         $links_paragraph = '<div style="display:flex;margin-bottom:10px;">' . $simplified_link . '&nbsp;' . $info_link . '</div>';
 
-
-        if ( 'top' === $position ) {
-            $content = $links_paragraph . $content;
-        } elseif ( 'bottom' === $position ) {
-            $content .= $links_paragraph;
-        }
+        $content .= $links_paragraph;
+        
     }
 
     return $content;

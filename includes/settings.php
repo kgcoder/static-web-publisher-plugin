@@ -40,10 +40,6 @@ function stwbpb_settings_page() {
     ?>
     <div class="wrap">
         <h1>Static Web Plugin Settings</h1>
-        <script>
-    console.log(<?php echo json_encode($settings); ?>);
-</script>
-
         <form method="post" action="options.php">
         <?php
             // Outputs nonce, action, and option_page fields for the settings
@@ -301,7 +297,6 @@ function stwbpb_settings_init() {
 
 
     // Register a single option for storing all settings
-    // phpcs:ignore PluginCheck.CodeAnalysis.SettingSanitization.register_settingDynamic
     register_setting(
         'stwbpb_options_group', // Option group
         'stwbpb_settings',      // Option name
