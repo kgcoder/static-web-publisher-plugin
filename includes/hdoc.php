@@ -69,7 +69,9 @@ function stwbpb_send_hdoc_for_post($post){
             $htmlContent = stwbpb_modify_external_links_in_html($htmlContent);
         }
   
-        $finalContent = '<h1>' . $title . "</h1>" .  $htmlContent . "<p>---</p><p><a href=\"" . $permalink . "\">" . "Original page</a></p>";
+        $originalPageDisabled = get_post_meta($post->ID, '_disable_original_page', true) === '1';
+
+        $finalContent = '<h1>' . $title . "</h1>" .  $htmlContent . ($originalPageDisabled ? "" : "<p>---</p><p><a href=\"" . $permalink . "\">" . "Original page</a></p>");
 
         $panels_escaped = stwbpb_get_panels($post);
 
