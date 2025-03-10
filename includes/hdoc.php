@@ -38,22 +38,19 @@ function stwbpb_send_hdoc_for_post($post){
         $connections_info = get_post_meta($post->ID, '_static_web_connections_info', true);
 
 
-        // header('Content-Type: text/plain');
-        // echo  $htmlContent;
-
-        $pattern = '/<!-- wp:embed \{"url":"https:\/\/www\.youtube\.com\/watch\?v=([^"]+)",.*"className":"wp-embed-aspect-(\d+)-(\d+) wp-has-aspect-ratio"\} -->.*<div class="wp-block-embed__wrapper">\s*(https:\/\/www\.youtube\.com\/watch\?v=[^<]+)\s*<\/div>.*<!-- \/wp:embed -->/sU';
+   
+        $embedPattern = '/<!-- wp:embed \{"url":"https:\/\/www\.youtube\.com\/(watch\?v=|embed\/)([^"]+)",.*\} -->.*<div class="wp-block-embed__wrapper">\s*(https:\/\/www\.youtube\.com\/(watch\?v=|embed\/)[^<]+)\s*<\/div>.*<!-- \/wp:embed -->/sU';
         
         $callback = function ($matches) {
-            $youtubeId = $matches[1];
-            $width = 560;// $matches[2];
-            $height = 315;// $matches[3];
-            return "<iframe width=\"$width\" height=\"$height\" src=\"https://www.youtube.com/embed/$youtubeId\" frameborder=\"0\" allowfullscreen=\"allowfullscreen\"></iframe><h3>hello</h3>";
+            $youtubeId = $matches[2];
+            $width = 560;
+            $height = 315;
+            return "<iframe width=\"$width\" height=\"$height\" src=\"https://www.youtube.com/embed/$youtubeId\" frameborder=\"0\" allowfullscreen=\"allowfullscreen\"></iframe>";
         };
 
-        $htmlContent = preg_replace_callback($pattern, $callback, $htmlContent);
+        $htmlContent = preg_replace_callback($embedPattern, $callback, $htmlContent);
 
         $htmlContent = stwbpb_strip_wp_tags($htmlContent);
-
 
 
         $settings = get_option('stwbpb_settings', array()); // Ensure a default empty array
@@ -93,16 +90,30 @@ function stwbpb_send_hdoc_for_post($post){
             'sandbox'         => true
         );
 
+        $panels_allowed_tags = array(
+            'panels' =>  array('bgcolor' => true, 'textcolor' => true),
+            'top-panel'  => array('bgcolor' => true, 'textcolor' => true),
+            'side-panel' => array('side' => true),
+            'bottom-panel'  => array('bgcolor' => true, 'textcolor' => true), 
+            'logo' => array('src' => true, 'href' => true),
+            'site-name' => array('href' => true),
+            'a' => array('href' => true),
+            'section' => array('title' => true),
+            'bottom-message' => array(),
+        );
+
 
         $connections_allowed_tags = array(
             'connections' =>  array(),
             'doc'  => array('url' => true, 'title' => true, 'hash' => true), 
         );
 
+        
+
        
         header('Content-Type: text/plain');
         echo '<hdoc>';
-        echo $panels_escaped;
+        echo wp_kses($panels_escaped,$panels_allowed_tags);
         echo '<html>' . wp_kses($finalContent,$allowed_tags) . '</html>'; 
         echo wp_kses($connectionsSection, $connections_allowed_tags);
         echo '</hdoc>';
