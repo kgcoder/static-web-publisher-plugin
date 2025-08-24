@@ -19,12 +19,13 @@ Here’s how the plugin works:
 
 * For each page and post, it creates an additional endpoint.
 * For example, if your page URL is: https://example.com/some-page, the plugin generates a new endpoint: https://example.com/sw/some-page
-* A download link pointing to the new URL will be placed at the bottom of the original page.
+* A download link pointing to the new URL will be placed in the head section of the page (invisible on the page). This link may be found using a browser extension. 
+* Additionally, you can add a visible download link and an info link to the bottom of each page. 
 * The link will use a different URL scheme (sws:// instead of https://), allowing users to open the content in apps that support Web 1.1 formats.
 
 Here is a short [video](https://www.youtube.com/watch?v=DX2-G7zy32k) demonstrating how saving of a page works.
 
-The new endpoint provides content in a modified format called HDOC (short for "HTML Document"), which is similar to HTML but does not support scripts.
+The new endpoint provides content in a modified format called HDOC (short for "Hypertext Document"), which is similar to HTML but does not support scripts.
 
 Example comparison
 
@@ -61,7 +62,16 @@ Setting up Static Web Publisher is quick and easy:
 3. Find the plugin in the search results, hover over it, and click Install.
 4. Once installed, click Activate.
 5. Go to the plugin's Settings page and configure the plugin (e.g., top and bottom panels).
-6. Enable the info link (optional but important, see below).
+6. Add download link and info link (optional).
+
+*Download link*
+
+By default, this link is hidden. You can leave it that way, but then only people who already know about Static Web will be able to access the alternative page version.
+
+If you’d like to spread the word - and maybe encourage new visitors to try downloading pages from your site - enable the download link in the plugin settings.
+
+Since the link alone doesn’t explain much, it’s best to also enable the info link alongside it.
+
 
 *Info link*
 
@@ -70,7 +80,7 @@ Since Web 1.1 is a new concept, most visitors won’t be familiar with it. The i
 * The info link appears as a black button with a question mark next to the orange download button.
 * Clicking it takes users to an explanation page.
 
-By default, this feature is disabled because it requires adding an external link. You have two activation options:
+By default, this link is disabled. You have two activation options:
 
 * Use the default external link (SEO-safe, uses rel=nofollow).
 * Create your own explanation page and link to it from the plugin settings.
@@ -87,10 +97,18 @@ No frequently asked questions yet. Feel free to ask!
 
 == Changelog ==  
 
+= 1.1.0 =
+* Download buttons are now optional and are not visible by default.
+* An alternate link is added to the head of each page. This way sw:// and sws:// links can be found on the page using a browser extension. That's why download buttons are now optional.
+* Minor improvements
+
 = 1.0 =  
 Initial release.  
 
 == Upgrade Notice ==  
+
+= 1.1.0 =
+Important: In this version, the download button is optional. By default, all download buttons are hidden, but you can re-enable them anytime from the plugin settings page.
 
 = 1.0 =  
 First release. No upgrade steps required. 
