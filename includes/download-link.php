@@ -140,6 +140,12 @@ function stwbpb_custom_post_endpoints_add_link_to_content( $content ) {
         $settings = get_option('stwbpb_settings', array()); // Ensure a default empty array
         $user_defined_info_url = isset($settings['user_defined_info_url']) ? $settings['user_defined_info_url'] : '';
     
+        $download_link_variant = $settings['download_link_variant'];
+
+        if($download_link_variant === 'none'){
+            return $content;
+        }
+
         $info_link_variant = $settings['info_link_variant'];
 
     
@@ -168,6 +174,25 @@ function stwbpb_custom_post_endpoints_add_link_to_content( $content ) {
 }
 
 add_filter( 'the_content', 'stwbpb_custom_post_endpoints_add_link_to_content' );
+
+function stwbpb_output_alternate_hdoc_link_in_head() {
+	global $post;
+
+	if ((is_single() || is_page()) && $post && ('post' === $post->post_type || 'page' === $post->post_type)) {
+		if (get_post_meta($post->ID, '_disable_static_web_link', true) === '1') {
+			return;
+		}
+
+		$permalink = get_permalink($post->ID);
+		$path_part = preg_replace('#^' . preg_quote(home_url(), '#') . '#', '', $permalink);
+		$link = preg_replace('/^http/', "sw", home_url("/sw{$path_part}"));
+
+		$title = get_the_title($post);
+
+		echo '<link rel="alternate" type="application/hdoc+xml" title="' . esc_attr($title) . '" href="' . esc_url($link) . '" />' . "\n";
+	}
+}
+add_action('wp_head', 'stwbpb_output_alternate_hdoc_link_in_head');
 
 function stwbpb_add_icon_with_srcset($filename) {
     $icon_1x = plugins_url('assets/images/' . $filename . '.png', __FILE__);

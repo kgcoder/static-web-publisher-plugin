@@ -80,19 +80,19 @@ function stwbpb_get_panels($post) {
 
 <panels<?php 
 if(!empty($global_background_color)){
-    echo ' bgColor="' . esc_attr($global_background_color) . '"';
+    echo ' bgcolor="' . esc_attr($global_background_color) . '"';
 }
 if(!empty($global_text_color)){
-    echo ' textColor="' . esc_attr($global_text_color) . '"';
+    echo ' textcolor="' . esc_attr($global_text_color) . '"';
 }
 ?>>
 <?php if($should_show_top_panel){ ?>
 <top-panel<?php 
 if(!empty($top_background_color)){
-    echo ' bgColor="' . esc_attr($top_background_color) . '"';
+    echo ' bgcolor="' . esc_attr($top_background_color) . '"';
 }
 if(!empty($top_text_color)){
-    echo ' textColor="' . esc_attr($top_text_color) . '"';
+    echo ' textcolor="' . esc_attr($top_text_color) . '"';
 }
 ?>>
 <?php 
@@ -133,10 +133,10 @@ if(!empty($side_panel_left)){
 <?php if($should_show_bottom_panel){ ?>
 <bottom-panel<?php 
 if(!empty($bottom_background_color)){
-    echo ' bgColor="' . esc_attr($bottom_background_color) . '"';
+    echo ' bgcolor="' . esc_attr($bottom_background_color) . '"';
 }
 if(!empty($bottom_text_color)){
-    echo ' textColor="' . esc_attr($bottom_text_color) . '"';
+    echo ' textcolor="' . esc_attr($bottom_text_color) . '"';
 }
 ?>>
 <?php

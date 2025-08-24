@@ -115,6 +115,12 @@ function stwbpb_send_hdoc_for_post($post){
        
         header('Content-Type: text/plain');
         echo '<hdoc>';
+        echo '<head>';
+        echo '<title>' . $title . '</title>';
+        if(!$originalPageDisabled){
+            echo '<link rel="alternate" type="text/html" title="' . $title . '" href="' . $permalink . '" />';
+        }
+        echo '</head>';
         echo wp_kses($panels_escaped,$panels_allowed_tags);
         echo '<html>' . wp_kses($finalContent,$allowed_tags) . '</html>'; 
         echo wp_kses($connectionsSection, $connections_allowed_tags);

@@ -9,9 +9,10 @@ function stwbpb_settings_page() {
      //delete_option('stwbpb_settings');
 
 
-    $settings = get_option('stwbpb_settings', array(
+    $default_settings = array(
         'global_background_color' => '',
         'global_text_color' => '',
+        'download_link_variant' => 'none',
         'info_link_variant' => 'none',
         'user_defined_info_url' => '',
         'side_panel_on_the_left' => false,
@@ -31,9 +32,10 @@ function stwbpb_settings_page() {
             'bottom_message' => '',
             'sections' => array()
         ),
+    );
 
-
-    ));
+    $existing_settings = get_option('stwbpb_settings', array());
+    $settings = wp_parse_args($existing_settings, $default_settings);
 
     $top_panel = $settings['top_panel'];
     $bottom_panel = $settings['bottom_panel'];
@@ -46,12 +48,31 @@ function stwbpb_settings_page() {
             settings_fields('stwbpb_options_group');
             ?>
 
+            <p class="red-text">Don't forget to click 'Save changes' button at the bottom of this page after changing the settings.</p>
 
+            <h2>Download link</h2>
 
             <div class="settings-option-div">
                 <label>
+                <input type="radio" name="stwbpb_settings[download_link_variant]" value="none" <?php checked($settings['download_link_variant'], 'none'); ?>>
+                Don't show download link
+                </label>
+            </div>
+
+            <div class="settings-option-div">
+                <label>
+                <input type="radio" name="stwbpb_settings[download_link_variant]" value="default" <?php checked($settings['download_link_variant'], 'default'); ?>>
+                Show download link
+                </label>
+            </div>
+
+
+
+            <h2>Info link</h2>
+            <div class="settings-option-div">
+                <label>
                 <input type="radio" name="stwbpb_settings[info_link_variant]" value="none" <?php checked($settings['info_link_variant'], 'none'); ?>>
-                Don't use info link (<strong>Not recommended!</strong>)
+                Don't show info link
                 </label>
             </div>
             <div class="settings-option-div">
@@ -81,6 +102,8 @@ function stwbpb_settings_page() {
                     class="my-color-field" 
                 />
             </div>
+
+            
 
             <div class="settings-option-div">
                 <label for="main_text_color_field">Select global text color:</label>
@@ -274,6 +297,7 @@ function stwbpb_settings_init() {
     $default_settings = wp_json_encode(array(
         'global_background_color' => '',
         'global_text_color' => '',
+        'download_link_variant' => 'none',
         'info_link_variant' => 'none',
         'user_defined_info_url' => '',
         'side_panel_on_the_left' => false,
@@ -311,6 +335,8 @@ function stwbpb_settings_init() {
 function stwbpb_sanitize_settings($input) {
     $sanitized = array();
 
+    $valid_download_link_variants = array('none', 'default');
+
     $valid_info_link_variants = array('none', 'default', 'custom');
 
     //Sanitize main object
@@ -322,6 +348,8 @@ function stwbpb_sanitize_settings($input) {
     if(isset($input['global_text_color'])){
         $sanitized['global_text_color'] = sanitize_text_field($input['global_text_color']);
     }
+
+    $sanitized['download_link_variant'] = in_array($input['download_link_variant'], $valid_download_link_variants, true) ? $input['download_link_variant'] : 'none';
 
     $sanitized['info_link_variant'] = in_array($input['info_link_variant'], $valid_info_link_variants, true) ? $input['info_link_variant'] : 'none';
 
