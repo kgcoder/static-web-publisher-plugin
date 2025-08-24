@@ -30,28 +30,31 @@ The new endpoint provides content in a modified format called HDOC (short for "H
 Example comparison
 
 Standard HTML:
-`<html>
-    <head>
-        <title>My page</title>
-    </head>
-    <body>
-        <h1>My page</h1>
-        <p>Content</p>
-    </body>
-</html>`
+
+    <html>
+        <head>
+            <title>My page</title>
+        </head>
+        <body>
+            <h1>My page</h1>
+            <p>Content</p>
+        </body>
+    </html>
+
 
 HDOC format:
-`<hdoc>
-    <head>
-        <title>My page</title>
-    </head>
-    <html>
-        <h1>My page</h1>
-        <p>Content</p>
-    </html>
-    <panels>...</panels> <!-- Navigational panels (optional) -->
-    <connections>...</connections> <!-- Links to related documents (optional) -->
-</hdoc>`
+
+    <hdoc>
+        <head>
+            <title>My page</title>
+        </head>
+        <html>
+            <h1>My page</h1>
+            <p>Content</p>
+        </html>
+        <panels>...</panels> <!-- Navigational panels (optional) -->
+        <connections>...</connections> <!-- Links to related documents (optional) -->
+    </hdoc>
 
 == Installation ==
 
