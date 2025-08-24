@@ -116,9 +116,9 @@ function stwbpb_send_hdoc_for_post($post){
         header('Content-Type: text/plain');
         echo '<hdoc>';
         echo '<head>';
-        echo '<title>' . $title . '</title>';
+        echo '<title>' . esc_html( $title ) . '</title>';
         if(!$originalPageDisabled){
-            echo '<link rel="alternate" type="text/html" title="' . $title . '" href="' . $permalink . '" />';
+            echo '<link rel="alternate" type="text/html" title="' . esc_attr( $title ) . '" href="' . esc_url( $permalink ) . '" />';
         }
         echo '</head>';
         echo wp_kses($panels_escaped,$panels_allowed_tags);
