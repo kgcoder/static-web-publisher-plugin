@@ -61,7 +61,7 @@ function stwbpb_settings_page() {
 
             <div class="settings-option-div">
                 <label>
-                <input type="radio" name="stwbpb_settings[download_link_variant]" value="default" <?php checked($settings['download_link_variant'], 'default'); ?>>
+                <input type="radio" name="stwbpb_settings[download_link_variant]" value="on" <?php checked($settings['download_link_variant'], 'on'); ?>>
                 Show download link
                 </label>
             </div>
@@ -335,7 +335,7 @@ function stwbpb_settings_init() {
 function stwbpb_sanitize_settings($input) {
     $sanitized = array();
 
-    $valid_download_link_variants = array('none', 'default');
+    $valid_download_link_variants = array('none', 'on');
 
     $valid_info_link_variants = array('none', 'default', 'custom');
 

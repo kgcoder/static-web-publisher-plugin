@@ -4,7 +4,7 @@ Donate link: https://reinventingtheweb.com/donate
 Tags: static, web, publish
 Requires at least: 5.1
 Tested up to: 6.8
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -99,6 +99,9 @@ The correct link to use is available in the plugin settings. This way, you minim
 No frequently asked questions yet. Feel free to ask!
 
 == Changelog ==  
+
+= 1.1.1 =
+Bigfix
 
 = 1.1.0 =
 * Download buttons are now optional and are not visible by default.

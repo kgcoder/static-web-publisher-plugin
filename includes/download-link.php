@@ -142,7 +142,7 @@ function stwbpb_custom_post_endpoints_add_link_to_content( $content ) {
     
         $download_link_variant = $settings['download_link_variant'];
 
-        if($download_link_variant === 'none'){
+        if($download_link_variant !== 'on'){
             return $content;
         }
 
