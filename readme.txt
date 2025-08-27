@@ -101,7 +101,7 @@ No frequently asked questions yet. Feel free to ask!
 == Changelog ==  
 
 = 1.1.1 =
-Bigfix
+Bugfix
 
 = 1.1.0 =
 * Download buttons are now optional and are not visible by default.
@@ -112,6 +112,9 @@ Bigfix
 Initial release.  
 
 == Upgrade Notice ==  
+
+= 1.1.1 =
+Bugfix
 
 = 1.1.0 =
 Important: In this version, the download button is optional. By default, all download buttons are hidden, but you can re-enable them anytime from the plugin settings page.
