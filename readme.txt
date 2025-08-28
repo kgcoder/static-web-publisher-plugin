@@ -4,7 +4,7 @@ Donate link: https://reinventingtheweb.com/donate
 Tags: static, web, publish
 Requires at least: 5.1
 Tested up to: 6.8
-Stable tag: 1.1.1
+Stable tag: 1.2.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -100,6 +100,9 @@ No frequently asked questions yet. Feel free to ask!
 
 == Changelog ==  
 
+= 1.2.0 =
+The site name and link are automatically added to the HDOC top panel after the plugin is activated. This ensures the top panel is populated even if you don’t configure panels after installation.
+
 = 1.1.1 =
 Bugfix
 
@@ -112,6 +115,9 @@ Bugfix
 Initial release.  
 
 == Upgrade Notice ==  
+
+= 1.2.0 =
+Sitename and link are added on the top panel of HDOC automatically after activation of the plugin.
 
 = 1.1.1 =
 Bugfix

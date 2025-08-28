@@ -3,7 +3,7 @@
 /*
 Plugin Name: Static Web Publisher
 Description: Publishes your posts and pages on the Static Web
-Version: 1.1.1
+Version: 1.2.0
 Author: Karen Grigorian
 Author URI: https://github.com/kgcoder
 License: GPLv2 or later
@@ -30,6 +30,39 @@ require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
 function stwbpb_activate() {
     stwbpb_custom_post_endpoints_rewrite_rules();
     flush_rewrite_rules(); // Refresh permalinks
+    // Initialize default top_panel settings if all are empty
+    $settings = get_option('stwbpb_settings', array());
+    if (is_string($settings)) {
+        $decoded = json_decode($settings, true);
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+            $settings = $decoded;
+        } else {
+            $settings = array();
+        }
+    }
+    if (!is_array($settings)) {
+        $settings = array();
+    }
+    if (!isset($settings['top_panel']) || !is_array($settings['top_panel'])) {
+        $settings['top_panel'] = array();
+    }
+    $top_panel = $settings['top_panel'];
+    $main_link = isset($top_panel['main_link']) ? trim($top_panel['main_link']) : '';
+    $main_title = isset($top_panel['main_title']) ? trim($top_panel['main_title']) : '';
+    $logo_url = isset($top_panel['logo_url']) ? trim($top_panel['logo_url']) : '';
+    $global_background_color = isset($settings['global_background_color']) ? trim($settings['global_background_color']) : '';
+    $global_text_color = isset($settings['global_text_color']) ? trim($settings['global_text_color']) : '';
+
+
+    if ($main_link === '' && $main_title === '' && $logo_url === '') {
+        $settings['top_panel']['main_title'] = get_bloginfo('name');
+        $settings['top_panel']['main_link'] = home_url('/');
+        if($global_background_color === '' && $global_text_color === ''){
+            $settings['global_background_color'] = 'black';
+            $settings['global_text_color'] = 'white';
+        }
+        update_option('stwbpb_settings', $settings);
+    }
 }
 register_activation_hook(__FILE__, 'stwbpb_activate');
 

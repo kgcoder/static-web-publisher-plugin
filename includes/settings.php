@@ -401,25 +401,27 @@ function stwbpb_sanitize_settings($input) {
             'sections' => array()
         );
 
-        foreach ($input['bottom_panel']['sections'] as $section) {
-            if (is_array($section)) {
-                $sanitized_section = array(
-                    'title' => isset($section['title']) ? sanitize_text_field($section['title']) : '',
-                    'links' => array()
-                );
+        if (isset($input['bottom_panel']['sections']) && is_array($input['bottom_panel']['sections'])) {
+            foreach ($input['bottom_panel']['sections'] as $section) {
+                if (is_array($section)) {
+                    $sanitized_section = array(
+                        'title' => isset($section['title']) ? sanitize_text_field($section['title']) : '',
+                        'links' => array()
+                    );
 
-                if (isset($section['links']) && is_array($section['links'])) {
-                    foreach ($section['links'] as $link) {
-                        if (is_array($link)) {
-                            $sanitized_section['links'][] = array(
-                                'text' => isset($link['text']) ? sanitize_text_field($link['text']) : '',
-                                'url' => isset($link['url']) ? esc_url_raw($link['url']) : ''
-                            );
+                    if (isset($section['links']) && is_array($section['links'])) {
+                        foreach ($section['links'] as $link) {
+                            if (is_array($link)) {
+                                $sanitized_section['links'][] = array(
+                                    'text' => isset($link['text']) ? sanitize_text_field($link['text']) : '',
+                                    'url' => isset($link['url']) ? esc_url_raw($link['url']) : ''
+                                );
+                            }
                         }
                     }
-                }
 
-                $sanitized['bottom_panel']['sections'][] = $sanitized_section;
+                    $sanitized['bottom_panel']['sections'][] = $sanitized_section;
+                }
             }
         }
     }
