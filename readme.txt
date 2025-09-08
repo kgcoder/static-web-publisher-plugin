@@ -4,7 +4,7 @@ Donate link: https://reinventingtheweb.com/donate
 Tags: static, web, publish
 Requires at least: 5.1
 Tested up to: 6.8
-Stable tag: 1.2.0
+Stable tag: 2.0.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -25,7 +25,7 @@ Here’s how the plugin works:
 
 Here is a short [video](https://www.youtube.com/watch?v=DX2-G7zy32k) demonstrating how saving of a page works.
 
-The new endpoint provides content in a modified format called HDOC (short for "Hypertext Document"), which is similar to HTML but does not support scripts.
+The new endpoint provides content in a modified format called HDOC (short for "Hypertext Document"), which is similar to HTML but does not support scripts and has very limited styling options.
 
 Example comparison
 
@@ -33,10 +33,10 @@ Standard HTML:
 
     <html>
         <head>
-            <title>My page</title>
+            <title>Page title</title>
         </head>
         <body>
-            <h1>My page</h1>
+            <h1>Page title</h1>
             <p>Content</p>
         </body>
     </html>
@@ -46,10 +46,10 @@ HDOC format:
 
     <hdoc>
         <head>
-            <title>My page</title>
+            <title>Page title</title>
         </head>
         <html>
-            <h1>My page</h1>
+            <h1>Page title</h1>
             <p>Content</p>
         </html>
         <panels>...</panels> <!-- Navigational panels (optional) -->
@@ -64,14 +64,14 @@ Setting up Static Web Publisher is quick and easy:
 2. In the "Search plugins..." field, type Static Web Publisher.
 3. Find the plugin in the search results, hover over it, and click Install.
 4. Once installed, click Activate.
-5. Go to the plugin's Settings page and configure the plugin (e.g., top and bottom panels).
+5. Go to the plugin's Settings page and configure top and bottom panels (optional).
 6. Add download link and info link (optional).
 
 *Download link*
 
 By default, this link is hidden. You can leave it that way, but then only people who already know about Static Web will be able to access the alternative page version.
 
-If you’d like to spread the word - and maybe encourage new visitors to try downloading pages from your site - enable the download link in the plugin settings.
+If you’d like to spread the word - and encourage new visitors to try downloading pages from your site - enable the download link in the plugin settings.
 
 Since the link alone doesn’t explain much, it’s best to also enable the info link alongside it.
 
