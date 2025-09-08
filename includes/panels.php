@@ -10,7 +10,7 @@ function stwbpb_get_panels($post) {
 
     $path_part = preg_replace('#^' . preg_quote(home_url(), '#') . '#', '', $permalink);
 
-    $comments_link = home_url( "/sw-comments{$path_part}");
+    $comments_link = home_url( "/json-comments/?post={$post->ID}");
 
     $settings = get_option('stwbpb_settings', array(
         'global_background_color' => '',
@@ -115,7 +115,11 @@ if(!empty($site_name)){
 <?php
 if (!empty($top_panel['links'])) {
     foreach ($top_panel['links'] as $index => $link) {
-        echo '<a href="' . esc_url($link['url']) . '">' . esc_html($link['text']) . '</a>' . PHP_EOL; 
+        $link_to_use = $link['url'];
+        if(preg_match('/^https?:\/\/OP$/i', $link['url'])){
+            $link_to_use = $permalink;
+         }
+        echo '<a href="' . esc_url($link_to_use) . '">' . esc_html($link['text']) . '</a>' . PHP_EOL; 
     }
 }
 ?>
@@ -128,7 +132,7 @@ if (!empty($top_panel['links'])) {
 if(!empty($side_panel_left)){
     echo ' side="left"';
 }
-?>><?php echo esc_url($comments_link); ?></side-panel>
+?>><?php echo '<comments title="Comments" empty="No comments yet">' . esc_url($comments_link). '</comments>' ?></side-panel>
 <?php endif; ?>
 <?php if($should_show_bottom_panel){ ?>
 <bottom-panel<?php 

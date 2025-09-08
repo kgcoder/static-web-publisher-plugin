@@ -19,6 +19,7 @@ if (!defined('ABSPATH')) {
 
 require_once plugin_dir_path(__FILE__) . 'includes/download-link.php';
 require_once plugin_dir_path(__FILE__) . 'includes/comments-page.php';
+require_once plugin_dir_path(__FILE__) . 'includes/comments-json.php';
 require_once plugin_dir_path(__FILE__) . 'includes/panels.php';
 require_once plugin_dir_path(__FILE__) . 'includes/hdoc.php';
 require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
@@ -89,6 +90,12 @@ function stwbpb_custom_post_endpoints_rewrite_rules() {
     );
 
     add_rewrite_rule(
+        '^json-comments/?(.+)?$',
+        'index.php?json_comments_custom_matches=1',
+        'top'
+    );
+
+    add_rewrite_rule(
         '^sw/(.+)?$',
         'index.php?sw_custom_matches=$matches[1]',
         'top'
@@ -106,6 +113,7 @@ add_action('init', 'stwbpb_custom_post_endpoints_rewrite_rules');
 function stwbpb_custom_post_endpoints_query_vars($query_vars) {
     $query_vars[] = 'sw_custom_matches';
     $query_vars[] = 'comments_custom_matches';
+    $query_vars[] = 'json_comments_custom_matches';
 
     return $query_vars;
 }
@@ -195,6 +203,12 @@ function stwbpb_custom_post_endpoints_template_redirect() {
 
         }
    
+        exit;
+    }
+
+
+    if (isset($wp_query->query_vars['json_comments_custom_matches'])) {
+        stwbpb_send_comments_json_from_post();
         exit;
     }
 

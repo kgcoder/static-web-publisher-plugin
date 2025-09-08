@@ -96,6 +96,7 @@ function stwbpb_send_hdoc_for_post($post){
             'panels' =>  array('bgcolor' => true, 'textcolor' => true),
             'top-panel'  => array('bgcolor' => true, 'textcolor' => true),
             'side-panel' => array('side' => true),
+            'comments' => array('title' => true, 'empty' => true),
             'bottom-panel'  => array('bgcolor' => true, 'textcolor' => true), 
             'logo' => array('src' => true, 'href' => true),
             'site-name' => array('href' => true),
