@@ -17,24 +17,18 @@ function stwbpb_get_panels($post) {
     $comments_link = home_url( "/json-comments/?post={$post->ID}");
 
     $settings = get_option('stwbpb_settings', array(
-        'global_background_color' => '',
-        'global_text_color' => '',
         'info_link_variant' => 'none',
         'user_defined_info_url' => '',
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,
         'modify_external_links' => false,
         'top_panel' => array(
-            'top_background_color' => '',
-            'top_text_color' => '',
             'main_link' => '',
             'main_title' => '', 
             'logo_url' => '', 
             'links' => array()
         ),
         'bottom_panel' => array(
-            'bottom_background_color' => '',
-            'bottom_text_color' => '',
             'bottom_message' => '',
             'sections' => array()
         ),
@@ -49,17 +43,6 @@ function stwbpb_get_panels($post) {
 
     $logo_url = $top_panel['logo_url'];
 
-    $global_background_color = $settings['global_background_color'];
-
-    $global_text_color = $settings['global_text_color'];
-
-    $top_background_color = $top_panel['top_background_color'];
-
-    $top_text_color = $top_panel['top_text_color'];
-
-    $bottom_background_color = $bottom_panel['bottom_background_color'];
-
-    $bottom_text_color = $bottom_panel['bottom_text_color'];
 
     $bottom_message = $bottom_panel['bottom_message'];
 
@@ -82,23 +65,9 @@ function stwbpb_get_panels($post) {
 
     ?>
 
-<panels<?php 
-if(!empty($global_background_color)){
-    echo ' bgcolor="' . esc_attr($global_background_color) . '"';
-}
-if(!empty($global_text_color)){
-    echo ' textcolor="' . esc_attr($global_text_color) . '"';
-}
-?>>
+<panels>
 <?php if($should_show_top_panel){ ?>
-<top-panel<?php 
-if(!empty($top_background_color)){
-    echo ' bgcolor="' . esc_attr($top_background_color) . '"';
-}
-if(!empty($top_text_color)){
-    echo ' textcolor="' . esc_attr($top_text_color) . '"';
-}
-?>>
+<top-panel>
 <?php 
 if(!empty($logo_url)){
     echo '<logo src="' . esc_url($logo_url) . '"';
@@ -140,14 +109,7 @@ if(!empty($side_panel_left)){
 ?>><?php echo '<comments title="Comments" empty="No comments yet">' . esc_url($comments_link). '</comments>' ?></side-panel>
 <?php endif; ?>
 <?php if($should_show_bottom_panel){ ?>
-<bottom-panel<?php 
-if(!empty($bottom_background_color)){
-    echo ' bgcolor="' . esc_attr($bottom_background_color) . '"';
-}
-if(!empty($bottom_text_color)){
-    echo ' textcolor="' . esc_attr($bottom_text_color) . '"';
-}
-?>>
+<bottom-panel>
 <?php
 if (!empty($bottom_panel['sections'])) {
     foreach ($bottom_panel['sections'] as $section) {

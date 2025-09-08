@@ -51,17 +51,11 @@ function stwbpb_activate() {
     $main_link = isset($top_panel['main_link']) ? trim($top_panel['main_link']) : '';
     $main_title = isset($top_panel['main_title']) ? trim($top_panel['main_title']) : '';
     $logo_url = isset($top_panel['logo_url']) ? trim($top_panel['logo_url']) : '';
-    $global_background_color = isset($settings['global_background_color']) ? trim($settings['global_background_color']) : '';
-    $global_text_color = isset($settings['global_text_color']) ? trim($settings['global_text_color']) : '';
-
 
     if ($main_link === '' && $main_title === '' && $logo_url === '') {
         $settings['top_panel']['main_title'] = get_bloginfo('name');
         $settings['top_panel']['main_link'] = home_url('/');
-        if($global_background_color === '' && $global_text_color === ''){
-            $settings['global_background_color'] = 'black';
-            $settings['global_text_color'] = 'white';
-        }
+        $settings['top_panel']['links'] = array();
         update_option('stwbpb_settings', $settings);
     }
 }

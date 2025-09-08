@@ -93,11 +93,11 @@ function stwbpb_send_hdoc_for_post($post){
         );
 
         $panels_allowed_tags = array(
-            'panels' =>  array('bgcolor' => true, 'textcolor' => true),
-            'top-panel'  => array('bgcolor' => true, 'textcolor' => true),
+            'panels' => true,
+            'top-panel' => true,
             'side-panel' => array('side' => true),
+            'bottom-panel' => true,
             'comments' => array('title' => true, 'empty' => true),
-            'bottom-panel'  => array('bgcolor' => true, 'textcolor' => true), 
             'logo' => array('src' => true, 'href' => true),
             'site-name' => array('href' => true),
             'a' => array('href' => true),

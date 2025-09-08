@@ -10,8 +10,6 @@ function stwbpb_settings_page() {
 
 
     $default_settings = array(
-        'global_background_color' => '',
-        'global_text_color' => '',
         'download_link_variant' => 'none',
         'info_link_variant' => 'none',
         'user_defined_info_url' => '',
@@ -19,16 +17,12 @@ function stwbpb_settings_page() {
         'modify_internal_links' => false,
         'modify_external_links' => false,
         'top_panel' => array(
-            'top_background_color' => '',
-            'top_text_color' => '',
             'main_link' => '',
             'main_title' => '',
             'logo_url' => '', 
             'links' => array()
         ),
         'bottom_panel' => array(
-            'bottom_background_color' => '',
-            'bottom_text_color' => '',
             'bottom_message' => '',
             'sections' => array()
         ),
@@ -91,31 +85,8 @@ function stwbpb_settings_page() {
                 <input class="single-text-input" type="text" name="stwbpb_settings[user_defined_info_url]" value="<?php echo esc_url($settings['user_defined_info_url']); ?>" />
             </div>
 
-            <div class="settings-option-div">
-                <label for="main_background_color_field">Select global background color:</label>
-                <div class="spacerW10"></div>
-                <input 
-                    type="text" 
-                    id="main_background_color_field" 
-                    name="stwbpb_settings[global_background_color]" 
-                    value="<?php echo esc_attr($settings['global_background_color']); ?>" 
-                    class="my-color-field" 
-                />
-            </div>
-
             
 
-            <div class="settings-option-div">
-                <label for="main_text_color_field">Select global text color:</label>
-                <div class="spacerW10"></div>
-                <input 
-                    type="text" 
-                    id="main_text_color_field" 
-                    name="stwbpb_settings[global_text_color]" 
-                    value="<?php echo esc_attr($settings['global_text_color']); ?>" 
-                    class="my-color-field" 
-                />
-            </div>
 
 
             <h2>Top panel</h2>
@@ -138,31 +109,6 @@ function stwbpb_settings_page() {
                 <div class="spacerW10"></div>
                 <button type="button" id="select-image">Select Image</button>
             </div>
-
-            <div class="settings-option-div">
-                <label for="top_background_color_field">Select top bar background color:</label>
-                <div class="spacerW10"></div>
-                <input 
-                    type="text" 
-                    id="top_background_color_field" 
-                    name="stwbpb_settings[top_panel][top_background_color]" 
-                    value="<?php echo esc_attr($top_panel['top_background_color']); ?>" 
-                    class="my-color-field" 
-                />
-            </div>
-
-            <div class="settings-option-div">
-                <label for="top_text_color_field">Select top bar text color:</label>
-                <div class="spacerW10"></div>
-                <input 
-                    type="text" 
-                    id="top_text_color_field" 
-                    name="stwbpb_settings[top_panel][top_text_color]" 
-                    value="<?php echo esc_attr($top_panel['top_text_color']); ?>" 
-                    class="my-color-field" 
-                />
-            </div>
-
 
             <p class="red-text">Use <code>http://OP</code> to add a link to the original page.</p>
 
@@ -202,30 +148,7 @@ function stwbpb_settings_page() {
             </div>
 
             <h2>Bottom panel</h2>
-            <div class="settings-option-div">
-                <label for="bottom_background_color_field">Select bottom bar background color:</label>
-                <div class="spacerW10"></div>
-                <input 
-                    type="text" 
-                    id="bottom_background_color_field" 
-                    name="stwbpb_settings[bottom_panel][bottom_background_color]" 
-                    value="<?php echo esc_attr($bottom_panel['bottom_background_color']); ?>" 
-                    class="my-color-field" 
-                />
-            </div>
-
-            <div class="settings-option-div">
-                <label for="bottom_text_color_field">Select bottom bar text color:</label>
-                <div class="spacerW10"></div>
-                <input 
-                    type="text" 
-                    id="bottom_text_color_field" 
-                    name="stwbpb_settings[bottom_panel][bottom_text_color]" 
-                    value="<?php echo esc_attr($bottom_panel['bottom_text_color']); ?>" 
-                    class="my-color-field" 
-                />
-            </div>
-
+            
             <p class="red-text">Use <code>http://OP</code> to add a link to the original page.</p>
           
             <div id="sections-container">
@@ -301,8 +224,7 @@ function stwbpb_settings_page() {
 function stwbpb_settings_init() {
    
     $default_settings = wp_json_encode(array(
-        'global_background_color' => '',
-        'global_text_color' => '',
+       
         'download_link_variant' => 'none',
         'info_link_variant' => 'none',
         'user_defined_info_url' => '',
@@ -310,16 +232,12 @@ function stwbpb_settings_init() {
         'modify_internal_links' => false,
         'modify_external_links' => false,
         'top_panel' => array(
-            'top_background_color' => '',
-            'top_text_color' => '',
             'main_link' => '',
             'main_title' => '',
             'logo_url' => '',
             'links' => array()
         ),
         'bottom_panel' => array(
-            'bottom_background_color' => '',
-            'bottom_text_color' => '',
             'bottom_message' => '',
             'sections' => array()
         ),
@@ -347,13 +265,7 @@ function stwbpb_sanitize_settings($input) {
 
     //Sanitize main object
 
-    if(isset($input['global_background_color'])){
-        $sanitized['global_background_color'] = sanitize_text_field($input['global_background_color']);
-    }
-
-    if(isset($input['global_text_color'])){
-        $sanitized['global_text_color'] = sanitize_text_field($input['global_text_color']);
-    }
+    
 
     $sanitized['download_link_variant'] = in_array($input['download_link_variant'], $valid_download_link_variants, true) ? $input['download_link_variant'] : 'none';
 
@@ -378,8 +290,6 @@ function stwbpb_sanitize_settings($input) {
     // Sanitize top_panel
     if (isset($input['top_panel']) && is_array($input['top_panel'])) {
         $sanitized['top_panel'] = array(
-            'top_background_color' => isset($input['top_panel']['top_background_color']) ? sanitize_text_field($input['top_panel']['top_background_color']) : '',
-            'top_text_color' => isset($input['top_panel']['top_text_color']) ? sanitize_text_field($input['top_panel']['top_text_color']) : '',
             'main_link' => isset($input['top_panel']['main_link']) ? esc_url_raw($input['top_panel']['main_link']) : '',
             'main_title' => isset($input['top_panel']['main_title']) ? sanitize_text_field($input['top_panel']['main_title']) : '',
             'logo_url' => isset($input['top_panel']['logo_url']) ? esc_url_raw($input['top_panel']['logo_url']) : '',
@@ -401,8 +311,6 @@ function stwbpb_sanitize_settings($input) {
     // Sanitize bottom_panel
     if (isset($input['bottom_panel']) && is_array($input['bottom_panel'])) {
         $sanitized['bottom_panel'] = array(
-            'bottom_background_color' => isset($input['bottom_panel']['bottom_background_color']) ? sanitize_text_field($input['bottom_panel']['bottom_background_color']) : '',
-            'bottom_text_color' => isset($input['bottom_panel']['bottom_text_color']) ? sanitize_text_field($input['bottom_panel']['bottom_text_color']) : '',
             'bottom_message' =>  isset($input['bottom_panel']['bottom_message']) ? sanitize_text_field($input['bottom_panel']['bottom_message']) : '',
             'sections' => array()
         );
@@ -467,7 +375,6 @@ function stwbpb_enqueue_scripts($hook) {
 
     wp_enqueue_media(); // Enqueues the media uploader
 
-    wp_enqueue_style('wp-color-picker');
     wp_enqueue_script(
         'static-web-publisher-admin',
         plugin_dir_url(__FILE__) . 'admin.js',
@@ -476,13 +383,7 @@ function stwbpb_enqueue_scripts($hook) {
         true // Load in the footer
     );
 
-    wp_enqueue_script(
-        'static-web-publisher-color-picker',
-        plugin_dir_url(__FILE__) . 'color-picker.js', 
-        array('wp-color-picker'), // Dependency for the color picker
-        filemtime(plugin_dir_path(__FILE__) . 'color-picker.js'),
-        true
-    );
+    
 
     wp_enqueue_style(
         'static-web-publisher-admin-style',
