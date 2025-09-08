@@ -55,7 +55,12 @@ function stwbpb_activate() {
     if ($main_link === '' && $main_title === '' && $logo_url === '') {
         $settings['top_panel']['main_title'] = get_bloginfo('name');
         $settings['top_panel']['main_link'] = home_url('/');
-        $settings['top_panel']['links'] = array();
+        $settings['top_panel']['links'] = array(
+            array(
+                'url' => 'http://OP',
+                'text' => 'Original page'
+            )
+        );
         update_option('stwbpb_settings', $settings);
     }
 }
