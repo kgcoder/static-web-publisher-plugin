@@ -100,6 +100,11 @@ No frequently asked questions yet. Feel free to ask!
 
 == Changelog ==  
 
+= 2.0.0 =
+Color configuration of panels was removed from Settings. 
+Now a link to the original page can be added to the panels. The same link was removed from the bottom of each page. 
+Comments are now exported in JSON format.  
+
 = 1.2.0 =
 The site name and link are automatically added to the HDOC top panel after the plugin is activated. This ensures the top panel is populated even if you don’t configure panels after installation.
 
@@ -115,6 +120,8 @@ Bugfix
 Initial release.  
 
 == Upgrade Notice ==  
+= 2.0.0 =
+After the upgrade go to Settings > Permalinks and press 'Save Changes' to update your enpoints (json-comments endpoint was added). 
 
 = 1.2.0 =
 Sitename and link are added on the top panel of HDOC automatically after activation of the plugin.
