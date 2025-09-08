@@ -163,6 +163,10 @@ function stwbpb_settings_page() {
                 />
             </div>
 
+
+            <p class="red-text">Use <code>http://OP</code> to add a link to the original page.</p>
+
+
             <div id="top-panel-links-container">
               
                 <div class="links">
@@ -221,6 +225,8 @@ function stwbpb_settings_page() {
                     class="my-color-field" 
                 />
             </div>
+
+            <p class="red-text">Use <code>http://OP</code> to add a link to the original page.</p>
           
             <div id="sections-container">
                 <?php

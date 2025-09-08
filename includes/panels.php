@@ -10,6 +10,10 @@ function stwbpb_get_panels($post) {
 
     $path_part = preg_replace('#^' . preg_quote(home_url(), '#') . '#', '', $permalink);
 
+
+    $originalPageDisabled = get_post_meta($post->ID, '_disable_original_page', true) === '1';
+
+
     $comments_link = home_url( "/json-comments/?post={$post->ID}");
 
     $settings = get_option('stwbpb_settings', array(
@@ -116,7 +120,8 @@ if(!empty($site_name)){
 if (!empty($top_panel['links'])) {
     foreach ($top_panel['links'] as $index => $link) {
         $link_to_use = $link['url'];
-        if(preg_match('/^https?:\/\/OP$/i', $link['url'])){
+        
+        if(!$originalPageDisabled && preg_match('/^https?:\/\/OP$/i', $link['url'])){
             $link_to_use = $permalink;
          }
         echo '<a href="' . esc_url($link_to_use) . '">' . esc_html($link['text']) . '</a>' . PHP_EOL; 
@@ -156,7 +161,12 @@ if(!empty($section_title)){
 <?php
 if (!empty($section['links'])) {
     foreach ($section['links'] as $index => $link) {
-        echo '<a href="' . esc_url($link['url']) . '">' . esc_html($link['text']) . '</a>' . PHP_EOL; 
+        $link_to_use = $link['url'];
+        
+        if(!$originalPageDisabled && preg_match('/^https?:\/\/OP$/i', $link['url'])){
+            $link_to_use = $permalink;
+         }
+        echo '<a href="' . esc_url($link_to_use) . '">' . esc_html($link['text']) . '</a>' . PHP_EOL; 
     }
 }
 ?>

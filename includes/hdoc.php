@@ -71,7 +71,7 @@ function stwbpb_send_hdoc_for_post($post){
   
         $originalPageDisabled = get_post_meta($post->ID, '_disable_original_page', true) === '1';
 
-        $finalContent = '<h1>' . $title . "</h1>" .  $htmlContent . ($originalPageDisabled ? "" : "<p>---</p><p><a href=\"" . $permalink . "\">" . "Original page</a></p>");
+        $finalContent = '<h1>' . $title . "</h1>" .  $htmlContent;
 
         $panels_escaped = stwbpb_get_panels($post);
 
