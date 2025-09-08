@@ -20,6 +20,7 @@ if (!defined('ABSPATH')) {
 require_once plugin_dir_path(__FILE__) . 'includes/download-link.php';
 require_once plugin_dir_path(__FILE__) . 'includes/comments-page.php';
 require_once plugin_dir_path(__FILE__) . 'includes/comments-json.php';
+require_once plugin_dir_path(__FILE__) . 'includes/rss-feeds.php';
 require_once plugin_dir_path(__FILE__) . 'includes/panels.php';
 require_once plugin_dir_path(__FILE__) . 'includes/hdoc.php';
 require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
