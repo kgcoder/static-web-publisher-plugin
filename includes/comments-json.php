@@ -6,8 +6,8 @@ if (!defined('ABSPATH')) {
 
 
 function stwbpb_send_comments_json_from_post() {
-    
-    $post_id = isset($_GET['post']) ? absint($_GET['post']) : 0;
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe: only reading sanitized GET params.
+    $post_id = isset($_GET['post']) ? absint( wp_unslash( $_GET['post'] ) ) : 0;
     if (!$post_id) {
         return new WP_Error('post_not_found', 'Post not found', array('status' => 404));
     }
@@ -18,8 +18,10 @@ function stwbpb_send_comments_json_from_post() {
     }
 
     // Pagination parameters: page and per_page
-    $page = isset($_GET['page']) ? max(1, absint($_GET['page'])) : 1;
-    $per_page = isset($_GET['per_page']) ? absint($_GET['per_page']) : 10;
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe: only reading sanitized GET params.
+    $page = isset($_GET['page']) ? max(1, absint( wp_unslash( $_GET['page'] ) )) : 1;
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe: only reading sanitized GET params.
+    $per_page = isset($_GET['per_page']) ? absint( wp_unslash( $_GET['per_page'] ) ) : 10;
     if ($per_page < 1) {
         $per_page = 10;
     } elseif ($per_page > 100) {
