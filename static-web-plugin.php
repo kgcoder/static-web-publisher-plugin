@@ -53,6 +53,8 @@ function stwbpb_activate() {
     $logo_url = isset($top_panel['logo_url']) ? trim($top_panel['logo_url']) : '';
 
     if ($main_link === '' && $main_title === '' && $logo_url === '') {
+        $settings['comments_title'] = 'Comments';
+        $settings['no_comments_message'] = 'No comments yet';
         $settings['top_panel']['main_title'] = get_bloginfo('name');
         $settings['top_panel']['main_link'] = home_url();
         $settings['top_panel']['links'] = array(
