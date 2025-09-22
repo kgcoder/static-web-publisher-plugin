@@ -30,11 +30,19 @@ function stwbpb_send_comments_json_from_post() {
 
     $offset = ($page - 1) * $per_page;
 
+    // Order parameter: default to DESC, allow ASC via GET ?order=asc
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Safe: only reading sanitized GET params.
+    $order_param = isset($_GET['order']) ? strtolower( sanitize_text_field( wp_unslash( $_GET['order'] ) ) ) : '';
+    $order = ($order_param === 'asc') ? 'ASC' : 'DESC';
+
     $comments = get_comments(array(
         'post_id' => $post_id,
         'status' => 'approve',
         'number' => $per_page,
         'offset' => $offset,
+        'orderby' => 'comment_date_gmt',
+        'order' => $order,
+        
     ));
 
     $data = array_map(function($comment) use ($post_id) {
