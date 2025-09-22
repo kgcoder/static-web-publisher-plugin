@@ -16,6 +16,8 @@ function stwbpb_settings_page() {
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,
         'modify_external_links' => false,
+        'comments_title' => '',
+        'no_comments_message' => '',
         'top_panel' => array(
             'main_link' => '',
             'main_title' => '',
@@ -85,6 +87,20 @@ function stwbpb_settings_page() {
                 <input class="single-text-input" type="text" name="stwbpb_settings[user_defined_info_url]" value="<?php echo esc_url($settings['user_defined_info_url']); ?>" />
             </div>
 
+
+            <h2>Comments</h2>
+
+            <div class="settings-option-div">
+                <label>Comments title: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[comments_title]" value="<?php echo esc_attr($settings['comments_title']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>No comments message: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[no_comments_message]" value="<?php echo esc_attr($settings['no_comments_message']); ?>" />
+            </div>
             
 
 
@@ -231,6 +247,8 @@ function stwbpb_settings_init() {
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,
         'modify_external_links' => false,
+        'comments_title' => '',
+        'no_comments_message' => '',
         'top_panel' => array(
             'main_link' => '',
             'main_title' => '',
@@ -285,6 +303,9 @@ function stwbpb_sanitize_settings($input) {
         $sanitized['modify_external_links'] = boolval($input['modify_external_links']);
     }
 
+
+    $sanitized['comments_title'] = isset($input['comments_title']) ? sanitize_text_field($input['comments_title']) : '';
+    $sanitized['no_comments_message'] = isset($input['no_comments_message']) ? sanitize_text_field($input['no_comments_message']) : '';
 
 
     // Sanitize top_panel

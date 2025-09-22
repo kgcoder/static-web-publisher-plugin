@@ -22,6 +22,8 @@ function stwbpb_get_panels($post) {
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,
         'modify_external_links' => false,
+        'comments_title' => '',
+        'no_comments_message' => '',
         'top_panel' => array(
             'main_link' => '',
             'main_title' => '', 
@@ -33,6 +35,10 @@ function stwbpb_get_panels($post) {
             'sections' => array()
         ),
     ));
+
+    $comments_title = $settings['comments_title'];
+    $no_comments_message = $settings['no_comments_message'];
+
 
     $top_panel = $settings['top_panel'];
     $bottom_panel = $settings['bottom_panel'];
@@ -106,7 +112,7 @@ if (!empty($top_panel['links'])) {
 if(!empty($side_panel_left)){
     echo ' side="left"';
 }
-?>><?php echo '<comments title="Comments" empty="No comments yet">' . esc_url($comments_link). '</comments>' ?></side-panel>
+?>><?php echo '<comments' . (!empty($comments_title) ? ' title="' . esc_attr($comments_title) . '"' : '') . (!empty($no_comments_message) ? ' empty="' . esc_attr($no_comments_message) . '"' : '') . '>' . esc_url($comments_link). '</comments>' ?></side-panel>
 <?php endif; ?>
 <?php if($should_show_bottom_panel){ ?>
 <bottom-panel>
