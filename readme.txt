@@ -4,7 +4,7 @@ Donate link: https://reinventingtheweb.com/donate
 Tags: static, web, publish
 Requires at least: 5.1
 Tested up to: 6.8
-Stable tag: 2.0.0
+Stable tag: 2.1.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -100,6 +100,9 @@ No frequently asked questions yet. Feel free to ask!
 
 == Changelog ==  
 
+= 2.1.0 =
+It's now possible to order comments with 'order' parameter. Values: asc, desc. Title for comments section and 'no comments yet' message can now be specified in the Settings.
+
 = 2.0.0 =
 Color configuration of panels was removed from Settings. 
 Now a link to the original page can be added to the panels. The same link was removed from the bottom of each page. 
@@ -120,6 +123,10 @@ Bugfix
 Initial release.  
 
 == Upgrade Notice ==  
+
+= 2.1.0 =
+It's now possible to order comments with 'order' parameter. Values: asc, desc. Title for comments section and 'no comments yet' message can now be specified in the Settings.
+
 = 2.0.0 =
 After the upgrade go to Settings > Permalinks and press 'Save Changes' to update your enpoints (json-comments endpoint was added). 
 
