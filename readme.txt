@@ -4,7 +4,7 @@ Donate link: https://reinventingtheweb.com/donate
 Tags: static, web, publish
 Requires at least: 5.1
 Tested up to: 6.8
-Stable tag: 2.1.0
+Stable tag: 3.0.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -45,13 +45,21 @@ Standard HTML:
 HDOC format:
 
     <hdoc>
-        <head>
+        <metadata>
             <title>Page title</title>
-        </head>
-        <html>
+        </metadata>
+
+        <header>
             <h1>Page title</h1>
+            <author>John Doe</author>
+            <date>October 1, 2025</date>
+            ...
+        </header>
+
+        <content>
             <p>Content</p>
-        </html>
+        </content>
+
         <panels>...</panels> <!-- Navigational panels (optional) -->
         <connections>...</connections> <!-- Links to related documents (optional) -->
     </hdoc>
@@ -100,6 +108,9 @@ No frequently asked questions yet. Feel free to ask!
 
 == Changelog ==  
 
+= 3.0.0 =
+Big changes in HDOC format. 
+
 = 2.1.0 =
 It's now possible to order comments with 'order' parameter. Values: asc, desc. Title for comments section and 'no comments yet' message can now be specified in the Settings.
 
@@ -123,6 +134,9 @@ Bugfix
 Initial release.  
 
 == Upgrade Notice ==  
+
+= 3.0.0 =
+Big changes in HDOC format.
 
 = 2.1.0 =
 It's now possible to order comments with 'order' parameter. Values: asc, desc. Title for comments section and 'no comments yet' message can now be specified in the Settings.

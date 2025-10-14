@@ -71,7 +71,7 @@ function stwbpb_send_hdoc_for_post($post){
   
         $originalPageDisabled = get_post_meta($post->ID, '_disable_original_page', true) === '1';
 
-        $finalContent = '<h1>' . $title . "</h1>" .  $htmlContent;
+        //$finalContent = '<h1>' . $title . "</h1>" .  $htmlContent;
 
         $panels_escaped = stwbpb_get_panels($post);
 
@@ -94,9 +94,9 @@ function stwbpb_send_hdoc_for_post($post){
 
         $panels_allowed_tags = array(
             'panels' => true,
-            'top-panel' => true,
-            'side-panel' => array('side' => true),
-            'bottom-panel' => true,
+            'top' => true,
+            'side' => array('side' => true),
+            'bottom' => true,
             'comments' => array('title' => true, 'empty' => true),
             'logo' => array('src' => true, 'href' => true),
             'site-name' => array('href' => true),
@@ -111,19 +111,31 @@ function stwbpb_send_hdoc_for_post($post){
             'doc'  => array('url' => true, 'title' => true, 'hash' => true), 
         );
 
+
+        $author_id   = get_post_field('post_author', $post->ID);
+        $author_name = get_the_author_meta('display_name', $author_id);
+        $date = get_the_date(get_option('date_format'), $post->ID);
         
 
        
         header('Content-Type: text/plain');
-        echo '<hdoc>';
-        echo '<head>';
-        echo '<title>' . esc_html( $title ) . '</title>';
+        echo '<hdoc>' . PHP_EOL  . PHP_EOL;
+        echo '<metadata>' . PHP_EOL;
+        echo '<title>' . esc_html( $title ) . '</title>' . PHP_EOL;
         if(!$originalPageDisabled){
-            echo '<link rel="alternate" type="text/html" title="' . esc_attr( $title ) . '" href="' . esc_url( $permalink ) . '" />';
+            echo '<link rel="alternate" type="text/html" title="' . esc_attr( $title ) . '" href="' . esc_url( $permalink ) . '" />' . PHP_EOL;
         }
-        echo '</head>';
-        echo wp_kses($panels_escaped,$panels_allowed_tags);
-        echo '<html>' . wp_kses($finalContent,$allowed_tags) . '</html>'; 
+        echo '</metadata>' . PHP_EOL . PHP_EOL;
+        echo wp_kses($panels_escaped,$panels_allowed_tags) . PHP_EOL . PHP_EOL;
+
+        echo '<header>' . PHP_EOL;
+        echo '<h1>' . esc_html($title) . '</h1>' . PHP_EOL;
+        echo '<author>' . esc_html($author_name) . '</author>' . PHP_EOL;
+        echo '<date>' . esc_html($date) . '</date>' . PHP_EOL;
+        echo '</header>' . PHP_EOL . PHP_EOL;
+
+
+        echo '<content>' . wp_kses($htmlContent,$allowed_tags) . '</content>' . PHP_EOL . PHP_EOL; 
         echo wp_kses($connectionsSection, $connections_allowed_tags);
         echo '</hdoc>';
     } else {

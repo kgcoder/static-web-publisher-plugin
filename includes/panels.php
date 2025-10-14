@@ -69,11 +69,10 @@ function stwbpb_get_panels($post) {
     
     ob_start();
 
-    ?>
-
+?>
 <panels>
 <?php if($should_show_top_panel){ ?>
-<top-panel>
+<top>
 <?php 
 if(!empty($logo_url)){
     echo '<logo src="' . esc_url($logo_url) . '"';
@@ -103,19 +102,19 @@ if (!empty($top_panel['links'])) {
     }
 }
 ?>
-</top-panel>
+</top>
 <?php
 }
 ?>
 <?php if ($should_show_side_panel): ?>
-<side-panel<?php
+<side<?php
 if(!empty($side_panel_left)){
     echo ' side="left"';
 }
-?>><?php echo '<comments' . (!empty($comments_title) ? ' title="' . esc_attr($comments_title) . '"' : '') . (!empty($no_comments_message) ? ' empty="' . esc_attr($no_comments_message) . '"' : '') . '>' . esc_url($comments_link). '</comments>' ?></side-panel>
+?>><?php echo '<comments' . (!empty($comments_title) ? ' title="' . esc_attr($comments_title) . '"' : '') . (!empty($no_comments_message) ? ' empty="' . esc_attr($no_comments_message) . '"' : '') . '>' . esc_url($comments_link). '</comments>' ?></side>
 <?php endif; ?>
 <?php if($should_show_bottom_panel){ ?>
-<bottom-panel>
+<bottom>
 <?php
 if (!empty($bottom_panel['sections'])) {
     foreach ($bottom_panel['sections'] as $section) {
@@ -147,11 +146,10 @@ if (!empty($section['links'])) {
     echo '<bottom-message>' . esc_attr($bottom_message) . '</bottom-message>';
 }
 ?>
-</bottom-panel>
+</bottom>
 <?php
 }
 ?>
-
 </panels><?php
 
     $output = ob_get_clean();
