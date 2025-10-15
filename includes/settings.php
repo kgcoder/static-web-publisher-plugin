@@ -16,6 +16,8 @@ function stwbpb_settings_page() {
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,
         'modify_external_links' => false,
+        'display_author_name' => false,
+        'display_publish_date' => false,
         'comments_title' => '',
         'no_comments_message' => '',
         'top_panel' => array(
@@ -62,6 +64,19 @@ function stwbpb_settings_page() {
                 </label>
             </div>
 
+            <h2>Header info</h2>
+
+            <div class="settings-option-div">
+                <label>Display author's name</label>
+                <div class="spacerW10"></div>
+                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[display_author_name]" value="1" <?php echo !empty($settings['display_author_name']) ? 'checked' : ''; ?>/>
+            </div>
+
+            <div class="settings-option-div">
+                <label>Display publish date</label>
+                <div class="spacerW10"></div>
+                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[display_publish_date]" value="1" <?php echo !empty($settings['display_publish_date']) ? 'checked' : ''; ?>/>
+            </div>
 
 
             <h2>Info link</h2>
@@ -247,6 +262,8 @@ function stwbpb_settings_init() {
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,
         'modify_external_links' => false,
+        'display_author_name' => false,
+        'display_publish_date' => false,
         'comments_title' => '',
         'no_comments_message' => '',
         'top_panel' => array(
@@ -301,6 +318,12 @@ function stwbpb_sanitize_settings($input) {
     }
     if(isset($input['modify_external_links'])){
         $sanitized['modify_external_links'] = boolval($input['modify_external_links']);
+    }
+    if(isset($input['display_author_name'])){
+        $sanitized['display_author_name'] = boolval($input['display_author_name']);
+    }
+    if(isset($input['display_publish_date'])){
+        $sanitized['display_publish_date'] = boolval($input['display_publish_date']);
     }
 
 

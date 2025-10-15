@@ -63,6 +63,10 @@ function stwbpb_send_hdoc_for_post($post){
 
         $modify_external_links = isset($settings['modify_external_links']) ? $settings['modify_external_links'] : '';
 
+        $display_author_name = isset($settings['display_author_name']) ? $settings['display_author_name'] : '';
+        $display_publish_date = isset($settings['display_publish_date']) ? $settings['display_publish_date'] : '';
+
+
 
 
         if(!empty($modify_external_links)){
@@ -112,12 +116,6 @@ function stwbpb_send_hdoc_for_post($post){
         );
 
 
-        $author_id   = get_post_field('post_author', $post->ID);
-        $author_name = get_the_author_meta('display_name', $author_id);
-        $date = get_the_date(get_option('date_format'), $post->ID);
-        
-
-       
         header('Content-Type: text/plain');
         echo '<hdoc>' . PHP_EOL  . PHP_EOL;
         echo '<metadata>' . PHP_EOL;
@@ -127,11 +125,17 @@ function stwbpb_send_hdoc_for_post($post){
         }
         echo '</metadata>' . PHP_EOL . PHP_EOL;
         echo wp_kses($panels_escaped,$panels_allowed_tags) . PHP_EOL . PHP_EOL;
-
         echo '<header>' . PHP_EOL;
         echo '<h1>' . esc_html($title) . '</h1>' . PHP_EOL;
-        echo '<author>' . esc_html($author_name) . '</author>' . PHP_EOL;
-        echo '<date>' . esc_html($date) . '</date>' . PHP_EOL;
+        if(!empty($display_author_name)){
+            $author_id   = get_post_field('post_author', $post->ID);
+            $author_name = get_the_author_meta('display_name', $author_id);
+            echo '<author>' . esc_html($author_name) . '</author>' . PHP_EOL;
+        }
+        if(!empty($display_publish_date)){
+            $date = get_the_date(get_option('date_format'), $post->ID);
+            echo '<date>' . esc_html($date) . '</date>' . PHP_EOL;
+        }
         echo '</header>' . PHP_EOL . PHP_EOL;
 
 
