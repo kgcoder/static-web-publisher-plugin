@@ -10,6 +10,8 @@ function stwbpb_settings_page() {
 
 
     $default_settings = array(
+        'serve_hdoc_from_different_url' => false,
+        'removal_selectors' => '',
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,
         'modify_external_links' => false,
@@ -46,6 +48,20 @@ function stwbpb_settings_page() {
 
             <p class="red-text">Don't forget to click 'Save changes' button at the bottom of this page after changing the settings.</p>
 
+            <h2>Main settings</h2>
+
+            <div class="settings-option-div">
+                <label>Serve HDOCs from different page (not recommended)</label>
+                <div class="spacerW10"></div>
+                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[serve_hdoc_from_different_url]" value="1" <?php echo !empty($settings['serve_hdoc_from_different_url']) ? 'checked' : ''; ?>/>
+            </div>
+
+            <div class="settings-option-div">
+                <label>Elements to remove (specify selectors separated by commas): </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[removal_selectors]" value="<?php echo esc_attr($settings['removal_selectors']); ?>" />
+            </div>
+            
             <h2>Header info</h2>
 
             <div class="settings-option-div">
@@ -233,7 +249,8 @@ function stwbpb_settings_page() {
 function stwbpb_settings_init() {
    
     $default_settings = wp_json_encode(array(
-       
+        'serve_hdoc_from_different_url' => false,
+        'removal_selectors' => '',
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,
         'modify_external_links' => false,
@@ -274,6 +291,10 @@ function stwbpb_sanitize_settings($input) {
 
     //Sanitize main object
 
+
+    if(isset($input['serve_hdoc_from_different_url'])){
+        $sanitized['serve_hdoc_from_different_url'] = boolval($input['serve_hdoc_from_different_url']);
+    }
     if(isset($input['side_panel_on_the_left'])){
         $sanitized['side_panel_on_the_left'] = boolval($input['side_panel_on_the_left']);
     }
@@ -291,6 +312,7 @@ function stwbpb_sanitize_settings($input) {
     }
 
 
+    $sanitized['removal_selectors'] = isset($input['removal_selectors']) ? sanitize_text_field($input['removal_selectors']) : '';
     $sanitized['comments_title'] = isset($input['comments_title']) ? sanitize_text_field($input['comments_title']) : '';
     $sanitized['no_comments_message'] = isset($input['no_comments_message']) ? sanitize_text_field($input['no_comments_message']) : '';
 

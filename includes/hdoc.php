@@ -21,12 +21,16 @@ function stwbpb_strip_wp_tags($content) {
 
 function stwbpb_send_hdoc_for_post($post){
     if ($post) {
-
-        if (get_post_meta($post->ID, '_disable_static_web_link', true) === '1') {
+        
+        $settings = get_option('stwbpb_settings', array()); // Ensure a default empty array
+       
+        if (!isset($settings['serve_hdoc_from_different_url']) || get_post_meta($post->ID, '_disable_static_web_link', true) === '1') {
             status_header(404);
             echo 'Page not found';
             return;
         }
+
+
         
         
         $permalink = get_permalink($post->ID);
@@ -53,7 +57,6 @@ function stwbpb_send_hdoc_for_post($post){
         $htmlContent = stwbpb_strip_wp_tags($htmlContent);
 
 
-        $settings = get_option('stwbpb_settings', array()); // Ensure a default empty array
         $modify_internal_links = isset($settings['modify_internal_links']) ? $settings['modify_internal_links'] : '';
 
 
@@ -124,7 +127,7 @@ function stwbpb_send_hdoc_for_post($post){
             echo '<link rel="alternate" type="text/html" title="' . esc_attr( $title ) . '" href="' . esc_url( $permalink ) . '" />' . PHP_EOL;
         }
         echo '</metadata>' . PHP_EOL . PHP_EOL;
-        echo wp_kses($panels_escaped,$panels_allowed_tags) . PHP_EOL . PHP_EOL;
+        
         echo '<header>' . PHP_EOL;
         echo '<h1>' . esc_html($title) . '</h1>' . PHP_EOL;
         if(!empty($display_author_name)){
@@ -140,6 +143,7 @@ function stwbpb_send_hdoc_for_post($post){
 
 
         echo '<content>' . wp_kses($htmlContent,$allowed_tags) . '</content>' . PHP_EOL . PHP_EOL; 
+        echo wp_kses($panels_escaped,$panels_allowed_tags) . PHP_EOL . PHP_EOL;
         echo wp_kses($connectionsSection, $connections_allowed_tags) . PHP_EOL . PHP_EOL;
         echo '</hdoc>';
     } else {

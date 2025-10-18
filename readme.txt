@@ -73,33 +73,7 @@ Setting up Static Web Publisher is quick and easy:
 3. Find the plugin in the search results, hover over it, and click Install.
 4. Once installed, click Activate.
 5. Go to the plugin's Settings page and configure top and bottom panels (optional).
-6. Add download link and info link (optional).
 
-*Download link*
-
-By default, this link is hidden. You can leave it that way, but then only people who already know about Static Web will be able to access the alternative page version.
-
-If you’d like to spread the word - and encourage new visitors to try downloading pages from your site - enable the download link in the plugin settings.
-
-Since the link alone doesn’t explain much, it’s best to also enable the info link alongside it.
-
-
-*Info link*
-
-Since Web 1.1 is a new concept, most visitors won’t be familiar with it. The info link helps users understand how to use SW links.
-
-* The info link appears as a black button with a question mark next to the orange download button.
-* Clicking it takes users to an explanation page.
-
-By default, this link is disabled. You have two activation options:
-
-* Use the default external link (SEO-safe, uses rel=nofollow).
-* Create your own explanation page and link to it from the plugin settings.
-
-If you choose the second option, you can create a page that says:
-"To learn about Static Web, click here."
-
-The correct link to use is available in the plugin settings. This way, you minimize external links while still providing necessary information.
 
 
 == Frequently Asked Questions ==  

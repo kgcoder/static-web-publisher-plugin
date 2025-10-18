@@ -17,6 +17,8 @@ function stwbpb_get_panels($post) {
     $comments_link = home_url( "/json-comments/?post={$post->ID}");
 
     $settings = get_option('stwbpb_settings', array(
+        'serve_hdoc_from_different_url' => false,
+        'removal_selectors' => '',
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,
         'modify_external_links' => false,

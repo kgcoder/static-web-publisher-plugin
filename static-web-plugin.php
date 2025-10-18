@@ -82,13 +82,6 @@ register_uninstall_hook(__FILE__, 'stwbpb_uninstall');
 
 function stwbpb_custom_post_endpoints_rewrite_rules() {
 
-  
-    add_rewrite_rule(
-        '^sw-comments/(.+)?$',
-        'index.php?comments_custom_matches=$matches[1]',
-        'top'
-    );
-
     add_rewrite_rule(
         '^json-comments/?(.+)?$',
         'index.php?json_comments_custom_matches=1',
@@ -239,19 +232,13 @@ function stwbpb_custom_post_endpoints_template_redirect() {
 add_action('template_redirect', 'stwbpb_custom_post_endpoints_template_redirect');
 
 
-add_filter('the_title', function($title, $id) {
-    if (is_admin()) return $title;
-
-    // Only for main title in single post/page
-    if (is_singular(['post', 'page']) && in_the_loop() && is_main_query()) {
-        return '<div id="temp-hdoc-title">' . $title . '</div>';
-    }
-
-    return $title;
-}, 10, 2);
 
 add_filter('the_content', function($content) {
     if (is_admin()) return $content;
+    $settings = get_option('stwbpb_settings', array());
+    if(isset($settings['serve_hdoc_from_different_url'])){
+        return;
+    }
 
     // Only for single post/page
     if (is_singular(['post', 'page'])) {
@@ -264,6 +251,10 @@ add_filter('the_content', function($content) {
 add_action('template_redirect', function() {
     // Only on single posts or pages
     if (!is_singular(['post', 'page'])) return;
+    $settings = get_option('stwbpb_settings', array());
+    if(isset($settings['serve_hdoc_from_different_url'])){
+        return;
+    }
 
     ob_start(function($html) {
         libxml_use_internal_errors(true);
@@ -286,22 +277,6 @@ add_action('template_redirect', function() {
             $parent->removeChild($contentTemp);
         }
 
-        // ----- Handle title -----
-        $titleTemp = $dom->getElementById('temp-hdoc-title');
-        if ($titleTemp && $titleTemp->parentNode) {
-            $parent = $titleTemp->parentNode;
-
-            // Mark parent container
-            $existing = $parent->getAttribute('class');
-            $parent->setAttribute('class', trim($existing . ' hdoc-title'));
-
-            // Unwrap temp div
-            while ($titleTemp->firstChild) {
-                $parent->insertBefore($titleTemp->firstChild, $titleTemp);
-            }
-            $parent->removeChild($titleTemp);
-        }
-
         return $dom->saveHTML();
     });
 });
@@ -315,11 +290,20 @@ function stwbpb_output_xml() {
     global $post;
     if (!$post) return;
 
+
     $settings = get_option('stwbpb_settings', array());
+    if(isset($settings['serve_hdoc_from_different_url'])){
+        return;
+    }
+
+
     $display_author_name = isset($settings['display_author_name']) ? $settings['display_author_name'] : '';
     $display_publish_date = isset($settings['display_publish_date']) ? $settings['display_publish_date'] : '';
+    $removal_selectors = isset($settings['removal_selectors']) ? $settings['removal_selectors'] : '';
 
-    $header = [];
+    $header = [
+        'h1'  => get_the_title($post),
+    ];
 
     if(!empty($display_author_name)){
         $author_id   = get_post_field('post_author', $post->ID);
@@ -364,13 +348,19 @@ function stwbpb_output_xml() {
 
     $data = [];
 
+    
+    if (!empty($header)) {
+        $data['header'] = $header;
+    }
+    
+    if (!empty($removal_selectors)) {
+        $data['removal-selectors'] = $removal_selectors;
+    }
+    
     if (!empty($panels_array)) {
         $data['panels'] = $panels_array;
     }
 
-    if (!empty($header)) {
-        $data['header'] = $header;
-    }
 
     if (!empty($connections_array)) {
         $data['connections'] = $connections_array;

@@ -110,8 +110,10 @@ add_action('template_redirect', 'stwbpb_custom_redirect_logic');
 function stwbpb_output_alternate_hdoc_link_in_head() {
 	global $post;
 
+    $settings = get_option('stwbpb_settings', array()); // Ensure a default empty array
+       
 	if ((is_single() || is_page()) && $post && ('post' === $post->post_type || 'page' === $post->post_type)) {
-		if (get_post_meta($post->ID, '_disable_static_web_link', true) === '1') {
+		if (!isset($settings['serve_hdoc_from_different_url']) || get_post_meta($post->ID, '_disable_static_web_link', true) === '1') {
 			return;
 		}
 
