@@ -18,7 +18,6 @@ if (!defined('ABSPATH')) {
 }
 
 require_once plugin_dir_path(__FILE__) . 'includes/download-link.php';
-require_once plugin_dir_path(__FILE__) . 'includes/comments-page.php';
 require_once plugin_dir_path(__FILE__) . 'includes/comments-json.php';
 require_once plugin_dir_path(__FILE__) . 'includes/panels.php';
 require_once plugin_dir_path(__FILE__) . 'includes/hdoc.php';
@@ -148,64 +147,6 @@ function stwbpb_custom_post_endpoints_template_redirect() {
     }
 
    
-
-    if (isset($wp_query->query_vars['comments_custom_matches'])) {
-        $path = $wp_query->query_vars['comments_custom_matches'];
-        
-        if (strpos($permalink_structure, '%post_id%') !== false) {
-            // Get the current path
-            $current_path = sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI']));
-            $site_url = home_url(); // Base site URL
-            $path = str_replace($site_url, '', $current_path);
-        
-            
-            // Generate a regex based on the permalink structure
-            $pattern = preg_quote($permalink_structure, '/'); // Escape all special characters except for '%'
-            $pattern = '\/sw' . str_replace('%post_id%', '(\d+)\/?', $pattern); // Replace %post_id% with (\d+)
-        
-         
-            if (preg_match("/^" . $pattern . "$/", $path, $matches)) {
-                $post_id = $matches[1]; // Extracted post ID
-                $slug = $post_id;
-            } else {
-                // Remove any trailing slash if it exists
-                $path = rtrim($path, '/');
-                // Use basename to get the last part of the path
-                $slug = basename($path);
-
-            }
-        }else{
-            $parsed_path = wp_parse_url($path, PHP_URL_PATH);
-
-            // Break the path into parts
-            $path_parts = explode('/', trim($parsed_path, '/'));
-
-            // Assuming the slug is the last part of the path
-            $slug = end($path_parts);
-          //  $slug = basename(get_permalink());
-        }
-
-        if (is_numeric($slug)) {
-            $post_id = (int)$slug;
-            $post = get_post($post_id);
-            if ($post) {
-                stwbpb_send_comments_from_post($post);
-            } else {
-                echo 'Post not found by ID';
-            }
-
-        }else{
-            $post = get_page_by_path($slug, OBJECT, array('post','page'));
-            if ($post) {
-                stwbpb_send_comments_from_post($post);
-            } else {
-                echo 'Post not found by ID';
-            }
-
-        }
-   
-        exit;
-    }
 
 
     if (isset($wp_query->query_vars['json_comments_custom_matches'])) {
@@ -405,16 +346,20 @@ function stwbpb_output_xml() {
     $connections_obj = simplexml_load_string($connectionsSection, "SimpleXMLElement", LIBXML_NOCDATA);
 
 
-    $panels_array = xml_to_array_with_attributes($panels_obj);
-    //$connections_array = xml_to_array_with_attributes($connections_obj);
+    if(!empty($panels_obj)){
+        $panels_array = xml_to_array_with_attributes($panels_obj);
+    }
 
     $connections_obj = simplexml_load_string($connectionsSection, "SimpleXMLElement", LIBXML_NOCDATA);
 
     $connections_array = [];
 
-    // Handle multiple <doc> elements
-    foreach ($connections_obj->doc as $doc) {
-        $connections_array[] = xml_to_array_with_attributes($doc, 'doc');
+    if(!empty($connections_obj)){
+        // Handle multiple <doc> elements
+        foreach ($connections_obj->doc as $doc) {
+            $connections_array[] = xml_to_array_with_attributes($doc, 'doc');
+        }
+
     }
 
     $data = [];

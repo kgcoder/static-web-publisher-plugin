@@ -10,9 +10,6 @@ function stwbpb_settings_page() {
 
 
     $default_settings = array(
-        'download_link_variant' => 'none',
-        'info_link_variant' => 'none',
-        'user_defined_info_url' => '',
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,
         'modify_external_links' => false,
@@ -48,49 +45,6 @@ function stwbpb_settings_page() {
             ?>
 
             <p class="red-text">Don't forget to click 'Save changes' button at the bottom of this page after changing the settings.</p>
-
-            <h2>Download link</h2>
-
-            <div class="settings-option-div">
-                <label>
-                <input type="radio" name="stwbpb_settings[download_link_variant]" value="none" <?php checked($settings['download_link_variant'], 'none'); ?>>
-                Don't show download link
-                </label>
-            </div>
-
-            <div class="settings-option-div">
-                <label>
-                <input type="radio" name="stwbpb_settings[download_link_variant]" value="on" <?php checked($settings['download_link_variant'], 'on'); ?>>
-                Show download link
-                </label>
-            </div>
-
-            
-
-
-            <h2>Info link</h2>
-            <div class="settings-option-div">
-                <label>
-                <input type="radio" name="stwbpb_settings[info_link_variant]" value="none" <?php checked($settings['info_link_variant'], 'none'); ?>>
-                Don't show info link
-                </label>
-            </div>
-            <div class="settings-option-div">
-            <label>
-                <input type="radio" name="stwbpb_settings[info_link_variant]" value="default" <?php checked($settings['info_link_variant'], 'default'); ?>>
-                Use default info link (<?php echo "https://reinventingtheweb.com/how-to-use-sw-links/" ?>)
-            </label>
-            </div>
-           
-            <div class="settings-option-div">
-                <label>
-                    <input type="radio" name="stwbpb_settings[info_link_variant]" value="custom" <?php checked($settings['info_link_variant'], 'custom'); ?>>
-                    Use custom info link
-                </label>
-                <div class="spacerW10"></div>
-                <input class="single-text-input" type="text" name="stwbpb_settings[user_defined_info_url]" value="<?php echo esc_url($settings['user_defined_info_url']); ?>" />
-            </div>
-
 
             <h2>Header info</h2>
 
@@ -280,9 +234,6 @@ function stwbpb_settings_init() {
    
     $default_settings = wp_json_encode(array(
        
-        'download_link_variant' => 'none',
-        'info_link_variant' => 'none',
-        'user_defined_info_url' => '',
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,
         'modify_external_links' => false,
@@ -319,21 +270,9 @@ function stwbpb_settings_init() {
 function stwbpb_sanitize_settings($input) {
     $sanitized = array();
 
-    $valid_download_link_variants = array('none', 'on');
 
-    $valid_info_link_variants = array('none', 'default', 'custom');
 
     //Sanitize main object
-
-    
-
-    $sanitized['download_link_variant'] = in_array($input['download_link_variant'], $valid_download_link_variants, true) ? $input['download_link_variant'] : 'none';
-
-    $sanitized['info_link_variant'] = in_array($input['info_link_variant'], $valid_info_link_variants, true) ? $input['info_link_variant'] : 'none';
-
-    if(isset($input['user_defined_info_url'])){
-        $sanitized['user_defined_info_url'] = sanitize_text_field($input['user_defined_info_url']);
-    }
 
     if(isset($input['side_panel_on_the_left'])){
         $sanitized['side_panel_on_the_left'] = boolval($input['side_panel_on_the_left']);
@@ -477,28 +416,8 @@ function stwbpb_enqueue_scripts($hook) {
 }
 add_action('admin_enqueue_scripts', 'stwbpb_enqueue_scripts');
 
-function stwbpb_enqueue_comment_style($hook) {
-    if(isset($_SERVER['REQUEST_URI']) && strpos(sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'])), '/sw-comments/') !== false){
-
-        global $wp_styles;
-        
-        // Dequeue all styles
-        foreach( $wp_styles->registered as $handle => $style ) {
-            wp_dequeue_style( $handle );
-        }
 
 
-        wp_enqueue_style(
-            'static-web-publisher-comments-style',
-            plugin_dir_url(__FILE__) . 'comments.css',
-            array(),
-            filemtime(plugin_dir_path(__FILE__) . 'comments.css')
-        );
-      
-    }   
-}
-
-add_action('wp_enqueue_scripts', 'stwbpb_enqueue_comment_style');
 
 function stwbpb_allow_custom_url_schemes($protocols) {
     $protocols[] = 'sw';

@@ -107,74 +107,6 @@ add_action('template_redirect', 'stwbpb_custom_redirect_logic');
 
 
 
-
-function stwbpb_custom_post_endpoints_add_link_to_content( $content ) {
-    global $post;
-    global $wp_query;
-
-
-    if (( is_single() || is_page()) && $post && ('post' === $post->post_type || 'page' === $post->post_type) ) {
-
-        // Check if the user has disabled the link for this post
-        if (get_post_meta($post->ID, '_disable_static_web_link', true) === '1') {
-            return $content;
-        }
-
-
-        
-        
-        $permalink = get_permalink($post->ID);
-        
-        $path_part = preg_replace('#^' . preg_quote(home_url(), '#') . '#', '', $permalink);
-        
-        
-        $link = home_url( "/sw{$path_part}");
-        
-
-        $icon = stwbpb_add_icon_with_srcset('sw_download_logo');
-
-        $link_text = 'Download this page using Static Web';
-        $simplified_link = '<a class="swp-link" style="border:none;box-shadow:none;" title="' . $link_text . '" href="' . $link . '" rel="alternate" data-static>' . $icon . '</a>';
-
-
-        $settings = get_option('stwbpb_settings', array()); // Ensure a default empty array
-        $user_defined_info_url = isset($settings['user_defined_info_url']) ? $settings['user_defined_info_url'] : '';
-    
-        $download_link_variant = $settings['download_link_variant'];
-
-        if($download_link_variant !== 'on'){
-            return $content;
-        }
-
-        $info_link_variant = $settings['info_link_variant'];
-
-    
-        $default_info_url = "https://reinventingtheweb.com/how-to-use-sw-links/";
-
-
-        $info_url = $info_link_variant === 'custom' ? $user_defined_info_url : $default_info_url;
-
-        $question_icon = stwbpb_add_icon_with_srcset('sw_question');
-
-        $info_link_text = 'Learn about Static Web';
-
-        $info_link = '';
-        if($info_link_variant !== 'none'){
-            $info_link = '&nbsp;<a class="swp-link" style="border:none;box-shadow:none;" title="' . $info_link_text . '" href="' . $info_url . '" rel="nofollow noopener" target="_blank">' . $question_icon . '</a>';
-        }
-
-
-        $links_paragraph = '<div style="display:flex;margin-bottom:10px;">' . $simplified_link . '&nbsp;' . $info_link . '</div>';
-
-        $content .= $links_paragraph;
-        
-    }
-
-    return $content;
-}
-
-add_filter( 'the_content', 'stwbpb_custom_post_endpoints_add_link_to_content' );
-
 function stwbpb_output_alternate_hdoc_link_in_head() {
 	global $post;
 
@@ -194,21 +126,7 @@ function stwbpb_output_alternate_hdoc_link_in_head() {
 }
 add_action('wp_head', 'stwbpb_output_alternate_hdoc_link_in_head');
 
-function stwbpb_add_icon_with_srcset($filename) {
-    $icon_1x = plugins_url('assets/images/' . $filename . '.png', __FILE__);
-    $icon_2x = plugins_url('assets/images/' . $filename . '_2x.png', __FILE__);
-    $icon_3x = plugins_url('assets/images/' . $filename . '_3x.png', __FILE__);
 
-    ob_start();
-    ?><img 
-        src="<?php echo esc_url($icon_1x); ?>" 
-        srcset="<?php echo esc_url($icon_1x); ?> 1x, 
-                <?php echo esc_url($icon_2x); ?> 2x, 
-                <?php echo esc_url($icon_3x); ?> 3x" 
-        alt="My Icon" 
-        style="width:24px; height:24px;" /><?php
-    return ob_get_clean();
-}
 
 
 ?>

@@ -9,19 +9,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    const radios = document.querySelectorAll('input[name="stwbpb_settings[info_link_variant]"]');
-    const textInput = document.querySelector('input[name="stwbpb_settings[user_defined_info_url]"]');
-
-    function toggleTextInput() {
-        textInput.disabled = document.querySelector('input[name="stwbpb_settings[info_link_variant]"]:checked').value !== 'custom';
-    }
-
-
-    radios.forEach(radio => radio.addEventListener('change', toggleTextInput));
-
-    textInput.disabled = !radios[2].checked
-           
-   
    let sectionIndex = document.querySelectorAll('#sections-container .section').length;
 
     const selectImageButton = document.getElementById('select-image');
