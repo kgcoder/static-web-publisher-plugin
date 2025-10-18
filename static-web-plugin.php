@@ -298,3 +298,200 @@ function stwbpb_custom_post_endpoints_template_redirect() {
 add_action('template_redirect', 'stwbpb_custom_post_endpoints_template_redirect');
 
 
+add_filter('the_title', function($title, $id) {
+    if (is_admin()) return $title;
+
+    // Only for main title in single post/page
+    if (is_singular(['post', 'page']) && in_the_loop() && is_main_query()) {
+        return '<div id="temp-hdoc-title">' . $title . '</div>';
+    }
+
+    return $title;
+}, 10, 2);
+
+add_filter('the_content', function($content) {
+    if (is_admin()) return $content;
+
+    // Only for single post/page
+    if (is_singular(['post', 'page'])) {
+        return '<div id="temp-hdoc-content">' . $content . '</div>';
+    }
+
+    return $content;
+});
+
+add_action('template_redirect', function() {
+    // Only on single posts or pages
+    if (!is_singular(['post', 'page'])) return;
+
+    ob_start(function($html) {
+        libxml_use_internal_errors(true);
+        $dom = new DOMDocument();
+        @$dom->loadHTML('<?xml encoding="utf-8" ?>' . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+        // ----- Handle content -----
+        $contentTemp = $dom->getElementById('temp-hdoc-content');
+        if ($contentTemp && $contentTemp->parentNode) {
+            $parent = $contentTemp->parentNode;
+
+            // Mark parent container
+            $existing = $parent->getAttribute('class');
+            $parent->setAttribute('class', trim($existing . ' hdoc-content'));
+
+            // Unwrap temp div
+            while ($contentTemp->firstChild) {
+                $parent->insertBefore($contentTemp->firstChild, $contentTemp);
+            }
+            $parent->removeChild($contentTemp);
+        }
+
+        // ----- Handle title -----
+        $titleTemp = $dom->getElementById('temp-hdoc-title');
+        if ($titleTemp && $titleTemp->parentNode) {
+            $parent = $titleTemp->parentNode;
+
+            // Mark parent container
+            $existing = $parent->getAttribute('class');
+            $parent->setAttribute('class', trim($existing . ' hdoc-title'));
+
+            // Unwrap temp div
+            while ($titleTemp->firstChild) {
+                $parent->insertBefore($titleTemp->firstChild, $titleTemp);
+            }
+            $parent->removeChild($titleTemp);
+        }
+
+        return $dom->saveHTML();
+    });
+});
+
+
+
+
+add_action('wp_body_open', 'stwbpb_output_xml');
+function stwbpb_output_xml() {
+    if (!is_singular()) return;
+    global $post;
+    if (!$post) return;
+
+    $panels_escaped = stwbpb_get_panels($post);
+
+    $connections_info = get_post_meta($post->ID, '_static_web_connections_info', true);
+    $connectionsSection = '';
+    if (!empty($connections_info)) {
+        $connectionsSection = '<docs>' . $connections_info . '</docs>';
+    }
+
+    $connections_allowed_tags = array(
+            'connections' =>  array(),
+            'doc'  => array('url' => true, 'title' => true, 'hash' => true), 
+        );
+
+    $panels_obj = simplexml_load_string($panels_escaped, "SimpleXMLElement", LIBXML_NOCDATA);
+    $connections_obj = simplexml_load_string($connectionsSection, "SimpleXMLElement", LIBXML_NOCDATA);
+
+
+    $panels_array = xml_to_array_with_attributes($panels_obj);
+    //$connections_array = xml_to_array_with_attributes($connections_obj);
+
+    $connections_obj = simplexml_load_string($connectionsSection, "SimpleXMLElement", LIBXML_NOCDATA);
+
+    $connections_array = [];
+
+    // Handle multiple <doc> elements
+    foreach ($connections_obj->doc as $doc) {
+        $connections_array[] = xml_to_array_with_attributes($doc, 'doc');
+    }
+
+
+    $data = [
+        'panels' => $panels_array,
+        'connections' => $connections_array,
+    ];
+
+    $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    
+    // Replace any accidental </script> in JSON strings
+    $json = str_replace('</script>', '<\/script>', $json);
+   
+    // Output JSON directly
+    // Note: Safe because type="application/json" is treated as literal text
+    echo '<script type="application/json" id="hdoc-data">';
+    echo $json;
+    echo '</script>';
+}
+
+
+function xml_to_array_with_attributes($xml, $parent_name = '') {
+    $arr = [];
+
+    // Include attributes
+    foreach ($xml->attributes() as $attr_name => $attr_value) {
+        $arr[$attr_name] = (string)$attr_value;
+    }
+
+    // Include children
+    foreach ($xml->children() as $child_name => $child) {
+        $child_array = xml_to_array_with_attributes($child, $child_name);
+
+        // Special handling: if <a> inside <top>, push to 'links' array
+        if ($parent_name === 'top' && $child_name === 'a') {
+            if (!isset($arr['links'])) {
+                $arr['links'] = [];
+            }
+            $arr['links'][] = $child_array;
+            continue; // skip adding as 'a' key
+        }
+
+        if ($parent_name === 'bottom' && $child_name === 'section') {
+            if (!isset($arr['sections'])) {
+                $arr['sections'] = [];
+            }
+            $arr['sections'][] = $child_array;
+            continue; // skip adding as 'section' key
+        }
+
+        if ($parent_name === 'section' && $child_name === 'a') {
+            if (!isset($arr['links'])) {
+                $arr['links'] = [];
+            }
+            $arr['links'][] = $child_array;
+            continue; // skip adding as 'a' key
+        }
+
+        // If multiple children with same name, make it numeric array
+        if (isset($arr[$child_name])) {
+            if (!is_array($arr[$child_name]) || !isset($arr[$child_name][0])) {
+                $arr[$child_name] = [$arr[$child_name]];
+            }
+            $arr[$child_name][] = $child_array;
+        } else {
+            $arr[$child_name] = $child_array;
+        }
+    }
+
+    // Include text content
+    $text = (string)$xml;
+    if ($text !== '' && trim($text) !== '') {
+        if ($parent_name === 'doc') {
+            // Split by newlines, trim, remove empty lines
+            $lines = array_filter(array_map('trim', explode("\n", $text)), function($line) {
+                return $line !== '';
+            });
+            $arr['flinks'] = array_values($lines);
+        } elseif ($parent_name === 'a' || $parent_name === 'site-name') {
+            $arr['text'] = $text;
+        } elseif ($parent_name === 'comments') {
+            $arr['url'] = $text;
+        } elseif ($parent_name === 'bottom-message') {
+            return $text;
+        }else {
+            $arr['_text'] = $text;
+        }
+    }
+
+    return $arr;
+}
+
+
+

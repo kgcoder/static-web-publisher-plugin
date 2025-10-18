@@ -23,7 +23,8 @@ function stwbpb_settings_page() {
         'top_panel' => array(
             'main_link' => '',
             'main_title' => '',
-            'logo_url' => '', 
+            'logo_url' => '',
+            'static_link' => false, 
             'links' => array()
         ),
         'bottom_panel' => array(
@@ -64,19 +65,7 @@ function stwbpb_settings_page() {
                 </label>
             </div>
 
-            <h2>Header info</h2>
-
-            <div class="settings-option-div">
-                <label>Display author's name</label>
-                <div class="spacerW10"></div>
-                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[display_author_name]" value="1" <?php echo !empty($settings['display_author_name']) ? 'checked' : ''; ?>/>
-            </div>
-
-            <div class="settings-option-div">
-                <label>Display publish date</label>
-                <div class="spacerW10"></div>
-                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[display_publish_date]" value="1" <?php echo !empty($settings['display_publish_date']) ? 'checked' : ''; ?>/>
-            </div>
+            
 
 
             <h2>Info link</h2>
@@ -103,6 +92,23 @@ function stwbpb_settings_page() {
             </div>
 
 
+            <h2>Header info</h2>
+
+            <div class="settings-option-div">
+                <label>Display author's name</label>
+                <div class="spacerW10"></div>
+                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[display_author_name]" value="1" <?php echo !empty($settings['display_author_name']) ? 'checked' : ''; ?>/>
+            </div>
+
+            <div class="settings-option-div">
+                <label>Display publish date</label>
+                <div class="spacerW10"></div>
+                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[display_publish_date]" value="1" <?php echo !empty($settings['display_publish_date']) ? 'checked' : ''; ?>/>
+            </div>
+
+
+
+
             <h2>Comments</h2>
 
             <div class="settings-option-div">
@@ -126,6 +132,12 @@ function stwbpb_settings_page() {
                 <label>Main link: </label>
                 <div class="spacerW10"></div>
                 <input class="single-text-input" type="text" name="stwbpb_settings[top_panel][main_link]" value="<?php echo esc_url($top_panel['main_link']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Is link static?</label>
+                <div class="spacerW10"></div>
+                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[top_panel][static_link]" value="1" <?php echo !empty($top_panel['static_link']) ? 'checked' : ''; ?>/>
             </div>
 
             <div class="settings-option-div">
@@ -157,6 +169,12 @@ function stwbpb_settings_page() {
                                 <div class="spacerH10"></div>
                                 <label>Link URL: </label>
                                 <input type="text" name="stwbpb_settings[top_panel][links][<?php echo esc_attr($link_index); ?>][url]" value="<?php echo esc_url($link['url']); ?>" />
+                                <div class="spacerH10"></div>
+                                <div class="settings-option-div">
+                                    <label>Is link static?</label>
+                                    <div class="spacerW10"></div>
+                                    <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[top_panel][links][<?php echo esc_attr($link_index); ?>][static_link]" value="1" <?php echo !empty($link['static_link']) ? 'checked' : ''; ?>/>
+                                </div>
                                 <div class="spacerH10"></div>
                                 <button type="button" class="remove-link">Remove Link</button>
                             </div>
@@ -203,6 +221,12 @@ function stwbpb_settings_page() {
 
                                             <label style="margin-top:10px;">Link URL: </label>
                                             <input type="text" name="stwbpb_settings[bottom_panel][sections][<?php echo esc_attr($section_index); ?>][links][<?php echo esc_attr($link_index); ?>][url]" value="<?php echo isset($link['url']) ? esc_url($link['url']) : ''; ?>" />
+                                            <div class="spacerH10"></div>
+                                            <div class="settings-option-div">
+                                                <label>Is link static?</label>
+                                                <div class="spacerW10"></div>
+                                                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[bottom_panel][sections][<?php echo esc_attr($section_index); ?>][links][<?php echo esc_attr($link_index); ?>][static_link]" value="1" <?php echo !empty($link['static_link']) ? 'checked' : ''; ?>/>
+                                            </div>
                                             <div class="spacerH10"></div>
                                             <button style="margin-top:10px;" type="button" class="remove-link">Remove Link</button>
                                         </div>
@@ -270,6 +294,7 @@ function stwbpb_settings_init() {
             'main_link' => '',
             'main_title' => '',
             'logo_url' => '',
+            'static_link' => false,
             'links' => array()
         ),
         'bottom_panel' => array(
@@ -340,12 +365,21 @@ function stwbpb_sanitize_settings($input) {
             'links' => array()
         );
 
+        if(isset($input['top_panel']['static_link'])){
+            $sanitized['top_panel']['static_link'] = boolval($input['top_panel']['static_link']);
+        }
+
+
         if (isset($input['top_panel']['links']) && is_array($input['top_panel']['links'])) {
             foreach ($input['top_panel']['links'] as $link) {
                 if (is_array($link)) {
+
+                    $sanitizedStatic = !empty($link['static_link']) ? true : false;
+
                     $sanitized['top_panel']['links'][] = array(
                         'text' => isset($link['text']) ? sanitize_text_field($link['text']) : '',
-                        'url' => isset($link['url']) ? esc_url_raw($link['url']) : ''
+                        'url' => isset($link['url']) ? esc_url_raw($link['url']) : '',
+                        'static_link' => $sanitizedStatic
                     );
                 }
             }
@@ -370,9 +404,12 @@ function stwbpb_sanitize_settings($input) {
                     if (isset($section['links']) && is_array($section['links'])) {
                         foreach ($section['links'] as $link) {
                             if (is_array($link)) {
+                                $sanitizedStatic = !empty($link['static_link']) ? true : false;
+
                                 $sanitized_section['links'][] = array(
                                     'text' => isset($link['text']) ? sanitize_text_field($link['text']) : '',
-                                    'url' => isset($link['url']) ? esc_url_raw($link['url']) : ''
+                                    'url' => isset($link['url']) ? esc_url_raw($link['url']) : '',
+                                    'static_link' => $sanitizedStatic
                                 );
                             }
                         }

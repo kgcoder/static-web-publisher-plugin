@@ -31,6 +31,7 @@ function stwbpb_get_panels($post) {
             'main_link' => '',
             'main_title' => '', 
             'logo_url' => '', 
+            'static_link' => false,
             'links' => array()
         ),
         'bottom_panel' => array(
@@ -51,6 +52,8 @@ function stwbpb_get_panels($post) {
     $site_name = $top_panel['main_title'];
 
     $logo_url = $top_panel['logo_url'];
+
+    $is_main_link_static = $top_panel['static_link'];
 
 
     $bottom_message = $bottom_panel['bottom_message'];
@@ -81,6 +84,9 @@ if(!empty($logo_url)){
     echo '<logo src="' . esc_url($logo_url) . '"';
     if(!empty($main_link)){
         echo ' href="' . esc_url($main_link) . '"';
+        if(!empty($is_main_link_static)){
+            echo ' static="true"';
+        }
     }
     echo '/>';
 }
@@ -88,6 +94,10 @@ if(!empty($site_name)){
     echo '<site-name';
     if(!empty($main_link) && empty($logo_url)){ 
         echo ' href="' . esc_url($main_link) . '"';
+        if(!empty($is_main_link_static)){
+            echo ' static="true"';
+        }
+
     }
     echo '>' . esc_attr($site_name) . '</site-name>';
 }
@@ -97,11 +107,15 @@ if(!empty($site_name)){
 if (!empty($top_panel['links'])) {
     foreach ($top_panel['links'] as $index => $link) {
         $link_to_use = $link['url'];
+
+        $staticText = !empty($link['static_link']) ? ' static="true"' : '';
         
         if(!$originalPageDisabled && preg_match('/^https?:\/\/OP$/i', $link['url'])){
             $link_to_use = $permalink;
-         }
-        echo '<a href="' . esc_url($link_to_use) . '">' . esc_html($link['text']) . '</a>' . PHP_EOL; 
+        }
+        // $html = '<a href="' . esc_url($link_to_use) . '"' . $staticText . '>' . esc_html($link['text']) . '</a>';
+        // error_log("DEBUG LINK HTML: " . $html);
+        echo '<a href="' . esc_url($link_to_use) . '"' .$staticText . '>' . esc_html($link['text']) . '</a>' . PHP_EOL; 
     }
 }
 ?>
@@ -112,7 +126,7 @@ if (!empty($top_panel['links'])) {
 <?php if ($should_show_side_panel): ?>
 <side<?php
 if(!empty($side_panel_left)){
-    echo ' side="left"';
+    echo ' left="true"';
 }
 ?>><?php echo '<comments' . (!empty($comments_title) ? ' title="' . esc_attr($comments_title) . '"' : '') . (!empty($no_comments_message) ? ' empty="' . esc_attr($no_comments_message) . '"' : '') . '>' . esc_url($comments_link). '</comments>' ?></side>
 <?php endif; ?>
@@ -132,11 +146,12 @@ if(!empty($section_title)){
 if (!empty($section['links'])) {
     foreach ($section['links'] as $index => $link) {
         $link_to_use = $link['url'];
+        $staticText = !empty($link['static_link']) ? ' static="true"' : '';
         
         if(!$originalPageDisabled && preg_match('/^https?:\/\/OP$/i', $link['url'])){
             $link_to_use = $permalink;
          }
-        echo '<a href="' . esc_url($link_to_use) . '">' . esc_html($link['text']) . '</a>' . PHP_EOL; 
+        echo '<a href="' . esc_url($link_to_use) . '"' . $staticText . '>' . esc_html($link['text']) . '</a>' . PHP_EOL; 
     }
 }
 ?>

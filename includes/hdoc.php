@@ -102,9 +102,9 @@ function stwbpb_send_hdoc_for_post($post){
             'side' => array('side' => true),
             'bottom' => true,
             'comments' => array('title' => true, 'empty' => true),
-            'logo' => array('src' => true, 'href' => true),
-            'site-name' => array('href' => true),
-            'a' => array('href' => true),
+            'logo' => array('src' => true, 'href' => true, 'static' => true),
+            'site-name' => array('href' => true, 'static' => true),
+            'a' => array('href' => true, 'static' => true),
             'section' => array('title' => true),
             'bottom-message' => array(),
         );

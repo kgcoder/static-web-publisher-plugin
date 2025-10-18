@@ -128,13 +128,13 @@ function stwbpb_custom_post_endpoints_add_link_to_content( $content ) {
         $path_part = preg_replace('#^' . preg_quote(home_url(), '#') . '#', '', $permalink);
         
         
-        $link = preg_replace('/^http/', "sw", home_url( "/sw{$path_part}"));
+        $link = home_url( "/sw{$path_part}");
         
 
         $icon = stwbpb_add_icon_with_srcset('sw_download_logo');
 
         $link_text = 'Download this page using Static Web';
-        $simplified_link = '<a class="swp-link" style="border:none;box-shadow:none;" title="' . $link_text . '" href="' . $link . '" rel="alternate">' . $icon . '</a>';
+        $simplified_link = '<a class="swp-link" style="border:none;box-shadow:none;" title="' . $link_text . '" href="' . $link . '" rel="alternate" data-static>' . $icon . '</a>';
 
 
         $settings = get_option('stwbpb_settings', array()); // Ensure a default empty array
@@ -185,7 +185,7 @@ function stwbpb_output_alternate_hdoc_link_in_head() {
 
 		$permalink = get_permalink($post->ID);
 		$path_part = preg_replace('#^' . preg_quote(home_url(), '#') . '#', '', $permalink);
-		$link = preg_replace('/^http/', "sw", home_url("/sw{$path_part}"));
+		$link = home_url("/sw{$path_part}");
 
 		$title = get_the_title($post);
 
