@@ -374,6 +374,23 @@ function stwbpb_output_xml() {
     global $post;
     if (!$post) return;
 
+    $settings = get_option('stwbpb_settings', array());
+    $display_author_name = isset($settings['display_author_name']) ? $settings['display_author_name'] : '';
+    $display_publish_date = isset($settings['display_publish_date']) ? $settings['display_publish_date'] : '';
+
+    $header = [];
+
+    if(!empty($display_author_name)){
+        $author_id   = get_post_field('post_author', $post->ID);
+        $author_name = get_the_author_meta('display_name', $author_id);
+        $header['author'] = $author_name;
+    }
+
+    if(!empty($display_publish_date)){
+        $date = get_the_date(get_option('date_format'), $post->ID);
+        $header['date'] = $date;
+    }
+
     $panels_escaped = stwbpb_get_panels($post);
 
     $connections_info = get_post_meta($post->ID, '_static_web_connections_info', true);
@@ -382,10 +399,7 @@ function stwbpb_output_xml() {
         $connectionsSection = '<docs>' . $connections_info . '</docs>';
     }
 
-    $connections_allowed_tags = array(
-            'connections' =>  array(),
-            'doc'  => array('url' => true, 'title' => true, 'hash' => true), 
-        );
+ 
 
     $panels_obj = simplexml_load_string($panels_escaped, "SimpleXMLElement", LIBXML_NOCDATA);
     $connections_obj = simplexml_load_string($connectionsSection, "SimpleXMLElement", LIBXML_NOCDATA);
@@ -403,11 +417,22 @@ function stwbpb_output_xml() {
         $connections_array[] = xml_to_array_with_attributes($doc, 'doc');
     }
 
+    $data = [];
 
-    $data = [
-        'panels' => $panels_array,
-        'connections' => $connections_array,
-    ];
+    if (!empty($panels_array)) {
+        $data['panels'] = $panels_array;
+    }
+
+    if (!empty($header)) {
+        $data['header'] = $header;
+    }
+
+    if (!empty($connections_array)) {
+        $data['connections'] = $connections_array;
+    }
+
+    if (empty($data)) return;
+
 
     $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     
@@ -416,9 +441,9 @@ function stwbpb_output_xml() {
    
     // Output JSON directly
     // Note: Safe because type="application/json" is treated as literal text
-    echo '<script type="application/json" id="hdoc-data">';
+    echo '<script type="application/json" id="hdoc-data">' . PHP_EOL;
     echo $json;
-    echo '</script>';
+    echo PHP_EOL .'</script>';
 }
 
 

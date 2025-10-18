@@ -81,7 +81,7 @@ function stwbpb_send_hdoc_for_post($post){
 
         $connectionsSection = '';
         if(!empty($connections_info)){
-            $connectionsSection = '<connections>' . $connections_info . '</connections>';
+            $connectionsSection = '<connections>' . PHP_EOL . $connections_info . PHP_EOL . '</connections>';
 
         }
 
@@ -140,7 +140,7 @@ function stwbpb_send_hdoc_for_post($post){
 
 
         echo '<content>' . wp_kses($htmlContent,$allowed_tags) . '</content>' . PHP_EOL . PHP_EOL; 
-        echo wp_kses($connectionsSection, $connections_allowed_tags);
+        echo wp_kses($connectionsSection, $connections_allowed_tags) . PHP_EOL . PHP_EOL;
         echo '</hdoc>';
     } else {
         // Handle post not found
