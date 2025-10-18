@@ -18,6 +18,7 @@ function stwbpb_get_panels($post) {
 
     $settings = get_option('stwbpb_settings', array(
         'serve_hdoc_from_different_url' => false,
+        'rewrite_prefix' => 'sw',
         'removal_selectors' => '',
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,

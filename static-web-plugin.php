@@ -82,6 +82,11 @@ register_uninstall_hook(__FILE__, 'stwbpb_uninstall');
 
 function stwbpb_custom_post_endpoints_rewrite_rules() {
 
+    $settings = get_option('stwbpb_settings', []);
+    $prefix = isset($settings['rewrite_prefix']) && $settings['rewrite_prefix'] !== ''
+        ? $settings['rewrite_prefix']
+        : 'sw';
+
     add_rewrite_rule(
         '^json-comments/?(.+)?$',
         'index.php?json_comments_custom_matches=1',
@@ -89,13 +94,13 @@ function stwbpb_custom_post_endpoints_rewrite_rules() {
     );
 
     add_rewrite_rule(
-        '^sw/(.+)?$',
+        '^' . $prefix . '/(.+)?$',
         'index.php?sw_custom_matches=$matches[1]',
         'top'
     );
 
     add_rewrite_rule(
-        '^sw/?$',
+        '^' . $prefix . '/?$',
         'index.php?sw_custom_matches=main_page',
         'top'
     );
@@ -356,7 +361,7 @@ function stwbpb_output_xml() {
     if (!empty($removal_selectors)) {
         $data['removal-selectors'] = $removal_selectors;
     }
-    
+
     if (!empty($panels_array)) {
         $data['panels'] = $panels_array;
     }

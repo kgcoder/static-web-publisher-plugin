@@ -11,6 +11,7 @@ function stwbpb_settings_page() {
 
     $default_settings = array(
         'serve_hdoc_from_different_url' => false,
+        'rewrite_prefix' => 'sw',
         'removal_selectors' => '',
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,
@@ -51,10 +52,26 @@ function stwbpb_settings_page() {
             <h2>Main settings</h2>
 
             <div class="settings-option-div">
-                <label>Serve HDOCs from different page (not recommended)</label>
+                <label>Serve HDOCs from a different page with prefix in URL (not recommended)</label>
                 <div class="spacerW10"></div>
                 <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[serve_hdoc_from_different_url]" value="1" <?php echo !empty($settings['serve_hdoc_from_different_url']) ? 'checked' : ''; ?>/>
             </div>
+
+           
+            <div class="settings-option-div">
+                <label>URL prefix: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[rewrite_prefix]" value="<?php echo esc_attr($settings['rewrite_prefix'] ?? 'sw'); ?>" />
+            </div>
+            
+            <p class="prefix-description">
+        After changing this prefix (and clicking Save Changes on this page!), go to 
+        <a href="<?php echo admin_url('options-permalink.php'); ?>" target="_blank">
+            Settings → Permalinks
+        </a> 
+        and click <strong>Save Changes</strong> to update rewrite rules.
+    </p>
+
 
             <div class="settings-option-div">
                 <label>Elements to remove (specify selectors separated by commas): </label>
@@ -250,6 +267,7 @@ function stwbpb_settings_init() {
    
     $default_settings = wp_json_encode(array(
         'serve_hdoc_from_different_url' => false,
+        'rewrite_prefix' => 'sw',
         'removal_selectors' => '',
         'side_panel_on_the_left' => false,
         'modify_internal_links' => false,
@@ -311,6 +329,12 @@ function stwbpb_sanitize_settings($input) {
         $sanitized['display_publish_date'] = boolval($input['display_publish_date']);
     }
 
+   $raw_prefix = isset($input['rewrite_prefix']) ? $input['rewrite_prefix'] : '';
+    $prefix = sanitize_title_with_dashes($raw_prefix);
+    if ($prefix === '') {
+        $prefix = 'sw';
+    }
+    $sanitized['rewrite_prefix'] = $prefix;
 
     $sanitized['removal_selectors'] = isset($input['removal_selectors']) ? sanitize_text_field($input['removal_selectors']) : '';
     $sanitized['comments_title'] = isset($input['comments_title']) ? sanitize_text_field($input['comments_title']) : '';
@@ -382,8 +406,6 @@ function stwbpb_sanitize_settings($input) {
         }
     }
 
-    
-
     return $sanitized;
 }
 
@@ -447,3 +469,17 @@ function stwbpb_allow_custom_url_schemes($protocols) {
     return $protocols;
 }
 add_filter('kses_allowed_protocols', 'stwbpb_allow_custom_url_schemes');
+
+
+
+// Flush when option is updated (compares old/new values)
+add_action('updated_option', 'stwbpb_maybe_flush_rewrites', 10, 3);
+function stwbpb_maybe_flush_rewrites($option, $old_value, $value) {
+    if ($option !== 'stwbpb_settings') return;
+
+    $old_prefix = isset($old_value['rewrite_prefix']) ? $old_value['rewrite_prefix'] : '';
+    $new_prefix = isset($value['rewrite_prefix']) ? $value['rewrite_prefix'] : '';
+    if ($old_prefix !== $new_prefix) {
+        flush_rewrite_rules();
+    }
+}
