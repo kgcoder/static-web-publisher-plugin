@@ -4,7 +4,7 @@ Donate link: https://reinventingtheweb.com/donate
 Tags: static, web, publish
 Requires at least: 5.1
 Tested up to: 6.8
-Stable tag: 3.0.0
+Stable tag: 4.0.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -20,8 +20,6 @@ Here’s how the plugin works:
 * For each page and post, it creates an additional endpoint.
 * For example, if your page URL is: https://example.com/some-page, the plugin generates a new endpoint: https://example.com/sw/some-page
 * A download link pointing to the new URL will be placed in the head section of the page (invisible on the page). This link may be found using a browser extension. 
-* Additionally, you can add a visible download link and an info link to the bottom of each page. 
-* The link will use a different URL scheme (sws:// instead of https://), allowing users to open the content in apps that support Web 1.1 formats.
 
 Here is a short [video](https://www.youtube.com/watch?v=DX2-G7zy32k) demonstrating how saving of a page works.
 

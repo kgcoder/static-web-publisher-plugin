@@ -3,7 +3,7 @@
 /*
 Plugin Name: Static Web Publisher
 Description: Publishes your posts and pages on the Static Web
-Version: 3.0.0
+Version: 4.0.0
 Author: Karen Grigorian
 Author URI: https://github.com/kgcoder
 License: GPLv2 or later
@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
-require_once plugin_dir_path(__FILE__) . 'includes/download-link.php';
+require_once plugin_dir_path(__FILE__) . 'includes/page-methods.php';
 require_once plugin_dir_path(__FILE__) . 'includes/comments-json.php';
 require_once plugin_dir_path(__FILE__) . 'includes/panels.php';
 require_once plugin_dir_path(__FILE__) . 'includes/hdoc.php';
