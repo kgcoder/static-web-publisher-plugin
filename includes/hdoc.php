@@ -141,8 +141,8 @@ function stwbpb_send_hdoc_for_post($post){
         }
         echo '</header>' . PHP_EOL . PHP_EOL;
 
-
         echo '<content>' . wp_kses($htmlContent,$allowed_tags) . '</content>' . PHP_EOL . PHP_EOL; 
+       
         echo wp_kses($panels_escaped,$panels_allowed_tags) . PHP_EOL . PHP_EOL;
         echo wp_kses($connectionsSection, $connections_allowed_tags) . PHP_EOL . PHP_EOL;
         echo '</hdoc>';

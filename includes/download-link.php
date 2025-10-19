@@ -90,11 +90,13 @@ function stwbpb_custom_redirect_logic() {
 
         if (get_post_meta($post->ID, '_disable_original_page', true) === '1') {
             $permalink = get_permalink($post->ID);
+            $settings = get_option('stwbpb_settings', array());
+
         
             $path_part = preg_replace('#^' . preg_quote(home_url(), '#') . '#', '', $permalink);
+            $rewrite_prefix = $settings['rewrite_prefix'];
             
-            
-            $link = preg_replace('/^http/', "sw", home_url( "/sw{$path_part}"));
+            $link = preg_replace('/^http/', $rewrite_prefix, home_url( "/{$rewrite_prefix}{$path_part}"));
             wp_redirect($link);
             exit;
         }
@@ -117,9 +119,11 @@ function stwbpb_output_alternate_hdoc_link_in_head() {
 			return;
 		}
 
+        $rewrite_prefix = $settings['rewrite_prefix'];
+
 		$permalink = get_permalink($post->ID);
 		$path_part = preg_replace('#^' . preg_quote(home_url(), '#') . '#', '', $permalink);
-		$link = home_url("/sw{$path_part}");
+		$link = home_url("/{$rewrite_prefix}{$path_part}");
 
 		$title = get_the_title($post);
 

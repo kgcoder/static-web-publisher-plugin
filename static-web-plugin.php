@@ -185,10 +185,11 @@ function stwbpb_custom_post_endpoints_template_redirect() {
             $site_url = home_url(); // Base site URL
             $path = str_replace($site_url, '', $current_path);
         
-            
+            $settings = get_option('stwbpb_settings', array());
+            $rewrite_prefix = $settings['rewrite_prefix'] ?? 'sw';
             // Generate a regex based on the permalink structure
             $pattern = preg_quote($permalink_structure, '/'); // Escape all special characters except for '%'
-            $pattern = '\/sw' . str_replace('%post_id%', '(\d+)\/?', $pattern); // Replace %post_id% with (\d+)
+            $pattern = '\/' . $rewrite_prefix . str_replace('%post_id%', '(\d+)\/?', $pattern); // Replace %post_id% with (\d+)
         
          
             if (preg_match("/^" . $pattern . "$/", $path, $matches)) {

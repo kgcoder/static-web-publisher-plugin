@@ -8,6 +8,33 @@ document.addEventListener('DOMContentLoaded', function () {
         sectionsContainer.style.display = 'none'
     }
 
+    // Dynamic visibility for settings options
+    const serveHdocCheckbox = document.getElementById('serve-hdoc-checkbox');
+    const urlPrefixOption = document.getElementById('url-prefix-option');
+    const prefixDescription = document.getElementById('prefix-description');
+    const removalSelectorsOption = document.getElementById('removal-selectors-option');
+
+    function toggleSettingsVisibility() {
+        if (serveHdocCheckbox && urlPrefixOption && prefixDescription && removalSelectorsOption) {
+            if (serveHdocCheckbox.checked) {
+                // Show URL prefix option and description, hide removal selectors
+                urlPrefixOption.style.display = 'block';
+                prefixDescription.style.display = 'block';
+                removalSelectorsOption.style.display = 'none';
+            } else {
+                // Hide URL prefix option and description, show removal selectors
+                urlPrefixOption.style.display = 'none';
+                prefixDescription.style.display = 'none';
+                removalSelectorsOption.style.display = 'block';
+            }
+        }
+    }
+
+    // Add event listener for checkbox changes
+    if (serveHdocCheckbox) {
+        serveHdocCheckbox.addEventListener('change', toggleSettingsVisibility);
+    }
+
 
    let sectionIndex = document.querySelectorAll('#sections-container .section').length;
 
