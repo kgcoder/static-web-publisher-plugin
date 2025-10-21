@@ -9,58 +9,35 @@ Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin lets you publish your website on the Static Web (Web 1.1).
 
 == Description ==
 
-This plugin allows your readers to download pages from your website and store them on their desktop, enhancing audience retention. Web 1.1 is a new concept, and you can read about it on [this website](https://reinventingtheweb.com).
+Publish your website on the Static Web - also known as Web 1.1 or the Readers’ Web.
 
-Here’s how the plugin works:
+With this plugin, your visitors can download and keep pages from your site on their desktops — helping extend engagement and retention.
 
-* For each page and post, it creates an additional endpoint.
-* For example, if your page URL is: https://example.com/some-page, the plugin generates a new endpoint: https://example.com/sw/some-page
-* A download link pointing to the new URL will be placed in the head section of the page (invisible on the page). This link may be found using a browser extension. 
+The Static Web is a new vision for a more interconnected web. You can learn more about it [here](reinventingtheweb.com).
 
-Here is a short [video](https://www.youtube.com/watch?v=DX2-G7zy32k) demonstrating how saving of a page works.
+= How this plugin works =
+On each post and page, the plugin embeds a small block of JSON metadata. This data helps compatible apps and parsers generate reader-friendly, static versions of your content — versions that can visually link to any other page on the Web.
 
-The new endpoint provides content in a modified format called HDOC (short for "Hypertext Document"), which is similar to HTML but does not support scripts and has very limited styling options.
+= Background =
+This project is inspired by Ted Nelson’s Project Xanadu, re-imagining the Web as a network of visibly connected documents.
 
-Example comparison
+= Current support =
+The new formats introduced by this plugin are currently supported by:
 
-Standard HTML:
+[LZ Desktop](https://reinventingtheweb.com/download)
+ — a standalone app for reading and exploring Web 1.1 content.
 
-    <html>
-        <head>
-            <title>Page title</title>
-        </head>
-        <body>
-            <h1>Page title</h1>
-            <p>Content</p>
-        </body>
-    </html>
+[LZ Desktop Helper](https://chromewebstore.google.com/detail/lz-desktop-helper/bnldbchignidakglolliabcdaenjclme)
+ — a Chrome extension that integrates the Static Web with your browser.
 
+Typically, you use the browser extension to download a web page and save it directly to the LZ Desktop app.
 
-HDOC format:
+= Looking ahead =
+More apps — especially reader apps, and eventually browsers — will be able to support these new data formats in the future.
 
-    <hdoc>
-        <metadata>
-            <title>Page title</title>
-        </metadata>
-
-        <header>
-            <h1>Page title</h1>
-            <author>John Doe</author>
-            <date>October 1, 2025</date>
-            ...
-        </header>
-
-        <content>
-            <p>Content</p>
-        </content>
-
-        <panels>...</panels> <!-- Navigational panels (optional) -->
-        <connections>...</connections> <!-- Links to related documents (optional) -->
-    </hdoc>
 
 == Installation ==
 
@@ -73,12 +50,16 @@ Setting up Static Web Publisher is quick and easy:
 5. Go to the plugin's Settings page and configure top and bottom panels (optional).
 
 
-
 == Frequently Asked Questions ==  
 
 No frequently asked questions yet. Feel free to ask!
 
 == Changelog ==  
+
+= 4.0.0 =
+Introduced the embedded HDOC format.  
+The plugin no longer creates additional endpoints for serving HDOCs.  
+Support for custom URL schemes has been removed.
 
 = 3.0.0 =
 Big changes in HDOC format. 
@@ -106,6 +87,9 @@ Bugfix
 Initial release.  
 
 == Upgrade Notice ==  
+
+= 4.0.0 =
+You may have to update links to old HDOC pages because now they have the same URLs as the original pages.
 
 = 3.0.0 =
 Big changes in HDOC format.
