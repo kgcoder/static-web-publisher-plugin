@@ -251,7 +251,7 @@ add_filter('the_content', function($content) {
 
     // Only for single post/page
     if (is_singular(['post', 'page'])) {
-        return '<div id="temp-hdoc-content">' . $content . '</div>';
+        return '<div id="hdoc-content">' . $content . '</div>';
     }
 
     return $content;
@@ -282,7 +282,7 @@ add_action('template_redirect', function() {
         @$dom->loadHTML('<?xml encoding="utf-8" ?>' . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
         // ----- Handle content -----
-        $contentTemp = $dom->getElementById('temp-hdoc-content');
+        $contentTemp = $dom->getElementById('hdoc-content');
         if ($contentTemp && $contentTemp->parentNode) {
             $parent = $contentTemp->parentNode;
 
