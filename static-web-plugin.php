@@ -401,8 +401,8 @@ function stwbpb_output_xml() {
     $json = str_replace('</script>', '<\/script>', $json);
    
     // Output JSON directly
-    // Note: Safe because type="application/json" is treated as literal text
     echo '<script type="application/json" id="hdoc-data">' . PHP_EOL;
+    // Note: Safe because type="application/json" is treated as literal text
     echo $json;
     echo PHP_EOL .'</script>';
 }
