@@ -48,30 +48,7 @@ function stwbpb_settings_page() {
             <p class="red-text">Don't forget to click 'Save changes' button at the bottom of this page after changing the settings.</p>
 
             <h2>Main settings</h2>
-            
-            
-            <div class="settings-option-div">
-                <label>Serve HDOCs from a different page with prefix in URL (not recommended)</label>
-                <div class="spacerW10"></div>
-                <input id="serve-hdoc-checkbox" class="single-checkbox-input" type="checkbox" name="stwbpb_settings[serve_hdoc_from_different_url]" value="1" <?php echo !empty($settings['serve_hdoc_from_different_url']) ? 'checked' : ''; ?>/>
-            </div>
-
-           
-            <div id="url-prefix-option" class="settings-option-div" style="display: <?php echo !empty($settings['serve_hdoc_from_different_url']) ? 'block' : 'none'; ?>;">
-                <label>URL prefix: </label>
-                <div class="spacerW10"></div>
-                <input class="single-text-input" type="text" name="stwbpb_settings[rewrite_prefix]" value="<?php echo esc_attr($settings['rewrite_prefix'] ?? 'sw'); ?>" />
-            </div>
-            
-            <p id="prefix-description" class="prefix-description" style="display: <?php echo !empty($settings['serve_hdoc_from_different_url']) ? 'block' : 'none'; ?>;">
-                After changing this prefix (and clicking Save Changes on this page!), go to 
-                <a href="<?php echo admin_url('options-permalink.php'); ?>" target="_blank">
-                    Settings → Permalinks
-                </a> 
-                and click <strong>Save Changes</strong> to update rewrite rules.
-            </p>
-
-            
+   
             <div id="removal-selectors-option" class="settings-option-div" style="display: <?php echo empty($settings['serve_hdoc_from_different_url']) ? 'block' : 'none'; ?>;">
                 <label>Elements to remove (specify selectors separated by commas): </label>
                 <div class="spacerW10"></div>

@@ -106,14 +106,10 @@ if (!empty($top_panel['links'])) {
     foreach ($top_panel['links'] as $index => $link) {
         $link_to_use = $link['url'];
 
-        $staticText = !empty($link['static_link']) ? ' static="true"' : '';
-        
         if(!$originalPageDisabled && preg_match('/^https?:\/\/OP$/i', $link['url'])){
             $link_to_use = $permalink;
         }
-        // $html = '<a href="' . esc_url($link_to_use) . '"' . $staticText . '>' . esc_html($link['text']) . '</a>';
-        // error_log("DEBUG LINK HTML: " . $html);
-        echo '<a href="' . esc_url($link_to_use) . '"' .$staticText . '>' . esc_html($link['text']) . '</a>' . PHP_EOL; 
+        echo '<a href="' . esc_url($link_to_use) . '"' . (!empty($link['static_link']) ? ' static="true"' : '') . '>' . esc_html($link['text']) . '</a>' . PHP_EOL; 
     }
 }
 ?>
@@ -144,12 +140,11 @@ if(!empty($section_title)){
 if (!empty($section['links'])) {
     foreach ($section['links'] as $index => $link) {
         $link_to_use = $link['url'];
-        $staticText = !empty($link['static_link']) ? ' static="true"' : '';
         
         if(!$originalPageDisabled && preg_match('/^https?:\/\/OP$/i', $link['url'])){
             $link_to_use = $permalink;
-         }
-        echo '<a href="' . esc_url($link_to_use) . '"' . $staticText . '>' . esc_html($link['text']) . '</a>' . PHP_EOL; 
+        }
+        echo '<a href="' . esc_url($link_to_use) . '"' . (!empty($link['static_link']) ? ' static="true"' : '') . '>' . esc_html($link['text']) . '</a>' . PHP_EOL; 
     }
 }
 ?>
