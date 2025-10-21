@@ -14,8 +14,6 @@ function stwbpb_settings_page() {
         'rewrite_prefix' => 'sw',
         'removal_selectors' => '',
         'side_panel_on_the_left' => false,
-        'modify_internal_links' => false,
-        'modify_external_links' => false,
         'display_author_name' => false,
         'display_publish_date' => false,
         'comments_title' => '',
@@ -241,17 +239,7 @@ function stwbpb_settings_page() {
                 <div class="spacerW10"></div>
                 <input class="single-text-input" type="text" name="stwbpb_settings[bottom_panel][bottom_message]" value="<?php echo esc_attr($bottom_panel['bottom_message']); ?>" />
             </div>
-            <div class="settings-option-div">
-                <label>Modify internal links? </label>
-                <div class="spacerW10"></div>
-                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[modify_internal_links]" value="1" <?php echo !empty($settings['modify_internal_links']) ? 'checked' : ''; ?>/>
-            </div>
-
-            <div class="settings-option-div">
-                <label>Modify external links? </label>
-                <div class="spacerW10"></div>
-                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[modify_external_links]" value="1" <?php echo !empty($settings['modify_external_links']) ? 'checked' : ''; ?>/>
-            </div>
+          
             <?php submit_button(); ?>
         </form>
     </div>
@@ -271,8 +259,6 @@ function stwbpb_settings_init() {
         'rewrite_prefix' => 'sw',
         'removal_selectors' => '',
         'side_panel_on_the_left' => false,
-        'modify_internal_links' => false,
-        'modify_external_links' => false,
         'display_author_name' => false,
         'display_publish_date' => false,
         'comments_title' => '',
@@ -316,12 +302,6 @@ function stwbpb_sanitize_settings($input) {
     }
     if(isset($input['side_panel_on_the_left'])){
         $sanitized['side_panel_on_the_left'] = boolval($input['side_panel_on_the_left']);
-    }
-    if(isset($input['modify_internal_links'])){
-        $sanitized['modify_internal_links'] = boolval($input['modify_internal_links']);
-    }
-    if(isset($input['modify_external_links'])){
-        $sanitized['modify_external_links'] = boolval($input['modify_external_links']);
     }
     if(isset($input['display_author_name'])){
         $sanitized['display_author_name'] = boolval($input['display_author_name']);

@@ -28,7 +28,7 @@ function stwbpb_custom_post_endpoints_meta_box_callback($post) {
     ?>
     <label for="disable_static_web_link">
         <input type="checkbox" name="disable_static_web_link" id="disable_static_web_link" value="1" <?php checked($value, '1'); ?> />
-        Disable Static Web Link on this post/page
+        Disable HDOC version of this post/page
     </label>
     <br><br>
     <label for="disable_original_page">
@@ -79,33 +79,6 @@ function stwbpb_custom_post_endpoints_save_meta_box($post_id) {
 }
 add_action('save_post', 'stwbpb_custom_post_endpoints_save_meta_box');
 
-
-
-
-function stwbpb_custom_redirect_logic() {
-    if (is_single() || is_page()) {  // Applies to posts and pages
-
-        global $post;
-        if (!$post) return; // Prevent errors if $post is undefined
-
-        if (get_post_meta($post->ID, '_disable_original_page', true) === '1') {
-            $permalink = get_permalink($post->ID);
-            $settings = get_option('stwbpb_settings', array());
-
-        
-            $path_part = preg_replace('#^' . preg_quote(home_url(), '#') . '#', '', $permalink);
-            $rewrite_prefix = $settings['rewrite_prefix'];
-            
-            $link = preg_replace('/^http/', $rewrite_prefix, home_url( "/{$rewrite_prefix}{$path_part}"));
-            wp_redirect($link);
-            exit;
-        }
-
-        
-    
-    }
-}
-add_action('template_redirect', 'stwbpb_custom_redirect_logic');
 
 
 

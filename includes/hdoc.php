@@ -24,7 +24,7 @@ function stwbpb_send_hdoc_for_post($post){
         
         $settings = get_option('stwbpb_settings', array()); // Ensure a default empty array
        
-        if (!isset($settings['serve_hdoc_from_different_url']) || get_post_meta($post->ID, '_disable_static_web_link', true) === '1') {
+        if (get_post_meta($post->ID, '_disable_static_web_link', true) === '1') {
             status_header(404);
             echo 'Page not found';
             return;
@@ -57,24 +57,13 @@ function stwbpb_send_hdoc_for_post($post){
         $htmlContent = stwbpb_strip_wp_tags($htmlContent);
 
 
-        $modify_internal_links = isset($settings['modify_internal_links']) ? $settings['modify_internal_links'] : '';
-
-
-        if(!empty($modify_internal_links)){
-            $htmlContent = stwbpb_modify_internal_links_in_html($htmlContent);
-        }
-
-        $modify_external_links = isset($settings['modify_external_links']) ? $settings['modify_external_links'] : '';
-
         $display_author_name = isset($settings['display_author_name']) ? $settings['display_author_name'] : '';
         $display_publish_date = isset($settings['display_publish_date']) ? $settings['display_publish_date'] : '';
 
 
 
 
-        if(!empty($modify_external_links)){
-            $htmlContent = stwbpb_modify_external_links_in_html($htmlContent);
-        }
+        
   
         $originalPageDisabled = get_post_meta($post->ID, '_disable_original_page', true) === '1';
 
@@ -127,7 +116,9 @@ function stwbpb_send_hdoc_for_post($post){
             echo '<link rel="alternate" type="text/html" title="' . esc_attr( $title ) . '" href="' . esc_url( $permalink ) . '" />' . PHP_EOL;
         }
         echo '</metadata>' . PHP_EOL . PHP_EOL;
-        
+
+        echo wp_kses($panels_escaped,$panels_allowed_tags) . PHP_EOL . PHP_EOL;
+
         echo '<header>' . PHP_EOL;
         echo '<h1>' . esc_html($title) . '</h1>' . PHP_EOL;
         if(!empty($display_author_name)){
@@ -142,8 +133,7 @@ function stwbpb_send_hdoc_for_post($post){
         echo '</header>' . PHP_EOL . PHP_EOL;
 
         echo '<content>' . wp_kses($htmlContent,$allowed_tags) . '</content>' . PHP_EOL . PHP_EOL; 
-       
-        echo wp_kses($panels_escaped,$panels_allowed_tags) . PHP_EOL . PHP_EOL;
+            
         echo wp_kses($connectionsSection, $connections_allowed_tags) . PHP_EOL . PHP_EOL;
         echo '</hdoc>';
     } else {
@@ -154,68 +144,8 @@ function stwbpb_send_hdoc_for_post($post){
 }
 
 
-function stwbpb_modify_internal_links_in_html($htmlContent) {
-    // Get the site's base URL
-    $site_url = home_url();
-
-    // Parse the site's URL to extract the domain
-    $parsed_url = wp_parse_url($site_url);
-    $site_domain = $parsed_url['host']; // e.g., 'mywebsite.com'
-
-    // Regex pattern to find all <a> tags with href attributes
-    $pattern = '/<a\s+[^>]*href=["\'](.*?)["\']/i';
-
-    // Callback function to modify URLs
-    $modifiedHtml = preg_replace_callback($pattern, function ($matches) use ($site_domain) {
-        $original_url = $matches[1];
-
-        // Check if the URL belongs to the site's domain
-        if (strpos($original_url, 'http://' . $site_domain) === 0 || strpos($original_url, 'https://' . $site_domain) === 0) {
-            // Replace http/https with sw/sws
-            $protocol_replacement = strpos($original_url, 'https://') === 0 ? 'sws://' : 'sw://';
-
-            // Remove the protocol and add the new one
-            $url_without_protocol = preg_replace('/^https?:\/\//', '', $original_url);
-
-            // Add '/sw/' after the domain name
-            $modified_url = preg_replace("/^{$site_domain}/", "{$site_domain}/sw", $url_without_protocol);
-
-            // Combine the new protocol with the modified URL
-            $modified_url = $protocol_replacement . $modified_url;
-
-            // Replace the original URL in the anchor tag
-            return str_replace($original_url, $modified_url, $matches[0]);
-        }
-
-        // Return the original match if not internal
-        return $matches[0];
-    }, $htmlContent);
-
-    return $modifiedHtml;
-}
 
 
-function stwbpb_modify_external_links_in_html($htmlContent) {
-    // Regex pattern to find <a> tags with a data-sw attribute
-    $pattern = '/<a\s+[^>]*href=["\'](.*?)["\'][^>]*data-sw=["\'](.*?)["\'][^>]*>/i';
-
-    // Callback function to replace href and remove data-sw
-    $modifiedHtml = preg_replace_callback($pattern, function ($matches) {
-        $original_href = $matches[1]; // Original href value
-        $data_sw_value = $matches[2]; // Value from data-sw attribute
-
-        // Replace href with data-sw value and remove the data-sw attribute
-        $modified_tag = preg_replace(
-            array('/href=["\'].*?["\']/', '/\s+data-sw=["\'].*?["\']/'), // Patterns to replace
-            array("href=\"$data_sw_value\"", ''), // Replacements
-            $matches[0]
-        );
-
-        return $modified_tag;
-    }, $htmlContent);
-
-    return $modifiedHtml;
-}
 
 
 

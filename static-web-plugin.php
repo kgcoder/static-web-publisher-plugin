@@ -82,7 +82,7 @@ register_uninstall_hook(__FILE__, 'stwbpb_uninstall');
 
 function stwbpb_custom_post_endpoints_rewrite_rules() {
 
-    $settings = get_option('stwbpb_settings', []);
+    $settings = get_option('stwbpb_settings', array());
     $prefix = isset($settings['rewrite_prefix']) && $settings['rewrite_prefix'] !== ''
         ? $settings['rewrite_prefix']
         : 'sw';
@@ -122,13 +122,16 @@ function stwbpb_custom_post_endpoints_template_redirect() {
     global $wp_query;
 
     $permalink_structure = get_option( 'permalink_structure' );
+    $settings = get_option('stwbpb_settings', array());
 
-    if (empty($permalink_structure) && isset($_SERVER['REQUEST_URI']) && strpos(sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'])), '/sw/') !== false && isset($wp_query->query_vars['p'])) {
+    $rewrite_prefix = $settings[$rewrite_prefix];
+    if (empty($permalink_structure) && isset($_SERVER['REQUEST_URI']) && strpos(sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'])), '/' . $rewrite_prefix . '/') !== false && isset($wp_query->query_vars['p'])) {
 
         $post_id = (int) $wp_query->query_vars['p'];
         
-        $expected_path1 = '/sw/?p=' . $post_id;
-        $expected_path2 = '/sw/?page_id=' . $post_id;
+
+        $expected_path1 = '/' . $rewrite_prefix . '/?p=' . $post_id;
+        $expected_path2 = '/' . $rewrite_prefix . '/?page_id=' . $post_id;
         
         
         $current_path = sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI']));
@@ -256,10 +259,21 @@ add_filter('the_content', function($content) {
 
 add_action('template_redirect', function() {
     // Only on single posts or pages
+    if (is_admin()) return;
     if (!is_singular(['post', 'page'])) return;
     $settings = get_option('stwbpb_settings', array());
     if(isset($settings['serve_hdoc_from_different_url'])){
         return;
+    }
+
+    global $post;
+
+    if(get_post_meta($post->ID, '_disable_original_page', true) === '1'){
+        
+        
+        stwbpb_send_hdoc_for_post($post);
+        
+        exit;
     }
 
     ob_start(function($html) {
@@ -297,8 +311,14 @@ function stwbpb_output_xml() {
     if (!$post) return;
 
 
+
+
     $settings = get_option('stwbpb_settings', array());
     if(isset($settings['serve_hdoc_from_different_url'])){
+        return;
+    }
+
+    if(get_post_meta($post->ID, '_disable_static_web_link', true) === '1'){
         return;
     }
 
@@ -458,6 +478,5 @@ function xml_to_array_with_attributes($xml, $parent_name = '') {
 
     return $arr;
 }
-
 
 

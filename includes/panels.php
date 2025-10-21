@@ -21,8 +21,6 @@ function stwbpb_get_panels($post) {
         'rewrite_prefix' => 'sw',
         'removal_selectors' => '',
         'side_panel_on_the_left' => false,
-        'modify_internal_links' => false,
-        'modify_external_links' => false,
         'display_author_name' => false,
         'display_publish_date' => false,
         'comments_title' => '',
