@@ -22,7 +22,6 @@ function stwbpb_settings_page() {
             'main_link' => '',
             'main_title' => '',
             'logo_url' => '',
-            'static_link' => false, 
             'links' => array()
         ),
         'bottom_panel' => array(
@@ -98,12 +97,6 @@ function stwbpb_settings_page() {
             </div>
 
             <div class="settings-option-div">
-                <label>Is link static?</label>
-                <div class="spacerW10"></div>
-                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[top_panel][static_link]" value="1" <?php echo !empty($top_panel['static_link']) ? 'checked' : ''; ?>/>
-            </div>
-
-            <div class="settings-option-div">
                 <label>Site name (optional): </label>
                 <div class="spacerW10"></div>
                 <input class="single-text-input" type="text" name="stwbpb_settings[top_panel][main_title]" value="<?php echo esc_attr($top_panel['main_title']); ?>" />
@@ -115,9 +108,6 @@ function stwbpb_settings_page() {
                 <div class="spacerW10"></div>
                 <button type="button" id="select-image">Select Image</button>
             </div>
-
-            <p class="red-text">Use <code>http://OP</code> to add a link to the original page.</p>
-
 
             <div id="top-panel-links-container">
               
@@ -132,12 +122,6 @@ function stwbpb_settings_page() {
                                 <div class="spacerH10"></div>
                                 <label>Link URL: </label>
                                 <input type="text" name="stwbpb_settings[top_panel][links][<?php echo esc_attr($link_index); ?>][url]" value="<?php echo esc_url($link['url']); ?>" />
-                                <div class="spacerH10"></div>
-                                <div class="settings-option-div">
-                                    <label>Is link static?</label>
-                                    <div class="spacerW10"></div>
-                                    <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[top_panel][links][<?php echo esc_attr($link_index); ?>][static_link]" value="1" <?php echo !empty($link['static_link']) ? 'checked' : ''; ?>/>
-                                </div>
                                 <div class="spacerH10"></div>
                                 <button type="button" class="remove-link">Remove Link</button>
                             </div>
@@ -161,7 +145,6 @@ function stwbpb_settings_page() {
 
             <h2>Bottom panel</h2>
             
-            <p class="red-text">Use <code>http://OP</code> to add a link to the original page.</p>
           
             <div id="sections-container">
                 <?php
@@ -184,13 +167,7 @@ function stwbpb_settings_page() {
 
                                             <label style="margin-top:10px;">Link URL: </label>
                                             <input type="text" name="stwbpb_settings[bottom_panel][sections][<?php echo esc_attr($section_index); ?>][links][<?php echo esc_attr($link_index); ?>][url]" value="<?php echo isset($link['url']) ? esc_url($link['url']) : ''; ?>" />
-                                            <div class="spacerH10"></div>
-                                            <div class="settings-option-div">
-                                                <label>Is link static?</label>
-                                                <div class="spacerW10"></div>
-                                                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[bottom_panel][sections][<?php echo esc_attr($section_index); ?>][links][<?php echo esc_attr($link_index); ?>][static_link]" value="1" <?php echo !empty($link['static_link']) ? 'checked' : ''; ?>/>
-                                            </div>
-                                            <div class="spacerH10"></div>
+                                            <div class="spacerH10"></div> 
                                             <button style="margin-top:10px;" type="button" class="remove-link">Remove Link</button>
                                         </div>
                                         <?php
@@ -244,7 +221,6 @@ function stwbpb_settings_init() {
             'main_link' => '',
             'main_title' => '',
             'logo_url' => '',
-            'static_link' => false,
             'links' => array()
         ),
         'bottom_panel' => array(
@@ -308,21 +284,14 @@ function stwbpb_sanitize_settings($input) {
             'links' => array()
         );
 
-        if(isset($input['top_panel']['static_link'])){
-            $sanitized['top_panel']['static_link'] = boolval($input['top_panel']['static_link']);
-        }
-
-
         if (isset($input['top_panel']['links']) && is_array($input['top_panel']['links'])) {
             foreach ($input['top_panel']['links'] as $link) {
                 if (is_array($link)) {
 
-                    $sanitizedStatic = !empty($link['static_link']) ? true : false;
 
                     $sanitized['top_panel']['links'][] = array(
                         'text' => isset($link['text']) ? sanitize_text_field($link['text']) : '',
-                        'url' => isset($link['url']) ? esc_url_raw($link['url']) : '',
-                        'static_link' => $sanitizedStatic
+                        'url' => isset($link['url']) ? esc_url_raw($link['url']) : ''
                     );
                 }
             }
@@ -347,12 +316,10 @@ function stwbpb_sanitize_settings($input) {
                     if (isset($section['links']) && is_array($section['links'])) {
                         foreach ($section['links'] as $link) {
                             if (is_array($link)) {
-                                $sanitizedStatic = !empty($link['static_link']) ? true : false;
 
                                 $sanitized_section['links'][] = array(
                                     'text' => isset($link['text']) ? sanitize_text_field($link['text']) : '',
-                                    'url' => isset($link['url']) ? esc_url_raw($link['url']) : '',
-                                    'static_link' => $sanitizedStatic
+                                    'url' => isset($link['url']) ? esc_url_raw($link['url']) : ''
                                 );
                             }
                         }

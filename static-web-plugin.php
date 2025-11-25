@@ -56,12 +56,7 @@ function stwbpb_activate() {
         $settings['no_comments_message'] = 'No comments yet';
         $settings['top_panel']['main_title'] = get_bloginfo('name');
         $settings['top_panel']['main_link'] = home_url();
-        $settings['top_panel']['links'] = array(
-            array(
-                'url' => 'http://OP',
-                'text' => 'Original page'
-            )
-        );
+        
         update_option('stwbpb_settings', $settings);
     }
 }
@@ -304,7 +299,7 @@ add_action('template_redirect', function() {
 
 
 
-add_action('wp_body_open', 'stwbpb_output_xml');
+add_action('wp_footer', 'stwbpb_output_xml', 9999);
 function stwbpb_output_xml() {
     if (!is_singular()) return;
     global $post;
@@ -405,6 +400,8 @@ function stwbpb_output_xml() {
     // Note: Safe because type="application/json" is treated as literal text
     echo $json;
     echo PHP_EOL .'</script>';
+
+    exit;
 }
 
 
