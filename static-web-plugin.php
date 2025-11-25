@@ -19,6 +19,7 @@ if (!defined('ABSPATH')) {
 
 require_once plugin_dir_path(__FILE__) . 'includes/page-methods.php';
 require_once plugin_dir_path(__FILE__) . 'includes/comments-json.php';
+require_once plugin_dir_path(__FILE__) . 'includes/doc-files.php';
 require_once plugin_dir_path(__FILE__) . 'includes/panels.php';
 require_once plugin_dir_path(__FILE__) . 'includes/hdoc.php';
 require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
@@ -89,6 +90,12 @@ function stwbpb_custom_post_endpoints_rewrite_rules() {
     );
 
     add_rewrite_rule(
+        '^doc-viewer/([^/]+)?$',
+        'index.php?doc_viewer_matches=$matches[1]',
+        'top'
+    );
+
+    add_rewrite_rule(
         '^' . $prefix . '/(.+)?$',
         'index.php?sw_custom_matches=$matches[1]',
         'top'
@@ -105,6 +112,7 @@ add_action('init', 'stwbpb_custom_post_endpoints_rewrite_rules');
 
 function stwbpb_custom_post_endpoints_query_vars($query_vars) {
     $query_vars[] = 'sw_custom_matches';
+    $query_vars[] = 'doc_viewer_matches';
     $query_vars[] = 'comments_custom_matches';
     $query_vars[] = 'json_comments_custom_matches';
 
@@ -112,6 +120,13 @@ function stwbpb_custom_post_endpoints_query_vars($query_vars) {
 }
 add_filter('query_vars', 'stwbpb_custom_post_endpoints_query_vars');
 
+
+add_filter('user_trailingslashit', function($url, $type){
+    if (strpos($url, 'doc-viewer/') !== false) {
+        return untrailingslashit($url);
+    }
+    return $url;
+}, 10, 2);
 
 function stwbpb_custom_post_endpoints_template_redirect() {
     global $wp_query;
@@ -147,6 +162,13 @@ function stwbpb_custom_post_endpoints_template_redirect() {
 
     if (isset($wp_query->query_vars['json_comments_custom_matches'])) {
         stwbpb_send_comments_json_from_post();
+        exit;
+    }
+
+
+    if (isset($wp_query->query_vars['doc_viewer_matches'])) {
+        $path = $wp_query->query_vars['doc_viewer_matches'];
+        stwbpb_send_doc_file($path);
         exit;
     }
 
