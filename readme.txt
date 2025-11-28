@@ -4,40 +4,35 @@ Donate link: https://reinventingtheweb.com/donate
 Tags: static, web, publish
 Requires at least: 5.1
 Tested up to: 6.8
-Stable tag: 4.0.0
+Stable tag: 4.1.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Publish your website on the Static Web - also known as Web 1.1 or the Readers’ Web.
+Support visible connections between web pages by making your site part of the emerging Static Web (Web 1.1) ecosystem.
 
 == Description ==
 
-Publish your website on the Static Web - also known as Web 1.1 or the Readers’ Web.
+Static Web Publisher adds a small block of JSON metadata to each post and page. This metadata allows compatible apps and browser extensions to generate reader-friendly, static representations of your content — versions that can visually highlight connections to other pages across the Web.
 
-With this plugin, your visitors can download and keep pages from your site on their desktops — helping extend engagement and retention.
+Visitors without supporting software will see your site exactly as before. Nothing about its appearance or behavior changes for regular users.
 
-The Static Web is a new vision for a more interconnected web. You can learn more about it [here](reinventingtheweb.com).
-
-= How this plugin works =
-On each post and page, the plugin embeds a small block of JSON metadata. This data helps compatible apps and parsers generate reader-friendly, static versions of your content — versions that can visually link to any other page on the Web.
+The Static Web is a new approach to building a more interconnected Web. You can learn more about it [here](reinventingtheweb.com).
 
 = Background =
-This project is inspired by Ted Nelson’s Project Xanadu, re-imagining the Web as a network of visibly connected documents.
+This project is inspired by the long-standing ideas of hypertext pioneer Ted Nelson.
 
 = Current support =
-The new formats introduced by this plugin are currently supported by:
+The new formats (HDOCs) this plugin works with are currently supported by:
+
+[Visible Connections](https://chromewebstore.google.com/detail/visible-connections/hlckcdbgknflkkciojgdbhomdnegimbm)
+ — a Chrome extension that shows visible connections between web pages in your browser.
 
 [LZ Desktop](https://reinventingtheweb.com/download)
- — a standalone app for reading and exploring Web 1.1 content.
-
-[LZ Desktop Helper](https://chromewebstore.google.com/detail/lz-desktop-helper/bnldbchignidakglolliabcdaenjclme)
- — a Chrome extension that integrates the Static Web with your browser.
-
-Typically, you use the browser extension to download a web page and save it directly to the LZ Desktop app.
+ — a standalone app for exploring and creating Web 1.1 content.
 
 = Looking ahead =
-More apps — especially reader apps, and eventually browsers — will be able to support these new data formats in the future.
+More apps — especially reader apps, and eventually browsers — will be able to support Static Web data formats in the future.
 
 
 == Installation ==
@@ -56,6 +51,9 @@ Setting up Static Web Publisher is quick and easy:
 No frequently asked questions yet. Feel free to ask!
 
 == Changelog ==  
+
+= 4.1.0 =
+Some unnecessary functionality removed.
 
 = 4.0.0 =
 Introduced the embedded HDOC format.  
@@ -76,6 +74,7 @@ Comments are now exported in JSON format.
 = 1.2.0 =
 The site name and link are automatically added to the HDOC top panel after the plugin is activated. This ensures the top panel is populated even if you don’t configure panels after installation.
 
+
 = 1.1.1 =
 Bugfix
 
@@ -87,7 +86,10 @@ Bugfix
 = 1.0 =  
 Initial release.  
 
-== Upgrade Notice ==  
+== Upgrade Notice == 
+
+= 4.1.0 =
+Minor changes. No action required.
 
 = 4.0.0 =
 You may have to update links to old HDOC pages because now they have the same URLs as the original pages.
