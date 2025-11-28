@@ -90,7 +90,7 @@ function stwbpb_custom_post_endpoints_rewrite_rules() {
     );
 
     add_rewrite_rule(
-        '^doc-viewer/([^/]+)?$',
+        '^static/([^/]+)?$',
         'index.php?doc_viewer_matches=$matches[1]',
         'top'
     );
@@ -122,7 +122,7 @@ add_filter('query_vars', 'stwbpb_custom_post_endpoints_query_vars');
 
 
 add_filter('user_trailingslashit', function($url, $type){
-    if (strpos($url, 'doc-viewer/') !== false) {
+    if (strpos($url, 'static/') !== false) {
         return untrailingslashit($url);
     }
     return $url;
@@ -135,7 +135,10 @@ function stwbpb_custom_post_endpoints_template_redirect() {
     $settings = get_option('stwbpb_settings', array());
 
     $rewrite_prefix = $settings[$rewrite_prefix];
+
+
     if (empty($permalink_structure) && isset($_SERVER['REQUEST_URI']) && strpos(sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'])), '/' . $rewrite_prefix . '/') !== false && isset($wp_query->query_vars['p'])) {
+
 
         $post_id = (int) $wp_query->query_vars['p'];
         
