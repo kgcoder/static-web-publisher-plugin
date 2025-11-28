@@ -90,7 +90,7 @@ function stwbpb_custom_post_endpoints_rewrite_rules() {
     );
 
     add_rewrite_rule(
-        '^static/([^/]+)?$',
+        '^static/(.+)$',
         'index.php?doc_viewer_matches=$matches[1]',
         'top'
     );
