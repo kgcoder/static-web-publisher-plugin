@@ -26,7 +26,7 @@ This project is inspired by the long-standing ideas of hypertext pioneer Ted Nel
 The new formats (HDOCs) this plugin works with are currently supported by:
 
 [Visible Connections](https://chromewebstore.google.com/detail/visible-connections/hlckcdbgknflkkciojgdbhomdnegimbm)
- — a Chrome extension that shows visible connections between web pages in your browser.
+ — a Chrome extension that shows visible connections between web pages in your browser,
 
 [LZ Desktop](https://reinventingtheweb.com/download)
  — a standalone app for exploring and creating Web 1.1 content.
