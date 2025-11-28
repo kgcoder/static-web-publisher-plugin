@@ -44,7 +44,7 @@ Setting up Static Web Publisher is quick and easy:
 3. Find the plugin in the search results, hover over it, and click Install.
 4. Once installed, click Activate.
 5. Go to the plugin's Settings page and configure top and bottom panels (optional).
-
+6. In the main folder of your website (usually named public), create a folder named static-documents. Place your standalone HDOCs, CDOCs, and CONDOCs inside this folder. They will be accessible via URLs like: https://yourwebsite.com/static/your_file.hdoc. Files in this folder are served directly in the browser rather than downloaded, which allows compatible extensions to handle them properly.
 
 == Frequently Asked Questions ==  
 
@@ -89,7 +89,7 @@ Initial release.
 == Upgrade Notice == 
 
 = 4.1.0 =
-Minor changes. No action required.
+After upgrading, go to Settings > Permalinks and click Save Changes to update endpoints. To use standalone static files, create a 'static-documents' folder in your website's main directory.
 
 = 4.0.0 =
 You may have to update links to old HDOC pages because now they have the same URLs as the original pages.
