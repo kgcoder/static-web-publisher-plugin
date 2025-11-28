@@ -53,6 +53,7 @@ function stwbpb_send_comments_json_from_post() {
         $date_gmt = get_comment_time('c', true, false, $comment);
 
         // Content rendered similar to REST API
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core filter name.
         $content_rendered = apply_filters('comment_text', $comment->comment_content, $comment);
 
         // Author avatar urls like REST: 24, 48, 96

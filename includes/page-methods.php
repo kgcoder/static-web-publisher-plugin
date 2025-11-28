@@ -73,9 +73,12 @@ function stwbpb_custom_post_endpoints_save_meta_box($post_id) {
     );
 
     if (isset($_POST['static_web_connections_info'])) {
+
         $connections_info = wp_kses(wp_unslash($_POST['static_web_connections_info']), $allowed_tags);
+
         update_post_meta($post_id, '_static_web_connections_info', $connections_info);
     }
+
 }
 add_action('save_post', 'stwbpb_custom_post_endpoints_save_meta_box');
 

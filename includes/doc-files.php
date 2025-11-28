@@ -23,6 +23,7 @@ function stwbpb_send_doc_file($path){
 
         header('Content-Type: text/plain; charset=utf-8');
         header('Content-Disposition: inline');
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile
         readfile($real_path);
         exit;
     }

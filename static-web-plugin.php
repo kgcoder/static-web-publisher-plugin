@@ -377,7 +377,7 @@ function stwbpb_output_xml() {
 
 
     if(!empty($panels_obj)){
-        $panels_array = xml_to_array_with_attributes($panels_obj);
+        $panels_array = stwbpb_xml_to_array_with_attributes($panels_obj);
     }
 
     $connections_obj = simplexml_load_string($connectionsSection, "SimpleXMLElement", LIBXML_NOCDATA);
@@ -387,7 +387,7 @@ function stwbpb_output_xml() {
     if(!empty($connections_obj)){
         // Handle multiple <doc> elements
         foreach ($connections_obj->doc as $doc) {
-            $connections_array[] = xml_to_array_with_attributes($doc, 'doc');
+            $connections_array[] = stwbpb_xml_to_array_with_attributes($doc, 'doc');
         }
 
     }
@@ -422,7 +422,7 @@ function stwbpb_output_xml() {
    
     // Output JSON directly
     echo '<script type="application/json" id="hdoc-data">' . PHP_EOL;
-    // Note: Safe because type="application/json" is treated as literal text
+    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Safe because type="application/json" is treated as literal text
     echo $json;
     echo PHP_EOL .'</script>';
 
@@ -430,7 +430,7 @@ function stwbpb_output_xml() {
 }
 
 
-function xml_to_array_with_attributes($xml, $parent_name = '') {
+function stwbpb_xml_to_array_with_attributes($xml, $parent_name = '') {
     $arr = [];
 
     // Include attributes
@@ -440,7 +440,7 @@ function xml_to_array_with_attributes($xml, $parent_name = '') {
 
     // Include children
     foreach ($xml->children() as $child_name => $child) {
-        $child_array = xml_to_array_with_attributes($child, $child_name);
+        $child_array = stwbpb_xml_to_array_with_attributes($child, $child_name);
 
         // Special handling: if <a> inside <top>, push to 'links' array
         if ($parent_name === 'top' && $child_name === 'a') {
