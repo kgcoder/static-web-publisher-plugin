@@ -3,13 +3,13 @@
 /*
 Plugin Name: Static Web Publisher
 Description: Publishes your posts and pages on the Static Web
-Version: 4.1.0
+Version: 4.1.1
 Author: Karen Grigorian
 Author URI: https://github.com/kgcoder
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 5.1
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.4
 */
 

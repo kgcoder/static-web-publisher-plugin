@@ -21,7 +21,7 @@ function stwbpb_send_doc_file($path){
             wp_die('File not found or access denied');
         }
 
-        header('Content-Type: text/plain; charset=utf-8');
+        header('Content-Type: text/html; charset=utf-8');
         header('Content-Disposition: inline');
         // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile
         readfile($real_path);
