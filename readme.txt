@@ -52,6 +52,9 @@ No frequently asked questions yet. Feel free to ask!
 
 == Changelog ==  
 
+= 4.1.1 =
+Content type of standalone files changed to text/html to allow HTML in fallback messages.
+
 = 4.1.0 =
 Some unnecessary functionality removed.
 
@@ -87,6 +90,9 @@ Bugfix
 Initial release.  
 
 == Upgrade Notice == 
+
+= 4.1.1 =
+Minor changes. No action required.
 
 = 4.1.0 =
 After upgrading, go to Settings > Permalinks and click Save Changes to update endpoints. To use standalone static files, create a 'static-documents' folder in your website's main directory.
