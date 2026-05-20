@@ -4,7 +4,7 @@ Donate link: https://reinventingtheweb.com/donate
 Tags: static, web, publish
 Requires at least: 5.1
 Tested up to: 6.9
-Stable tag: 4.1.1
+Stable tag: 4.1.2
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -52,6 +52,9 @@ No frequently asked questions yet. Feel free to ask!
 
 == Changelog ==  
 
+= 4.1.2 =
+Bug fix
+
 = 4.1.1 =
 Content type of standalone files changed to text/html to allow HTML in fallback messages.
 
@@ -90,6 +93,9 @@ Bugfix
 Initial release.  
 
 == Upgrade Notice == 
+
+= 4.1.2 =
+Minor changes. No action required.
 
 = 4.1.1 =
 Minor changes. No action required.

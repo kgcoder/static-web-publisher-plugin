@@ -3,7 +3,7 @@
 /*
 Plugin Name: Static Web Publisher
 Description: Publishes your posts and pages on the Static Web
-Version: 4.1.1
+Version: 4.1.2
 Author: Karen Grigorian
 Author URI: https://github.com/kgcoder
 License: GPLv2 or later
@@ -134,7 +134,7 @@ function stwbpb_custom_post_endpoints_template_redirect() {
     $permalink_structure = get_option( 'permalink_structure' );
     $settings = get_option('stwbpb_settings', array());
 
-    $rewrite_prefix = $settings[$rewrite_prefix];
+    $rewrite_prefix = $settings['rewrite_prefix'] ?? 'sw';
 
 
     if (empty($permalink_structure) && isset($_SERVER['REQUEST_URI']) && strpos(sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'])), '/' . $rewrite_prefix . '/') !== false && isset($wp_query->query_vars['p'])) {
