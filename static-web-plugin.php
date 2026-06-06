@@ -22,6 +22,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/comments-json.php';
 require_once plugin_dir_path(__FILE__) . 'includes/doc-files.php';
 require_once plugin_dir_path(__FILE__) . 'includes/panels.php';
 require_once plugin_dir_path(__FILE__) . 'includes/hdoc.php';
+require_once plugin_dir_path(__FILE__) . 'includes/reader.php';
 require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
 
 
@@ -277,50 +278,23 @@ add_filter('the_content', function($content) {
     return $content;
 });
 
-add_action('template_redirect', function() {
-    // Only on single posts or pages
-    if (is_admin()) return;
-    if (!is_singular(['post', 'page'])) return;
-    $settings = get_option('stwbpb_settings', array());
-    if(isset($settings['serve_hdoc_from_different_url'])){
-        return;
+
+
+
+
+add_filter('template_include', function ($template) {
+
+    if (is_admin()) return $template;
+    if (!is_singular(['post', 'page'])) return $template;
+
+    $settings = get_option('stwbpb_settings', []);
+
+    if (!empty($settings['serve_hdoc_from_different_url'])) {
+        return $template;
     }
 
-    global $post;
-
-    if(get_post_meta($post->ID, '_disable_original_page', true) === '1'){
-        
-        
-        stwbpb_send_hdoc_for_post($post);
-        
-        exit;
-    }
-
-    ob_start(function($html) {
-        libxml_use_internal_errors(true);
-        $dom = new DOMDocument();
-        @$dom->loadHTML('<?xml encoding="utf-8" ?>' . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-
-        // ----- Handle content -----
-        $contentTemp = $dom->getElementById('hdoc-content');
-        if ($contentTemp && $contentTemp->parentNode) {
-            $parent = $contentTemp->parentNode;
-
-            // Mark parent container
-            $existing = $parent->getAttribute('class');
-            $parent->setAttribute('class', trim($existing . ' hdoc-content'));
-
-            // Unwrap temp div
-            while ($contentTemp->firstChild) {
-                $parent->insertBefore($contentTemp->firstChild, $contentTemp);
-            }
-            $parent->removeChild($contentTemp);
-        }
-
-        return $dom->saveHTML();
-    });
+    return plugin_dir_path(__FILE__) . 'templates/reader-template.php';
 });
-
 
 
 

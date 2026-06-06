@@ -59,9 +59,8 @@ function stwbpb_get_panels($post) {
     $should_show_bottom_panel = !empty($bottom_message) || !empty($bottom_panel['sections']);
 
     $should_show_panels = $should_show_top_panel || $should_show_side_panel || $should_show_bottom_panel;
-
-    $side_panel_left = !!$settings['side_panel_on_the_left'];
-
+error_log('PANELS FILE VERSION: ' . time());
+    $side_panel_left = (bool) ($settings['side_panel_on_the_left'] ?? false);
     $side_panel_attribute = $side_panel_left ? ' side="left"' : '';
     
     if(!$should_show_panels){
