@@ -21,21 +21,21 @@ export function getObjectFromLocalStorage(objectName) {
 
 
     function handleResponse(event) {
-      if (event.source !== window) return;
-        const msg = event.data;
-        if (msg.type === "LOCAL_STORAGE_RESULT" && msg.id === id) {
+    //   if (event.source !== window) return;
+    //     const msg = event.data;
+    //     if (msg.type === "LOCAL_STORAGE_RESULT" && msg.id === id) {
           
-        window.removeEventListener("message", handleResponse);
-        resolve({value: msg.value});
-      }
+    //  //   window.removeEventListener("message", handleResponse);
+    //     resolve({value: msg.value});
+    //   }
     }
 
-    window.addEventListener("message", handleResponse);
-    window.postMessage({ type: "GET_OBJECT_FROM_LOCAL_STORAGE", objectName, id }, "*");
+   // window.addEventListener("message", handleResponse);
+  //  window.postMessage({ type: "GET_OBJECT_FROM_LOCAL_STORAGE", objectName, id }, "*");
   });
 }
 
 
 export function saveObjectInLocalStorage(objectName, object) {
-    window.postMessage({ type: "SAVE_OBJECT_IN_LOCAL_STORAGE", objectName, object }, "*");
+  //  window.postMessage({ type: "SAVE_OBJECT_IN_LOCAL_STORAGE", objectName, object }, "*");
 }

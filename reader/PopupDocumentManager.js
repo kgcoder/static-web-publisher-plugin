@@ -151,29 +151,35 @@ class PopupDocumentManager{
 
 
     
-        const infoButton = document.getElementById("CurrentDocumentInfoButton")
+        const infoButton = document.getElementById("CurrentDocumentInfoButton1")
+        if(!infoButton)return
         this.createOneSVGIconComponent(infoButton,g.iconsInfo.svgIcons.infoIcon,'Reader-InfoButton')
-        infoButton.addEventListener('click', this.infoButtonPressed)
+        if(infoButton)infoButton.addEventListener('click', this.infoButtonPressed)
         
         const downloadAllButton = document.getElementById("CurrentDocumentDownloadAllDocsButton")
 
+        if(!downloadAllButton)return
 
         this.createOneSVGIconComponent(downloadAllButton,g.iconsInfo.svgIcons.downloadAll,'Reader-DownloadAllButton')
-        downloadAllButton.addEventListener('click',g.readingManager.downloadAllPages)
+        if(downloadAllButton)downloadAllButton.addEventListener('click',g.readingManager.downloadAllPages)
     
         const fullScreenButton = document.getElementById("CurrentDocumentFullScreenButton")
+        if(!fullScreenButton)return
         this.createOneSVGIconComponent(fullScreenButton,g.iconsInfo.svgIcons.fullscreenOffIcon,'Reader-FullscreenButton')
-
         fullScreenButton.addEventListener('click', this.fullScreenButtonPressed)
         fullScreenButton.style.display = 'none'
+        
     
         const exportButton = document.getElementById("CurrentDocumentExportButton")
+        if(!exportButton)return
         this.createOneSVGIconComponent(exportButton,g.iconsInfo.svgIcons.exportIcon,'Reader-ExportButton')
-
         exportButton.addEventListener('click', this.exportButtonPressed)
         exportButton.style.display = 'none'
 
+        
+
         const sourceCodeButton = document.getElementById("CurrentDocumentSourceCodeButton")
+        if(!sourceCodeButton)return
         this.createOneSVGIconComponent(sourceCodeButton,g.iconsInfo.svgIcons.sourceCode,'Reader-SourceCodeButton')
 
         sourceCodeButton.addEventListener('click', this.sourceCodeButtonPressed)
@@ -1625,7 +1631,7 @@ class PopupDocumentManager{
      
         const buttonDivWrapper = document.getElementById("CurrentDocumentInfoButtonWrapper")
 
-        const buttonDiv = document.getElementById("CurrentDocumentInfoButton")
+        const buttonDiv = document.getElementById("CurrentDocumentInfoButton1")
 
         const countDiv = document.getElementById("CurrentDocumentInfoButtonCountDiv")
         const countText = countDiv.textContent  
@@ -1805,19 +1811,19 @@ class PopupDocumentManager{
 
 
     getCurrentDocTopOffset() {
+        const mainContainer = document.getElementById("AllDocumentsContainer");
+        const mainContainerRect = mainContainer.getBoundingClientRect();
         
         if (g.readingManager.mainDocType === 'c') {
-            return this.currentDocTopPanelShowing ? 50 : 0
+            return this.currentDocTopPanelShowing ? mainContainerRect.top + 50 : mainContainerRect.top
         }
 
-        const mainContainer = document.getElementById("AllDocumentsContainer");
 
 
         const parent = document.getElementById("CurrentDocument");
         const child = document.getElementById("CurrentDocumentMainDiv");
 
 
-        const mainContainerRect = mainContainer.getBoundingClientRect();
 
       
         const parentRect = parent.getBoundingClientRect();
@@ -1830,18 +1836,18 @@ class PopupDocumentManager{
 
 
     getRightDocTopOffset(noteData) {
-        if (noteData.docType === 'c') {
-            return noteData.currentDocTopPanelShowing ? 50 : 0
-        }
-
         const mainContainer = document.getElementById("AllDocumentsContainer");
+        const mainContainerRect = mainContainer.getBoundingClientRect();
+        
+        if (noteData.docType === 'c') {
+            return noteData.currentDocTopPanelShowing ? mainContainerRect.top + 50 : mainContainerRect.top
+        }
 
         
         const parent = noteData.scrollDiv
         const child = getPresentationDivFrom(parent)
 
       
-        const mainContainerRect = mainContainer.getBoundingClientRect();
 
         const parentRect = parent.getBoundingClientRect();
         const childRect = child.getBoundingClientRect();

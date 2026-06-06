@@ -54,7 +54,9 @@ export function fetchWebPage(url) {
           
               return
           
-           }
+          }else{
+            //send request through the wp backend
+          }
 
         }catch(e){
           resolve({error:e, text:'Something is wrong with the URL'})
@@ -64,21 +66,8 @@ export function fetchWebPage(url) {
 
 
 
-    const id = Math.random().toString(36).slice(2);
 
-      function handleResponse(event) {
-      if (event.source !== window) return;
-      const msg = event.data;
-      if (msg.type === "FETCH_RESULT" && msg.id === id) {
-        window.removeEventListener("message", handleResponse);
-        currentRequests.delete(msg.url)
-        resolve({text:msg.html,error:msg.isError ? msg.html : null});
-      }
 
-      
-    }
 
-    window.addEventListener("message", handleResponse);
-    window.postMessage({ type: "FETCH_WEB_PAGE", url, id }, "*");
   });
 }

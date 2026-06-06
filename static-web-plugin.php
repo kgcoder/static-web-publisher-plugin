@@ -22,7 +22,6 @@ require_once plugin_dir_path(__FILE__) . 'includes/comments-json.php';
 require_once plugin_dir_path(__FILE__) . 'includes/doc-files.php';
 require_once plugin_dir_path(__FILE__) . 'includes/panels.php';
 require_once plugin_dir_path(__FILE__) . 'includes/hdoc.php';
-require_once plugin_dir_path(__FILE__) . 'includes/reader.php';
 require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
 
 
@@ -298,7 +297,7 @@ add_filter('template_include', function ($template) {
 
 
 
-add_action('wp_footer', 'stwbpb_output_xml', 9999);
+// add_action('wp_footer', 'stwbpb_output_xml', 9999);
 function stwbpb_output_xml() {
     if (!is_singular()) return;
     global $post;
@@ -400,7 +399,7 @@ function stwbpb_output_xml() {
     echo $json;
     echo PHP_EOL .'</script>';
 
-    exit;
+    // exit;
 }
 
 

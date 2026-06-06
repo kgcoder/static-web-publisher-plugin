@@ -80,6 +80,7 @@ export function createOneIconComponent(parent,iconPath,componentId,className,wid
 }
 
 export function createOneSVGIconComponent(parent,svgString,componentId,className){
+    if(!parent)return
     const div = document.createElement('div')
 
     

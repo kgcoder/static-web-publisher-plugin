@@ -55,7 +55,7 @@ class ReadingManager {
     partialRightLink = null
     docWidth = 0
     rightDocTop = 0
-    flinkStyle = 'thin' //'thin', 'thick', 'invisible'
+    flinkStyle = 'thick' //'thin', 'thick', 'invisible'
 
 
 
@@ -258,6 +258,7 @@ class ReadingManager {
 
 
     addNewRightDocDivs(){
+        console.log('addNewRightDocDivs in wp')
         if(!g.readingManager.rightNotesData.length)return
         g.readingManager.selectedRightDocIndex = 0
         const rightTopBar = document.getElementById("RightDocumentsTopBar")
@@ -651,6 +652,11 @@ class ReadingManager {
 
         let rightX = rightMinX
 
+        const mainContainer = document.getElementById("AllDocumentsContainer");
+        const mainContainerRect = mainContainer.getBoundingClientRect();
+        
+        const mainContainerTopOffset = mainContainerRect.top
+
         const topPanelHeight = g.pdm.getCurrentDocTopOffset()
         const secondTopPanelHeight = g.pdm.getRightDocTopOffset(noteObj)
 
@@ -663,8 +669,8 @@ class ReadingManager {
            
                 let {leftTop,leftBottom} = flink// this.getLeftRectsTopAndBottom(presentationDiv, flink.leftRects, true, flink.color03, flink.leftSideIsBroken)
                 
-                leftTop += topPanelHeight - mainDocScrollDiv.scrollTop //+ kLeftDivTop
-                leftBottom += topPanelHeight - mainDocScrollDiv.scrollTop// + kLeftDivTop
+                leftTop += topPanelHeight - mainDocScrollDiv.scrollTop - mainContainerTopOffset
+                leftBottom += topPanelHeight - mainDocScrollDiv.scrollTop - mainContainerTopOffset
 
 
                 leftBottom -= flink.bottomIndentHeight
@@ -675,8 +681,8 @@ class ReadingManager {
 
                 let {rightTop,rightBottom} = flink
 
-                rightTop += secondTopPanelHeight - secondDocScrollDiv.scrollTop
-                rightBottom += secondTopPanelHeight - secondDocScrollDiv.scrollTop
+                rightTop += secondTopPanelHeight - secondDocScrollDiv.scrollTop - mainContainerTopOffset
+                rightBottom += secondTopPanelHeight - secondDocScrollDiv.scrollTop - mainContainerTopOffset
 
                 rightTop += flink.topIndentHeight
                 

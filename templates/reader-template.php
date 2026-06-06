@@ -89,7 +89,6 @@ if (!empty($connections_info)) {
 
     <script>
         window.vcReaderData = {
-            assetsUrl: <?php echo wp_json_encode($reader_url . 'images/'); ?>
         };
     </script>
 
@@ -117,7 +116,7 @@ if (!empty($connections_info)) {
             <div id="CurrentDocumentTopBarRow" class="theme-light">
 
                 <div id="CurrentDocumentInfoButtonWrapper" class="DocumentTopBarButtonWrapper">
-                    <div title="Page info" id="CurrentDocumentInfoButton" class="DocumentTopBarButton" href="#">
+                    <div title="Page info" id="CurrentDocumentInfoButton1" class="DocumentTopBarButton" href="#">
                         <span id="CurrentDocumentInfoButtonCountDiv" class="CurrentDocumentTopButtonCountDiv"></span>
                     </div>
                 </div>
