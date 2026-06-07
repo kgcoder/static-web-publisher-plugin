@@ -89,6 +89,8 @@ if (!empty($connections_info)) {
 
     <script>
         window.vcReaderData = {
+            assetsUrl: <?php echo wp_json_encode($reader_url . 'images/'); ?>,
+            proxyUrl:  <?php echo wp_json_encode(home_url('/sw-proxy/')); ?>
         };
     </script>
 

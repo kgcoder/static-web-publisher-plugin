@@ -626,23 +626,27 @@ class ReadingManager {
 
 
 
-    
+        const mainContainer = document.getElementById("AllDocumentsContainer");
+        const mainContainerRect = mainContainer.getBoundingClientRect();
+        
+        const mainContainerTopOffset = mainContainerRect.top
+
 
 
         const mainDocScrollDiv = document.getElementById("CurrentDocument")
                
 
      if(isLeftText && !isRightText && noteObj.collageViewer && !!noteObj.collageViewer.viewport){
-        this.drawTextToPointFlinks(noteObj)
+        this.drawTextToPointFlinks(noteObj,mainContainerTopOffset)
         return
      } else if (!isLeftText && this.mainCollageViewer && !!this.mainCollageViewer.viewport) {
-         this.drawAllPointsOnLeftCollage()
+         this.drawAllPointsOnLeftCollage(mainContainerTopOffset)
          if (isRightText) {
-             this.drawPointToTextFlinks(noteObj)   
+             this.drawPointToTextFlinks(noteObj,mainContainerTopOffset)   
          } 
         return
     }else if(!isLeftText || !isRightText){
-        this.drawPointToPointFlinks(noteObj)
+        this.drawPointToPointFlinks(noteObj,mainContainerTopOffset)
         return
     }
 
@@ -652,11 +656,7 @@ class ReadingManager {
 
         let rightX = rightMinX
 
-        const mainContainer = document.getElementById("AllDocumentsContainer");
-        const mainContainerRect = mainContainer.getBoundingClientRect();
-        
-        const mainContainerTopOffset = mainContainerRect.top
-
+    
         const topPanelHeight = g.pdm.getCurrentDocTopOffset()
         const secondTopPanelHeight = g.pdm.getRightDocTopOffset(noteObj)
 
@@ -863,7 +863,7 @@ class ReadingManager {
 
 
 
-    drawTextToPointFlinks(noteObj) {
+    drawTextToPointFlinks(noteObj,topOffset) {
         const mainDocScrollDiv = document.getElementById("CurrentDocument")
 
         const mainDocRightX = this.docWidth
@@ -900,8 +900,8 @@ class ReadingManager {
 
                 let {leftTop,leftBottom} = flink
                 
-                leftTop += -mainDocScrollDiv.scrollTop + topPanelHeight
-                leftBottom += -mainDocScrollDiv.scrollTop + topPanelHeight
+                leftTop += -mainDocScrollDiv.scrollTop + topPanelHeight - topOffset
+                leftBottom += -mainDocScrollDiv.scrollTop + topPanelHeight - topOffset
 
                 leftBottom -= flink.bottomIndentHeight
 
@@ -1073,12 +1073,12 @@ class ReadingManager {
 
     }
 
-    drawPointToPointFlinks(noteObj){
+    drawPointToPointFlinks(noteObj,topOffset){
 
     }
 
 
-    drawAllPointsOnLeftCollage() {
+    drawAllPointsOnLeftCollage(topOffset) {
 
         const collageViewer = g.readingManager.mainCollageViewer
 
@@ -1983,10 +1983,14 @@ class ReadingManager {
 
         if(g.pdm.isShowingInfo || g.pdm.isLeftSourceCodeShowing)return
         
+        const mainContainer = document.getElementById("AllDocumentsContainer");
+        const mainContainerRect = mainContainer.getBoundingClientRect();
+        const topOffset = mainContainerRect.top
+
         const topPanelHeight = g.pdm.getCurrentDocTopOffset()
         
         const x = pageX - g.pdm.getCurrentDocLeftVerticalPanelWidth()
-        const y = pageY - kLeftDivTop - topPanelHeight
+        const y = pageY - kLeftDivTop - topPanelHeight - topOffset
         if(this.mainDocType === 'c'){
             for(let flinksData of this.connections){
                 if(!flinksData.activeFlinks)continue
@@ -2041,7 +2045,7 @@ class ReadingManager {
         }else if(this.mainDocType === 'h'){
             const mainScrollDocDiv = document.getElementById("CurrentDocument")
             const x = pageX - g.pdm.getCurrentDocLeftVerticalPanelWidth()
-            const y = pageY - kLeftDivTop - topPanelHeight + mainScrollDocDiv.scrollTop
+            const y = pageY - kLeftDivTop - topPanelHeight + mainScrollDocDiv.scrollTop //- topOffset
         
             let touchedFlinks = []
             for(let flinksData of this.connections){
@@ -2134,6 +2138,12 @@ class ReadingManager {
 
     handleTouchInRightDoc(pageX,pageY,currentlyPressedLink){
         if(this.isFullScreen)return
+        
+        const mainContainer = document.getElementById("AllDocumentsContainer");
+        const mainContainerRect = mainContainer.getBoundingClientRect();
+        const topOffset = mainContainerRect.top
+        
+        
         const noteData = this.rightNotesData[this.selectedRightDocIndex]
 
         const flinksData = this.currentConnection
@@ -2145,7 +2155,7 @@ class ReadingManager {
             const noteLeftX = this.docWidth + kMiddleGap
         
             const x = pageX - noteLeftX
-            const y = pageY - kLeftDivTop
+            const y = pageY - kLeftDivTop - topOffset
 
 
             for(let flink of flinksData.activeFlinks){
@@ -2185,7 +2195,7 @@ class ReadingManager {
         
             const topPanelHeight = g.pdm.getRightDocTopOffset(noteData)
             const x = pageX - noteLeftX
-            const y = pageY - topPanelHeight - kLeftDivTop + scrollTop
+            const y = pageY - topPanelHeight - kLeftDivTop + scrollTop //- topOffset
     
 
 
@@ -2559,12 +2569,16 @@ class ReadingManager {
     }
 
     moveRightCollageInPositionForLink(flink, leftScrollTop, topPanelHeight) {
+        const mainContainer = document.getElementById("AllDocumentsContainer");
+        const mainContainerRect = mainContainer.getBoundingClientRect();
+        const topOffset = mainContainerRect.top
+        
         const {leftTop,leftBottom} = flink
 
         const rightEnd = flink.rightEnds[0]
         const {x,y,radius} = rightEnd
 
-        const leftY = -leftScrollTop + topPanelHeight + (leftTop - flink.bottomIndentHeight + leftBottom) / 2
+        const leftY = -topOffset - leftScrollTop + topPanelHeight + (leftTop - flink.bottomIndentHeight + leftBottom) / 2
 
         const noteData = this.rightNotesData[this.selectedRightDocIndex]
 
@@ -2588,6 +2602,11 @@ class ReadingManager {
 
     scrollMainDocInPositionForPoint(flink,rightY, topPanelHeight){
 
+        const mainContainer = document.getElementById("AllDocumentsContainer");
+        const mainContainerRect = mainContainer.getBoundingClientRect();
+        
+        const topOffset = mainContainerRect.top
+
         const leftScrollDiv = document.getElementById("CurrentDocument")
 
         if(flink.leftEndOutOfBounds){
@@ -2603,7 +2622,7 @@ class ReadingManager {
 
         const currentLeftY = kLeftDivTop - leftScrollDiv.scrollTop + (leftTop - flink.bottomIndentHeight + leftBottom) / 2
 
-        const neededLeftScrollTop =  -rightY + topPanelHeight + leftScrollDiv.scrollTop + currentLeftY
+        const neededLeftScrollTop = -topOffset - rightY + topPanelHeight + leftScrollDiv.scrollTop + currentLeftY
 
         this.animateScroll(leftScrollDiv,neededLeftScrollTop)
 

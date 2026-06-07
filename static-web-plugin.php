@@ -23,6 +23,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/doc-files.php';
 require_once plugin_dir_path(__FILE__) . 'includes/panels.php';
 require_once plugin_dir_path(__FILE__) . 'includes/hdoc.php';
 require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
+require_once plugin_dir_path(__FILE__) . 'includes/proxy.php';
 
 
 
@@ -90,6 +91,12 @@ function stwbpb_custom_post_endpoints_rewrite_rules() {
     );
 
     add_rewrite_rule(
+        '^sw-proxy/?$',
+        'index.php?sw_proxy_request=1',
+        'top'
+    );
+
+    add_rewrite_rule(
         '^static/(.+)$',
         'index.php?doc_viewer_matches=$matches[1]',
         'top'
@@ -115,6 +122,7 @@ function stwbpb_custom_post_endpoints_query_vars($query_vars) {
     $query_vars[] = 'doc_viewer_matches';
     $query_vars[] = 'comments_custom_matches';
     $query_vars[] = 'json_comments_custom_matches';
+    $query_vars[] = 'sw_proxy_request';
 
     return $query_vars;
 }
@@ -162,6 +170,11 @@ function stwbpb_custom_post_endpoints_template_redirect() {
 
    
 
+
+    if (isset($wp_query->query_vars['sw_proxy_request'])) {
+        stwbpb_proxy_fetch();
+        exit;
+    }
 
     if (isset($wp_query->query_vars['json_comments_custom_matches'])) {
         stwbpb_send_comments_json_from_post();
@@ -260,6 +273,11 @@ function stwbpb_custom_post_endpoints_template_redirect() {
 }
 add_action('template_redirect', 'stwbpb_custom_post_endpoints_template_redirect');
 
+
+
+add_action('save_post', function($post_id) {
+    delete_transient('swp_connections_' . $post_id);
+});
 
 
 add_filter('the_content', function($content) {
