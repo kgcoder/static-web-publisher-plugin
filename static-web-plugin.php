@@ -315,7 +315,7 @@ add_filter('template_include', function ($template) {
 
 
 
-// add_action('wp_footer', 'stwbpb_output_xml', 9999);
+add_action('wp_footer', 'stwbpb_output_xml', 9999);
 function stwbpb_output_xml() {
     if (!is_singular()) return;
     global $post;

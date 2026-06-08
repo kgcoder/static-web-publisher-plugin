@@ -232,9 +232,6 @@ if (!empty($connections_info)) {
 <div id="CurrentUrl"></div>
 <div id="multiple-links-popup" class="theme-light"></div>
 
-
-<?php stwbpb_output_xml(); ?>
-
 <?php wp_footer(); ?>
 
 </body>

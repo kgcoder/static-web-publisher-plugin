@@ -105,12 +105,6 @@ class NoteDivsManager{
         }
          
          
-        const iframes = notePresentationDiv.querySelectorAll('iframe')
-        
-        iframes.forEach(iframe => {
-            const placeholder = this.createIframePlaceholder(iframe,flinksData);
-            iframe.parentNode.replaceChild(placeholder, iframe);
-        });
 
         replaceMediaTagsWithLinksInDiv(notePresentationDiv,'audio')
         replaceMediaTagsWithLinksInDiv(notePresentationDiv,'video')

@@ -2179,6 +2179,19 @@ class PopupDocumentManager{
     }
 
     leftDocumentLeftPanelButtonPressed = () => {
+
+        const commentsUrl = g.readingManager.mainDocPanels.sidePanel.commentsUrl
+        if (commentsUrl) {
+            const currentPageUrl = g.readingManager.mainDocData.url
+            const currentPageHostname = new URL(currentPageUrl).hostname
+            const requestedPageHostname = new URL(commentsUrl).hostname
+
+            if(requestedPageHostname !== currentPageHostname){
+                alert("To view comments open this page in another tab")
+                return
+            }
+        }
+
         this.currentDocLeftPanelShowing = !this.currentDocLeftPanelShowing
 
         if(this.isLeftExporting){
@@ -2196,7 +2209,9 @@ class PopupDocumentManager{
             const commentsUrl = g.readingManager.mainDocPanels.sidePanel.commentsUrl
             if (commentsUrl) {
                 const {commentsTitle,noCommentsMessage} = g.readingManager.mainDocPanels.sidePanel
+          
                 this.getComments(commentsDiv,commentsUrl,commentsTitle,noCommentsMessage,this)    
+                
             }
 
             const iframe = document.getElementById("leftDocLeftPanel")
@@ -2216,10 +2231,25 @@ class PopupDocumentManager{
     }
     
     leftDocumentRightPanelButtonPressed = async () => {
+
+        const commentsUrl = g.readingManager.mainDocPanels.sidePanel.commentsUrl
+        if (commentsUrl) {
+            const currentPageUrl = g.readingManager.mainDocData.url
+            const currentPageHostname = new URL(currentPageUrl).hostname
+            const requestedPageHostname = new URL(commentsUrl).hostname
+
+            if(requestedPageHostname !== currentPageHostname){
+                alert("To view comments open this page in another tab")
+                return
+            }
+        }
+
         this.currentDocRightPanelShowing = !this.currentDocRightPanelShowing 
 
         this.closeAllExcept(null)
       
+
+
 
         const commentsDiv = document.getElementById("leftDocRightPanelComments")
         if(this.currentDocRightPanelShowing){
@@ -2248,6 +2278,18 @@ class PopupDocumentManager{
 
     rightDocumentLeftPanelButtonPressed = () => {
         const noteData = g.readingManager.rightNotesData[g.readingManager.selectedRightDocIndex]
+        const commentsUrl = noteData.panels.sidePanel.commentsUrl
+        if (commentsUrl) {
+            const currentPageUrl = g.readingManager.mainDocData.url
+            const currentPageHostname = new URL(currentPageUrl).hostname
+            const requestedPageHostname = new URL(commentsUrl).hostname
+
+            if(requestedPageHostname !== currentPageHostname){
+                alert("To view comments open this page in another tab")
+                return
+            }
+        }
+        
         noteData.currentDocLeftPanelShowing = !noteData.currentDocLeftPanelShowing
 
         
@@ -2257,7 +2299,7 @@ class PopupDocumentManager{
             const commentsUrl = noteData.panels.sidePanel.commentsUrl
             if (commentsUrl) {
                 const {commentsTitle,noCommentsMessage} = noteData.panels.sidePanel
-                this.getComments(commentsDiv,commentsUrl,commentsTitle,noCommentsMessage,noteData)
+                this.getComments(commentsDiv,commentsUrl,commentsTitle,noCommentsMessage,noteData)  
             }
 
             const iframe = document.getElementById("rightDocLeftPanel" + noteData.index)
@@ -2276,6 +2318,19 @@ class PopupDocumentManager{
     
     rightDocumentRightPanelButtonPressed = () => {
         const noteData = g.readingManager.rightNotesData[g.readingManager.selectedRightDocIndex]
+        const commentsUrl = noteData.panels.sidePanel.commentsUrl
+        if (commentsUrl) {
+            const currentPageUrl = g.readingManager.mainDocData.url
+            const currentPageHostname = new URL(currentPageUrl).hostname
+            const requestedPageHostname = new URL(commentsUrl).hostname
+
+            if(requestedPageHostname !== currentPageHostname){
+                alert("To view comments open this page in another tab")
+                return
+            }
+        }
+
+
         noteData.currentDocRightPanelShowing = !noteData.currentDocRightPanelShowing 
         
         const commentsDiv = document.getElementById("rightDocRightPanel" + noteData.index + "Comments")
