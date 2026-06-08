@@ -139,6 +139,14 @@ add_filter('user_trailingslashit', function($url, $type){
 function stwbpb_custom_post_endpoints_template_redirect() {
     global $wp_query;
 
+    if (is_singular(['post', 'page'])) {
+        global $post;
+        if ($post && stwbpb_get_effective_display_mode($post) === 'standalone_hdoc') {
+            stwbpb_send_hdoc_for_post($post);
+            exit;
+        }
+    }
+
     $permalink_structure = get_option( 'permalink_structure' );
     $settings = get_option('stwbpb_settings', array());
 
@@ -310,7 +318,15 @@ add_filter('template_include', function ($template) {
         return $template;
     }
 
-    return plugin_dir_path(__FILE__) . 'templates/reader-template.php';
+    global $post;
+    if (!$post) return $template;
+
+    $mode = stwbpb_get_effective_display_mode($post);
+    if ($mode === 'hdoc_in_reader') {
+        return plugin_dir_path(__FILE__) . 'templates/reader-template.php';
+    }
+
+    return $template;
 });
 
 
@@ -333,6 +349,8 @@ function stwbpb_output_xml() {
         return;
     }
 
+    $mode = stwbpb_get_effective_display_mode($post);
+    if ($mode === 'standalone_hdoc') return;
 
     $display_author_name = isset($settings['display_author_name']) ? $settings['display_author_name'] : '';
     $display_publish_date = isset($settings['display_publish_date']) ? $settings['display_publish_date'] : '';
@@ -405,6 +423,9 @@ function stwbpb_output_xml() {
 
     if (empty($data)) return;
 
+    if ($mode === 'embedded_hdoc_forced' || $mode === 'hdoc_in_reader') {
+        $data['forced'] = true;
+    }
 
     $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     

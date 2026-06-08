@@ -28,6 +28,8 @@ function stwbpb_settings_page() {
             'bottom_message' => '',
             'sections' => array()
         ),
+        'page_mode' => 'embedded_hdoc',
+        'post_mode' => 'embedded_hdoc',
     );
 
     $existing_settings = get_option('stwbpb_settings', array());
@@ -54,6 +56,28 @@ function stwbpb_settings_page() {
                 <input class="single-text-input" type="text" name="stwbpb_settings[removal_selectors]" value="<?php echo esc_attr($settings['removal_selectors']); ?>" />
             </div>
             
+            <div class="settings-option-div">
+                <label>Page mode: </label>
+                <div class="spacerW10"></div>
+                <select name="stwbpb_settings[page_mode]">
+                    <option value="embedded_hdoc" <?php selected($settings['page_mode'], 'embedded_hdoc'); ?>>Embedded HDOC</option>
+                    <option value="embedded_hdoc_forced" <?php selected($settings['page_mode'], 'embedded_hdoc_forced'); ?>>Embedded HDOC (forced)</option>
+                    <option value="hdoc_in_reader" <?php selected($settings['page_mode'], 'hdoc_in_reader'); ?>>HDOC inside the Reader</option>
+                    <option value="standalone_hdoc" <?php selected($settings['page_mode'], 'standalone_hdoc'); ?>>Standalone HDOC</option>
+                </select>
+            </div>
+
+            <div class="settings-option-div">
+                <label>Post mode: </label>
+                <div class="spacerW10"></div>
+                <select name="stwbpb_settings[post_mode]">
+                    <option value="embedded_hdoc" <?php selected($settings['post_mode'], 'embedded_hdoc'); ?>>Embedded HDOC</option>
+                    <option value="embedded_hdoc_forced" <?php selected($settings['post_mode'], 'embedded_hdoc_forced'); ?>>Embedded HDOC (forced)</option>
+                    <option value="hdoc_in_reader" <?php selected($settings['post_mode'], 'hdoc_in_reader'); ?>>HDOC inside the Reader</option>
+                    <option value="standalone_hdoc" <?php selected($settings['post_mode'], 'standalone_hdoc'); ?>>Standalone HDOC</option>
+                </select>
+            </div>
+
             <h2>Header info</h2>
 
             <div class="settings-option-div">
@@ -227,6 +251,8 @@ function stwbpb_settings_init() {
             'bottom_message' => '',
             'sections' => array()
         ),
+        'page_mode' => 'embedded_hdoc',
+        'post_mode' => 'embedded_hdoc',
     ));
 
 
@@ -273,6 +299,10 @@ function stwbpb_sanitize_settings($input) {
     $sanitized['removal_selectors'] = isset($input['removal_selectors']) ? sanitize_text_field($input['removal_selectors']) : '';
     $sanitized['comments_title'] = isset($input['comments_title']) ? sanitize_text_field($input['comments_title']) : '';
     $sanitized['no_comments_message'] = isset($input['no_comments_message']) ? sanitize_text_field($input['no_comments_message']) : '';
+
+    $allowed_modes = array('embedded_hdoc', 'embedded_hdoc_forced', 'hdoc_in_reader', 'standalone_hdoc');
+    $sanitized['page_mode'] = isset($input['page_mode']) && in_array($input['page_mode'], $allowed_modes, true) ? $input['page_mode'] : 'embedded_hdoc';
+    $sanitized['post_mode'] = isset($input['post_mode']) && in_array($input['post_mode'], $allowed_modes, true) ? $input['post_mode'] : 'embedded_hdoc';
 
 
     // Sanitize top_panel
