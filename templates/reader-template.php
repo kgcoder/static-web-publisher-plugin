@@ -29,8 +29,6 @@ $htmlContent          = $post->post_content;
 $connections_info     = get_post_meta($post->ID, '_static_web_connections_info', true);
 $display_author_name  = $settings['display_author_name'] ?? '';
 $display_publish_date = $settings['display_publish_date'] ?? '';
-$originalPageDisabled = get_post_meta($post->ID, '_disable_original_page', true) === '1';
-
 $embedPattern = '/<!-- wp:embed \{"url":"https:\/\/www\.youtube\.com\/(watch\?v=|embed\/)([^"]+)",.*\} -->.*<div class="wp-block-embed__wrapper">\s*(https:\/\/www\.youtube\.com\/(watch\?v=|embed\/)[^<]+)\s*<\/div>.*<!-- \/wp:embed -->/sU';
 
 $htmlContent = preg_replace_callback($embedPattern, function ($matches) {
@@ -76,9 +74,7 @@ if (!empty($connections_info)) {
 
     <title><?php echo esc_html($title); ?></title>
 
-    <?php if (!$originalPageDisabled): ?>
-        <link rel="canonical" href="<?php echo esc_url($permalink); ?>">
-    <?php endif; ?>
+    <link rel="canonical" href="<?php echo esc_url($permalink); ?>">
 
     <link rel="stylesheet" href="<?php echo esc_url($reader_url . 'reader.css'); ?>">
     <link rel="stylesheet" href="<?php echo esc_url($reader_url . 'ExportPage.css'); ?>">

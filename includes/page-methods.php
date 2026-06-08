@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
 function stwbpb_custom_post_endpoints_add_meta_box() {
     add_meta_box(
         'custom_post_endpoints_meta_box',
-        'Static Web Link Settings',
+        'Static Web Publisher Settings',
         'stwbpb_custom_post_endpoints_meta_box_callback',
         array('post', 'page'), // Enable for posts and pages
         'side',
@@ -19,23 +19,11 @@ function stwbpb_custom_post_endpoints_add_meta_box() {
 add_action('add_meta_boxes', 'stwbpb_custom_post_endpoints_add_meta_box');
 
 function stwbpb_custom_post_endpoints_meta_box_callback($post) {
-    $value = get_post_meta($post->ID, '_disable_static_web_link', true);
-    $disable_original_page_value = get_post_meta($post->ID, '_disable_original_page', true);
     $connections_info = get_post_meta($post->ID, '_static_web_connections_info', true);
     $mode_value = get_post_meta($post->ID, '_hdoc_display_mode', true) ?: 'default';
 
     wp_nonce_field('custom_post_endpoints_meta_box_nonce', 'custom_post_endpoints_nonce');
     ?>
-    <label for="disable_static_web_link">
-        <input type="checkbox" name="disable_static_web_link" id="disable_static_web_link" value="1" <?php checked($value, '1'); ?> />
-        Disable HDOC version of this post/page
-    </label>
-    <br><br>
-    <label for="disable_original_page">
-        <input type="checkbox" name="disable_original_page" id="disable_original_page" value="1" <?php checked($disable_original_page_value, '1'); ?> />
-        Disable the original post/page
-    </label>
-    <br><br>
     <label for="hdoc_display_mode"><strong>Display mode:</strong></label><br>
     <select name="hdoc_display_mode" id="hdoc_display_mode" style="width:100%;margin-top:4px;">
         <option value="default" <?php selected($mode_value, 'default'); ?>>Default (use global setting)</option>
@@ -69,12 +57,6 @@ function stwbpb_custom_post_endpoints_save_meta_box($post_id) {
         return;
     }
 
-    $value = isset($_POST['disable_static_web_link']) ? '1' : '';
-    update_post_meta($post_id, '_disable_static_web_link', $value);
-
-    $value = isset($_POST['disable_original_page']) ? '1' : '';
-    update_post_meta($post_id, '_disable_original_page', $value);
-
     $allowed_modes = array('default', 'embedded_hdoc', 'embedded_hdoc_forced', 'hdoc_in_reader', 'standalone_hdoc');
     $mode = isset($_POST['hdoc_display_mode']) && in_array($_POST['hdoc_display_mode'], $allowed_modes, true)
         ? sanitize_text_field(wp_unslash($_POST['hdoc_display_mode']))
@@ -97,31 +79,6 @@ function stwbpb_custom_post_endpoints_save_meta_box($post_id) {
 }
 add_action('save_post', 'stwbpb_custom_post_endpoints_save_meta_box');
 
-
-
-
-function stwbpb_output_alternate_hdoc_link_in_head() {
-	global $post;
-
-    $settings = get_option('stwbpb_settings', array()); // Ensure a default empty array
-       
-	if ((is_single() || is_page()) && $post && ('post' === $post->post_type || 'page' === $post->post_type)) {
-		if (!isset($settings['serve_hdoc_from_different_url']) || get_post_meta($post->ID, '_disable_static_web_link', true) === '1') {
-			return;
-		}
-
-        $rewrite_prefix = $settings['rewrite_prefix'];
-
-		$permalink = get_permalink($post->ID);
-		$path_part = preg_replace('#^' . preg_quote(home_url(), '#') . '#', '', $permalink);
-		$link = home_url("/{$rewrite_prefix}{$path_part}");
-
-		$title = get_the_title($post);
-
-		echo '<link rel="alternate" type="application/hdoc+xml" title="' . esc_attr($title) . '" href="' . esc_url($link) . '" />' . "\n";
-	}
-}
-add_action('wp_head', 'stwbpb_output_alternate_hdoc_link_in_head');
 
 
 function stwbpb_get_effective_display_mode($post) {

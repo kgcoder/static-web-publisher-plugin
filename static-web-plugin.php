@@ -80,9 +80,6 @@ register_uninstall_hook(__FILE__, 'stwbpb_uninstall');
 function stwbpb_custom_post_endpoints_rewrite_rules() {
 
     $settings = get_option('stwbpb_settings', array());
-    $prefix = isset($settings['rewrite_prefix']) && $settings['rewrite_prefix'] !== ''
-        ? $settings['rewrite_prefix']
-        : 'sw';
 
     add_rewrite_rule(
         '^json-comments/?(.+)?$',
@@ -99,18 +96,6 @@ function stwbpb_custom_post_endpoints_rewrite_rules() {
     add_rewrite_rule(
         '^static/(.+)$',
         'index.php?doc_viewer_matches=$matches[1]',
-        'top'
-    );
-
-    add_rewrite_rule(
-        '^' . $prefix . '/(.+)?$',
-        'index.php?sw_custom_matches=$matches[1]',
-        'top'
-    );
-
-    add_rewrite_rule(
-        '^' . $prefix . '/?$',
-        'index.php?sw_custom_matches=main_page',
         'top'
     );
 
@@ -147,37 +132,6 @@ function stwbpb_custom_post_endpoints_template_redirect() {
         }
     }
 
-    $permalink_structure = get_option( 'permalink_structure' );
-    $settings = get_option('stwbpb_settings', array());
-
-    $rewrite_prefix = $settings['rewrite_prefix'] ?? 'sw';
-
-
-    if (empty($permalink_structure) && isset($_SERVER['REQUEST_URI']) && strpos(sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'])), '/' . $rewrite_prefix . '/') !== false && isset($wp_query->query_vars['p'])) {
-
-
-        $post_id = (int) $wp_query->query_vars['p'];
-        
-
-        $expected_path1 = '/' . $rewrite_prefix . '/?p=' . $post_id;
-        $expected_path2 = '/' . $rewrite_prefix . '/?page_id=' . $post_id;
-        
-        
-        $current_path = sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI']));
-        
-        if ($current_path === $expected_path1 || $current_path === $expected_path2) {
-            $post = get_post($post_id);
-            stwbpb_send_hdoc_for_post($post);
-            exit;
-        }
-
-
-     
-        exit;
-    }
-
-   
-
 
     if (isset($wp_query->query_vars['sw_proxy_request'])) {
         stwbpb_proxy_fetch();
@@ -197,87 +151,6 @@ function stwbpb_custom_post_endpoints_template_redirect() {
     }
 
 
-    if (!empty($permalink_structure) && isset($wp_query->query_vars['sw_custom_matches'])) {
-        $path = $wp_query->query_vars['sw_custom_matches'];
-
-      
-
-        if($path === 'main_page'){
-
-            
-
-            if (get_option('show_on_front') === 'page') {
-                $front_page_id = get_option('page_on_front');
-                $post = get_post($front_page_id);
-    
-                if ($post) {
-                    // Front page content found, send it
-                    stwbpb_send_hdoc_for_post($post);
-                } else {
-                    // Front page set, but no content found, send 404
-                    wp_die('Page not found', '', array('response' => 404));
-                }
-            } else {
-                // No front page set, return 404
-                wp_die('Page not found', '', array('response' => 404));
-            }
-          exit;
-
-        }else if (strpos($permalink_structure, '%post_id%') !== false) {
-            // Get the current path
-            $current_path = sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI']));
-            $site_url = home_url(); // Base site URL
-            $path = str_replace($site_url, '', $current_path);
-        
-            $settings = get_option('stwbpb_settings', array());
-            $rewrite_prefix = $settings['rewrite_prefix'] ?? 'sw';
-            // Generate a regex based on the permalink structure
-            $pattern = preg_quote($permalink_structure, '/'); // Escape all special characters except for '%'
-            $pattern = '\/' . $rewrite_prefix . str_replace('%post_id%', '(\d+)\/?', $pattern); // Replace %post_id% with (\d+)
-        
-         
-            if (preg_match("/^" . $pattern . "$/", $path, $matches)) {
-                $post_id = $matches[1]; // Extracted post ID
-                $slug = $post_id;
-            } else {
-                // Remove any trailing slash if it exists
-                $path = rtrim($path, '/');
-                // Use basename to get the last part of the path
-                $slug = basename($path);
-
-            }
-        }else{
-            $parsed_path = wp_parse_url($path, PHP_URL_PATH);
-
-            // Break the path into parts
-            $path_parts = explode('/', trim($parsed_path, '/'));
-
-            // Assuming the slug is the last part of the path
-            $slug = end($path_parts);
-          //  $slug = basename(get_permalink());
-        }
-        //echo $path;
-        // echo $slug;
-        // exit;
-  
-        if (is_numeric($slug)) {
-            $post_id = (int)$slug;
-            $post = get_post($post_id);
-
-            stwbpb_send_hdoc_for_post($post);
-          
-
-        }else{
-            $post = get_page_by_path($slug, OBJECT, array('post','page'));
-       
-            stwbpb_send_hdoc_for_post($post);
-           
-
-        }
-
-        exit;
-    }
-
 }
 add_action('template_redirect', 'stwbpb_custom_post_endpoints_template_redirect');
 
@@ -291,9 +164,6 @@ add_action('save_post', function($post_id) {
 add_filter('the_content', function($content) {
     if (is_admin()) return $content;
     $settings = get_option('stwbpb_settings', array());
-    if(isset($settings['serve_hdoc_from_different_url'])){
-        return;
-    }
 
     // Only for single post/page
     if (is_singular(['post', 'page'])) {
@@ -313,10 +183,6 @@ add_filter('template_include', function ($template) {
     if (!is_singular(['post', 'page'])) return $template;
 
     $settings = get_option('stwbpb_settings', []);
-
-    if (!empty($settings['serve_hdoc_from_different_url'])) {
-        return $template;
-    }
 
     global $post;
     if (!$post) return $template;
@@ -341,13 +207,6 @@ function stwbpb_output_xml() {
 
 
     $settings = get_option('stwbpb_settings', array());
-    if(isset($settings['serve_hdoc_from_different_url'])){
-        return;
-    }
-
-    if(get_post_meta($post->ID, '_disable_static_web_link', true) === '1'){
-        return;
-    }
 
     $mode = stwbpb_get_effective_display_mode($post);
     if ($mode === 'standalone_hdoc') return;

@@ -11,14 +11,9 @@ function stwbpb_get_panels($post) {
     $path_part = preg_replace('#^' . preg_quote(home_url(), '#') . '#', '', $permalink);
 
 
-    $originalPageDisabled = get_post_meta($post->ID, '_disable_original_page', true) === '1';
-
-
     $comments_link = home_url( "/json-comments/?post={$post->ID}");
 
     $settings = get_option('stwbpb_settings', array(
-        'serve_hdoc_from_different_url' => false,
-        'rewrite_prefix' => 'sw',
         'removal_selectors' => '',
         'side_panel_on_the_left' => false,
         'display_author_name' => false,

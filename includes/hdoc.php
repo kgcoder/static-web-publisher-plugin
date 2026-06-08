@@ -23,16 +23,7 @@ function stwbpb_send_hdoc_for_post($post){
     if ($post) {
         
         $settings = get_option('stwbpb_settings', array()); // Ensure a default empty array
-       
-        if (get_post_meta($post->ID, '_disable_static_web_link', true) === '1') {
-            status_header(404);
-            echo 'Page not found';
-            return;
-        }
 
-
-        
-        
         $permalink = get_permalink($post->ID);
 
         
@@ -59,13 +50,6 @@ function stwbpb_send_hdoc_for_post($post){
 
         $display_author_name = isset($settings['display_author_name']) ? $settings['display_author_name'] : '';
         $display_publish_date = isset($settings['display_publish_date']) ? $settings['display_publish_date'] : '';
-
-
-
-
-        
-  
-        $originalPageDisabled = get_post_meta($post->ID, '_disable_original_page', true) === '1';
 
         //$finalContent = '<h1>' . $title . "</h1>" .  $htmlContent;
 
@@ -112,9 +96,6 @@ function stwbpb_send_hdoc_for_post($post){
         echo '<hdoc>' . PHP_EOL  . PHP_EOL;
         echo '<metadata>' . PHP_EOL;
         echo '<title>' . esc_html( $title ) . '</title>' . PHP_EOL;
-        if(!$originalPageDisabled){
-            echo '<link rel="alternate" type="text/html" title="' . esc_attr( $title ) . '" href="' . esc_url( $permalink ) . '" />' . PHP_EOL;
-        }
         echo '</metadata>' . PHP_EOL . PHP_EOL;
 
         echo wp_kses($panels_escaped,$panels_allowed_tags) . PHP_EOL . PHP_EOL;

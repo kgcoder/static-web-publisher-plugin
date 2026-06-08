@@ -10,8 +10,6 @@ function stwbpb_settings_page() {
 
 
     $default_settings = array(
-        'serve_hdoc_from_different_url' => false,
-        'rewrite_prefix' => 'sw',
         'removal_selectors' => '',
         'side_panel_on_the_left' => false,
         'display_author_name' => false,
@@ -50,7 +48,7 @@ function stwbpb_settings_page() {
 
             <h2>Main settings</h2>
    
-            <div id="removal-selectors-option" class="settings-option-div" style="display: <?php echo empty($settings['serve_hdoc_from_different_url']) ? 'block' : 'none'; ?>;">
+            <div id="removal-selectors-option" class="settings-option-div" style="display:block;">
                 <label>Elements to remove (specify selectors separated by commas): </label>
                 <div class="spacerW10"></div>
                 <input class="single-text-input" type="text" name="stwbpb_settings[removal_selectors]" value="<?php echo esc_attr($settings['removal_selectors']); ?>" />
@@ -233,8 +231,6 @@ function stwbpb_settings_page() {
 function stwbpb_settings_init() {
    
     $default_settings = wp_json_encode(array(
-        'serve_hdoc_from_different_url' => false,
-        'rewrite_prefix' => 'sw',
         'removal_selectors' => '',
         'side_panel_on_the_left' => false,
         'display_author_name' => false,
@@ -275,10 +271,6 @@ function stwbpb_sanitize_settings($input) {
 
     //Sanitize main object
 
-
-    if(isset($input['serve_hdoc_from_different_url'])){
-        $sanitized['serve_hdoc_from_different_url'] = boolval($input['serve_hdoc_from_different_url']);
-    }
     if(isset($input['side_panel_on_the_left'])){
         $sanitized['side_panel_on_the_left'] = boolval($input['side_panel_on_the_left']);
     }
@@ -288,13 +280,6 @@ function stwbpb_sanitize_settings($input) {
     if(isset($input['display_publish_date'])){
         $sanitized['display_publish_date'] = boolval($input['display_publish_date']);
     }
-
-   $raw_prefix = isset($input['rewrite_prefix']) ? $input['rewrite_prefix'] : '';
-    $prefix = sanitize_title_with_dashes($raw_prefix);
-    if ($prefix === '') {
-        $prefix = 'sw';
-    }
-    $sanitized['rewrite_prefix'] = $prefix;
 
     $sanitized['removal_selectors'] = isset($input['removal_selectors']) ? sanitize_text_field($input['removal_selectors']) : '';
     $sanitized['comments_title'] = isset($input['comments_title']) ? sanitize_text_field($input['comments_title']) : '';
@@ -414,19 +399,3 @@ function stwbpb_enqueue_scripts($hook) {
    
 }
 add_action('admin_enqueue_scripts', 'stwbpb_enqueue_scripts');
-
-
-
-
-
-// Flush when option is updated (compares old/new values)
-add_action('updated_option', 'stwbpb_maybe_flush_rewrites', 10, 3);
-function stwbpb_maybe_flush_rewrites($option, $old_value, $value) {
-    if ($option !== 'stwbpb_settings') return;
-
-    $old_prefix = isset($old_value['rewrite_prefix']) ? $old_value['rewrite_prefix'] : '';
-    $new_prefix = isset($value['rewrite_prefix']) ? $value['rewrite_prefix'] : '';
-    if ($old_prefix !== $new_prefix) {
-        flush_rewrite_rules();
-    }
-}
