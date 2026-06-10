@@ -1549,6 +1549,9 @@ class PopupDocumentManager{
     updateDocumentWidth() {
         const screenWidth = window.innerWidth
         g.readingManager.docWidth = (screenWidth - kMiddleGap) / 2
+        const allDocumentsContainer = document.getElementById("AllDocumentsContainer")
+
+        allDocumentsContainer.style.height = `${window.innerHeight - g.adminBarHeight}px`
         const oneDocumentContainer = document.getElementById("OneDocumentContainer")
         const currentDocumentDiv = document.getElementById("CurrentDocument")
         const currentDocumentWidth = g.readingManager.isFullScreen ? window.innerWidth : g.readingManager.docWidth
@@ -1811,11 +1814,9 @@ class PopupDocumentManager{
 
 
     getCurrentDocTopOffset() {
-        const mainContainer = document.getElementById("AllDocumentsContainer");
-        const mainContainerRect = mainContainer.getBoundingClientRect();
-        
+    
         if (g.readingManager.mainDocType === 'c') {
-            return this.currentDocTopPanelShowing ? mainContainerRect.top + 50 : mainContainerRect.top
+            return this.currentDocTopPanelShowing ? g.adminBarHeight + 50 : g.adminBarHeight
         }
 
 
@@ -1830,17 +1831,15 @@ class PopupDocumentManager{
         const childRect = child.getBoundingClientRect();
 
    
-        return mainContainerRect.top + childRect.top - parentRect.top + parent.scrollTop;
+        return g.adminBarHeight + childRect.top - parentRect.top + parent.scrollTop;
  
     }
 
 
     getRightDocTopOffset(noteData) {
-        const mainContainer = document.getElementById("AllDocumentsContainer");
-        const mainContainerRect = mainContainer.getBoundingClientRect();
-        
+   
         if (noteData.docType === 'c') {
-            return noteData.currentDocTopPanelShowing ? mainContainerRect.top + 50 : mainContainerRect.top
+            return noteData.currentDocTopPanelShowing ? g.adminBarHeight + 50 : g.adminBarHeight
         }
 
         
@@ -1853,7 +1852,7 @@ class PopupDocumentManager{
         const childRect = child.getBoundingClientRect();
 
   
-        return mainContainerRect.top + childRect.top - parentRect.top + parent.scrollTop;
+        return g.adminBarHeight + childRect.top - parentRect.top + parent.scrollTop;
  
     }
 

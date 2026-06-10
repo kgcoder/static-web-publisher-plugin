@@ -93,7 +93,7 @@ if (!empty($connections_info)) {
     <?php if (defined('WP_DEBUG') && WP_DEBUG): ?>
         <script type="module" src="<?php echo esc_url($reader_url . 'readerStartUp.js'); ?>"></script>
     <?php else: ?>
-        <script src="<?php echo esc_url($dist_url . 'reader.bundle.min.js'); ?>"></script>
+        <script type="module" src="<?php echo esc_url($dist_url . 'reader.bundle.min.js'); ?>"></script>
     <?php endif; ?>
 
     <?php wp_head(); ?>

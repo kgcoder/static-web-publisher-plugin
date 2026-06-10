@@ -28,6 +28,10 @@ document.addEventListener('DOMContentLoaded', onLoad);
 async function onLoad() {
     console.log('page loaded')
 
+    const mainContainer = document.getElementById("AllDocumentsContainer");
+    const mainContainerRect = mainContainer.getBoundingClientRect();
+    g.adminBarHeight = mainContainerRect.top
+
     currentLocation = window.location.toString()
 
     if (currentLocation.includes('#')) {
@@ -46,55 +50,12 @@ async function onLoad() {
     await g.pdm.loadDocument(dataObject) 
 
 
+ 
+
 }
 
 
-// window.addEventListener("message", (event) => {
-//       if (event.source !== window) return;
-//       const msg = event.data;
-//         if (msg.type === "FLINK_THICKNESS_UPDATED") {
-//             const useThickLinks = msg.useThickLinks
-//             g.readingManager.flinkStyle = useThickLinks ? 'thick' : 'thin'
-//             g.readingManager.redrawFlinks()
 
-//       }
-//     //   if(msg.type === "DOWNLOAD_USER_SPECIFIED_PAGE"){
-
-//     //         const url = msg.url
-
-//     //         if(!url || !url.trim())return
-
-//     //         g.readingManager.downloadOnePage(url)
-
-//     //   }
-// });
-
-// window.addEventListener('initReader', async (e) => {
-//     const { url, contentString, useThickLinks, savedParsingRules } = e.detail;
-//     g.readingManager.flinkStyle = useThickLinks ? 'thick' : 'thin'
-//     mainDocData = e.detail
-    
-//     const {dataObject,error} = await parseStaticContent(contentString,url, savedParsingRules)
-
-//     if(dataObject && !error){
-//         loadUIAndIcons()
-//     }
-
-
-//     if(!dataObject){
-//       setTimeout(() => {
-//         window.postMessage({ type: "RELOAD_PAGE" }, "*")
-//       },1000)
-//     }else if (dataObject.docType === 'c') {
-//         await g.pdm.loadCollage(dataObject)
-//     } else if(dataObject.docType === 'h'){
-//         await g.pdm.loadDocument(dataObject) 
-//     } else if (dataObject.docType === 'condoc') {
-//         g.pdm.showEmptyCondoc(dataObject)
-//     }
-
-
-// });
 
 
 function loadUIAndIcons() {

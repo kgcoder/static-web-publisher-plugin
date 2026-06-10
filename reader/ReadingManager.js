@@ -621,15 +621,9 @@ class ReadingManager {
         const mainDocRightX = this.docWidth
         const rightMinX = mainDocRightX + kMiddleGap
 
-        
 
-
-
-
-        const mainContainer = document.getElementById("AllDocumentsContainer");
-        const mainContainerRect = mainContainer.getBoundingClientRect();
-        
-        const mainContainerTopOffset = mainContainerRect.top
+     
+        const mainContainerTopOffset = g.adminBarHeight
 
 
 
@@ -1983,9 +1977,7 @@ class ReadingManager {
 
         if(g.pdm.isShowingInfo || g.pdm.isLeftSourceCodeShowing)return
         
-        const mainContainer = document.getElementById("AllDocumentsContainer");
-        const mainContainerRect = mainContainer.getBoundingClientRect();
-        const topOffset = mainContainerRect.top
+        const topOffset = g.adminBarHeight
 
         const topPanelHeight = g.pdm.getCurrentDocTopOffset()
         
@@ -2077,7 +2069,7 @@ class ReadingManager {
           
                 if(currentlyPressedLink){
                     event.preventDefault()
-                    const text = currentlyPressedLink.innerText
+                    let text = currentlyPressedLink.innerText
                     if(text.length > 30){
                         text = text.slice(0,30).trim() + '...'
                     }
@@ -2139,9 +2131,8 @@ class ReadingManager {
     handleTouchInRightDoc(pageX,pageY,currentlyPressedLink){
         if(this.isFullScreen)return
         
-        const mainContainer = document.getElementById("AllDocumentsContainer");
-        const mainContainerRect = mainContainer.getBoundingClientRect();
-        const topOffset = mainContainerRect.top
+        const topOffset = g.adminBarHeight
+
         
         
         const noteData = this.rightNotesData[this.selectedRightDocIndex]
@@ -2221,7 +2212,7 @@ class ReadingManager {
           
                 if(currentlyPressedLink){
                     event.preventDefault()
-                    const text = currentlyPressedLink.innerText
+                    let text = currentlyPressedLink.innerText
                     if(text.length > 30){
                         text = text.slice(0,30).trim() + '...'
                     }
@@ -2569,10 +2560,8 @@ class ReadingManager {
     }
 
     moveRightCollageInPositionForLink(flink, leftScrollTop, topPanelHeight) {
-        const mainContainer = document.getElementById("AllDocumentsContainer");
-        const mainContainerRect = mainContainer.getBoundingClientRect();
-        const topOffset = mainContainerRect.top
-        
+        const topOffset = g.adminBarHeight
+
         const {leftTop,leftBottom} = flink
 
         const rightEnd = flink.rightEnds[0]
@@ -2602,10 +2591,8 @@ class ReadingManager {
 
     scrollMainDocInPositionForPoint(flink,rightY, topPanelHeight){
 
-        const mainContainer = document.getElementById("AllDocumentsContainer");
-        const mainContainerRect = mainContainer.getBoundingClientRect();
-        
-        const topOffset = mainContainerRect.top
+        const topOffset = g.adminBarHeight
+
 
         const leftScrollDiv = document.getElementById("CurrentDocument")
 
