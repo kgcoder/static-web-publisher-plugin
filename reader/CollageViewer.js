@@ -25,8 +25,6 @@ const touchState = {
     NOTHING: 'nothing',
     PANNING: 'panning',
     TWO_FINGER_ZOOM: 'two finger zoom',
-    INERTIAL_ZOOM: 'inertial zoom',
-    VERTICAL_SCROLL: 'vertical scroll'
 }
 
 
@@ -895,6 +893,8 @@ class CollageViewer{
     }
     onMouseMove = (e) => {
 
+        console.log('onMouseMove',e)
+
         this.mouseMoved = true
         if (!this.viewport) return
 
@@ -1043,6 +1043,7 @@ class CollageViewer{
             for(const linkRect of linkRects){
                 if(isDotInsideFrame(x,y,linkRect)){
                     e.stopPropagation()
+                    hideUrlInTheCorner()
                     window.open(linkRect.url)
                    // g.wn.openUrl(linkRect.url, linkRect.isStaticLink)
                     return
@@ -1069,6 +1070,7 @@ class CollageViewer{
              
                 case 'link':{
                     const link = selectedObj
+                    hideUrlInTheCorner()
                     window.open(link.linkAddress)
                //     g.wn.openUrl(link.linkAddress, link.isStaticLink)
             
@@ -1099,6 +1101,8 @@ class CollageViewer{
 
     canvasTouchStart = (e) =>  {
         e.stopPropagation()
+                console.log('touches on first touch',e.touches)
+
         this.numberOfFingers = e.touches.length
         this.vx = 0
         this.vy = 0
@@ -1106,31 +1110,27 @@ class CollageViewer{
 
 
     if (this.numberOfFingers === 2) {
+        console.log('touches on first touch',e.touches)
         this.currentTouchState = touchState.TWO_FINGER_ZOOM
         const x1 = e.touches[0].pageX
         const y1 = e.touches[0].pageY
+        const touch1Id = e.touches[0].identifier
         const x2 = e.touches[1].pageX
         const y2 = e.touches[1].pageY
-        const diameter = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-        const centerX = (x1 + x2) / 2
-        this.touchDiameterAbs = diameter / this.k
+        const touch2Id = e.touches[1].identifier
 
-        this.doubleTouchCenterAbsX = this.viewport.origin.x + centerX / this.k
 
-        this.oldTouchDiameter = diameter
-        this.oldTouchDiameterTime = timestamp()
-        this.diameterVelocity = 0
-
-        //this.isWaitingForLongPress = false
-
+      const finger1AbsX = this.viewport.origin.x + x1 / this.k
+      const finger1AbsY = this.viewport.origin.y + y1 / this.k
+      const finger2AbsX = this.viewport.origin.x + x2 / this.k
+      const finger2AbsY = this.viewport.origin.y + y2 / this.k
+      this.twoTouches = {
+          [touch1Id]:{absX: finger1AbsX, absY:finger1AbsY},
+          [touch2Id]:{absX: finger2AbsX, absY:finger2AbsY},
+      }
 
 
     } else if (this.numberOfFingers === 1) {
-
-        //isTouchScreen = true
-
-        //checkForDoubleTap(e.touches[0].pageX)
-
 
         this.currentTouchState = touchState.PANNING
 
@@ -1150,7 +1150,6 @@ class CollageViewer{
 
         this.longPressFingerX = pageX
         this.longPressFingerY = pageY
-       // this.isWaitingForLongPress = true
 
     }
 }
@@ -1164,64 +1163,50 @@ canvasTouchMove = (e) => {
         e.preventDefault();
     }
 
-    //this.isWaitingForLongPress = false
 
 
 
 
     if (this.numberOfFingers === 2 && this.currentTouchState === touchState.TWO_FINGER_ZOOM) {
-        //shouldShowCommentContainer = false
 
-        const x1 = e.touches[0].pageX
+        console.log('touches on the move',e.touches)
+
+        const x1 = e.touches[0].pageX 
         const y1 = e.touches[0].pageY
+        const touch1Id = e.touches[0].identifier
+
         const x2 = e.touches[1].pageX
         const y2 = e.touches[1].pageY
-
-        const diameter = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
-        const centerX = (x1 + x2) / 2
+        const touch2Id = e.touches[1].identifier
 
 
+        const touch1Data = this.twoTouches[touch1Id]
+        const touch2Data = this.twoTouches[touch2Id]
 
-        this.newK = diameter / this.touchDiameterAbs
-
-
-
-        this.kMin = (window.innerWidth - this.virtualSideOffset * 2) / this.lengthOfTimeline
-
-        const oldK = k
-
-        if (this.newK > this.kMin && this.newK < 24000 || (oldK < this.kMin || oldK > 24000)) {
-            if (oldK >= this.kMin || this.newK > oldK) {
-                this.k = this.newK
-            }
-        }
-
-        this.viewport.origin.x = this.doubleTouchCenterAbsX - centerX / this.k
-
-        this.singleTouchAbsX = 0
-
-
-        const diff = (timestamp() - this.oldTouchDiameterTime) / 1000
-        this.diameterVelocity = diff > 0 ? (diameter - this.oldTouchDiameter) / diff : 0
-        this.oldTouchDiameter = diameter
+        const absDistance = Math.sqrt((touch2Data.absX - touch1Data.absX) ** 2 + (touch2Data.absY - touch1Data.absY) ** 2)
+        const rDistance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
         
+        const newK = rDistance / absDistance
+
+        this.kMin = this.getKMin()
+
+
+        const oldK = this.k
+
+        this.k = Math.max(newK,this.kMin)
+
+        const originX = touch1Data.absX - x1 / this.k    
+        const originY = touch1Data.absY - y1 / this.k    
+
+
+        this.viewport.updateOrigin(originX,originY)
+
         this.changesExist = true
 
     } else if (this.numberOfFingers === 1 && this.currentTouchState === touchState.PANNING) {
-        //shouldShowCommentContainer = false
         const pageX = e.touches[0].pageX
         const pageY = e.touches[0].pageY
-        this.singleFingerX = pageX
-        this.singleFingerY = pageY
-
-
-        this.diameterVelocity = 0
-
-        this.doubleTouchCenterAbsX = 0
-        this.touchDiameterAbs = 0
-
-
-
+ 
         const now = timestamp()
         const dt = (now - this.lastFingerTime) / 1000
 
@@ -1233,9 +1218,6 @@ canvasTouchMove = (e) => {
             this.vy = -(pageY - this.lastFingerY) / (this.k * dt)
 
         }
-
-
-
 
         this.lastFingerX = pageX
         this.lastFingerY = pageY
@@ -1252,10 +1234,6 @@ canvasTouchMove = (e) => {
 
     }
 
-    // if (isZoomSignificant()) {
-    //     filterEventLists()
-    //     filterDrawableRects()
-    // }
 
 }
 
@@ -1266,6 +1244,8 @@ canvasTouchEnd = (e) => {
     e.stopPropagation()
     this.numberOfFingers = e.touches.length
 
+    console.log('touches on touch end',e.touches)
+
 
 
 
@@ -1273,35 +1253,12 @@ canvasTouchEnd = (e) => {
         case touchState.PANNING: {
 
             if (this.numberOfFingers === 0) {
-                this.currentTouchState = touchState.NOTHING
-                // if (isWaitingForLongPress && !isSomethingBlockingMouse(longPressFingerX,longPressFingerY)) {
-                //     const now = timestamp()
-                //     const dt = (now - lastFingerDownTime)
-                //     if (dt > 300) {
-                //         checkIfSomeRectangleIsLongPressed(longPressFingerX, longPressFingerY)
-                //     } else {
-                //         checkIfSomeTextIsClicked(longPressFingerX, longPressFingerY)
-                //     }
-                //     isWaitingForLongPress = false
-                // }
-                
+                this.currentTouchState = touchState.NOTHING   
             }
             break
         }
         case touchState.TWO_FINGER_ZOOM: {
             if (this.numberOfFingers < 2) {
-                this.currentTouchState = touchState.INERTIAL_ZOOM
-            }
-            break
-        }
-        case touchState.INERTIAL_ZOOM: {
-            if (this.numberOfFingers === 0) {
-                this.currentTouchState = touchState.NOTHING
-            }
-            break
-        }
-        case touchState.VERTICAL_SCROLL: {
-            if (this.numberOfFingers === 0) {
                 this.currentTouchState = touchState.NOTHING
             }
             break

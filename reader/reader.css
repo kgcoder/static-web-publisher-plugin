@@ -94,6 +94,14 @@ canvas {
     box-sizing: border-box;
 }
 
+#middle-space-div {
+    display: flex;
+    position: absolute;
+    box-sizing: border-box;
+    touch-action: auto;
+    pointer-events: all;
+}
+
 #LinksListContainerDiv {
     display: none;
     position: absolute;

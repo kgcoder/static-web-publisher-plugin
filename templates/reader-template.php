@@ -189,6 +189,8 @@ if (!empty($connections_info)) {
         <a id="LinksOpenButton"></a>
     </div>
 
+    <div id="middle-space-div"></div>
+
     <div id="LinksListContainerDiv">
         <div id="LinksListTopRow">
             <div id="LinksListTopRowLeftSortButtonContainer"></div>

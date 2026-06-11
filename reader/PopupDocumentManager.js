@@ -58,6 +58,13 @@ window.onresize = () => {
 
     const canvasTopDiv = document.getElementById('middle-canvas-topDiv')
     canvasTopDiv.style.left = `${g.readingManager.docWidth}px`
+
+    const middleSpaceDiv = document.getElementById("middle-space-div")
+
+    middleSpaceDiv.style.left = `${g.readingManager.docWidth}px`
+    middleSpaceDiv.style.top = '61px'
+    middleSpaceDiv.style.width = `${kMiddleGap}px`
+    middleSpaceDiv.style.bottom = 0
     
     if (g.readingManager.mainCollageViewer) {
         g.readingManager.mainCollageViewer.updateCanvasSize(g.readingManager.docWidth, kLeftDivTop, 0)
@@ -330,6 +337,9 @@ class PopupDocumentManager{
 
     
             const clickX = pageX - leftOffset
+
+
+            console.log('clickX',clickX)
             
             if(g.readingManager.isFullScreen || clickX < docWidth){
                 if( pageY > kLeftDivTop){
@@ -342,6 +352,7 @@ class PopupDocumentManager{
                     g.readingManager.handleTouchInRightDoc(clickX,pageY,this.currentLink)
                 }
             }else{
+                console.log('middle touched',clickX)
                 
                 g.readingManager.handleTouchInMiddleGap(clickX,pageY)
             }
@@ -1835,6 +1846,14 @@ class PopupDocumentManager{
         canvasTopDiv.style.zIndex = 21
         canvasTopDiv.style.display = 'flex'
 
+        const middleSpaceDiv = document.getElementById("middle-space-div")
+
+        middleSpaceDiv.style.left = `${g.readingManager.docWidth}px`
+        middleSpaceDiv.style.top = '61px'
+        middleSpaceDiv.style.width = `${kMiddleGap}px`
+        middleSpaceDiv.style.bottom = 0
+        middleSpaceDiv.style.display = 'flex'
+
 
       //  this.showMiddleArrow()
 
@@ -1851,6 +1870,9 @@ class PopupDocumentManager{
 
         const canvasTopDiv = document.getElementById('middle-canvas-topDiv')
         canvasTopDiv.style.display = 'none'
+
+        const middleSpaceDiv = document.getElementById("middle-space-div")
+        middleSpaceDiv.style.display = 'none'
 
     }
 

@@ -40,6 +40,25 @@ async function onLoad() {
     }
 
 
+    const container = mainContainer.parentElement
+    //snapping
+    container.addEventListener('scrollend', () => {
+        const halfway = container.scrollWidth / 4;
+
+        if (container.scrollLeft > halfway) {
+            container.scrollTo({
+            left: container.scrollWidth,
+            behavior: 'smooth'
+            });
+        } else {
+            container.scrollTo({
+            left: 0,
+            behavior: 'smooth'
+            });
+        }
+    });
+
+
     const {hdocDataJSON, content} = getHdocJsonAndContentFromCurrentDocument()
 
     const dataObject = parseHtmlPageWithEmbeddedHDoc(currentLocation, content, hdocDataJSON)  
