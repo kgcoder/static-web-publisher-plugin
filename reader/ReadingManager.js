@@ -2130,6 +2130,8 @@ class ReadingManager {
 
     handleTouchInRightDoc(pageX,pageY,currentlyPressedLink){
         if(this.isFullScreen)return
+
+        console.log('handleTouchInRightDoc',pageX,pageY)
         
         const topOffset = g.adminBarHeight
 

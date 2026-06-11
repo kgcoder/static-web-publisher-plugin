@@ -167,7 +167,7 @@ if (!empty($connections_info)) {
                     <div id="CurrentDocumentBottomPanelBottomMessage" class="DocumentBottomPanelBottomMessage"></div>
                 </div>
                 <div id="CurrentDocumentMainCollageDiv">
-                    <canvas id="CurrentDocumentMainCollageCanvas"></canvas>
+                    <canvas id="CurrentDocumentMainCollageCanvas" class="OneCollageCanvas"></canvas>
                 </div>
                 <div id="CurrentDocumentDropDownMenu" class="DocumentDropDownMenu"></div>
             </div>

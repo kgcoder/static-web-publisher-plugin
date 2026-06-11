@@ -89,10 +89,10 @@ class NoteDivsManager{
 
 
         const screenWidth = window.innerWidth
-        g.readingManager.docWidth = g.readingManager.isFullScreen && !isRight ? screenWidth : (screenWidth - kMiddleGap) / 2// g.readingManager.docWidth
+       // g.readingManager.docWidth = g.readingManager.isFullScreen && !isRight ? screenWidth : (screenWidth - kMiddleGap) / 2// g.readingManager.docWidth
 
         let maxImageWidth
-        if (g.readingManager.isFullScreen && !isRight) {
+        if (g.readingManager.isFullScreen && !isRight && screenWidth > 430) {
             maxImageWidth = g.readingManager.docWidth * 0.6
         } else {
             maxImageWidth = g.readingManager.docWidth - 20 - 30
@@ -104,6 +104,15 @@ class NoteDivsManager{
             flinksData = g.readingManager.connections.find(data => data.url === url)
         }
          
+        const iframes = notePresentationDiv.querySelectorAll('iframe')
+        
+        iframes.forEach(iframe => {
+            const w = iframe.getAttribute('width')
+            const h = iframe.getAttribute('height')
+            iframe.style.width = '100%'
+            iframe.style.height = 'auto'
+            iframe.style.aspectRatio = (w && h) ? `${w} / ${h}` : '16 / 9'
+        });
          
 
         replaceMediaTagsWithLinksInDiv(notePresentationDiv,'audio')
@@ -961,7 +970,9 @@ class NoteDivsManager{
             let width
 
 
-            const padding = window.innerWidth * 0.2 - 10
+            
+            
+            const padding = (g.mainPadding.includes('%') ? parseFloat(g.mainPadding) * window.innerWidth / 100.0 : parseFloat(g.mainPadding)) - 10 // - 10//window.innerWidth * 0.2 - 10
             const rightX = window.innerWidth - padding - 10
 
             if (isFirst && isLast) {

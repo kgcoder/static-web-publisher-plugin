@@ -20,6 +20,16 @@ import Crosshair from './models/Crosshair.js'
 import Viewport from './models/Viewport.js'
 import { kLeftDivTop } from './PopupDocumentManager.js'
 
+
+const touchState = {
+    NOTHING: 'nothing',
+    PANNING: 'panning',
+    TWO_FINGER_ZOOM: 'two finger zoom',
+    INERTIAL_ZOOM: 'inertial zoom',
+    VERTICAL_SCROLL: 'vertical scroll'
+}
+
+
 class CollageViewer{
 
     vk = 0
@@ -36,11 +46,34 @@ class CollageViewer{
     lastMouseDownTime = 0
     mouseMoved = false
     kRLinkCircleRadius = 10
+    touchDiameterAbs = 0
 
     collageInfo = null
 
+
+    currentTouchState = touchState.NOTHING
+
+    numberOfFingers = 0
+
+
+    singleFingerX = 0
+    singleFingerY = 0
+
+    doubleTouchCenterAbsX = 0
+
+
+    isWaitingForDoubleTap = false
+    lastTapX = 0
+    lastTapY = 0
+    tapCount = 0
+
+
+
     canvasWidth = window.innerWidth
     canvasHeight = window.innerHeight
+
+
+
 
 
     constructor(xmlString,url, rightDocIndex,docId,canvas,leftX,topY = 0,canvasWidth,callback){
@@ -60,6 +93,11 @@ class CollageViewer{
         this.canvas.onmouseup = this.onMouseUp
         this.canvas.onmouseout = this.onMouseOut
         this.canvas.onmousemove = this.onMouseMove
+
+        this.canvas.ontouchstart = this.canvasTouchStart
+        this.canvas.ontouchmove = this.canvasTouchMove
+        this.canvas.ontouchend = this.canvasTouchEnd
+        
         this.canvas.ondblclick = this.onMouseDoubleClick
         this.canvas.onclick = this.onMouseClick
 
@@ -144,6 +182,7 @@ class CollageViewer{
     async loadContent(xmlString,url, callback){
         this.content = await loadCollageContentFromFile(xmlString, url, this.docId)
 
+        console.log('collage loaded',this.viewport)
         if(callback)callback()
 
       //  const {url,width,height} = this.content.info
@@ -171,6 +210,7 @@ class CollageViewer{
 
         this.viewport = new Viewport(-horizontalOffset / this.k, -verticalOffset / this.k, this.canvasWidth, this.canvasHeight)
     
+        console.log('loaded viewport',this.viewport)
         
 
         this.changesExist = true
@@ -761,6 +801,7 @@ class CollageViewer{
         this.zoomX = this.crosshair.x
         this.zoomY = this.crosshair.y
 
+        console.log({zoomX:this.zoomX,chrosX:this.crosshair.x})
 
         if (e.deltaY < 0) {
             if(this.k > this.biggestZoom){
@@ -793,7 +834,7 @@ class CollageViewer{
     onMouseDown = (e) => {
         if (e.button !== 0) return
         if(!this.viewport || !this.viewport.origin)return
-        const mouseX = e.pageX - this.leftX
+        const mouseX = e.pageX - this.leftX - this.mainLeftOffset()
         const mouseY = e.pageY - this.topY
 
         if(this.vk !== 0){
@@ -825,7 +866,7 @@ class CollageViewer{
 
             if(!this.mouseMoved){
                 if(g.readingManager.isSelectingFlinkXY){
-                    const mouseX = e.pageX - this.leftX
+                    const mouseX = e.pageX - this.leftX - this.mainLeftOffset()
                     const mouseY = e.pageY - this.topY - g.adminBarHeight
 
                     const {x,y} = this.getAbsolutePoint(mouseX,mouseY)
@@ -858,7 +899,7 @@ class CollageViewer{
         if (!this.viewport) return
 
         
-        const mouseX = e.pageX - this.leftX
+        const mouseX = e.pageX - this.leftX - this.mainLeftOffset()
         const mouseY = e.pageY - this.topY
         this.crosshair.mouseMoved(mouseX, mouseY)
 
@@ -961,7 +1002,9 @@ class CollageViewer{
     onMouseClick = (e) => {
         if(!this.content)return
 
-        const mouseX = e.pageX - this.leftX
+      
+
+        const mouseX = e.pageX - this.leftX - this.mainLeftOffset()
         const mouseY = e.pageY - this.topY
 
         const {x,y} = this.getAbsolutePoint(mouseX,mouseY)
@@ -1048,6 +1091,234 @@ class CollageViewer{
 
 
 
+    }
+
+
+
+    //Touches
+
+    canvasTouchStart = (e) =>  {
+        e.stopPropagation()
+        this.numberOfFingers = e.touches.length
+        this.vx = 0
+        this.vy = 0
+
+
+
+    if (this.numberOfFingers === 2) {
+        this.currentTouchState = touchState.TWO_FINGER_ZOOM
+        const x1 = e.touches[0].pageX
+        const y1 = e.touches[0].pageY
+        const x2 = e.touches[1].pageX
+        const y2 = e.touches[1].pageY
+        const diameter = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+        const centerX = (x1 + x2) / 2
+        this.touchDiameterAbs = diameter / this.k
+
+        this.doubleTouchCenterAbsX = this.viewport.origin.x + centerX / this.k
+
+        this.oldTouchDiameter = diameter
+        this.oldTouchDiameterTime = timestamp()
+        this.diameterVelocity = 0
+
+        //this.isWaitingForLongPress = false
+
+
+
+    } else if (this.numberOfFingers === 1) {
+
+        //isTouchScreen = true
+
+        //checkForDoubleTap(e.touches[0].pageX)
+
+
+        this.currentTouchState = touchState.PANNING
+
+        const pageX = e.touches[0].pageX
+        const pageY = e.touches[0].pageY
+        this.singleFingerX = pageX
+        this.singleFingerY = pageY
+        this.singleTouchAbsX = this.viewport.origin.x + pageX / this.k
+        this.singleTouchAbsY = this.viewport.origin.y + pageY / this.k
+
+        this.isSingleFingerDown = true
+
+        this.lastFingerX = pageX
+        this.lastFingerY = pageY
+        this.lastFingerTime = timestamp()
+        this.lastFingerDownTime = timestamp()
+
+        this.longPressFingerX = pageX
+        this.longPressFingerY = pageY
+       // this.isWaitingForLongPress = true
+
+    }
+}
+
+
+canvasTouchMove = (e) => {
+    e.stopPropagation()
+
+    e = e.originalEvent || e;
+    if (e.scale !== 1) {
+        e.preventDefault();
+    }
+
+    //this.isWaitingForLongPress = false
+
+
+
+
+    if (this.numberOfFingers === 2 && this.currentTouchState === touchState.TWO_FINGER_ZOOM) {
+        //shouldShowCommentContainer = false
+
+        const x1 = e.touches[0].pageX
+        const y1 = e.touches[0].pageY
+        const x2 = e.touches[1].pageX
+        const y2 = e.touches[1].pageY
+
+        const diameter = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+        const centerX = (x1 + x2) / 2
+
+
+
+        this.newK = diameter / this.touchDiameterAbs
+
+
+
+        this.kMin = (window.innerWidth - this.virtualSideOffset * 2) / this.lengthOfTimeline
+
+        const oldK = k
+
+        if (this.newK > this.kMin && this.newK < 24000 || (oldK < this.kMin || oldK > 24000)) {
+            if (oldK >= this.kMin || this.newK > oldK) {
+                this.k = this.newK
+            }
+        }
+
+        this.viewport.origin.x = this.doubleTouchCenterAbsX - centerX / this.k
+
+        this.singleTouchAbsX = 0
+
+
+        const diff = (timestamp() - this.oldTouchDiameterTime) / 1000
+        this.diameterVelocity = diff > 0 ? (diameter - this.oldTouchDiameter) / diff : 0
+        this.oldTouchDiameter = diameter
+        
+        this.changesExist = true
+
+    } else if (this.numberOfFingers === 1 && this.currentTouchState === touchState.PANNING) {
+        //shouldShowCommentContainer = false
+        const pageX = e.touches[0].pageX
+        const pageY = e.touches[0].pageY
+        this.singleFingerX = pageX
+        this.singleFingerY = pageY
+
+
+        this.diameterVelocity = 0
+
+        this.doubleTouchCenterAbsX = 0
+        this.touchDiameterAbs = 0
+
+
+
+        const now = timestamp()
+        const dt = (now - this.lastFingerTime) / 1000
+
+
+        if (dt === 0) {
+            this.vx = 0
+        } else {
+            this.vx = -(pageX - this.lastFingerX) / (this.k * dt)
+            this.vy = -(pageY - this.lastFingerY) / (this.k * dt)
+
+        }
+
+
+
+
+        this.lastFingerX = pageX
+        this.lastFingerY = pageY
+
+        const newOffsetX = this.singleTouchAbsX - pageX / this.k
+        const newOffsetY = this.singleTouchAbsY - pageY / this.k
+
+        this.viewport.origin.x = newOffsetX
+        this.viewport.origin.y = newOffsetY
+
+        this.lastFingerTime = now
+
+        this.changesExist = true
+
+    }
+
+    // if (isZoomSignificant()) {
+    //     filterEventLists()
+    //     filterDrawableRects()
+    // }
+
+}
+
+
+
+
+canvasTouchEnd = (e) => {
+    e.stopPropagation()
+    this.numberOfFingers = e.touches.length
+
+
+
+
+    switch (this.currentTouchState) {
+        case touchState.PANNING: {
+
+            if (this.numberOfFingers === 0) {
+                this.currentTouchState = touchState.NOTHING
+                // if (isWaitingForLongPress && !isSomethingBlockingMouse(longPressFingerX,longPressFingerY)) {
+                //     const now = timestamp()
+                //     const dt = (now - lastFingerDownTime)
+                //     if (dt > 300) {
+                //         checkIfSomeRectangleIsLongPressed(longPressFingerX, longPressFingerY)
+                //     } else {
+                //         checkIfSomeTextIsClicked(longPressFingerX, longPressFingerY)
+                //     }
+                //     isWaitingForLongPress = false
+                // }
+                
+            }
+            break
+        }
+        case touchState.TWO_FINGER_ZOOM: {
+            if (this.numberOfFingers < 2) {
+                this.currentTouchState = touchState.INERTIAL_ZOOM
+            }
+            break
+        }
+        case touchState.INERTIAL_ZOOM: {
+            if (this.numberOfFingers === 0) {
+                this.currentTouchState = touchState.NOTHING
+            }
+            break
+        }
+        case touchState.VERTICAL_SCROLL: {
+            if (this.numberOfFingers === 0) {
+                this.currentTouchState = touchState.NOTHING
+            }
+            break
+        }
+    }
+
+
+}
+
+
+
+    //Touches - end
+
+    mainLeftOffset(){
+        const allDocumentsContainer = document.getElementById("AllDocumentsContainer")
+        const rect = allDocumentsContainer.getBoundingClientRect();
+        return rect.left
     }
 
 

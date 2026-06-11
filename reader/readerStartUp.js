@@ -32,6 +32,7 @@ async function onLoad() {
     const mainContainerRect = mainContainer.getBoundingClientRect();
     g.adminBarHeight = mainContainerRect.top
 
+    console.log('g.adminBarHeight',g.adminBarHeight)
     currentLocation = window.location.toString()
 
     if (currentLocation.includes('#')) {

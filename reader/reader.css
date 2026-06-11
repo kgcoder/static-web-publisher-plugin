@@ -6,13 +6,27 @@ body {
     overflow: hidden;
     background-color: white;
     height: 100%;
+    width: 100%;
     flex: 1;
     padding: 0;
     margin: 0;
-    touch-action: none;
+    position: fixed;
+    
+    
+}
+
+body {
+    touch-action: auto;
     overscroll-behavior-x: none;
+    overflow-x: auto;
 
+}
 
+@media screen and (max-width: 600px) {
+    #wpadminbar {
+        position: fixed !important;
+        top: 0 !important;
+    }
 }
 
 
@@ -45,20 +59,6 @@ canvas {
     background-color: LightSlateGray;
     /*DarkSlateGray; */
     flex: 1
-}
-
-#top-canvas {
-    /* display: none; */
-    display: flex;
-    background-color: transparent;
-    /* flex:1; */
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    position: absolute;
-    pointer-events: none;
-    z-index: 3000;
 }
 
 #flinks-canvas {
@@ -1068,7 +1068,7 @@ code {
 
 #AllDocumentsContainer {
     display: flex;
-    position: absolute;
+    position: relative;
     left: 0;
     right: 0;
     top: 0;
@@ -1077,17 +1077,17 @@ code {
 
     /* background-color: yellow; */
     pointer-events: none;
-    z-index: 142000;
+    z-index: 0;
 }
 
 body.admin-bar #AllDocumentsContainer {
-    top: 32px;
+    /* top: 32px; */
     /* z-index: 99998; */
 }
 
 @media screen and (max-width: 782px) {
     body.admin-bar #AllDocumentsContainer {
-        top: 46px;
+        /* top: 0; */
     }
 }
 
@@ -1148,6 +1148,8 @@ body.admin-bar #AllDocumentsContainer {
 
 
     min-height: 100%;
+
+    overflow-x: hidden;
 
     /* overflow: hidden; */
 
@@ -1377,6 +1379,8 @@ a.TopPanelOptionLink:hover {
     padding: 20px;
     z-index: 2;
     box-sizing: border-box;
+    white-space: normal;
+    min-width: 0;
 }
 
 .CurrentDocumentTopButtonCountDiv {
@@ -1555,7 +1559,8 @@ a.TopPanelOptionLink:hover {
 .OneCollageCanvas {
     display: flex;
     flex: 1;
-    background-color: blue;
+    /* background-color: blue; */
+    touch-action: none;
 }
 
 .DocumentTopBarButton {
