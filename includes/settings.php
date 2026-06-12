@@ -12,8 +12,10 @@ function stwbpb_settings_page() {
     $default_settings = array(
         'removal_selectors' => '',
         'side_panel_on_the_left' => false,
-        'display_author_name' => false,
-        'display_publish_date' => false,
+        'page_author_name' => 'show',
+        'page_publish_date' => 'show',
+        'post_author_name' => 'show',
+        'post_publish_date' => 'show',
         'comments_title' => '',
         'no_comments_message' => '',
         'top_panel' => array(
@@ -76,22 +78,45 @@ function stwbpb_settings_page() {
                 </select>
             </div>
 
-            <h2>Header info</h2>
+            <h2>Header info (pages)</h2>
 
             <div class="settings-option-div">
-                <label>Display author's name</label>
+                <label>Author's name: </label>
                 <div class="spacerW10"></div>
-                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[display_author_name]" value="1" <?php echo !empty($settings['display_author_name']) ? 'checked' : ''; ?>/>
+                <select name="stwbpb_settings[page_author_name]">
+                    <option value="show" <?php selected($settings['page_author_name'], 'show'); ?>>Show</option>
+                    <option value="hide" <?php selected($settings['page_author_name'], 'hide'); ?>>Hide</option>
+                </select>
             </div>
 
             <div class="settings-option-div">
-                <label>Display publish date</label>
+                <label>Publish date: </label>
                 <div class="spacerW10"></div>
-                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[display_publish_date]" value="1" <?php echo !empty($settings['display_publish_date']) ? 'checked' : ''; ?>/>
+                <select name="stwbpb_settings[page_publish_date]">
+                    <option value="show" <?php selected($settings['page_publish_date'], 'show'); ?>>Show</option>
+                    <option value="hide" <?php selected($settings['page_publish_date'], 'hide'); ?>>Hide</option>
+                </select>
             </div>
 
+            <h2>Header info (posts)</h2>
 
+            <div class="settings-option-div">
+                <label>Author's name: </label>
+                <div class="spacerW10"></div>
+                <select name="stwbpb_settings[post_author_name]">
+                    <option value="show" <?php selected($settings['post_author_name'], 'show'); ?>>Show</option>
+                    <option value="hide" <?php selected($settings['post_author_name'], 'hide'); ?>>Hide</option>
+                </select>
+            </div>
 
+            <div class="settings-option-div">
+                <label>Publish date: </label>
+                <div class="spacerW10"></div>
+                <select name="stwbpb_settings[post_publish_date]">
+                    <option value="show" <?php selected($settings['post_publish_date'], 'show'); ?>>Show</option>
+                    <option value="hide" <?php selected($settings['post_publish_date'], 'hide'); ?>>Hide</option>
+                </select>
+            </div>
 
             <h2>Comments</h2>
 
@@ -233,8 +258,10 @@ function stwbpb_settings_init() {
     $default_settings = wp_json_encode(array(
         'removal_selectors' => '',
         'side_panel_on_the_left' => false,
-        'display_author_name' => false,
-        'display_publish_date' => false,
+        'page_author_name' => 'show',
+        'page_publish_date' => 'show',
+        'post_author_name' => 'show',
+        'post_publish_date' => 'show',
         'comments_title' => '',
         'no_comments_message' => '',
         'top_panel' => array(
@@ -274,14 +301,14 @@ function stwbpb_sanitize_settings($input) {
     if(isset($input['side_panel_on_the_left'])){
         $sanitized['side_panel_on_the_left'] = boolval($input['side_panel_on_the_left']);
     }
-    if(isset($input['display_author_name'])){
-        $sanitized['display_author_name'] = boolval($input['display_author_name']);
-    }
-    if(isset($input['display_publish_date'])){
-        $sanitized['display_publish_date'] = boolval($input['display_publish_date']);
-    }
 
     $sanitized['removal_selectors'] = isset($input['removal_selectors']) ? sanitize_text_field($input['removal_selectors']) : '';
+
+    $allowed_vis = array('show', 'hide');
+    $sanitized['page_author_name']  = isset($input['page_author_name'])  && in_array($input['page_author_name'],  $allowed_vis, true) ? $input['page_author_name']  : 'show';
+    $sanitized['page_publish_date'] = isset($input['page_publish_date']) && in_array($input['page_publish_date'], $allowed_vis, true) ? $input['page_publish_date'] : 'show';
+    $sanitized['post_author_name']  = isset($input['post_author_name'])  && in_array($input['post_author_name'],  $allowed_vis, true) ? $input['post_author_name']  : 'show';
+    $sanitized['post_publish_date'] = isset($input['post_publish_date']) && in_array($input['post_publish_date'], $allowed_vis, true) ? $input['post_publish_date'] : 'show';
     $sanitized['comments_title'] = isset($input['comments_title']) ? sanitize_text_field($input['comments_title']) : '';
     $sanitized['no_comments_message'] = isset($input['no_comments_message']) ? sanitize_text_field($input['no_comments_message']) : '';
 

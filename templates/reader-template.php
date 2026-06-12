@@ -27,8 +27,6 @@ $permalink            = get_permalink($post->ID);
 $title                = $post->post_title;
 $htmlContent          = $post->post_content;
 $connections_info     = get_post_meta($post->ID, '_static_web_connections_info', true);
-$display_author_name  = $settings['display_author_name'] ?? '';
-$display_publish_date = $settings['display_publish_date'] ?? '';
 $embedPattern = '/<!-- wp:embed \{"url":"https:\/\/www\.youtube\.com\/(watch\?v=|embed\/)([^"]+)",.*\} -->.*<div class="wp-block-embed__wrapper">\s*(https:\/\/www\.youtube\.com\/(watch\?v=|embed\/)[^<]+)\s*<\/div>.*<!-- \/wp:embed -->/sU';
 
 $htmlContent = preg_replace_callback($embedPattern, function ($matches) {

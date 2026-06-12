@@ -103,7 +103,6 @@ function stwbpb_custom_post_endpoints_rewrite_rules() {
 add_action('init', 'stwbpb_custom_post_endpoints_rewrite_rules');
 
 function stwbpb_custom_post_endpoints_query_vars($query_vars) {
-    $query_vars[] = 'sw_custom_matches';
     $query_vars[] = 'doc_viewer_matches';
     $query_vars[] = 'comments_custom_matches';
     $query_vars[] = 'json_comments_custom_matches';
@@ -211,23 +210,19 @@ function stwbpb_output_xml() {
     $mode = stwbpb_get_effective_display_mode($post);
     if ($mode === 'standalone_hdoc') return;
 
-    $display_author_name = isset($settings['display_author_name']) ? $settings['display_author_name'] : '';
-    $display_publish_date = isset($settings['display_publish_date']) ? $settings['display_publish_date'] : '';
     $removal_selectors = isset($settings['removal_selectors']) ? $settings['removal_selectors'] : '';
 
     $header = [
         'h1'  => get_the_title($post),
     ];
 
-    if(!empty($display_author_name)){
-        $author_id   = get_post_field('post_author', $post->ID);
-        $author_name = get_the_author_meta('display_name', $author_id);
-        $header['author'] = $author_name;
+    if (stwbpb_get_effective_author_display($post) === 'show') {
+        $author_id = get_post_field('post_author', $post->ID);
+        $header['author'] = get_the_author_meta('display_name', $author_id);
     }
 
-    if(!empty($display_publish_date)){
-        $date = get_the_date(get_option('date_format'), $post->ID);
-        $header['date'] = $date;
+    if (stwbpb_get_effective_date_display($post) === 'show') {
+        $header['date'] = get_the_date(get_option('date_format'), $post->ID);
     }
 
     $panels_escaped = stwbpb_get_panels($post);

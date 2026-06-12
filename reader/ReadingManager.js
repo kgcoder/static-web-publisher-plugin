@@ -606,7 +606,7 @@ setupFlinksCanvasDPR(){
 
                  
         this.removeFlinksFromMiddleCanvas()
-        this.setupFlinksCanvasDPR()
+        //this.setupFlinksCanvasDPR()
         if((this.mainDocType === 'h' && this.isFullScreen) || g.pdm.isShowingInfo || g.pdm.isLeftSourceCodeShowing)return
 
         if (!g.pdm.isOkToShowFlinks()) return

@@ -16,14 +16,12 @@ function stwbpb_get_panels($post) {
     $settings = get_option('stwbpb_settings', array(
         'removal_selectors' => '',
         'side_panel_on_the_left' => false,
-        'display_author_name' => false,
-        'display_publish_date' => false,
         'comments_title' => '',
         'no_comments_message' => '',
         'top_panel' => array(
             'main_link' => '',
-            'main_title' => '', 
-            'logo_url' => '', 
+            'main_title' => '',
+            'logo_url' => '',
             'links' => array()
         ),
         'bottom_panel' => array(

@@ -48,9 +48,6 @@ function stwbpb_send_hdoc_for_post($post){
         $htmlContent = stwbpb_strip_wp_tags($htmlContent);
 
 
-        $display_author_name = isset($settings['display_author_name']) ? $settings['display_author_name'] : '';
-        $display_publish_date = isset($settings['display_publish_date']) ? $settings['display_publish_date'] : '';
-
         //$finalContent = '<h1>' . $title . "</h1>" .  $htmlContent;
 
         $panels_escaped = stwbpb_get_panels($post);
@@ -102,12 +99,12 @@ function stwbpb_send_hdoc_for_post($post){
 
         echo '<header>' . PHP_EOL;
         echo '<h1>' . esc_html($title) . '</h1>' . PHP_EOL;
-        if(!empty($display_author_name)){
+        if (stwbpb_get_effective_author_display($post) === 'show') {
             $author_id   = get_post_field('post_author', $post->ID);
             $author_name = get_the_author_meta('display_name', $author_id);
             echo '<author>' . esc_html($author_name) . '</author>' . PHP_EOL;
         }
-        if(!empty($display_publish_date)){
+        if (stwbpb_get_effective_date_display($post) === 'show') {
             $date = get_the_date(get_option('date_format'), $post->ID);
             echo '<date>' . esc_html($date) . '</date>' . PHP_EOL;
         }

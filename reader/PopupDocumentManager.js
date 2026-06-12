@@ -284,10 +284,6 @@ class PopupDocumentManager{
 
         });
 
-
-        allDocumentsContainer.addEventListener('touchend', (e) => {
-            console.log('touch end')
-        })
         
 
         allDocumentsContainer.addEventListener('mouseup',(e)=>{
@@ -299,13 +295,8 @@ class PopupDocumentManager{
     
             const docWidth = g.readingManager.docWidth
     
-            console.log('left offset',document.documentElement.scrollLeft)
 
-            const rect = allDocumentsContainer.getBoundingClientRect();
-
-            console.log('scroll left',rect.left);
-
-            const leftOffset = rect.left
+            const leftOffset = this.getMainLeftOffset()
             
             if (this.isFlinksListOpen) {
                 const flinksListDiv = document.getElementById("LinksListContainerDiv")
