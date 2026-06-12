@@ -23,6 +23,7 @@ import { loadStaticContentFromUrl } from './parsers/ParsingManager.js'
 import { hideMultipleLinksPopup } from './MultipleLinksPopupManager.js'
 
 export const kMiddleGap = 50
+export const kMinDocWidthForDesktop = 430
 export const kLeftDivTop = 60
 export const kRightDocsTabRowHeight = 20
 export const kRightDivTopBarHeight = 20
@@ -1579,9 +1580,11 @@ class PopupDocumentManager{
 
         const screenWidth = window.innerWidth
         let docWidth = (screenWidth - kMiddleGap) / 2
-        if(docWidth < 430){
-            console.log('document is too narrow',docWidth)
+        if(docWidth < kMinDocWidthForDesktop){
             docWidth = screenWidth - kMiddleGap - 20
+            g.isMobileMode = true
+        }else{
+            g.isMobileMode = false
         }
         console.log('docWidth',docWidth)
         g.readingManager.docWidth = docWidth
@@ -1619,7 +1622,7 @@ class PopupDocumentManager{
         const mainPresentationDiv = document.getElementById("CurrentDocumentMainDiv")
 
 
-        const mainPadding = this.isPaddingOn && g.readingManager.isFullScreen && screenWidth > 430 ? kBiggerPadding : kDefaultPadding
+        const mainPadding = this.isPaddingOn && g.readingManager.isFullScreen && screenWidth > kMinDocWidthForDesktop ? kBiggerPadding : kDefaultPadding
        
         g.mainPadding = mainPadding
         mainPresentationDiv.style.paddingLeft = mainPadding
@@ -1945,13 +1948,33 @@ class PopupDocumentManager{
     }
 
     openFlinksList = () => {
+        const kMaxListWidth = 600
+        const isFullscreenList = kMaxListWidth > window.innerWidth 
+        console.log('isFullscreenList',isFullscreenList)
         const iconPaths = g.iconsInfo.iconPaths
         const flinksListContainerDiv = document.getElementById("LinksListContainerDiv")
-        const flinksContainerWidth = 600
+        const flinksContainerWidth = isFullscreenList ? window.innerWidth : kMaxListWidth 
         flinksListContainerDiv.style.top = (kLeftDivTop + 1) + 'px'
-        flinksListContainerDiv.style.left = `${g.readingManager.docWidth + kMiddleGap / 2 - flinksContainerWidth / 2}px`
-        
+        flinksListContainerDiv.style.width = `${isFullscreenList ? window.innerWidth : kMaxListWidth}px`
         flinksListContainerDiv.style.maxHeight = `${window.innerHeight - kLeftDivTop}px`
+        
+
+        if(g.isMobileMode){
+            console.log('g.isMobileMode && !isFullscreenList',this.getMainLeftOffset())
+            const leftOffset = this.getMainLeftOffset()
+            if(leftOffset >=0){
+
+               flinksListContainerDiv.style.left = ''
+               flinksListContainerDiv.style.right = '0px'
+            }else{
+                flinksListContainerDiv.style.left = `${-leftOffset}px`
+                flinksListContainerDiv.style.right = ''
+
+            }
+        }else{
+            flinksListContainerDiv.style.left = `${g.readingManager.docWidth + kMiddleGap / 2 - flinksContainerWidth / 2}px`
+            flinksListContainerDiv.style.right = ''
+        }
         
         const topRowContainer = document.getElementById("LinksListTopRow")
         
@@ -2816,6 +2839,12 @@ class PopupDocumentManager{
     hideMainDocSpinner() {
       const spinner = document.getElementById('mainDocSpinner');
       spinner.style.display = 'none';
+    }
+
+    getMainLeftOffset(){
+        const allDocumentsContainer = document.getElementById("AllDocumentsContainer")
+        const rect = allDocumentsContainer.getBoundingClientRect();
+        return rect.left
     }
 
 

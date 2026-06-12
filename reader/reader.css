@@ -92,6 +92,7 @@ canvas {
     border-bottom-width: 1px;
     border-bottom-color: rgba(37, 38, 39, 0.2);
     box-sizing: border-box;
+    pointer-events: all;
 }
 
 #middle-space-div {
@@ -114,6 +115,7 @@ canvas {
     /* height: 450px; */
     z-index: 40000;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    pointer-events: all;
 
 }
 

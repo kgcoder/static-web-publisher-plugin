@@ -180,7 +180,6 @@ class CollageViewer{
     async loadContent(xmlString,url, callback){
         this.content = await loadCollageContentFromFile(xmlString, url, this.docId)
 
-        console.log('collage loaded',this.viewport)
         if(callback)callback()
 
       //  const {url,width,height} = this.content.info
@@ -207,10 +206,7 @@ class CollageViewer{
 
 
         this.viewport = new Viewport(-horizontalOffset / this.k, -verticalOffset / this.k, this.canvasWidth, this.canvasHeight)
-    
-        console.log('loaded viewport',this.viewport)
-        
-
+            
         this.changesExist = true
 
         const noUrl = this.collageInfo && !this.collageInfo.url
@@ -799,8 +795,6 @@ class CollageViewer{
         this.zoomX = this.crosshair.x
         this.zoomY = this.crosshair.y
 
-        console.log({zoomX:this.zoomX,chrosX:this.crosshair.x})
-
         if (e.deltaY < 0) {
             if(this.k > this.biggestZoom){
                 this.vk = 0
@@ -832,7 +826,7 @@ class CollageViewer{
     onMouseDown = (e) => {
         if (e.button !== 0) return
         if(!this.viewport || !this.viewport.origin)return
-        const mouseX = e.pageX - this.leftX - this.mainLeftOffset()
+        const mouseX = e.pageX - this.leftX - g.pdm.getMainLeftOffset()
         const mouseY = e.pageY - this.topY
 
         if(this.vk !== 0){
@@ -864,7 +858,7 @@ class CollageViewer{
 
             if(!this.mouseMoved){
                 if(g.readingManager.isSelectingFlinkXY){
-                    const mouseX = e.pageX - this.leftX - this.mainLeftOffset()
+                    const mouseX = e.pageX - this.leftX - g.pdm.getMainLeftOffset()
                     const mouseY = e.pageY - this.topY - g.adminBarHeight
 
                     const {x,y} = this.getAbsolutePoint(mouseX,mouseY)
@@ -893,13 +887,11 @@ class CollageViewer{
     }
     onMouseMove = (e) => {
 
-        console.log('onMouseMove',e)
-
         this.mouseMoved = true
         if (!this.viewport) return
 
         
-        const mouseX = e.pageX - this.leftX - this.mainLeftOffset()
+        const mouseX = e.pageX - this.leftX - g.pdm.getMainLeftOffset()
         const mouseY = e.pageY - this.topY
         this.crosshair.mouseMoved(mouseX, mouseY)
 
@@ -1004,7 +996,7 @@ class CollageViewer{
 
       
 
-        const mouseX = e.pageX - this.leftX - this.mainLeftOffset()
+        const mouseX = e.pageX - this.leftX - g.pdm.getMainLeftOffset()
         const mouseY = e.pageY - this.topY
 
         const {x,y} = this.getAbsolutePoint(mouseX,mouseY)
@@ -1101,7 +1093,6 @@ class CollageViewer{
 
     canvasTouchStart = (e) =>  {
         e.stopPropagation()
-                console.log('touches on first touch',e.touches)
 
         this.numberOfFingers = e.touches.length
         this.vx = 0
@@ -1110,7 +1101,6 @@ class CollageViewer{
 
 
     if (this.numberOfFingers === 2) {
-        console.log('touches on first touch',e.touches)
         this.currentTouchState = touchState.TWO_FINGER_ZOOM
         const x1 = e.touches[0].pageX
         const y1 = e.touches[0].pageY
@@ -1168,8 +1158,6 @@ canvasTouchMove = (e) => {
 
 
     if (this.numberOfFingers === 2 && this.currentTouchState === touchState.TWO_FINGER_ZOOM) {
-
-        console.log('touches on the move',e.touches)
 
         const x1 = e.touches[0].pageX 
         const y1 = e.touches[0].pageY
@@ -1244,11 +1232,6 @@ canvasTouchEnd = (e) => {
     e.stopPropagation()
     this.numberOfFingers = e.touches.length
 
-    console.log('touches on touch end',e.touches)
-
-
-
-
     switch (this.currentTouchState) {
         case touchState.PANNING: {
 
@@ -1272,11 +1255,7 @@ canvasTouchEnd = (e) => {
 
     //Touches - end
 
-    mainLeftOffset(){
-        const allDocumentsContainer = document.getElementById("AllDocumentsContainer")
-        const rect = allDocumentsContainer.getBoundingClientRect();
-        return rect.left
-    }
+   
 
 
 }

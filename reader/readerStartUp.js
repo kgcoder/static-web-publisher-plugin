@@ -42,6 +42,13 @@ async function onLoad() {
 
     const container = mainContainer.parentElement
     //snapping
+
+    container.addEventListener('scroll',() => {
+        if (g.pdm.isFlinksListOpen) {
+            g.pdm.toggleFlinksList()
+        }
+    })
+
     container.addEventListener('scrollend', () => {
         const halfway = container.scrollWidth / 4;
 

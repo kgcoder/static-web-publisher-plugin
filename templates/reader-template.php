@@ -191,23 +191,7 @@ if (!empty($connections_info)) {
 
     <div id="middle-space-div"></div>
 
-    <div id="LinksListContainerDiv">
-        <div id="LinksListTopRow">
-            <div id="LinksListTopRowLeftSortButtonContainer"></div>
-            <div id="LinksListTopRowMiddleSpacer"></div>
-            <div id="LinksListTopRowRightSortButtonContainer"></div>
-            <div id="LinksListTopRowEndSpacer"></div>
-        </div>
-        <div id="FlinksScrollDiv" class="scroll-container"></div>
-        <span id="LinksListModificationMessage">Floating links were modified</span>
-        <div id="LinksListBottomRow">
-            <button id="LinksListCloseButton" class="CancelButton">Close</button>
-            <div class="LinksListBottomRowMiddleSpacer"></div>
-            <button id="LinksListOriginalLinksButton" class="CancelButton">Show original flinks</button>
-            <div id="LinksListOriginalLinksSpacer" class="LinksListBottomRowMiddleSpacer"></div>
-            <button id="LinksListFixButton" class="ActionButton">Fix all</button>
-        </div>
-    </div>
+    
 
     <div id="AllRightDocumentsContainer">
         <div id="RightDocumentsTabsContainer"></div>
@@ -224,6 +208,24 @@ if (!empty($connections_info)) {
     </div>
 
     <canvas id="flinks-canvas"></canvas>
+</div>
+
+<div id="LinksListContainerDiv">
+    <div id="LinksListTopRow">
+        <div id="LinksListTopRowLeftSortButtonContainer"></div>
+        <div id="LinksListTopRowMiddleSpacer"></div>
+        <div id="LinksListTopRowRightSortButtonContainer"></div>
+        <div id="LinksListTopRowEndSpacer"></div>
+    </div>
+    <div id="FlinksScrollDiv" class="scroll-container"></div>
+    <span id="LinksListModificationMessage">Floating links were modified</span>
+    <div id="LinksListBottomRow">
+        <button id="LinksListCloseButton" class="CancelButton">Close</button>
+        <div class="LinksListBottomRowMiddleSpacer"></div>
+        <button id="LinksListOriginalLinksButton" class="CancelButton">Show original flinks</button>
+        <div id="LinksListOriginalLinksSpacer" class="LinksListBottomRowMiddleSpacer"></div>
+        <button id="LinksListFixButton" class="ActionButton">Fix all</button>
+    </div>
 </div>
 
 <div id="spinner" class="spinner"></div>

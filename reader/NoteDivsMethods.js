@@ -15,7 +15,7 @@ https://github.com/kgcoder/default-web
 import g from "./Globals.js"
 import { getHeaderInfoFromXML, populateHeaderDiv } from "./HeaderMethods.js"
 import { absolutizeUrls, escapeHTML, getHeaderDivFrom, getPresentationDivFrom, getTextColumnWidth, replaceMediaTagsWithLinksInDiv, scrollToIdInContainer, stickBottomLineRectToTheTopOne } from "./helpers.js"
-import { kMiddleGap } from "./PopupDocumentManager.js"
+import { kMiddleGap, kMinDocWidthForDesktop } from "./PopupDocumentManager.js"
 
 
 
@@ -89,10 +89,9 @@ class NoteDivsManager{
 
 
         const screenWidth = window.innerWidth
-       // g.readingManager.docWidth = g.readingManager.isFullScreen && !isRight ? screenWidth : (screenWidth - kMiddleGap) / 2// g.readingManager.docWidth
 
         let maxImageWidth
-        if (g.readingManager.isFullScreen && !isRight && screenWidth > 430) {
+        if (g.readingManager.isFullScreen && !isRight && screenWidth > kMinDocWidthForDesktop) {
             maxImageWidth = g.readingManager.docWidth * 0.6
         } else {
             maxImageWidth = g.readingManager.docWidth - 20 - 30
