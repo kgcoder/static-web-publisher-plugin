@@ -7,8 +7,9 @@ if (!defined('ABSPATH')) {
 
 function stwbpb_proxy_fetch() {
     // phpcs:disable WordPress.Security.NonceVerification.Recommended -- Public proxy; auth is via allowlist check.
-    $source_url = isset($_GET['source_url']) ? esc_url_raw(wp_unslash($_GET['source_url'])) : '';
-    $target_url = isset($_GET['target_url']) ? esc_url_raw(wp_unslash($_GET['target_url'])) : '';
+    $source_url  = isset($_GET['source_url'])  ? esc_url_raw(wp_unslash($_GET['source_url']))  : '';
+    $target_url  = isset($_GET['target_url'])  ? esc_url_raw(wp_unslash($_GET['target_url']))  : '';
+    $for_condoc  = isset($_GET['for_condoc']);
     // phpcs:enable
 
     if (!stwbpb_is_http_url($source_url) || !stwbpb_is_http_url($target_url)) {
@@ -22,12 +23,21 @@ function stwbpb_proxy_fetch() {
         exit;
     }
 
-    $allowed_urls = stwbpb_get_allowed_proxy_urls($post_id);
-    $target_base  = strtok($target_url, '#');
+    $target_base = strtok($target_url, '#');
 
-    if (!in_array($target_base, $allowed_urls, true)) {
-        status_header(403);
-        exit;
+    if ($for_condoc) {
+        $condoc_main_url  = get_post_meta($post_id, '_condoc_main_url', true);
+        $condoc_base      = strtok($condoc_main_url, '#');
+        if (empty($condoc_main_url) || $condoc_base !== $target_base) {
+            status_header(403);
+            exit;
+        }
+    } else {
+        $allowed_urls = stwbpb_get_allowed_proxy_urls($post_id);
+        if (!in_array($target_base, $allowed_urls, true)) {
+            status_header(403);
+            exit;
+        }
     }
 
     $response = wp_remote_get($target_url, array('timeout' => 15));

@@ -2,7 +2,7 @@
 Contributors: kgcoder
 Donate link: https://reinventingtheweb.com/donate
 Tags: static, web, publish
-Requires at least: 5.1
+Requires at least: 5.2
 Tested up to: 6.9
 Stable tag: 4.1.2
 Requires PHP: 7.4

@@ -8,7 +8,7 @@ Author: Karen Grigorian
 Author URI: https://github.com/kgcoder
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Requires at least: 5.1
+Requires at least: 5.2
 Tested up to: 6.9
 Requires PHP: 7.4
 */
@@ -22,6 +22,8 @@ require_once plugin_dir_path(__FILE__) . 'includes/comments-json.php';
 require_once plugin_dir_path(__FILE__) . 'includes/doc-files.php';
 require_once plugin_dir_path(__FILE__) . 'includes/panels.php';
 require_once plugin_dir_path(__FILE__) . 'includes/hdoc.php';
+require_once plugin_dir_path(__FILE__) . 'includes/cdoc.php';
+require_once plugin_dir_path(__FILE__) . 'includes/condoc.php';
 require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
 require_once plugin_dir_path(__FILE__) . 'includes/proxy.php';
 
@@ -125,8 +127,15 @@ function stwbpb_custom_post_endpoints_template_redirect() {
 
     if (is_singular(['post', 'page'])) {
         global $post;
-        if ($post && stwbpb_get_effective_display_mode($post) === 'standalone_hdoc') {
-            stwbpb_send_hdoc_for_post($post);
+        if ($post && stwbpb_get_doc_effective_display_mode($post) === 'standalone_doc') {
+            $type = stwbpb_get_effective_doc_type($post);
+            if ($type === 'CDOC') {
+                stwbpb_send_cdoc_for_post($post);
+            } elseif ($type === 'CONDOC') {
+                stwbpb_send_condoc_for_post($post);
+            } else {
+                stwbpb_send_hdoc_for_post($post);
+            }
             exit;
         }
     }
@@ -186,8 +195,8 @@ add_filter('template_include', function ($template) {
     global $post;
     if (!$post) return $template;
 
-    $mode = stwbpb_get_effective_display_mode($post);
-    if ($mode === 'hdoc_in_reader') {
+    $mode = stwbpb_get_doc_effective_display_mode($post);
+    if ($mode === 'doc_in_reader') {
         return plugin_dir_path(__FILE__) . 'templates/reader-template.php';
     }
 
@@ -207,8 +216,10 @@ function stwbpb_output_xml() {
 
     $settings = get_option('stwbpb_settings', array());
 
-    $mode = stwbpb_get_effective_display_mode($post);
-    if ($mode === 'standalone_hdoc') return;
+    $mode = stwbpb_get_doc_effective_display_mode($post);
+    if ($mode === 'standalone_doc') return;
+    $type = stwbpb_get_effective_doc_type($post);
+    if ($type === 'CDOC' || $type === 'CONDOC') return;
 
     $removal_selectors = isset($settings['removal_selectors']) ? $settings['removal_selectors'] : '';
 
@@ -277,7 +288,7 @@ function stwbpb_output_xml() {
 
     if (empty($data)) return;
 
-    if ($mode === 'embedded_hdoc_forced' || $mode === 'hdoc_in_reader') {
+    if ($mode === 'embedded_hdoc_forced' || $mode === 'doc_in_reader') {
         $data['forced'] = true;
     }
 

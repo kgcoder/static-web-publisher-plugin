@@ -140,13 +140,15 @@ class PopupDocumentManager{
       
 
         const downloadLink = document.getElementById("MainDocDownloadLink")
-        downloadLink.addEventListener('click', (e) => {
-            e.preventDefault()
-            e.stopPropagation()
-
-            this.downloadMainDocInCondoc(g.readingManager.mainDocData.needsMainDocWithUrl)
-            
-        })
+        if(downloadLink){
+            downloadLink.addEventListener('click', (e) => {
+                e.preventDefault()
+                e.stopPropagation()
+    
+                this.downloadMainDocInCondoc(g.readingManager.mainDocData.needsMainDocWithUrl)
+                
+            })
+        }
     
       
     
@@ -537,6 +539,7 @@ class PopupDocumentManager{
         downloadAllButton.style.display = count < total ? 'flex' : 'none'
 
 
+        console.log('mainPageUrl',mainPageUrl)
         this.downloadMainDocInCondoc(mainPageUrl)
        
 
@@ -545,7 +548,7 @@ class PopupDocumentManager{
 
     async downloadMainDocInCondoc(mainPageUrl, successCallback) {
          g.pdm.showMainDocSpinner()
-        const embeddedDataObject = await loadStaticContentFromUrl(mainPageUrl)
+        const embeddedDataObject = await loadStaticContentFromUrl(mainPageUrl, true)
         g.pdm.hideMainDocSpinner()
         
 

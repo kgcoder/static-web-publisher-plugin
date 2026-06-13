@@ -23,14 +23,14 @@ import { parsePlainTextPage } from "./PlainTextParser.js";
 
 
 
-export async function loadStaticContentFromUrl(originalUrl, muteErrorMessage = false){
+export async function loadStaticContentFromUrl(originalUrl, isForCondoc = false, muteErrorMessage = false){
 
 
     const urlToCall = originalUrl.split('#')[0].replace(/\?$/,'')
     
 
 
-    const result = await fetchWebPage(urlToCall)
+    const result = await fetchWebPage(urlToCall, isForCondoc)
 
     if (!result) {
         if (!muteErrorMessage) {
@@ -76,7 +76,7 @@ export async function loadStaticContentFromUrl(originalUrl, muteErrorMessage = f
     
         }
 
-        if(dataObject.docSubtype === 7 && !dataObject.needsMainDocWithUrl){
+        if((dataObject.docSubtype === 7 || dataObject.docSubtype === 9) && !dataObject.needsMainDocWithUrl){
             showToastMessage('Something is wrong with the URL of the main document in this CONDOC')
             return
         }

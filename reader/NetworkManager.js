@@ -19,7 +19,7 @@ const currentRequests = new Set()
 const responseCache = new Map()
 
 
-export function fetchWebPage(url) {
+export function fetchWebPage(url,isForCondoc = false) {
   if (!g.readingManager.mainDocData) return
 
   if (responseCache.has(url)) return Promise.resolve(responseCache.get(url))
@@ -52,6 +52,7 @@ export function fetchWebPage(url) {
           const params = new URLSearchParams({
             source_url: currentPageUrl.split('#')[0],
             target_url: url,
+            ...(isForCondoc ? { for_condoc: '1' } : {}),
           })
           const result = await fetch(`${proxyUrl}?${params}`)
           if (!result.ok) throw new Error(`Proxy error ${result.status}`)

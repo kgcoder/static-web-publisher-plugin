@@ -27,6 +27,19 @@ $permalink            = get_permalink($post->ID);
 $title                = $post->post_title;
 $htmlContent          = $post->post_content;
 $connections_info     = get_post_meta($post->ID, '_static_web_connections_info', true);
+
+$doc_type = stwbpb_get_effective_doc_type($post);
+if ($doc_type === 'CDOC') {
+    $doc_source   = stwbpb_build_cdoc_source($post);
+    $source_class = 'cdoc-source';
+} elseif ($doc_type === 'CONDOC') {
+    $doc_source   = stwbpb_build_condoc_source($post);
+    $source_class = 'condoc-source';
+} else {
+    $doc_source   = null;
+    $source_class = 'hdoc-content';
+}
+
 $embedPattern = '/<!-- wp:embed \{"url":"https:\/\/www\.youtube\.com\/(watch\?v=|embed\/)([^"]+)",.*\} -->.*<div class="wp-block-embed__wrapper">\s*(https:\/\/www\.youtube\.com\/(watch\?v=|embed\/)[^<]+)\s*<\/div>.*<!-- \/wp:embed -->/sU';
 
 $htmlContent = preg_replace_callback($embedPattern, function ($matches) {
@@ -154,10 +167,13 @@ if (!empty($connections_info)) {
                     </div>
                 </div>
                 <div id="CurrentDocumentHeader" class="HeaderDiv"></div>
-                <div id="CurrentDocumentMainDiv" class="hdoc-content">
-                    <?php echo wp_kses($htmlContent, $allowed_tags); ?>
-                    <a id="MainDocDownloadLink">Download main document</a>
-
+                <div id="CurrentDocumentMainDiv" class="<?php echo ($doc_source !== null) ? '' : 'hdoc-content'; ?>">
+                    <?php if ($doc_source !== null): ?>
+                        <pre style="display:none;" class="<?php echo esc_attr($source_class); ?>"><?php echo esc_html($doc_source); ?></pre>
+                    <?php else: ?>
+                        <?php echo wp_kses($htmlContent, $allowed_tags); ?>
+                        <a id="MainDocDownloadLink">Download main document</a>
+                    <?php endif; ?>
                 </div>
                 <textarea id="CurrentDocumentTextarea" class="NoteEditingDiv"></textarea>
                 <div id="CurrentDocumentBottomPanel" class="DocumentBottomPanel">
