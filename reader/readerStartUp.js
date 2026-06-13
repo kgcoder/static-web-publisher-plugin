@@ -68,47 +68,51 @@ async function onLoad() {
     });
 
 
-    const mainDiv = document.getElementById('CurrentDocumentMainDiv');
-    if (mainDiv) {
-        const cdocPre = mainDiv.querySelector('pre.cdoc-source')
-        if(cdocPre){
-            const source = cdocPre.textContent
-            console.log('source:',source)
+    let isEmbeddedCdoc = false
+    let isEmbeddedCondoc = false
+    let contentString = ''
+    try {
+            const embeddedCdocScript = document.querySelector('#cdoc-source')
+            const source = JSON.parse(embeddedCdocScript.textContent).source;
+            if(source){
+                isEmbeddedCdoc = true
+                contentString = '<html><body>' + document.body.innerHTML + '</body></html>'
+            }
+        } catch {
+            //do nothing
+        }
 
-            const dataObject = await parseCDOC(currentLocation,source)
-            
+        try {
+            const embeddedCondocScript = document.querySelector('#condoc-source')
+            console.log('condoc script',embeddedCondocScript)
+            const source = JSON.parse(embeddedCondocScript.textContent).source;
+            if(source){
+                isEmbeddedCondoc = true
+                contentString = '<html><body>' + document.body.innerHTML + '</body></html>'
+            }
+        } catch {
+            //do nothing
+        }
+
+
+        if(isEmbeddedCdoc || isEmbeddedCondoc){
+            const {dataObject,error} = await parseStaticContent(contentString,currentLocation)
+        
             if(dataObject ){
-                dataObject.docSubtype = 8
-                console.log('dataObject',dataObject)
-
                 loadUIAndIcons()
 
-                await g.pdm.loadCollage(dataObject)
+                if(isEmbeddedCdoc){
+                    await g.pdm.loadCollage(dataObject)
+                }else{
+                    await g.pdm.showEmptyCondoc(dataObject)
+                }
 
-                return;
+                return
+
+
             }
-
         }
-        const condocPre = mainDiv.querySelector('pre.condoc-source')
-        if(condocPre){
-            const source = condocPre.textContent
-            console.log('condoc source:',source)
 
-            const dataObject = await parseCondoc(currentLocation,source)
-            console.log('condoc dataObject',dataObject)
-            if(dataObject ){
-                dataObject.docSubtype = 9
-                console.log('dataObject',dataObject)
-
-                loadUIAndIcons()
-
-                await g.pdm.showEmptyCondoc(dataObject)
-
-                return;
-            }
-
-        }
-    }
 
     const {hdocDataJSON, content} = getHdocJsonAndContentFromCurrentDocument()
 

@@ -174,7 +174,7 @@ setupFlinksCanvasDPR(){
             return
         }
 
-        if(![1,2,3,5].includes(dataObject.docSubtype)){
+        if(![1,2,3,5,8].includes(dataObject.docSubtype)){
             showToastMessage("Unsupported document format")
             if(!hideSpinner)g.pdm.hideMainDocSpinner()
             return
@@ -193,7 +193,7 @@ setupFlinksCanvasDPR(){
 
                 
 
-                if(dataObject.docSubtype === 5){
+                if(dataObject.docSubtype === 5 || dataObject.docSubtype === 8){
                     title = dataObject.title
 
                     const svgMatch = dataObject.xmlString.match(/<svg\b[^>]*>[\s\S]*?<\/svg>/)

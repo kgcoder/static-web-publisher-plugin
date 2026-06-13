@@ -70,6 +70,10 @@ class ExportPageManager{
                 return 'Source code (CDOC)'
             case 7:
                 return 'Source code (CONDOC)'
+            case 8:
+                return 'Source code (generated locally using embedded CDOC data)'
+            case 9:
+                return 'Source code (generated locally using embedded CONDOC data)'
             default:
                 return 'Source code'
         }
@@ -186,7 +190,7 @@ class ExportPageManager{
        // textDiv.className = "ExportTextContainer"
         containerDiv.appendChild(textDiv)
 
-        textDiv.innerText = text
+        textDiv.textContent = text
 
 
         // const input = document.createElement('input')
@@ -204,7 +208,7 @@ class ExportPageManager{
         this.header = title.trim() ? `\n\n<header>\n<h1>${escapeXml(title.trim())}</h1>\n</header>` : ''
 
         const exportTextDiv = document.getElementById("ExportTextDiv")
-        exportTextDiv.innerText = this.firstContentPart + this.docmeta + this.header + this.secondContentPart
+        exportTextDiv.textContent = this.firstContentPart + this.docmeta + this.header + this.secondContentPart
     }
 
 
@@ -253,11 +257,11 @@ class ExportPageManager{
 
         const sourceCodeTextDiv = document.querySelector("#SourceCodeTextDiv")
 
-        sourceCodeTextDiv.innerText = g.readingManager.mainDocData.xmlString
+        sourceCodeTextDiv.textContent = g.readingManager.mainDocData.xmlString
 
         const titleEl = document.querySelector("#SourceCodeTitleDiv")
 
-        titleEl.innerText = this.getSourceCodeTitleByDocSybtype(g.readingManager.mainDocData.docSubtype) 
+        titleEl.textContent = this.getSourceCodeTitleByDocSybtype(g.readingManager.mainDocData.docSubtype) 
 
 
 
@@ -273,13 +277,12 @@ class ExportPageManager{
         rightButton.classList.remove("linkInputTypeUnselectedButton")
 
         const sourceCodeTextDiv = document.querySelector("#SourceCodeTextDiv")
-        sourceCodeTextDiv.innerText = g.readingManager.embeddedDocData.xmlString
+        sourceCodeTextDiv.textContent = g.readingManager.embeddedDocData.xmlString
 
         const titleEl = document.querySelector("#SourceCodeTitleDiv")
 
 
-        titleEl.innerText = this.getSourceCodeTitleByDocSybtype(g.readingManager.embeddedDocData.docSubtype)
-
+        titleEl.textContent = this.getSourceCodeTitleByDocSybtype(g.readingManager.embeddedDocData.docSubtype)
 
 
     }

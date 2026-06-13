@@ -289,7 +289,7 @@ class PopupDocumentManager{
         
 
         allDocumentsContainer.addEventListener('mouseup',(e)=>{
-            console.log('mouse up')
+           // console.log('mouse up')
             if (this.isDragging) return
             if(this.isLeftSourceCodeShowing || this.isLeftExporting || this.isShowingInfo)return
      

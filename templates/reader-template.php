@@ -169,7 +169,7 @@ if (!empty($connections_info)) {
                 <div id="CurrentDocumentHeader" class="HeaderDiv"></div>
                 <div id="CurrentDocumentMainDiv" class="<?php echo ($doc_source !== null) ? '' : 'hdoc-content'; ?>">
                     <?php if ($doc_source !== null): ?>
-                        <pre style="display:none;" class="<?php echo esc_attr($source_class); ?>"><?php echo esc_html($doc_source); ?></pre>
+                        <script type="application/json" style="display:none;" id="<?php echo esc_attr($source_class); ?>"><?php echo wp_json_encode(['source' => $doc_source]); ?></script>
                     <?php else: ?>
                         <?php echo wp_kses($htmlContent, $allowed_tags); ?>
                         <a id="MainDocDownloadLink">Download main document</a>
