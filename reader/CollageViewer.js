@@ -188,7 +188,11 @@ class CollageViewer{
             const title = this.content.title ?? ''
             const titleSpan = this.getTitleSpan(title)
             if(titleSpan){
-                titleSpan.innerHTML = title
+                if(this.rightDocIndex < 0){
+                    titleSpan.innerText = url
+                }else{
+                    titleSpan.innerText = title
+                }
             }
             
 
@@ -235,7 +239,7 @@ class CollageViewer{
 
     getTitleSpan(title){
         if(this.rightDocIndex < 0){
-            return document.getElementById("CurrentDocumentTitleSpan")
+            return document.getElementById("CurrentDocumentTitleSpan0")
         }else{
             const noteData = g.readingManager.rightNotesData[this.rightDocIndex]
             noteData.title = title

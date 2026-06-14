@@ -512,8 +512,12 @@ class PopupDocumentManager{
 
         this.mainDocTitle = condocTitle
         this.mainDocType = 'condoc'
-        const titleSpan = document.getElementById("CurrentDocumentTitleSpan")
-        titleSpan.innerText = this.mainDocTitle
+
+        const optionalTitle = document.getElementById("CurrentDocumentOptionalTitleSpan")
+        optionalTitle.innerText = this.mainDocTitle
+
+        const titleSpan = document.getElementById("CurrentDocumentTitleSpan0")
+        titleSpan.innerText = mainPageUrl
 
         const leftTitleLink = document.getElementById("CurrentDocumentTitleLink")
         leftTitleLink.href = mainPageUrl.split('#')[0]
@@ -540,14 +544,27 @@ class PopupDocumentManager{
 
 
         console.log('mainPageUrl',mainPageUrl)
-        this.downloadMainDocInCondoc(mainPageUrl)
+
+
+
+        setTimeout(() => {
+            //testing if the extension has replaced the UI
+            const titleSpan = document.getElementById("CurrentDocumentTitleSpan0")
+            if(titleSpan){
+                this.downloadMainDocInCondoc(mainPageUrl)
+            }
+        },500)
+
        
 
     }
 
 
     async downloadMainDocInCondoc(mainPageUrl, successCallback) {
-         g.pdm.showMainDocSpinner()
+        g.pdm.showMainDocSpinner()
+
+  
+
         const embeddedDataObject = await loadStaticContentFromUrl(mainPageUrl, true)
         g.pdm.hideMainDocSpinner()
         
@@ -608,7 +625,6 @@ class PopupDocumentManager{
       
         const canvas = document.getElementById("CurrentDocumentMainCollageCanvas")
 
-        //const titleSpan = document.getElementById("CurrentDocumentTitleSpan")
 
         
         g.readingManager.mainCollageViewer = new CollageViewer(dataObject.xmlString,dataObject.url,-1,'main',canvas,0,kLeftDivTop,window.innerWidth, this.collageLoadedCallback)
@@ -740,11 +756,21 @@ class PopupDocumentManager{
         downloadAllButton.style.display = count < total ? 'flex' : 'none'
         
 
-  
+        const titleSpan = document.getElementById("CurrentDocumentTitleSpan0")
 
+        const optionalTitleSpan = document.getElementById("CurrentDocumentOptionalTitleSpan")
 
-        const titleSpan = document.getElementById("CurrentDocumentTitleSpan")
-        titleSpan.innerHTML = this.mainDocTitle
+        if(isEmbedded){
+
+            optionalTitleSpan.innerText = title
+            titleSpan.innerText = dataObject.url
+        }else{
+            console.log('wtf')
+            titleSpan.innerText = title
+
+        }
+
+        optionalTitleSpan.style.display = isEmbedded ? 'flex' : 'none'
 
 
 
@@ -1786,17 +1812,30 @@ class PopupDocumentManager{
         const noteData = g.readingManager.rightNotesData[g.readingManager.selectedRightDocIndex]
 
 
+        const optionalTitleSpan = document.getElementById("RightDocumentOptionalTitleSpan")
         if(!g.readingManager.isFullScreen){
             this.populatePanelsOfOneRightDoc()
 
-            const titleSpan = document.getElementById("RightDocumentTitleSpan")
-            titleSpan.innerText = noteData.title ?? ''
+            if(g.readingManager.rightNotesData.length === 1){
+                optionalTitleSpan.innerText = noteData.title ?? ''
+                optionalTitleSpan.style.display = 'flex'
+
+            }else{
+                optionalTitleSpan.style.display = 'none'
+            }
+
+         
+
         }else{
+
             
             this.hideMiddleCanvas()
 
        
         }
+
+        const titleSpan = document.getElementById("RightDocumentTitleSpan")
+        titleSpan.innerText = noteData.url ?? ''
 
        
 

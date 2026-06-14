@@ -15,6 +15,12 @@
     background-color: var(--bg-main); /* dark background */
 }
 
+.theme-dark #mainDocSpinner{
+    border: 2px solid rgba(222, 221, 221, 0.1);
+    border-top: 2px solid #ffffff;
+}
+
+
 #CurrentDocumentTopBar.theme-dark{
   background-color: var(--top-bars);
 }
@@ -67,7 +73,7 @@
   color:white;
 }
 
-.theme-dark #CurrentDocumentTitleSpan{
+.theme-dark #CurrentDocumentTitleSpan0{
   color:white;
 }
 
@@ -87,6 +93,30 @@
   background-color: rgb(60, 60, 60);
 }
 
+
+.theme-dark .RightDocumentTab{
+  background-color: var(--header-footer-bg);
+
+}
+
+
+.theme-dark .RightDocumentTabSelected{
+  background-color: var(--top-bars);
+}
+
+.theme-dark .RightDocumentTabTitle{
+  color:#8d8d8d;
+}
+
+.theme-dark .RightDocumentTabTitleSelected{
+  color:#aaaaaa
+
+}
+
+
+.theme-dark #RightDocumentTitleSpan{
+  color:white;
+}
 
 
 

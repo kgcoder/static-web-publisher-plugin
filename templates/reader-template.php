@@ -138,10 +138,14 @@ if (!empty($connections_info)) {
                 <div id="CurrentDocumentRightPanelButton" class="DocumentTopBarButtonWrapper"></div>
                 <div id="CurrentDocumentLeftPanelButton" class="DocumentTopBarButtonWrapper"></div>
 
-                <div class="spacer"></div>
 
-                <a id="CurrentDocumentTitleLink" href="#"><span id="CurrentDocumentTitleSpan"></span></a>
+                <div class="spacer10px"></div>
 
+                <div class="TitleContainer">
+                    <span id="CurrentDocumentOptionalTitleSpan" style="display: none;"></span>
+                    <a id="CurrentDocumentTitleLink" href="#"><span id="CurrentDocumentTitleSpan0"></span></a>
+                </div>
+                
                 <div id="CurrentDocumentEmbeddingSymbol" class="DocumentTopBarButtonWrapper" title="This document embeds another document. Click on the title to view the embedded document separately."></div>
 
                 <div id="mainDocSpinner"></div>
@@ -214,8 +218,13 @@ if (!empty($connections_info)) {
             <div id="RightDocumentRightPanelButton" class="DocumentTopBarButtonWrapper"></div>
             <div id="RightDocumentLeftPanelButton" class="DocumentTopBarButtonWrapper"></div>
             <div title="Center collage" id="RightDocumentCenterCollageButton" class="DocumentTopBarButtonWrapper"></div>
-            <div class="spacer"></div>
-            <a id="RightDocumentTitleLink"><span id="RightDocumentTitleSpan"></span></a>
+        
+            <div class="spacer10px"></div>
+
+            <div class="TitleContainer">
+                <span id="RightDocumentOptionalTitleSpan" style="display: none;"></span>
+                <a id="RightDocumentTitleLink"><span id="RightDocumentTitleSpan"></span></a>
+            </div>
         </div>
         <div id="RightDocumentCollectionContainer"></div>
         <div id="RightDocumentExportContainer"></div>

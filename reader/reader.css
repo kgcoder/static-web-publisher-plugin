@@ -1320,7 +1320,35 @@ a.TopPanelOptionLink:hover {
     padding-right: 20px;
 }
 
+.TitleContainer{
+    display: flex;
+    flex-direction: column;
+    flex:1;
+    min-width: 0;
+}
+
 #CurrentDocumentTitleSpan,
+#RightDocumentTitleSpan {
+    display: block;
+    margin-right: 20px;
+    
+    color: rgba(37, 38, 39, 0.5);
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    /* cursor: default; */
+}
+
+#RightDocumentTitleSpan::-webkit-scrollbar {
+    display: none; 
+}
+
+
+#CurrentDocumentTitleSpan0,
 #RightDocumentTitleSpan {
     display: flex;
     /* flex:1; */
@@ -1453,6 +1481,11 @@ a.TopPanelOptionLink:hover {
     display: flex;
     flex: 1;
 }
+
+.spacer10px {
+    width: 10px;
+}
+
 
 #CurrentDocumentMainCollageDiv {
     display: none;
@@ -1668,7 +1701,9 @@ div.MenuHorizontalLine {
 }
 
 
-
+#RightDocumentOptionalTitleSpan{
+    font-size: 10px;
+}
 
 .RightDocumentTab {
     display: flex;
@@ -1683,9 +1718,17 @@ div.MenuHorizontalLine {
     overflow: hidden;
     flex-shrink: 0;
     flex-grow: 0;
+    background-color: gray;
 }
 
-.RightDocumentTitle {
+.RightDocumentTabSelected {
+    border-right-color: transparent;
+    border-right-width: 0px;
+    background-color: rgba(37, 38, 39, 0.1);
+    box-shadow: none;
+}
+
+.RightDocumentTabTitle {
     display: inline-block;
     /* Ensures the element respects width */
     white-space: nowrap;
