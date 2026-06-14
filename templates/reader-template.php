@@ -233,7 +233,7 @@ if (!empty($connections_info)) {
     <canvas id="flinks-canvas"></canvas>
 </div>
 
-<div id="LinksListContainerDiv">
+<div id="LinksListContainerDiv" class="theme-light">
     <div id="LinksListTopRow">
         <div id="LinksListTopRowLeftSortButtonContainer"></div>
         <div id="LinksListTopRowMiddleSpacer"></div>

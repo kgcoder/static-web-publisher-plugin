@@ -80,14 +80,16 @@ canvas {
 #middle-canvas-topDiv {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-end;
+    padding-bottom: 10px;
     width: 50px;
-    padding-top: 4px;
+    /* padding-top: 4px; */
     flex-shrink: 0;
+    color: #515152;
 
     background-color: rgba(233, 233, 233, 0.3);
     align-items: center;
-    justify-content: space-around;
+    /* justify-content: space-around; */
     border-bottom-style: solid;
     border-bottom-width: 1px;
     border-bottom-color: rgba(37, 38, 39, 0.2);
@@ -1003,6 +1005,7 @@ code {
     width: 16px;
     height: 16px;
     animation: spin 1s linear infinite;
+    flex-shrink: 0;
 
    
     display: none;
@@ -1350,22 +1353,28 @@ a.TopPanelOptionLink:hover {
 
 #CurrentDocumentTitleSpan0,
 #RightDocumentTitleSpan {
-    display: flex;
-    /* flex:1; */
-    /* display: inline-block; Ensures the element respects width */
-    white-space: nowrap;
-    /* Prevents the text from wrapping to the next line */
-    overflow: hidden;
-    /* Hides overflowing content */
-    text-overflow: ellipsis;
+       display: block;
     margin-right: 20px;
-
+    
     color: rgba(37, 38, 39, 0.5);
     font-size: 14px;
     font-weight: 500;
     font-family: 'Inter', sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
     /* cursor: default; */
 }
+
+#CurrentDocumentOptionalTitleSpan{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+}
+
+
 #CurrentDocumentTitleLink,
 #RightDocumentTitleLink {
     color:rgba(37, 38, 39, 0.5);
@@ -1700,10 +1709,6 @@ div.MenuHorizontalLine {
     width: 10px;
 }
 
-
-#RightDocumentOptionalTitleSpan{
-    font-size: 10px;
-}
 
 .RightDocumentTab {
     display: flex;

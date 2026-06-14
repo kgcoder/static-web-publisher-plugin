@@ -544,17 +544,22 @@ setupFlinksCanvasDPR(){
             }
 
 
-           // const textContainer = this.rightMainRowDivs[i]
-
+           
             const tab = this.rightTabDivs[i]
             textContainer.style.display = index === i ? 'flex' : 'none'
             if(this.rightNotesData.length > 1){
-                const span = tab.getElementsByClassName('RightDocumentTitle')[0]
-                span.style.color = index === i ? 'rgba(37, 38, 39, 0.2)' : 'rgba(37, 38, 39, 0.5)'
+                const span = tab.getElementsByClassName('RightDocumentTabTitle')[0]
     
-                tab.style.backgroundColor = index === i ? 'rgba(37, 38, 39, 0.1)' : 'gray'
-    
-                tab.style.boxShadow = index === i ? 'none' : 'inset -1px 0 0 0 rgba(0, 0, 0, 0.3)';
+                if(index === i){
+                    if(!tab.classList.contains('RightDocumentTabSelected'))tab.classList.add('RightDocumentTabSelected')
+                    if(!span.classList.contains('RightDocumentTabTitleSelected'))span.classList.add('RightDocumentTabTitleSelected')
+
+                }else{
+                    if(tab.classList.contains('RightDocumentTabSelected'))tab.classList.remove('RightDocumentTabSelected')
+                    if(span.classList.contains('RightDocumentTabTitleSelected'))span.classList.remove('RightDocumentTabTitleSelected')
+
+                }
+                
             }
 
            
@@ -576,19 +581,27 @@ setupFlinksCanvasDPR(){
             g.pdm.populatePanelsOfOneRightDoc()
         }
 
-        const titleSpan = document.getElementById("RightDocumentTitleSpan")
+        console.log('g.readingManager',g.readingManager)
+        const optionalTitleSpan = document.getElementById("RightDocumentOptionalTitleSpan")
+        if(g.readingManager.rightNotesData.length === 1){
 
-
-        let title = noteData.title ?? ''
-        if(noteData.collageViewer){
-            if(noteData.collageViewer.content){
-                title = noteData.collageViewer.content.title ?? ''
-            }
+            optionalTitleSpan.innerText = noteData.title ?? ''
+           
+            optionalTitleSpan.style.display = 'flex'
+        }else{
+            optionalTitleSpan.style.display = 'none'
         }
 
 
+        const titleSpan = document.getElementById("RightDocumentTitleSpan")
 
-        titleSpan.innerHTML = title
+        console.log('noteData',noteData)
+
+        let title = noteData.url ?? ''
+     
+        titleSpan.innerText = title
+
+        console.log('show tab')
 
 
   
@@ -1150,21 +1163,11 @@ setupFlinksCanvasDPR(){
         function addTab(noteData,i, isSelected = false) {
             const tabDiv = document.createElement('div')
             tabDiv.className = 'RightDocumentTab'
-            tabDiv.style.backgroundColor = 'gray'
             tabDiv.style.height = `${kRightDivTopBarHeight}px`
             tabDiv.style.width = `${tabWidth}px`
             tabDiv.style.top = 0
             tabDiv.style.left = `${i * tabWidth}px`
-            tabDiv.style.boxShadow = 'inset -1px 0 0 0 rgba(0, 0, 0, 0.3)';
 
-         
-
-            if(isSelected){
-                tabDiv.style.borderRightColor = 'transparent'
-                tabDiv.style.borderRightWidth = '0px'
-                tabDiv.style.backgroundColor = 'rgba(37, 38, 39, 0.1)'
-                tabDiv.style.boxShadow = 'none'
-            }
 
             tabsContainerDiv.appendChild(tabDiv)
             const currentIndex = i            
@@ -1186,12 +1189,20 @@ setupFlinksCanvasDPR(){
             tabDiv.appendChild(tabCircleDiv)
 
             const noteTitleSpan = document.createElement('span')
-            noteTitleSpan.className = 'RightDocumentTitle'
-            noteTitleSpan.innerHTML = noteData.title
+
+            noteTitleSpan.className = 'RightDocumentTabTitle'
+            noteTitleSpan.innerText = noteData.title
+
 
             noteData.titleSpan = noteTitleSpan
 
             tabDiv.appendChild(noteTitleSpan)
+
+            if(isSelected){
+                tabDiv.classList.add('RightDocumentTabSelected')
+                noteTitleSpan.classList.add('RightDocumentTabTitleSelected')
+            }
+
         }
 
         if (docCount > 1) {

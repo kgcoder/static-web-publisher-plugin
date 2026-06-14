@@ -770,7 +770,7 @@ class PopupDocumentManager{
 
         }
 
-        optionalTitleSpan.style.display = isEmbedded ? 'flex' : 'none'
+        optionalTitleSpan.style.display = isEmbedded ? 'block' : 'none'
 
 
 
@@ -1504,10 +1504,12 @@ class PopupDocumentManager{
         
 
         this.isLeftSourceCodeShowing = !this.isLeftSourceCodeShowing
-
+        
         const buttonDiv = document.getElementById("CurrentDocumentSourceCodeButton")
- 
-        buttonDiv.style.color = this.isLeftSourceCodeShowing ? 'white' : 'red'
+
+        if(!this.isLeftSourceCodeShowing) buttonDiv.classList.remove('selectedIcon')
+        else buttonDiv.classList.add('selectedIcon')
+
         buttonDiv.style.backgroundColor = this.isLeftSourceCodeShowing ? 'rgb(72, 77, 233)' : 'transparent'
 
 
@@ -1532,7 +1534,8 @@ class PopupDocumentManager{
 
         const buttonDiv = document.getElementById("RightDocumentSourceCodeButton")
   
-        buttonDiv.style.color = '#0000ff'//this.isRightSourceCodeShowing ? 'white' : undefined
+        if(!this.isRightSourceCodeShowing) buttonDiv.classList.remove('selectedIcon')
+        else buttonDiv.classList.add('selectedIcon')        
         buttonDiv.style.backgroundColor = this.isRightSourceCodeShowing ? 'rgb(72, 77, 233)' : 'transparent'
 
 
@@ -1824,6 +1827,8 @@ class PopupDocumentManager{
                 optionalTitleSpan.style.display = 'none'
             }
 
+            const titleSpan = document.getElementById("RightDocumentTitleSpan")
+            titleSpan.innerText = noteData.url ?? ''
          
 
         }else{
@@ -1834,8 +1839,6 @@ class PopupDocumentManager{
        
         }
 
-        const titleSpan = document.getElementById("RightDocumentTitleSpan")
-        titleSpan.innerText = noteData.url ?? ''
 
        
 
@@ -1989,7 +1992,7 @@ class PopupDocumentManager{
         const flinksContainerWidth = isFullscreenList ? window.innerWidth : kMaxListWidth 
         flinksListContainerDiv.style.top = (kLeftDivTop + 1) + 'px'
         flinksListContainerDiv.style.width = `${isFullscreenList ? window.innerWidth : kMaxListWidth}px`
-        flinksListContainerDiv.style.maxHeight = `${window.innerHeight - kLeftDivTop}px`
+        flinksListContainerDiv.style.maxHeight = `${window.innerHeight - kLeftDivTop - g.adminBarHeight}px`
         
 
         if(g.isMobileMode){
@@ -2025,6 +2028,18 @@ class PopupDocumentManager{
         originalLinksButton.style.display = flinksWereModified ? 'flex' : 'none'
         originalLinksRightSpacer.style.display = flinksWereModified ? 'flex' : 'none'
 
+        const topRowLeftContainer = document.getElementById("LinksListTopRowLeftSortButtonContainer")
+        const topRowRightContainer = document.getElementById("LinksListTopRowRightSortButtonContainer")
+
+
+        if(this.sortInRightDoc){
+            topRowLeftContainer.classList.remove("FlinksListSelectedSide")
+            topRowRightContainer.classList.add("FlinksListSelectedSide")
+        }else{
+            topRowRightContainer.classList.remove("FlinksListSelectedSide")
+            topRowLeftContainer.classList.add("FlinksListSelectedSide")
+
+        }
 
         flinksListContainerDiv.style.display = 'flex'
 
@@ -2061,30 +2076,24 @@ class PopupDocumentManager{
 
 
 
-        if(shouldShowTopRow){
-            const topRowLeftContainer = document.getElementById("LinksListTopRowLeftSortButtonContainer")
+         if(shouldShowTopRow){
             removeAllChildren(topRowLeftContainer)
-            const leftIconPath = this.sortInRightDoc ? iconPaths.ic_sort_triangle_light : iconPaths.ic_sort_triangle
     
-            const leftSortButton = createOneIconComponent(topRowLeftContainer,leftIconPath,'',24)
-    
-            leftSortButton.classList.add("LinksListSortButton")
-    
+            const leftSortButton = createOneSVGIconComponent(topRowLeftContainer,g.iconsInfo.svgIcons.triangleIcon,'','LinksListSortButton')
+        
             leftSortButton.addEventListener('click',() => {
                 this.sortInRightDoc = false
                 this.openFlinksList()
             })
     
             
-            const topRowRightContainer = document.getElementById("LinksListTopRowRightSortButtonContainer")
             removeAllChildren(topRowRightContainer)
-            const rightIconPath = this.sortInRightDoc ? iconPaths.ic_sort_triangle : iconPaths.ic_sort_triangle_light
-            const rightSortButton = createOneIconComponent(topRowRightContainer,rightIconPath,'',24)
-    
-            rightSortButton.classList.add("LinksListSortButton")
-    
+            
+            const rightSortButton = createOneSVGIconComponent(topRowRightContainer,g.iconsInfo.svgIcons.triangleIcon,'','LinksListSortButton')
+        
             rightSortButton.addEventListener('click',() => {
                 this.sortInRightDoc = true
+                topRowRightContainer.classList.add("FlinksListSelectedSide")
                 this.openFlinksList()
             })
     
@@ -2258,7 +2267,8 @@ class PopupDocumentManager{
             deleteButtonContainer.style.display = foundLinksOutOfBounds || foundBrokenLinks ? 'flex' : 'none'
             
             if(shouldShowDeleteButton){
-                const deleteButton = createOneIconComponent(deleteButtonContainer,iconPaths.ic_bucket_button,'',24)
+                const deleteButton = createOneSVGIconComponent(deleteButtonContainer,g.iconsInfo.svgIcons.bucketIcon,'','DeleteFlinkButton')
+
                 deleteButton.addEventListener('click',(e) => {
                     e.stopPropagation()
                     
