@@ -33,7 +33,10 @@ body {
     display: flex;
     all:initial;
     flex: 1;
+        /* font-family: "Comic Sans MS", cursive; */
+
     font-family: Arial, Helvetica, sans-serif !important;
+    line-height: 1.55;
 }
 
 #MainContainer {
@@ -1972,3 +1975,10 @@ div.MenuHorizontalLine {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+p {
+    /* font-family: "Comic Sans MS", cursive; */
+    /* font-family: Arial, Helvetica, sans-serif !important; */
+    line-height: 1.4;
+}
+
