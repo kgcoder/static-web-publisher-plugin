@@ -22,35 +22,35 @@ if (!$post) {
     return;
 }
 
-$settings             = get_option('stwbpb_settings', []);
-$permalink            = get_permalink($post->ID);
+$stwbpb_settings      = get_option('stwbpb_settings', []);
+$stwbpb_permalink            = get_permalink($post->ID);
 $title                = $post->post_title;
-$htmlContent          = $post->post_content;
-$connections_info     = get_post_meta($post->ID, '_static_web_connections_info', true);
+$stwbpb_html_content          = $post->post_content;
+$stwbpb_connections_info     = get_post_meta($post->ID, '_static_web_connections_info', true);
 
-$doc_type = stwbpb_get_effective_doc_type($post);
-if ($doc_type === 'CDOC') {
-    $doc_source   = stwbpb_build_cdoc_source($post);
-    $source_class = 'cdoc-source';
-} elseif ($doc_type === 'CONDOC') {
-    $doc_source   = stwbpb_build_condoc_source($post);
-    $source_class = 'condoc-source';
+$stwbpb_doc_type = stwbpb_get_effective_doc_type($post);
+if ($stwbpb_doc_type === 'CDOC') {
+    $stwbpb_doc_source   = stwbpb_build_cdoc_source($post);
+    $stwbpb_source_class = 'cdoc-source';
+} elseif ($stwbpb_doc_type === 'CONDOC') {
+    $stwbpb_doc_source   = stwbpb_build_condoc_source($post);
+    $stwbpb_source_class = 'condoc-source';
 } else {
-    $doc_source   = null;
-    $source_class = 'hdoc-content';
+    $stwbpb_doc_source   = null;
+    $stwbpb_source_class = 'hdoc-content';
 }
 
-$embedPattern = '/<!-- wp:embed \{"url":"https:\/\/www\.youtube\.com\/(watch\?v=|embed\/)([^"]+)",.*\} -->.*<div class="wp-block-embed__wrapper">\s*(https:\/\/www\.youtube\.com\/(watch\?v=|embed\/)[^<]+)\s*<\/div>.*<!-- \/wp:embed -->/sU';
+$stwbpb_embed_pattern = '/<!-- wp:embed \{"url":"https:\/\/www\.youtube\.com\/(watch\?v=|embed\/)([^"]+)",.*\} -->.*<div class="wp-block-embed__wrapper">\s*(https:\/\/www\.youtube\.com\/(watch\?v=|embed\/)[^<]+)\s*<\/div>.*<!-- \/wp:embed -->/sU';
 
-$htmlContent = preg_replace_callback($embedPattern, function ($matches) {
+$stwbpb_html_content = preg_replace_callback($stwbpb_embed_pattern, function ($matches) {
     $youtubeId = $matches[2];
     return "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/$youtubeId\" frameborder=\"0\" allowfullscreen></iframe>";
-}, $htmlContent);
+}, $stwbpb_html_content);
 
-$htmlContent = stwbpb_strip_wp_tags($htmlContent);
+$stwbpb_html_content = stwbpb_strip_wp_tags($stwbpb_html_content);
 
-$allowed_tags = wp_kses_allowed_html('post');
-$allowed_tags['iframe'] = [
+$stwbpb_allowed_tags = wp_kses_allowed_html('post');
+$stwbpb_allowed_tags['iframe'] = [
     'src' => true,
     'width' => true,
     'height' => true,
@@ -60,19 +60,19 @@ $allowed_tags['iframe'] = [
     'sandbox' => true,
 ];
 
-$panels_escaped = stwbpb_get_panels($post);
+$stwbpb_panels_escaped = stwbpb_get_panels($post);
 
-$reader_url = plugins_url('reader/', dirname(__FILE__));
-$dist_url   = plugins_url('dist/', dirname(__FILE__));
+$stwbpb_reader_url = plugins_url('reader/', dirname(__FILE__));
+$stwbpb_dist_url   = plugins_url('dist/', dirname(__FILE__));
 
-$meta = [
-    'panels'    => $panels_escaped,
-    'permalink' => $permalink,
+$stwbpb_meta = [
+    'panels'    => $stwbpb_panels_escaped,
+    'permalink' => $stwbpb_permalink,
     'title'     => $title,
 ];
 
-if (!empty($connections_info)) {
-    $meta['connections'] = $connections_info;
+if (!empty($stwbpb_connections_info)) {
+    $stwbpb_meta['connections'] = $stwbpb_connections_info;
 }
 ?>
 
@@ -85,7 +85,7 @@ if (!empty($connections_info)) {
 
     <title><?php echo esc_html($title); ?></title>
 
-    <link rel="canonical" href="<?php echo esc_url($permalink); ?>">
+    <link rel="canonical" href="<?php echo esc_url($stwbpb_permalink); ?>">
 
     <?php wp_head(); ?>
 </head>
@@ -152,11 +152,11 @@ if (!empty($connections_info)) {
                         </div>
                     </div>
                     <div id="CurrentDocumentHeader" class="HeaderDiv"></div>
-                    <div id="CurrentDocumentMainDiv" class="<?php echo ($doc_source !== null) ? '' : 'hdoc-content'; ?>">
-                        <?php if ($doc_source !== null): ?>
-                            <script type="application/json" style="display:none;" id="<?php echo esc_attr($source_class); ?>"><?php echo wp_json_encode(['source' => $doc_source]); ?></script>
+                    <div id="CurrentDocumentMainDiv" class="<?php echo ($stwbpb_doc_source !== null) ? '' : 'hdoc-content'; ?>">
+                        <?php if ($stwbpb_doc_source !== null): ?>
+                            <script type="application/json" style="display:none;" id="<?php echo esc_attr($stwbpb_source_class); ?>"><?php echo wp_json_encode(['source' => $stwbpb_doc_source]); ?></script>
                         <?php else: ?>
-                            <?php echo wp_kses($htmlContent, $allowed_tags); ?>
+                            <?php echo wp_kses($stwbpb_html_content, $stwbpb_allowed_tags); ?>
                             <a id="MainDocDownloadLink">Download main document</a>
                         <?php endif; ?>
                     </div>
