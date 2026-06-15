@@ -29,7 +29,12 @@ body {
     }
 }
 
-
+#ui_root {
+    display: flex;
+    all:initial;
+    flex: 1;
+    font-family: Arial, Helvetica, sans-serif !important;
+}
 
 #MainContainer {
     display: flex;

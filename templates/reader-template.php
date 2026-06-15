@@ -118,143 +118,144 @@ if (!empty($connections_info)) {
     <?php wp_admin_bar_render(); ?>
 <?php endif; ?>
 
-<div id="AllDocumentsContainer" class="theme-light">
-    <div id="OneDocumentContainer">
+<div id="ui_root">
+    <div id="AllDocumentsContainer" class="theme-light">
+        <div id="OneDocumentContainer">
 
-        <div id="CurrentDocumentTopBar">
-            <div id="CurrentDocumentTopBarRow" class="theme-light">
+            <div id="CurrentDocumentTopBar">
+                <div id="CurrentDocumentTopBarRow" class="theme-light">
 
-                <div id="CurrentDocumentInfoButtonWrapper" class="DocumentTopBarButtonWrapper">
-                    <div title="Page info" id="CurrentDocumentInfoButton1" class="DocumentTopBarButton" href="#">
-                        <span id="CurrentDocumentInfoButtonCountDiv" class="CurrentDocumentTopButtonCountDiv"></span>
+                    <div id="CurrentDocumentInfoButtonWrapper" class="DocumentTopBarButtonWrapper">
+                        <div title="Page info" id="CurrentDocumentInfoButton1" class="DocumentTopBarButton" href="#">
+                            <span id="CurrentDocumentInfoButtonCountDiv" class="CurrentDocumentTopButtonCountDiv"></span>
+                        </div>
                     </div>
+
+                    <div title="Download all connected documents" id="CurrentDocumentDownloadAllDocsButton" class="DocumentTopBarButtonWrapper"></div>
+                    <div title="Toggle full screen" id="CurrentDocumentFullScreenButton" class="DocumentTopBarButtonWrapper"></div>
+                    <div id="CurrentDocumentExportButton" class="DocumentTopBarButtonWrapper"></div>
+                    <div title="Veiw Page Source" id="CurrentDocumentSourceCodeButton" class="DocumentTopBarButtonWrapper"></div>
+                    <div title="Center collage" id="CurrentDocumentCenterCollageButton" class="DocumentTopBarButtonWrapper"></div>
+                    <div id="CurrentDocumentRightPanelButton" class="DocumentTopBarButtonWrapper"></div>
+                    <div id="CurrentDocumentLeftPanelButton" class="DocumentTopBarButtonWrapper"></div>
+
+
+                    <div class="spacer10px"></div>
+
+                    <div class="TitleContainer">
+                        <span id="CurrentDocumentOptionalTitleSpan" style="display: none;"></span>
+                        <a id="CurrentDocumentTitleLink" href="#"><span id="CurrentDocumentTitleSpan0"></span></a>
+                    </div>
+                    
+                    <div id="CurrentDocumentEmbeddingSymbol" class="DocumentTopBarButtonWrapper" title="This document embeds another document. Click on the title to view the embedded document separately."></div>
+
+                    <div id="mainDocSpinner"></div>
+                </div>
+            </div>
+
+            <div id="CurrentDocumentMainRow" class="DocumentMainRow">
+
+                <div id="CurrentDocumentLeftPanel" class="DocumentSidePanel theme-light"></div>
+
+                <div id="CurrentDocument" class="DocumentColumn theme-light">
+                    <div id="CurrentDocumentTopPanel" class="DocumentTopPanel">
+                        <a id="CurrentDocumentTopPanelLogoLink" class="TopPanelLogoLink" href="#">
+                            <img id="CurrentDocumentTopPanelLogo" src="" width="150px" height="50px"/>
+                            <span id="CurrentDocumentTopPanelTitle" class="TopPanelTitle"><?php echo esc_html($title); ?></span>
+                        </a>
+                        <div class="spacer"></div>
+                        <div id="CurrentDocumentTopPanelOptionsRow" class="DocumentTopPanelOptionsRow"></div>
+                        <div id="LeftSandwichButton" class="SandwichButton">
+                            <div class="LeftSandwichLine"></div>
+                            <div class="LeftSandwichLine SandwichMiddleLine"></div>
+                            <div class="LeftSandwichLine"></div>
+                        </div>
+                    </div>
+                    <div id="CurrentDocumentHeader" class="HeaderDiv"></div>
+                    <div id="CurrentDocumentMainDiv" class="<?php echo ($doc_source !== null) ? '' : 'hdoc-content'; ?>">
+                        <?php if ($doc_source !== null): ?>
+                            <script type="application/json" style="display:none;" id="<?php echo esc_attr($source_class); ?>"><?php echo wp_json_encode(['source' => $doc_source]); ?></script>
+                        <?php else: ?>
+                            <?php echo wp_kses($htmlContent, $allowed_tags); ?>
+                            <a id="MainDocDownloadLink">Download main document</a>
+                        <?php endif; ?>
+                    </div>
+                    <textarea id="CurrentDocumentTextarea" class="NoteEditingDiv"></textarea>
+                    <div id="CurrentDocumentBottomPanel" class="DocumentBottomPanel">
+                        <div id="CurrentDocumentBottomPanelRow" class="DocumentBottomPanelRow"></div>
+                        <div id="CurrentDocumentBottomPanelBottomMessage" class="DocumentBottomPanelBottomMessage"></div>
+                    </div>
+                    <div id="CurrentDocumentMainCollageDiv">
+                        <canvas id="CurrentDocumentMainCollageCanvas" class="OneCollageCanvas"></canvas>
+                    </div>
+                    <div id="CurrentDocumentDropDownMenu" class="DocumentDropDownMenu"></div>
                 </div>
 
-                <div title="Download all connected documents" id="CurrentDocumentDownloadAllDocsButton" class="DocumentTopBarButtonWrapper"></div>
-                <div title="Toggle full screen" id="CurrentDocumentFullScreenButton" class="DocumentTopBarButtonWrapper"></div>
-                <div id="CurrentDocumentExportButton" class="DocumentTopBarButtonWrapper"></div>
-                <div title="Veiw Page Source" id="CurrentDocumentSourceCodeButton" class="DocumentTopBarButtonWrapper"></div>
-                <div title="Center collage" id="CurrentDocumentCenterCollageButton" class="DocumentTopBarButtonWrapper"></div>
-                <div id="CurrentDocumentRightPanelButton" class="DocumentTopBarButtonWrapper"></div>
-                <div id="CurrentDocumentLeftPanelButton" class="DocumentTopBarButtonWrapper"></div>
+                <div id="CurrentDocumentRightPanel" class="DocumentSidePanel theme-light"></div>
 
+                <div id="CurrentDocumentInfoContainer">
+                    <div id="CurrentDocumentInfo"></div>
+                </div>
 
+                <div id="CurrentDocumentExportContainer"></div>
+
+            </div>
+
+        </div>
+
+        <div id="middle-canvas-topDiv">
+            <svg id="svgArrow" width="28" height="12" viewBox="0 0 28 12" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>
+            <a id="LinksOpenButton"></a>
+        </div>
+
+        <div id="middle-space-div"></div>
+
+        
+
+        <div id="AllRightDocumentsContainer">
+            <div id="RightDocumentsTabsContainer"></div>
+            <div id="RightDocumentsTopBar">
+                <div title="Veiw Page Source" id="RightDocumentSourceCodeButton" class="DocumentTopBarButtonWrapper"></div>
+                <div id="RightDocumentRightPanelButton" class="DocumentTopBarButtonWrapper"></div>
+                <div id="RightDocumentLeftPanelButton" class="DocumentTopBarButtonWrapper"></div>
+                <div title="Center collage" id="RightDocumentCenterCollageButton" class="DocumentTopBarButtonWrapper"></div>
+            
                 <div class="spacer10px"></div>
 
                 <div class="TitleContainer">
-                    <span id="CurrentDocumentOptionalTitleSpan" style="display: none;"></span>
-                    <a id="CurrentDocumentTitleLink" href="#"><span id="CurrentDocumentTitleSpan0"></span></a>
+                    <span id="RightDocumentOptionalTitleSpan" style="display: none;"></span>
+                    <a id="RightDocumentTitleLink"><span id="RightDocumentTitleSpan"></span></a>
                 </div>
-                
-                <div id="CurrentDocumentEmbeddingSymbol" class="DocumentTopBarButtonWrapper" title="This document embeds another document. Click on the title to view the embedded document separately."></div>
-
-                <div id="mainDocSpinner"></div>
             </div>
+            <div id="RightDocumentCollectionContainer"></div>
+            <div id="RightDocumentExportContainer"></div>
         </div>
 
-        <div id="CurrentDocumentMainRow" class="DocumentMainRow">
+        <canvas id="flinks-canvas"></canvas>
+    </div>
 
-            <div id="CurrentDocumentLeftPanel" class="DocumentSidePanel theme-light"></div>
-
-            <div id="CurrentDocument" class="DocumentColumn theme-light">
-                <div id="CurrentDocumentTopPanel" class="DocumentTopPanel">
-                    <a id="CurrentDocumentTopPanelLogoLink" class="TopPanelLogoLink" href="#">
-                        <img id="CurrentDocumentTopPanelLogo" src="" width="150px" height="50px"/>
-                        <span id="CurrentDocumentTopPanelTitle" class="TopPanelTitle"><?php echo esc_html($title); ?></span>
-                    </a>
-                    <div class="spacer"></div>
-                    <div id="CurrentDocumentTopPanelOptionsRow" class="DocumentTopPanelOptionsRow"></div>
-                    <div id="LeftSandwichButton" class="SandwichButton">
-                        <div class="LeftSandwichLine"></div>
-                        <div class="LeftSandwichLine SandwichMiddleLine"></div>
-                        <div class="LeftSandwichLine"></div>
-                    </div>
-                </div>
-                <div id="CurrentDocumentHeader" class="HeaderDiv"></div>
-                <div id="CurrentDocumentMainDiv" class="<?php echo ($doc_source !== null) ? '' : 'hdoc-content'; ?>">
-                    <?php if ($doc_source !== null): ?>
-                        <script type="application/json" style="display:none;" id="<?php echo esc_attr($source_class); ?>"><?php echo wp_json_encode(['source' => $doc_source]); ?></script>
-                    <?php else: ?>
-                        <?php echo wp_kses($htmlContent, $allowed_tags); ?>
-                        <a id="MainDocDownloadLink">Download main document</a>
-                    <?php endif; ?>
-                </div>
-                <textarea id="CurrentDocumentTextarea" class="NoteEditingDiv"></textarea>
-                <div id="CurrentDocumentBottomPanel" class="DocumentBottomPanel">
-                    <div id="CurrentDocumentBottomPanelRow" class="DocumentBottomPanelRow"></div>
-                    <div id="CurrentDocumentBottomPanelBottomMessage" class="DocumentBottomPanelBottomMessage"></div>
-                </div>
-                <div id="CurrentDocumentMainCollageDiv">
-                    <canvas id="CurrentDocumentMainCollageCanvas" class="OneCollageCanvas"></canvas>
-                </div>
-                <div id="CurrentDocumentDropDownMenu" class="DocumentDropDownMenu"></div>
-            </div>
-
-            <div id="CurrentDocumentRightPanel" class="DocumentSidePanel theme-light"></div>
-
-            <div id="CurrentDocumentInfoContainer">
-                <div id="CurrentDocumentInfo"></div>
-            </div>
-
-            <div id="CurrentDocumentExportContainer"></div>
-
+    <div id="LinksListContainerDiv" class="theme-light">
+        <div id="LinksListTopRow">
+            <div id="LinksListTopRowLeftSortButtonContainer"></div>
+            <div id="LinksListTopRowMiddleSpacer"></div>
+            <div id="LinksListTopRowRightSortButtonContainer"></div>
+            <div id="LinksListTopRowEndSpacer"></div>
         </div>
-
-    </div>
-
-    <div id="middle-canvas-topDiv">
-        <svg id="svgArrow" width="28" height="12" viewBox="0 0 28 12" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>
-        <a id="LinksOpenButton"></a>
-    </div>
-
-    <div id="middle-space-div"></div>
-
-    
-
-    <div id="AllRightDocumentsContainer">
-        <div id="RightDocumentsTabsContainer"></div>
-        <div id="RightDocumentsTopBar">
-            <div title="Veiw Page Source" id="RightDocumentSourceCodeButton" class="DocumentTopBarButtonWrapper"></div>
-            <div id="RightDocumentRightPanelButton" class="DocumentTopBarButtonWrapper"></div>
-            <div id="RightDocumentLeftPanelButton" class="DocumentTopBarButtonWrapper"></div>
-            <div title="Center collage" id="RightDocumentCenterCollageButton" class="DocumentTopBarButtonWrapper"></div>
-        
-            <div class="spacer10px"></div>
-
-            <div class="TitleContainer">
-                <span id="RightDocumentOptionalTitleSpan" style="display: none;"></span>
-                <a id="RightDocumentTitleLink"><span id="RightDocumentTitleSpan"></span></a>
-            </div>
+        <div id="FlinksScrollDiv" class="scroll-container"></div>
+        <span id="LinksListModificationMessage">Floating links were modified</span>
+        <div id="LinksListBottomRow">
+            <button id="LinksListCloseButton" class="CancelButton">Close</button>
+            <div class="LinksListBottomRowMiddleSpacer"></div>
+            <button id="LinksListOriginalLinksButton" class="CancelButton">Show original flinks</button>
+            <div id="LinksListOriginalLinksSpacer" class="LinksListBottomRowMiddleSpacer"></div>
+            <button id="LinksListFixButton" class="ActionButton">Fix all</button>
         </div>
-        <div id="RightDocumentCollectionContainer"></div>
-        <div id="RightDocumentExportContainer"></div>
     </div>
 
-    <canvas id="flinks-canvas"></canvas>
+    <div id="spinner" class="spinner"></div>
+    <div id="CurrentUrl"></div>
+    <div id="multiple-links-popup" class="theme-light"></div>
 </div>
-
-<div id="LinksListContainerDiv" class="theme-light">
-    <div id="LinksListTopRow">
-        <div id="LinksListTopRowLeftSortButtonContainer"></div>
-        <div id="LinksListTopRowMiddleSpacer"></div>
-        <div id="LinksListTopRowRightSortButtonContainer"></div>
-        <div id="LinksListTopRowEndSpacer"></div>
-    </div>
-    <div id="FlinksScrollDiv" class="scroll-container"></div>
-    <span id="LinksListModificationMessage">Floating links were modified</span>
-    <div id="LinksListBottomRow">
-        <button id="LinksListCloseButton" class="CancelButton">Close</button>
-        <div class="LinksListBottomRowMiddleSpacer"></div>
-        <button id="LinksListOriginalLinksButton" class="CancelButton">Show original flinks</button>
-        <div id="LinksListOriginalLinksSpacer" class="LinksListBottomRowMiddleSpacer"></div>
-        <button id="LinksListFixButton" class="ActionButton">Fix all</button>
-    </div>
-</div>
-
-<div id="spinner" class="spinner"></div>
-<div id="CurrentUrl"></div>
-<div id="multiple-links-popup" class="theme-light"></div>
-
 <?php wp_footer(); ?>
 
 </body>
