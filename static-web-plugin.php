@@ -205,6 +205,48 @@ add_filter('template_include', function ($template) {
 
 
 
+add_action('wp_enqueue_scripts', function () {
+    if (is_admin() || !is_singular(['post', 'page'])) return;
+    global $post;
+    if (!$post) return;
+    if (stwbpb_get_doc_effective_display_mode($post) !== 'doc_in_reader') return;
+
+    $reader_url  = plugins_url('reader/', __FILE__);
+    $reader_path = plugin_dir_path(__FILE__) . 'reader/';
+    $dist_url    = plugins_url('dist/', __FILE__);
+    $dist_path   = plugin_dir_path(__FILE__) . 'dist/';
+
+    wp_enqueue_style('swp-reader',      $reader_url . 'reader.css',       [], filemtime($reader_path . 'reader.css'));
+    wp_enqueue_style('swp-export-page', $reader_url . 'ExportPage.css',   [], filemtime($reader_path . 'ExportPage.css'));
+    wp_enqueue_style('swp-page-info',   $reader_url . 'PageInfo.css',     [], filemtime($reader_path . 'PageInfo.css'));
+    wp_enqueue_style('swp-theme-light', $reader_url . 'themes/light.css', [], filemtime($reader_path . 'themes/light.css'));
+    wp_enqueue_style('swp-theme-dark',  $reader_url . 'themes/dark.css',  [], filemtime($reader_path . 'themes/dark.css'));
+    wp_enqueue_style('swp-theme-sepia', $reader_url . 'themes/sepia.css', [], filemtime($reader_path . 'themes/sepia.css'));
+
+    if (defined('WP_DEBUG') && WP_DEBUG) {
+        $js_url = $reader_url . 'readerStartUp.js';
+        $js_ver = filemtime($reader_path . 'readerStartUp.js');
+    } else {
+        $js_url = $dist_url . 'reader.bundle.min.js';
+        $js_ver = filemtime($dist_path . 'reader.bundle.min.js');
+    }
+    wp_enqueue_script('swp-reader-js', $js_url, [], $js_ver, false);
+
+    wp_add_inline_script('swp-reader-js', sprintf(
+        'window.vcReaderData = { assetsUrl: %s, proxyUrl: %s };',
+        wp_json_encode($reader_url . 'images/'),
+        wp_json_encode(home_url('/sw-proxy/'))
+    ), 'before');
+});
+
+add_filter('script_loader_tag', function ($tag, $handle) {
+    if ($handle === 'swp-reader-js') {
+        return str_replace('<script ', '<script type="module" ', $tag);
+    }
+    return $tag;
+}, 10, 2);
+
+
 add_action('wp_footer', 'stwbpb_output_xml', 9999);
 function stwbpb_output_xml() {
     if (!is_singular()) return;

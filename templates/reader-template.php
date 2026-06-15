@@ -87,26 +87,6 @@ if (!empty($connections_info)) {
 
     <link rel="canonical" href="<?php echo esc_url($permalink); ?>">
 
-    <link rel="stylesheet" href="<?php echo esc_url($reader_url . 'reader.css'); ?>">
-    <link rel="stylesheet" href="<?php echo esc_url($reader_url . 'ExportPage.css'); ?>">
-    <link rel="stylesheet" href="<?php echo esc_url($reader_url . 'PageInfo.css'); ?>">
-    <link rel="stylesheet" href="<?php echo esc_url($reader_url . 'themes/light.css'); ?>">
-    <link rel="stylesheet" href="<?php echo esc_url($reader_url . 'themes/dark.css'); ?>">
-    <link rel="stylesheet" href="<?php echo esc_url($reader_url . 'themes/sepia.css'); ?>">
-
-    <script>
-        window.vcReaderData = {
-            assetsUrl: <?php echo wp_json_encode($reader_url . 'images/'); ?>,
-            proxyUrl:  <?php echo wp_json_encode(home_url('/sw-proxy/')); ?>
-        };
-    </script>
-
-    <?php if (defined('WP_DEBUG') && WP_DEBUG): ?>
-        <script type="module" src="<?php echo esc_url($reader_url . 'readerStartUp.js'); ?>"></script>
-    <?php else: ?>
-        <script type="module" src="<?php echo esc_url($dist_url . 'reader.bundle.min.js'); ?>"></script>
-    <?php endif; ?>
-
     <?php wp_head(); ?>
 </head>
 
