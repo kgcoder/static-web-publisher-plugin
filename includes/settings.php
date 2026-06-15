@@ -60,8 +60,8 @@ function stwbpb_settings_page() {
                 <label>Page mode: </label>
                 <div class="spacerW10"></div>
                 <select name="stwbpb_settings[page_mode]">
-                    <option value="embedded_hdoc" <?php selected($settings['page_mode'], 'embedded_hdoc'); ?>>Embedded HDOC</option>
                     <option value="embedded_hdoc_forced" <?php selected($settings['page_mode'], 'embedded_hdoc_forced'); ?>>Embedded HDOC (forced)</option>
+                    <option value="embedded_hdoc" <?php selected($settings['page_mode'], 'embedded_hdoc'); ?>>Embedded HDOC</option>
                     <option value="doc_in_reader" <?php selected($settings['page_mode'], 'doc_in_reader'); ?>>Reader UI</option>
                     <option value="standalone_doc" <?php selected($settings['page_mode'], 'standalone_doc'); ?>>Standalone document</option>
                 </select>
@@ -71,8 +71,8 @@ function stwbpb_settings_page() {
                 <label>Post mode: </label>
                 <div class="spacerW10"></div>
                 <select name="stwbpb_settings[post_mode]">
-                    <option value="embedded_hdoc" <?php selected($settings['post_mode'], 'embedded_hdoc'); ?>>Embedded HDOC</option>
                     <option value="embedded_hdoc_forced" <?php selected($settings['post_mode'], 'embedded_hdoc_forced'); ?>>Embedded HDOC (forced)</option>
+                    <option value="embedded_hdoc" <?php selected($settings['post_mode'], 'embedded_hdoc'); ?>>Embedded HDOC</option>
                     <option value="doc_in_reader" <?php selected($settings['post_mode'], 'doc_in_reader'); ?>>Reader UI</option>
                     <option value="standalone_doc" <?php selected($settings['post_mode'], 'standalone_doc'); ?>>Standalone document</option>
                 </select>
@@ -312,9 +312,9 @@ function stwbpb_sanitize_settings($input) {
     $sanitized['comments_title'] = isset($input['comments_title']) ? sanitize_text_field($input['comments_title']) : '';
     $sanitized['no_comments_message'] = isset($input['no_comments_message']) ? sanitize_text_field($input['no_comments_message']) : '';
 
-    $allowed_modes = array('embedded_hdoc', 'embedded_hdoc_forced', 'doc_in_reader', 'standalone_doc');
-    $sanitized['page_mode'] = isset($input['page_mode']) && in_array($input['page_mode'], $allowed_modes, true) ? $input['page_mode'] : 'embedded_hdoc';
-    $sanitized['post_mode'] = isset($input['post_mode']) && in_array($input['post_mode'], $allowed_modes, true) ? $input['post_mode'] : 'embedded_hdoc';
+    $allowed_modes = array('embedded_hdoc_forced', 'embedded_hdoc', 'doc_in_reader', 'standalone_doc');
+    $sanitized['page_mode'] = isset($input['page_mode']) && in_array($input['page_mode'], $allowed_modes, true) ? $input['page_mode'] : 'embedded_hdoc_forced';
+    $sanitized['post_mode'] = isset($input['post_mode']) && in_array($input['post_mode'], $allowed_modes, true) ? $input['post_mode'] : 'embedded_hdoc_forced';
 
 
     // Sanitize top_panel

@@ -53,8 +53,8 @@ function stwbpb_custom_post_endpoints_meta_box_callback($post) {
     <label for="hdoc_display_mode"><strong>Display mode:</strong></label><br>
     <select name="hdoc_display_mode" id="hdoc_display_mode" style="width:100%;margin-top:4px;">
         <option value="default" <?php selected($mode_value, 'default'); ?>>Default (use global setting)</option>
-        <option value="embedded_hdoc" <?php selected($mode_value, 'embedded_hdoc'); ?>>Embedded HDOC</option>
         <option value="embedded_hdoc_forced" <?php selected($mode_value, 'embedded_hdoc_forced'); ?>>Embedded HDOC (forced)</option>
+        <option value="embedded_hdoc" <?php selected($mode_value, 'embedded_hdoc'); ?>>Embedded HDOC</option>
         <option value="doc_in_reader" <?php selected($mode_value, 'doc_in_reader'); ?>>Doc inside the Reader</option>
         <option value="standalone_doc" <?php selected($mode_value, 'standalone_doc'); ?>>Standalone doc</option>
     </select>
@@ -150,7 +150,7 @@ function stwbpb_custom_post_endpoints_save_meta_box($post_id) {
         : '';
     update_post_meta($post_id, '_cdoc_svg', $cdoc_svg);
 
-    $allowed_modes = array('default', 'embedded_hdoc', 'embedded_hdoc_forced', 'doc_in_reader', 'standalone_doc');
+    $allowed_modes = array('default', 'embedded_hdoc_forced', 'embedded_hdoc', 'doc_in_reader', 'standalone_doc');
     $mode = isset($_POST['hdoc_display_mode']) && in_array($_POST['hdoc_display_mode'], $allowed_modes, true)
         ? sanitize_text_field(wp_unslash($_POST['hdoc_display_mode']))
         : 'default';
