@@ -25,6 +25,10 @@ function stwbpb_render_comment_form($post_id, $parent_id, $error, $submitted) {
 
     $nonce = wp_create_nonce('swp_comment_form');
 
+    $post           = $post_id ? get_post($post_id) : null;
+    $post_title     = $post ? get_the_title($post) : '';
+    $parent_comment = ($parent_id > 0) ? get_comment($parent_id) : null;
+
     header('Content-Type: text/html; charset=UTF-8');
     ?>
 <!DOCTYPE html>
@@ -43,6 +47,16 @@ body {
     padding: 20px;
 }
 h2 { font-size: 16px; margin-bottom: 16px; font-weight: 600; }
+.swp-cf-context {
+    background: #f0f0f0;
+    border-left: 3px solid #aaa;
+    border-radius: 4px;
+    padding: 10px 12px;
+    margin-bottom: 16px;
+    font-size: 13px;
+}
+.swp-cf-context-label { font-weight: 600; margin-bottom: 4px; }
+.swp-cf-context-excerpt { color: #555; font-style: italic; line-height: 1.4; }
 .swp-cf-field { margin-bottom: 12px; }
 label { display: block; margin-bottom: 4px; font-weight: 500; font-size: 13px; }
 input[type="text"], input[type="email"], textarea {
@@ -83,11 +97,23 @@ button[type="submit"]:hover { background: #111; }
     button[type="submit"] { background: #555; }
     button[type="submit"]:hover { background: #777; }
     .swp-cf-error { background: #3a1a1a; border-color: #a55; color: #f99; }
+    .swp-cf-context { background: #2a2a2a; border-color: #666; }
+    .swp-cf-context-excerpt { color: #aaa; }
 }
 </style>
 </head>
 <body>
 <h2><?php esc_html_e('Leave a comment', 'static-web-publisher'); ?></h2>
+<?php if ($parent_comment): ?>
+<div class="swp-cf-context">
+    <div class="swp-cf-context-label"><?php echo esc_html(sprintf(__('Replying to %s', 'static-web-publisher'), $parent_comment->comment_author)); ?></div>
+    <div class="swp-cf-context-excerpt"><?php echo esc_html(wp_trim_words(wp_strip_all_tags($parent_comment->comment_content), 30)); ?></div>
+</div>
+<?php elseif ($post_title): ?>
+<div class="swp-cf-context">
+    <div class="swp-cf-context-label"><?php echo esc_html(sprintf(__('Commenting on: %s', 'static-web-publisher'), $post_title)); ?></div>
+</div>
+<?php endif; ?>
 <?php if ($error): ?>
 <div class="swp-cf-error"><?php echo esc_html($error); ?></div>
 <?php endif; ?>
