@@ -32,6 +32,8 @@ function stwbpb_get_panels($post) {
 
     $comments_title = $settings['comments_title'];
     $no_comments_message = $settings['no_comments_message'];
+    $reply_button_label = $settings['reply_button_label'] ?? '';
+    $leave_comment_label = $settings['leave_comment_label'] ?? '';
 
 
     $top_panel = $settings['top_panel'];
@@ -97,11 +99,19 @@ if (!empty($top_panel['links'])) {
 }
 ?>
 <?php if ($should_show_side_panel): ?>
-<side<?php
-if(!empty($side_panel_left)){
-    echo ' left="true"';
+<?php
+$commenting_open = $post->comment_status === 'open';
+$comments_attrs = '';
+$comments_attrs .= !empty($comments_title)      ? ' title="'              . esc_attr($comments_title)      . '"' : '';
+$comments_attrs .= !empty($no_comments_message) ? ' empty="'              . esc_attr($no_comments_message) . '"' : '';
+if ($commenting_open) {
+    $leave_comment_url = home_url("/sw-comment-form/?post={$post->ID}");
+    $comments_attrs .= ' leave-comment-url="'                             . esc_url($leave_comment_url)     . '"';
+    $comments_attrs .= !empty($reply_button_label)  ? ' reply-label="'         . esc_attr($reply_button_label)  . '"' : '';
+    $comments_attrs .= !empty($leave_comment_label) ? ' leave-comment-label="' . esc_attr($leave_comment_label) . '"' : '';
 }
-?>><?php echo '<comments' . (!empty($comments_title) ? ' title="' . esc_attr($comments_title) . '"' : '') . (!empty($no_comments_message) ? ' empty="' . esc_attr($no_comments_message) . '"' : '') . '>' . esc_url($comments_link). '</comments>' ?></side>
+?>
+<side<?php if(!empty($side_panel_left)){ echo ' left="true"'; } ?>><?php echo '<comments' . $comments_attrs . '>' . esc_url($comments_link) . '</comments>' ?></side>
 <?php endif; ?>
 <?php if($should_show_bottom_panel){ ?>
 <bottom>
@@ -147,13 +157,8 @@ if (!empty($section['links'])) {
 
 
 function stwbpb_has_comment_section($post) {
-    // Check if comments are globally allowed and post-specific status
-    $global_comments_setting = get_option('default_comment_status');
-    $theme_supports_comments = function_exists('comments_template');
-
-    if ($post && $post->comment_status === 'open' && $global_comments_setting === 'open' && $theme_supports_comments) {
-        return true;
-    }
-
-    return false;
+    if (!$post || !function_exists('comments_template')) return false;
+    $commenting_open = $post->comment_status === 'open';
+    $has_approved_comments = (int) get_comments_number($post->ID) > 0;
+    return $commenting_open || $has_approved_comments;
 }

@@ -18,6 +18,8 @@ function stwbpb_settings_page() {
         'post_publish_date' => 'show',
         'comments_title' => '',
         'no_comments_message' => '',
+        'reply_button_label' => '',
+        'leave_comment_label' => '',
         'top_panel' => array(
             'main_link' => '',
             'main_title' => '',
@@ -131,7 +133,18 @@ function stwbpb_settings_page() {
                 <div class="spacerW10"></div>
                 <input class="single-text-input" type="text" name="stwbpb_settings[no_comments_message]" value="<?php echo esc_attr($settings['no_comments_message']); ?>" />
             </div>
-            
+
+            <div class="settings-option-div">
+                <label>Reply button label: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[reply_button_label]" value="<?php echo esc_attr($settings['reply_button_label']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Leave a comment label: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[leave_comment_label]" value="<?php echo esc_attr($settings['leave_comment_label']); ?>" />
+            </div>
 
 
 
@@ -264,6 +277,8 @@ function stwbpb_settings_init() {
         'post_publish_date' => 'show',
         'comments_title' => '',
         'no_comments_message' => '',
+        'reply_button_label' => '',
+        'leave_comment_label' => '',
         'top_panel' => array(
             'main_link' => '',
             'main_title' => '',
@@ -311,6 +326,8 @@ function stwbpb_sanitize_settings($input) {
     $sanitized['post_publish_date'] = isset($input['post_publish_date']) && in_array($input['post_publish_date'], $allowed_vis, true) ? $input['post_publish_date'] : 'show';
     $sanitized['comments_title'] = isset($input['comments_title']) ? sanitize_text_field($input['comments_title']) : '';
     $sanitized['no_comments_message'] = isset($input['no_comments_message']) ? sanitize_text_field($input['no_comments_message']) : '';
+    $sanitized['reply_button_label'] = isset($input['reply_button_label']) ? sanitize_text_field($input['reply_button_label']) : '';
+    $sanitized['leave_comment_label'] = isset($input['leave_comment_label']) ? sanitize_text_field($input['leave_comment_label']) : '';
 
     $allowed_modes = array('embedded_hdoc_forced', 'embedded_hdoc', 'doc_in_reader', 'standalone_doc');
     $sanitized['page_mode'] = isset($input['page_mode']) && in_array($input['page_mode'], $allowed_modes, true) ? $input['page_mode'] : 'embedded_hdoc_forced';

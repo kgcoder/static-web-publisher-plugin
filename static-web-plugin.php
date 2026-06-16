@@ -19,6 +19,7 @@ if (!defined('ABSPATH')) {
 
 require_once plugin_dir_path(__FILE__) . 'includes/page-methods.php';
 require_once plugin_dir_path(__FILE__) . 'includes/comments-json.php';
+require_once plugin_dir_path(__FILE__) . 'includes/comment-form.php';
 require_once plugin_dir_path(__FILE__) . 'includes/doc-files.php';
 require_once plugin_dir_path(__FILE__) . 'includes/panels.php';
 require_once plugin_dir_path(__FILE__) . 'includes/hdoc.php';
@@ -58,6 +59,8 @@ function stwbpb_activate() {
     if ($main_link === '' && $main_title === '' && $logo_url === '') {
         $settings['comments_title'] = 'Comments';
         $settings['no_comments_message'] = 'No comments yet';
+        $settings['reply_button_label'] = 'Reply';
+        $settings['leave_comment_label'] = 'Leave a comment';
         $settings['top_panel']['main_title'] = get_bloginfo('name');
         $settings['top_panel']['main_link'] = home_url();
         
@@ -96,6 +99,12 @@ function stwbpb_custom_post_endpoints_rewrite_rules() {
     );
 
     add_rewrite_rule(
+        '^sw-comment-form/?$',
+        'index.php?sw_comment_form_request=1',
+        'top'
+    );
+
+    add_rewrite_rule(
         '^static/(.+)$',
         'index.php?doc_viewer_matches=$matches[1]',
         'top'
@@ -109,6 +118,7 @@ function stwbpb_custom_post_endpoints_query_vars($query_vars) {
     $query_vars[] = 'comments_custom_matches';
     $query_vars[] = 'json_comments_custom_matches';
     $query_vars[] = 'sw_proxy_request';
+    $query_vars[] = 'sw_comment_form_request';
 
     return $query_vars;
 }
@@ -148,6 +158,11 @@ function stwbpb_custom_post_endpoints_template_redirect() {
 
     if (isset($wp_query->query_vars['json_comments_custom_matches'])) {
         stwbpb_send_comments_json_from_post();
+        exit;
+    }
+
+    if (isset($wp_query->query_vars['sw_comment_form_request'])) {
+        stwbpb_handle_comment_form();
         exit;
     }
 

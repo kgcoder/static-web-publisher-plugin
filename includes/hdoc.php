@@ -74,7 +74,7 @@ function stwbpb_send_hdoc_for_post($post){
             'top' => true,
             'side' => array('side' => true),
             'bottom' => true,
-            'comments' => array('title' => true, 'empty' => true),
+            'comments' => array('title' => true, 'empty' => true, 'leave-comment-url' => true, 'reply-label' => true, 'leave-comment-label' => true),
             'logo' => array('src' => true, 'href' => true),
             'site-name' => array('href' => true),
             'a' => array('href' => true),

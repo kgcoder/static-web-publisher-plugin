@@ -35,6 +35,8 @@ function stwbpb_send_comments_json_from_post() {
     $order_param = isset($_GET['order']) ? strtolower( sanitize_text_field( wp_unslash( $_GET['order'] ) ) ) : '';
     $order = ($order_param === 'asc') ? 'ASC' : 'DESC';
 
+    $commenting_open = $post->comment_status === 'open';
+
     $comments = get_comments(array(
         'post_id' => $post_id,
         'status' => 'approve',
@@ -42,10 +44,10 @@ function stwbpb_send_comments_json_from_post() {
         'offset' => $offset,
         'orderby' => 'comment_date_gmt',
         'order' => $order,
-        
+
     ));
 
-    $data = array_map(function($comment) use ($post_id) {
+    $data = array_map(function($comment) use ($post_id, $commenting_open) {
         $comment_type = empty($comment->comment_type) ? 'comment' : $comment->comment_type;
 
         // Dates
@@ -61,7 +63,7 @@ function stwbpb_send_comments_json_from_post() {
         $avatar_48 = get_avatar_url($comment, array('size' => 48));
         $avatar_96 = get_avatar_url($comment, array('size' => 96));
 
-        return array(
+        $item = array(
             'id' => (int) $comment->comment_ID,
             'post' => (int) $post_id,
             'parent' => (int) $comment->comment_parent,
@@ -81,6 +83,12 @@ function stwbpb_send_comments_json_from_post() {
             'link' => get_comment_link($comment),
             'type' => $comment_type,
         );
+
+        if ($commenting_open) {
+            $item['reply-url'] = home_url("/sw-comment-form/?post={$post_id}&parent_id={$comment->comment_ID}");
+        }
+
+        return $item;
     }, $comments);
 
     wp_send_json($data);

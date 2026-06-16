@@ -2337,10 +2337,10 @@ class PopupDocumentManager{
         if (this.currentDocLeftPanelShowing) {
             const commentsUrl = g.readingManager.mainDocPanels.sidePanel.commentsUrl
             if (commentsUrl) {
-                const {commentsTitle,noCommentsMessage} = g.readingManager.mainDocPanels.sidePanel
-          
-                this.getComments(commentsDiv,commentsUrl,commentsTitle,noCommentsMessage,this)    
-                
+                const {commentsTitle, noCommentsMessage, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel} = g.readingManager.mainDocPanels.sidePanel
+
+                this.getComments(commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, this, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel)
+
             }
 
             const iframe = document.getElementById("leftDocLeftPanel")
@@ -2385,8 +2385,8 @@ class PopupDocumentManager{
 
             const commentsUrl = g.readingManager.mainDocPanels.sidePanel.commentsUrl
             if (commentsUrl) {
-                const {commentsTitle,noCommentsMessage} = g.readingManager.mainDocPanels.sidePanel
-                this.getComments(commentsDiv,commentsUrl,commentsTitle,noCommentsMessage,this)                
+                const {commentsTitle, noCommentsMessage, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel} = g.readingManager.mainDocPanels.sidePanel
+                this.getComments(commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, this, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel)
             }
 
             const iframe = document.getElementById("leftDocRightPanel")
@@ -2427,8 +2427,8 @@ class PopupDocumentManager{
 
             const commentsUrl = noteData.panels.sidePanel.commentsUrl
             if (commentsUrl) {
-                const {commentsTitle,noCommentsMessage} = noteData.panels.sidePanel
-                this.getComments(commentsDiv,commentsUrl,commentsTitle,noCommentsMessage,noteData)  
+                const {commentsTitle, noCommentsMessage, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel} = noteData.panels.sidePanel
+                this.getComments(commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, noteData, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel)
             }
 
             const iframe = document.getElementById("rightDocLeftPanel" + noteData.index)
@@ -2467,8 +2467,8 @@ class PopupDocumentManager{
 
             const commentsUrl = noteData.panels.sidePanel.commentsUrl
             if (commentsUrl) {
-                const {commentsTitle,noCommentsMessage} = noteData.panels.sidePanel
-                this.getComments(commentsDiv,commentsUrl,commentsTitle,noCommentsMessage,noteData)
+                const {commentsTitle, noCommentsMessage, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel} = noteData.panels.sidePanel
+                this.getComments(commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, noteData, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel)
             }
 
             const webview = document.getElementById("rightDocRightPanel" + noteData.index)
@@ -2493,7 +2493,7 @@ class PopupDocumentManager{
         }  
     }
 
-    getComments = async (commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, listenersOwner, page = 1) => {
+    getComments = async (commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, listenersOwner, leaveCommentUrl, replyLabel, leaveCommentLabel, page = 1) => {
         if (page === 1) {
             listenersOwner.commentsDiv = commentsDiv
             listenersOwner.commentsUrl = commentsUrl
@@ -2502,7 +2502,9 @@ class PopupDocumentManager{
             listenersOwner.comments = []
             listenersOwner.commentsTitle = commentsTitle
             listenersOwner.noCommentsMessage = noCommentsMessage
-
+            listenersOwner.leaveCommentUrl = leaveCommentUrl
+            listenersOwner.commentsReplyLabel = replyLabel
+            listenersOwner.commentsLeaveLabel = leaveCommentLabel
         }
         
         if(listenersOwner.allItemsLoaded)return
@@ -2572,12 +2574,20 @@ class PopupDocumentManager{
 
         this.cleanCommentsDiv(commentsDiv, listenersOwner)
        
+        const refreshComments = () => {
+            this.getComments(commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, listenersOwner, leaveCommentUrl, replyLabel, leaveCommentLabel)
+        }
+
+        const openPopupFn = (url) => {
+            this.openCommentPopup(url, refreshComments)
+        }
+
         if (commentsTitle && finalListOfComments.length) {
             const h2 = document.createElement('h2')
             h2.className = 'comments-title'
             h2.textContent = commentsTitle
             commentsDiv.appendChild(h2)
-            
+
         } else if(noCommentsMessage) {
             const span = document.createElement('span')
             span.className = 'no-comments-text'
@@ -2585,13 +2595,22 @@ class PopupDocumentManager{
             commentsDiv.appendChild(span)
         }
 
+        if (leaveCommentUrl && leaveCommentLabel) {
+            const leaveBtn = document.createElement('button')
+            leaveBtn.className = 'swp-leave-comment-btn'
+            leaveBtn.textContent = leaveCommentLabel
+            leaveBtn.addEventListener('click', () => openPopupFn(leaveCommentUrl))
+            commentsDiv.appendChild(leaveBtn)
+        }
+
         finalListOfComments.forEach((item) => {
 
-            const {id, parent,author_name, author_avatar_urls, date, content, indentationLevel} = item
+            const {author_name, author_avatar_urls, date, content, indentationLevel} = item
+            const commentReplyUrl = item['reply-url']
 
             const html = sanitizeHtml(content.rendered)
 
-            this.addCommentToDiv(commentsDiv, author_avatar_urls, author_name,html,date,indentationLevel)
+            this.addCommentToDiv(commentsDiv, author_avatar_urls, author_name, html, date, indentationLevel, commentReplyUrl, replyLabel, openPopupFn)
 
 
             
@@ -2626,7 +2645,7 @@ class PopupDocumentManager{
         })
     }
 
-    addCommentToDiv = (commentsDiv, author_avatar_urls, author_name,html,date,indentationLevel) => {
+    addCommentToDiv = (commentsDiv, author_avatar_urls, author_name, html, date, indentationLevel, commentReplyUrl, replyLabel, openPopupFn) => {
         const oneCommentDiv = document.createElement('div')
         oneCommentDiv.className = 'OneCommentContainerDiv'
         oneCommentDiv.style.marginLeft = `${20 * indentationLevel}px`
@@ -2641,8 +2660,48 @@ class PopupDocumentManager{
         </div>
         <div class="OneCommentContent">${html}</div>
         `
-    
+
+        if (commentReplyUrl && replyLabel && openPopupFn) {
+            const replyBtn = document.createElement('button')
+            replyBtn.className = 'swp-reply-btn'
+            replyBtn.textContent = replyLabel
+            replyBtn.addEventListener('click', () => openPopupFn(commentReplyUrl))
+            oneCommentDiv.appendChild(replyBtn)
+        }
+
         commentsDiv.appendChild(oneCommentDiv)
+    }
+
+    openCommentPopup = (url, onSuccess) => {
+        const overlay = document.createElement('div')
+        overlay.className = 'swp-comment-popup-overlay'
+
+        const popup = document.createElement('div')
+        popup.className = 'swp-comment-popup'
+
+        const closeBtn = document.createElement('button')
+        closeBtn.className = 'swp-comment-popup-close'
+        closeBtn.textContent = '✕'
+        closeBtn.addEventListener('click', () => overlay.remove())
+
+        const iframe = document.createElement('iframe')
+        iframe.src = url
+        iframe.className = 'swp-comment-popup-iframe'
+
+        popup.appendChild(closeBtn)
+        popup.appendChild(iframe)
+        overlay.appendChild(popup)
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove() })
+        document.body.appendChild(overlay)
+
+        const handler = (event) => {
+            if (event.data && event.data.type === 'swp-comment-submitted') {
+                overlay.remove()
+                window.removeEventListener('message', handler)
+                if (onSuccess) onSuccess()
+            }
+        }
+        window.addEventListener('message', handler)
     }
 
     
