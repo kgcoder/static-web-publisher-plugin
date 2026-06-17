@@ -148,6 +148,30 @@ function stwbpb_custom_post_endpoints_template_redirect() {
             }
             exit;
         }
+
+        $mode = $post ? stwbpb_get_doc_effective_display_mode($post) : '';
+        if ($mode !== 'doc_in_reader' && $mode !== 'standalone_doc') {
+            ob_start(function($html) {
+                libxml_use_internal_errors(true);
+                $dom = new DOMDocument();
+                @$dom->loadHTML('<?xml encoding="utf-8" ?>' . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
+                $contentTemp = $dom->getElementById('hdoc-content');
+                if ($contentTemp && $contentTemp->parentNode) {
+                    $parent = $contentTemp->parentNode;
+
+                    $existing = $parent->getAttribute('class');
+                    $parent->setAttribute('class', trim($existing . ' hdoc-content'));
+
+                    while ($contentTemp->firstChild) {
+                        $parent->insertBefore($contentTemp->firstChild, $contentTemp);
+                    }
+                    $parent->removeChild($contentTemp);
+                }
+
+                return $dom->saveHTML();
+            });
+        }
     }
 
 
