@@ -289,7 +289,6 @@ class PopupDocumentManager{
         
 
         allDocumentsContainer.addEventListener('mouseup',(e)=>{
-           // console.log('mouse up')
             if (this.isDragging) return
             if(this.isLeftSourceCodeShowing || this.isLeftExporting || this.isShowingInfo)return
      
@@ -333,7 +332,6 @@ class PopupDocumentManager{
             const clickX = pageX - leftOffset
 
 
-            console.log('clickX',clickX)
             
             if(g.readingManager.isFullScreen || clickX < docWidth){
                 if( pageY > kLeftDivTop){
@@ -345,9 +343,7 @@ class PopupDocumentManager{
                 if(pageY > rightTop){
                     g.readingManager.handleTouchInRightDoc(clickX,pageY,this.currentLink)
                 }
-            }else{
-                console.log('middle touched',clickX)
-                
+            }else{                
                 g.readingManager.handleTouchInMiddleGap(clickX,pageY)
             }
             
@@ -550,10 +546,6 @@ class PopupDocumentManager{
         const downloadAllButton = document.getElementById("CurrentDocumentDownloadAllDocsButton")
 
         downloadAllButton.style.display = count < total ? 'flex' : 'none'
-
-
-        console.log('mainPageUrl',mainPageUrl)
-
 
 
         setTimeout(() => {
@@ -774,7 +766,6 @@ class PopupDocumentManager{
             optionalTitleSpan.innerText = title
             titleSpan.innerText = dataObject.url
         }else{
-            console.log('wtf')
             titleSpan.innerText = title
 
         }
@@ -1603,7 +1594,6 @@ class PopupDocumentManager{
     }
 
     updateDocumentWidth() {
-        console.log('window',window)
 
         const mainContainer = document.getElementById("AllDocumentsContainer");
         const mainContainerRect = mainContainer.getBoundingClientRect();
@@ -1618,21 +1608,10 @@ class PopupDocumentManager{
         }else{
             g.isMobileMode = false
         }
-        console.log('docWidth',docWidth)
         g.readingManager.docWidth = docWidth
-        console.log('g.readingManager.docWidth',g.readingManager.docWidth)
         const allDocumentsContainer = document.getElementById("AllDocumentsContainer")
 
-        console.log('screenWidth',screenWidth)
-        console.log('window.innerWidth',window.innerWidth)
-        console.log('window.devicePixelRatio',window.devicePixelRatio)
-        console.log('document.documentElement.clientWidth',document.documentElement.clientWidth)
-        console.log('window.visualViewport?.width',window.visualViewport?.width)
-        console.log('screen.width',screen.width)
-        
-
-     //   const allRightDocumentsContainer = document.getElementById("AllRightDocumentsContainer")
-
+ 
         allDocumentsContainer.style.height = `${window.innerHeight - g.adminBarHeight}px`
         allDocumentsContainer.style.width = `${g.readingManager.isFullScreen ? screenWidth : docWidth * 2 + kMiddleGap}px`
         const oneDocumentContainer = document.getElementById("OneDocumentContainer")
@@ -1803,19 +1782,12 @@ class PopupDocumentManager{
 
 
     async updateConnectedDocumentsVisibility() {
-      //  const allDocumentsContainer = document.getElementById("AllDocumentsContainer")
         const allRightDocumentsContainer = document.getElementById("AllRightDocumentsContainer")
         
-       // const screenWidth = window.innerWidth
+        const screenWidth = window.innerWidth
 
-         const screenWidth = window.innerWidth
-       // g.readingManager.docWidth = (screenWidth - kMiddleGap) / 2// g.readingManager.docWidth
-
-        const docWidth = g.readingManager.docWidth// ( screenWidth - kMiddleGap) / 2
+        const docWidth = g.readingManager.docWidth
         const rightDocLeft = docWidth + kMiddleGap
-
-      //  allDocumentsContainer.style.backgroundColor = !g.readingManager.isFullScreen ? 'lightGray' : 'transparent'
-        // allDocumentsContainer.style.pointerEvents = !g.readingManager.isFullScreen ? 'all' : 'none'
 
         allRightDocumentsContainer.style.width = `${docWidth}px`
         allRightDocumentsContainer.style.left = `${rightDocLeft}px`
@@ -1995,7 +1967,6 @@ class PopupDocumentManager{
     openFlinksList = () => {
         const kMaxListWidth = 600
         const isFullscreenList = kMaxListWidth > window.innerWidth 
-        console.log('isFullscreenList',isFullscreenList)
         const iconPaths = g.iconsInfo.iconPaths
         const flinksListContainerDiv = document.getElementById("LinksListContainerDiv")
         const flinksContainerWidth = isFullscreenList ? window.innerWidth : kMaxListWidth 
@@ -2005,7 +1976,6 @@ class PopupDocumentManager{
         
 
         if(g.isMobileMode){
-            console.log('g.isMobileMode && !isFullscreenList',this.getMainLeftOffset())
             const leftOffset = this.getMainLeftOffset()
             if(leftOffset >=0){
 
@@ -2595,8 +2565,6 @@ class PopupDocumentManager{
 
         const jsonArray = JSON.parse(text)
 
-        console.log('json array',jsonArray)
-
         if (!jsonArray) return
 
         if (!jsonArray.length) {
@@ -2632,7 +2600,6 @@ class PopupDocumentManager{
         this.cleanCommentsDiv(commentsDiv, listenersOwner)
        
         const refreshComments = () => {
-            console.log('will refresh comments')
             this.getComments(commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, listenersOwner, leaveCommentUrl, replyLabel, leaveCommentLabel)
         }
 

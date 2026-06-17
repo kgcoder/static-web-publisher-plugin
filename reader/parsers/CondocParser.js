@@ -22,18 +22,14 @@ export function parseCondoc(url, fullContentString) {
     const fallbackReg = new RegExp(/<fallback\b[^>]*>[\s\S]*?<\/fallback>/,'mig')
     fullContentString = fullContentString.replace(fallbackReg,'')
 
-    console.log('fullContentString after trimming',fullContentString)
-
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(fullContentString, 'application/xml');
 
     const rootElement = xmlDoc.documentElement;
 
     const mainUrlTag = rootElement.querySelector('main')
-    console.log('mainUrlTag',mainUrlTag)
     const externalDocUrl = mainUrlTag.textContent
 
-    console.log('externalDocUrl',externalDocUrl)
     const connectionsRoot = rootElement.querySelector('connections')
 
     const connectedDocsData = []

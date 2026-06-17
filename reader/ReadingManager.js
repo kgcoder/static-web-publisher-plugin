@@ -272,7 +272,6 @@ setupFlinksCanvasDPR(){
 
 
     addNewRightDocDivs(){
-        console.log('addNewRightDocDivs in wp')
         if(!g.readingManager.rightNotesData.length)return
         g.readingManager.selectedRightDocIndex = 0
         const rightTopBar = document.getElementById("RightDocumentsTopBar")
@@ -581,7 +580,6 @@ setupFlinksCanvasDPR(){
             g.pdm.populatePanelsOfOneRightDoc()
         }
 
-        console.log('g.readingManager',g.readingManager)
         const optionalTitleSpan = document.getElementById("RightDocumentOptionalTitleSpan")
         if(g.readingManager.rightNotesData.length === 1){
 
@@ -595,13 +593,11 @@ setupFlinksCanvasDPR(){
 
         const titleSpan = document.getElementById("RightDocumentTitleSpan")
 
-        console.log('noteData',noteData)
 
         let title = noteData.url ?? ''
      
         titleSpan.innerText = title
 
-        console.log('show tab')
 
 
   
@@ -2020,7 +2016,6 @@ setupFlinksCanvasDPR(){
                     const {xRel, yRel} = relCoordinates
                     const distance = Math.sqrt(Math.pow(xRel - x, 2) + Math.pow(yRel - y, 2))
                     if(distance < Math.min(radius * collageViewer.k,10)){
-                        console.log('hit')
                         const noteDataIndex = this.getNoteIndexByUrl(flinksData.url)
 
                         if (noteDataIndex === -1) {
@@ -2158,8 +2153,6 @@ setupFlinksCanvasDPR(){
 
     handleTouchInRightDoc(pageX,pageY,currentlyPressedLink){
         if(this.isFullScreen)return
-
-        console.log('handleTouchInRightDoc',pageX,pageY)
         
         const topOffset = g.adminBarHeight
 
@@ -2510,7 +2503,6 @@ setupFlinksCanvasDPR(){
         if (this.mainDocType === 'c') {
             const scrollTop = secondDiv.scrollTop
             const topPanelHeight = g.pdm.getRightDocTopOffset(noteData)
-            console.log('topPanelHeight',topPanelHeight)
             this.moveLeftCollageInPositionForLink(flink,scrollTop,topPanelHeight)
         }else if(this.mainDocType === 'h'){
             this.scrollMainDocInPositionForLink(flink,secondDiv,noteData)
@@ -2531,10 +2523,8 @@ setupFlinksCanvasDPR(){
 
         const currentRightY = kLeftDivTop - rightScrollDiv.scrollTop + (rightTop + flink.topIndentHeight + rightBottom) / 2
 
-        console.log('currentRightY',currentRightY)
         const neededRightScrollTop =  -leftY - topPanelHeight + rightTopPanelHeight + rightScrollDiv.scrollTop + currentRightY
 
-        console.log('neededRightScrollTop',neededRightScrollTop)
         this.animateScroll(rightScrollDiv,neededRightScrollTop)
 
     }

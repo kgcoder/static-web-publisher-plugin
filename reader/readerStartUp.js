@@ -28,13 +28,11 @@ let currentLocation
 document.addEventListener('DOMContentLoaded', onLoad);
 
 async function onLoad() {
-    console.log('page loaded in plugin')
 
     const mainContainer = document.getElementById("AllDocumentsContainer");
     const mainContainerRect = mainContainer.getBoundingClientRect();
     g.adminBarHeight = mainContainerRect.top
 
-    console.log('g.adminBarHeight',g.adminBarHeight)
     currentLocation = window.location.toString()
 
     if (currentLocation.includes('#')) {
@@ -84,7 +82,6 @@ async function onLoad() {
 
         try {
             const embeddedCondocScript = document.querySelector('#condoc-source')
-            console.log('condoc script',embeddedCondocScript)
             const source = JSON.parse(embeddedCondocScript.textContent).source;
             if(source){
                 isEmbeddedCondoc = true
@@ -122,7 +119,6 @@ async function onLoad() {
     if(dataObject ){
         loadUIAndIcons()
     }
-    console.log({dataObject})
     await g.pdm.loadDocument(dataObject)
     dispatchReaderReady(currentLocation)
 
@@ -155,7 +151,6 @@ function loadUIAndIcons() {
 function dispatchReaderReady(url) {
     if (window.swpReaderReadyFired) return
     window.swpReaderReadyFired = true
-    console.log('dispatch swpReaderReady in plugin after doc load')
 
     document.dispatchEvent(new CustomEvent('swpReaderReady', { detail: { url } }))
 }
