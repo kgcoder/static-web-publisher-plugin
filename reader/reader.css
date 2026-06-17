@@ -29,7 +29,7 @@ body {
     }
 }
 
-#ui_root {
+#ui-root {
     display: flex;
     all:initial;
     flex: 1;
@@ -1200,7 +1200,7 @@ body.admin-bar #AllDocumentsContainer {
 
 }
 
-.DocumentSidePanel {
+.js-enabled .DocumentSidePanel {
     display: none;
     flex-shrink: 0;
     width: 200px;
@@ -1208,7 +1208,7 @@ body.admin-bar #AllDocumentsContainer {
 
 
 
-.DocumentTopPanel {
+.js-enabled .DocumentTopPanel {
     display: none;
     background-color: rgb(57, 56, 56);
     height: 50px;
@@ -1261,7 +1261,7 @@ a.TopPanelOptionLink:hover {
 
 
 
-.DocumentBottomPanel {
+.js-enabled .DocumentBottomPanel {
     display: none;
     background-color: rgb(57, 56, 56);
     /* height:50px; */

@@ -71,3 +71,11 @@ export function fetchWebPage(url,isForCondoc = false) {
     }
   })
 }
+
+export function invalidateCacheForUrl(url) {
+  for (const key of responseCache.keys()) {
+    if (key.startsWith(url)) {
+      responseCache.delete(key)
+    }
+  }
+}

@@ -156,6 +156,68 @@ if (!empty($section['links'])) {
 }
 
 
+function stwbpb_get_seo_panel_data($panels_xml) {
+    if (empty($panels_xml)) return null;
+
+    libxml_use_internal_errors(true);
+    $xml = simplexml_load_string($panels_xml);
+    libxml_clear_errors();
+    if ($xml === false) return null;
+
+    $data = [
+        'logo_href'       => null,
+        'logo_src'        => null,
+        'site_name'       => null,
+        'site_name_href'  => null,
+        'top_links'       => [],
+        'bottom_sections' => [],
+        'bottom_message'  => null,
+    ];
+
+    if (isset($xml->top)) {
+        $top = $xml->top;
+        if (isset($top->logo)) {
+            $logo = $top->logo;
+            $data['logo_src']  = isset($logo['src'])  ? (string) $logo['src']  : null;
+            $data['logo_href'] = isset($logo['href']) ? (string) $logo['href'] : null;
+        }
+        if (isset($top->{'site-name'})) {
+            $sn = $top->{'site-name'};
+            $data['site_name']      = (string) $sn;
+            $data['site_name_href'] = isset($sn['href']) ? (string) $sn['href'] : null;
+        }
+        foreach ($top->a as $a) {
+            $href = isset($a['href']) ? (string) $a['href'] : '';
+            $text = (string) $a;
+            if ($href !== '') {
+                $data['top_links'][] = ['href' => $href, 'text' => $text];
+            }
+        }
+    }
+
+    if (isset($xml->bottom)) {
+        $bottom = $xml->bottom;
+        foreach ($bottom->section as $section) {
+            $section_title = isset($section['title']) ? (string) $section['title'] : '';
+            $links = [];
+            foreach ($section->a as $a) {
+                $href = isset($a['href']) ? (string) $a['href'] : '';
+                $text = (string) $a;
+                if ($href !== '') {
+                    $links[] = ['href' => $href, 'text' => $text];
+                }
+            }
+            $data['bottom_sections'][] = ['title' => $section_title, 'links' => $links];
+        }
+        if (isset($bottom->{'bottom-message'})) {
+            $data['bottom_message'] = (string) $bottom->{'bottom-message'};
+        }
+    }
+
+    return $data;
+}
+
+
 function stwbpb_has_comment_section($post) {
     if (!$post || !function_exists('comments_template')) return false;
     $commenting_open = $post->comment_status === 'open';

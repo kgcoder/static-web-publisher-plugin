@@ -17,7 +17,7 @@ import { cleanConnectedDocURL, createOneIconComponent, createOneSVGIconComponent
 import PageInfoManager from './PageInfoManager.js'
 import CollageViewer from './CollageViewer.js'
 import { kColorsForFlinks } from './constants.js'
-import { fetchWebPage } from './NetworkManager.js'
+import { fetchWebPage, invalidateCacheForUrl } from './NetworkManager.js'
 import ExportPageManager from './ExportPageManager.js'
 import { loadStaticContentFromUrl } from './parsers/ParsingManager.js'
 import { hideMultipleLinksPopup } from './MultipleLinksPopupManager.js'
@@ -1094,8 +1094,8 @@ class PopupDocumentManager{
                 }
             }
 
-            topPanelLogoImage.style.display = 'none'
-            topPanelTitleSpan.style.display = 'none'
+            if(topPanelLogoImage) topPanelLogoImage.style.display = 'none'
+            if(topPanelTitleSpan) topPanelTitleSpan.style.display = 'none'
             if(topPanel.logo || topPanel.title){
                 let {isMainLinkStatic,logo:imageUrl,mainUrl:link,title} = topPanel
                 if(imageUrl){
@@ -2495,6 +2495,7 @@ class PopupDocumentManager{
 
     getComments = async (commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, listenersOwner, leaveCommentUrl, replyLabel, leaveCommentLabel, page = 1) => {
         if (page === 1) {
+            invalidateCacheForUrl(commentsUrl)
             listenersOwner.commentsDiv = commentsDiv
             listenersOwner.commentsUrl = commentsUrl
             listenersOwner.currentCommentsPage = 1
@@ -2539,6 +2540,7 @@ class PopupDocumentManager{
 
         const jsonArray = JSON.parse(text)
 
+        console.log('json array',jsonArray)
 
         if (!jsonArray) return
 
@@ -2575,6 +2577,7 @@ class PopupDocumentManager{
         this.cleanCommentsDiv(commentsDiv, listenersOwner)
        
         const refreshComments = () => {
+            console.log('will refresh comments')
             this.getComments(commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, listenersOwner, leaveCommentUrl, replyLabel, leaveCommentLabel)
         }
 

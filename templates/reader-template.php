@@ -61,6 +61,7 @@ $stwbpb_allowed_tags['iframe'] = [
 ];
 
 $stwbpb_panels_escaped = stwbpb_get_panels($post);
+$stwbpb_seo_panels = !empty($stwbpb_panels_escaped) ? stwbpb_get_seo_panel_data($stwbpb_panels_escaped) : null;
 
 $stwbpb_reader_url = plugins_url('reader/', dirname(__FILE__));
 $stwbpb_dist_url   = plugins_url('dist/', dirname(__FILE__));
@@ -82,6 +83,7 @@ if (!empty($stwbpb_connections_info)) {
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>document.documentElement.classList.add('js-enabled');</script>
 
     <title><?php echo esc_html($title); ?></title>
 
@@ -98,7 +100,7 @@ if (!empty($stwbpb_connections_info)) {
     <?php wp_admin_bar_render(); ?>
 <?php endif; ?>
 
-<div id="ui_root">
+<div id="ui-root">
     <div id="AllDocumentsContainer" class="theme-light">
         <div id="OneDocumentContainer">
 
@@ -139,19 +141,25 @@ if (!empty($stwbpb_connections_info)) {
 
                 <div id="CurrentDocument" class="DocumentColumn theme-light">
                     <div id="CurrentDocumentTopPanel" class="DocumentTopPanel">
-                        <a id="CurrentDocumentTopPanelLogoLink" class="TopPanelLogoLink" href="#">
-                            <img id="CurrentDocumentTopPanelLogo" src="" width="150px" height="50px"/>
-                            <span id="CurrentDocumentTopPanelTitle" class="TopPanelTitle"><?php echo esc_html($title); ?></span>
+                        <a id="CurrentDocumentTopPanelLogoLink" class="TopPanelLogoLink" href="<?php echo esc_url($stwbpb_seo_panels['logo_href'] ?? $stwbpb_seo_panels['site_name_href'] ?? '#'); ?>">
+                            <img id="CurrentDocumentTopPanelLogo" src="<?php echo esc_url($stwbpb_seo_panels['logo_src'] ?? ''); ?>" width="150px" height="50px"/>
+                            <span id="CurrentDocumentTopPanelTitle" class="TopPanelTitle"><?php echo esc_html($stwbpb_seo_panels['site_name'] ?? $title); ?></span>
                         </a>
                         <div class="spacer"></div>
-                        <div id="CurrentDocumentTopPanelOptionsRow" class="DocumentTopPanelOptionsRow"></div>
+                        <div id="CurrentDocumentTopPanelOptionsRow" class="DocumentTopPanelOptionsRow"><?php
+                        if (!empty($stwbpb_seo_panels['top_links'])) {
+                            foreach ($stwbpb_seo_panels['top_links'] as $stwbpb_tl) {
+                                echo '<a href="' . esc_url($stwbpb_tl['href']) . '">' . esc_html($stwbpb_tl['text']) . '</a>';
+                            }
+                        }
+                        ?></div>
                         <div id="LeftSandwichButton" class="SandwichButton">
                             <div class="LeftSandwichLine"></div>
                             <div class="LeftSandwichLine SandwichMiddleLine"></div>
                             <div class="LeftSandwichLine"></div>
                         </div>
                     </div>
-                    <div id="CurrentDocumentHeader" class="HeaderDiv"></div>
+                    <div id="CurrentDocumentHeader" class="HeaderDiv"><h1><?php echo esc_html($title); ?></h1></div>
                     <div id="CurrentDocumentMainDiv" class="<?php echo ($stwbpb_doc_source !== null) ? '' : 'hdoc-content'; ?>">
                         <?php if ($stwbpb_doc_source !== null): ?>
                             <script type="application/json" style="display:none;" id="<?php echo esc_attr($stwbpb_source_class); ?>"><?php echo wp_json_encode(['source' => $stwbpb_doc_source]); ?></script>
@@ -162,8 +170,22 @@ if (!empty($stwbpb_connections_info)) {
                     </div>
                     <textarea id="CurrentDocumentTextarea" class="NoteEditingDiv"></textarea>
                     <div id="CurrentDocumentBottomPanel" class="DocumentBottomPanel">
-                        <div id="CurrentDocumentBottomPanelRow" class="DocumentBottomPanelRow"></div>
-                        <div id="CurrentDocumentBottomPanelBottomMessage" class="DocumentBottomPanelBottomMessage"></div>
+                        <div id="CurrentDocumentBottomPanelRow" class="DocumentBottomPanelRow"><?php
+                        if (!empty($stwbpb_seo_panels['bottom_sections'])) {
+                            foreach ($stwbpb_seo_panels['bottom_sections'] as $stwbpb_bs) {
+                                echo '<section';
+                                if (!empty($stwbpb_bs['title'])) {
+                                    echo ' title="' . esc_attr($stwbpb_bs['title']) . '"';
+                                }
+                                echo '>';
+                                foreach ($stwbpb_bs['links'] as $stwbpb_bl) {
+                                    echo '<a href="' . esc_url($stwbpb_bl['href']) . '">' . esc_html($stwbpb_bl['text']) . '</a>';
+                                }
+                                echo '</section>';
+                            }
+                        }
+                        ?></div>
+                        <div id="CurrentDocumentBottomPanelBottomMessage" class="DocumentBottomPanelBottomMessage"><?php echo isset($stwbpb_seo_panels['bottom_message']) ? esc_html($stwbpb_seo_panels['bottom_message']) : ''; ?></div>
                     </div>
                     <div id="CurrentDocumentMainCollageDiv">
                         <canvas id="CurrentDocumentMainCollageCanvas" class="OneCollageCanvas"></canvas>
