@@ -426,6 +426,15 @@ class PopupDocumentManager{
         rightDocumentRightPanelButton.addEventListener('click',this.rightDocumentRightPanelButtonPressed)
     
     
+
+        const promotionButton = document.getElementById("PromotionButton")
+        if(promotionButton){
+            this.createOneSVGIconComponent(promotionButton,g.iconsInfo.svgIcons.extensionLogo,'Reader-PromotionButton')
+            promotionButton.addEventListener('click', this.promotionButtonPressed)
+
+        }
+
+        
    
 
   
@@ -2483,6 +2492,52 @@ class PopupDocumentManager{
 
         g.readingManager.applyFlinksOnTheRight()
 
+    }
+
+
+    promotionButtonPressed = () => {
+        this.openPromotionPopup()
+    }
+
+    openPromotionPopup = () => {
+        const PROMOTION_URL = 'https://reinventingtheweb.com/uploads/readers-web-promo-popup.html'
+
+        const overlay = document.createElement('div')
+        overlay.className = 'swp-comment-popup-overlay'
+
+        const popup = document.createElement('div')
+        popup.className = 'swp-comment-popup'
+
+        const closeBtn = document.createElement('button')
+        closeBtn.className = 'swp-comment-popup-close'
+        closeBtn.textContent = '✕'
+        closeBtn.addEventListener('click', () => overlay.remove())
+
+        const iframe = document.createElement('iframe')
+        iframe.src = PROMOTION_URL
+        iframe.className = 'swp-comment-popup-iframe'
+
+        iframe.addEventListener('load', () => {
+            try {
+                const links = iframe.contentDocument.querySelectorAll('a')
+                links.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        if (link.getAttribute('target') === '_blank') return
+                        e.preventDefault()
+                        overlay.remove()
+                        window.location.href = link.href
+                    })
+                })
+            } catch (_) {
+                // cross-origin: links behave as-is inside iframe
+            }
+        })
+
+        popup.appendChild(closeBtn)
+        popup.appendChild(iframe)
+        overlay.appendChild(popup)
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove() })
+        document.body.appendChild(overlay)
     }
 
     cleanCommentsDiv(commentsDiv, listnersOwner) {

@@ -218,17 +218,26 @@ Attributes:
 #### 7.2.1 `<comments>`
 
 ```xml
-<comments title="Comments" empty="No comments yet">https://…/comments.json</comments>
+<comments
+    title="Comments"
+    empty="No comments yet"
+    leave-comment-url="https://example.com/sw-comment-form/?post=19"
+    reply-label="Reply"
+    leave-comment-label="Leave a comment"
+>https://…/comments.json</comments>
 ```
 
 Attributes:
 
 * `title` (optional)
-* `empty` (optional)
+* `empty` (optional) — message shown when there are no comments
+* `leave-comment-url` (optional) — URL of the comment submission form for posting a top-level comment on this document. When absent, all posting UI ("Leave a comment" button and all "Reply" buttons) is hidden and the section is read-only. Existing comments are still displayed regardless.
+* `reply-label` (optional) — label for the per-comment Reply button (e.g. `"Reply"`). Used only when `leave-comment-url` is present.
+* `leave-comment-label` (optional) — label for the section-level Leave a comment button (e.g. `"Leave a comment"`). Used only when `leave-comment-url` is present.
 
 Content:
 
-* URL of a static-comments JSON array
+* URL of a static-comments JSON array (see Static Comments Specification)
 
 #### 7.2.2 `<ipage>`
 

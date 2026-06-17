@@ -121,6 +121,10 @@ if (!empty($stwbpb_connections_info)) {
                     <div id="CurrentDocumentRightPanelButton" class="DocumentTopBarButtonWrapper"></div>
                     <div id="CurrentDocumentLeftPanelButton" class="DocumentTopBarButtonWrapper"></div>
 
+                    <?php if (!empty($stwbpb_settings['show_promotion_button'])): ?>
+                    <div id="PromotionButton" class="DocumentTopBarButtonWrapper"></div>
+                    <?php endif; ?>
+
 
                     <div class="spacer10px"></div>
 

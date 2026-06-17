@@ -32,6 +32,7 @@ function stwbpb_settings_page() {
         ),
         'page_mode' => 'embedded_hdoc',
         'post_mode' => 'embedded_hdoc',
+        'show_promotion_button' => false,
     );
 
     $existing_settings = get_option('stwbpb_settings', array());
@@ -78,6 +79,12 @@ function stwbpb_settings_page() {
                     <option value="doc_in_reader" <?php selected($settings['post_mode'], 'doc_in_reader'); ?>>Reader UI</option>
                     <option value="standalone_doc" <?php selected($settings['post_mode'], 'standalone_doc'); ?>>Standalone document</option>
                 </select>
+            </div>
+
+            <div class="settings-option-div">
+                <label>Help promote Reader's Web by including a promo popup</label>
+                <div class="spacerW10"></div>
+                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[show_promotion_button]" value="1" <?php echo !empty($settings['show_promotion_button']) ? 'checked' : ''; ?>/>
             </div>
 
             <h2>Header info (pages)</h2>
@@ -316,6 +323,8 @@ function stwbpb_sanitize_settings($input) {
     if(isset($input['side_panel_on_the_left'])){
         $sanitized['side_panel_on_the_left'] = boolval($input['side_panel_on_the_left']);
     }
+
+    $sanitized['show_promotion_button'] = boolval($input['show_promotion_button'] ?? false);
 
     $sanitized['removal_selectors'] = isset($input['removal_selectors']) ? sanitize_text_field($input['removal_selectors']) : '';
 

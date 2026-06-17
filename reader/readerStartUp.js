@@ -28,7 +28,7 @@ let currentLocation
 document.addEventListener('DOMContentLoaded', onLoad);
 
 async function onLoad() {
-    console.log('page loaded')
+    console.log('page loaded in plugin')
 
     const mainContainer = document.getElementById("AllDocumentsContainer");
     const mainContainerRect = mainContainer.getBoundingClientRect();

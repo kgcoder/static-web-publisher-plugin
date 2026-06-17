@@ -31,23 +31,29 @@ HDOCs and Embedded HDOCs may include a **comments section** displayed in a side 
 [
   {
     "id": "c1",
+    "parent": 0,
     "author_name": "Alice",
     "author_email": "alice@example.com",
     "date": "2025-12-01T14:30:00Z",
-    "content": "This is a comment."
+    "content": "This is a comment.",
+    "reply-url": "https://example.com/sw-comment-form/?post=19&parent_id=c1"
   },
   {
     "id": 2,
+    "parent": 0,
     "author_name": "Bob",
     "author_email": "bob@example.com",
     "date": "2025-12-01T15:10:00Z",
-    "content": "Another comment."
+    "content": "Another comment.",
+    "reply-url": "https://example.com/sw-comment-form/?post=19&parent_id=2"
   }
 ]
 ```
 
-* `id`: Unique identifier for the comment (integer or string).
+* `id`: Unique identifier for the comment (integer or string). Must be present when `reply-url` is used, since the backend uses it to build the reply URL.
+* `parent`: ID of the parent comment (integer or string), or `0` for a top-level comment.
 * `author_name`: Name of the comment author.
 * `author_email`: Email of the comment author.
 * `date`: ISO 8601 timestamp of the comment.
 * `content`: Comment text.
+* `reply-url` (optional): Full URL of the comment form pre-configured to post a reply to this specific comment. The backend constructs the complete URL; the reader uses it as-is without modification. When absent, no Reply button is shown for that comment. When the document has commenting closed, `reply-url` is omitted from all comments.

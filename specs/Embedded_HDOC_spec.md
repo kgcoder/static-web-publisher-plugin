@@ -98,7 +98,10 @@ Example:
     "comments": {
       "url": "http://example.com/json-comments/?post=19",
       "title": "Comments",
-      "empty": "No comments yet"
+      "empty": "No comments yet",
+      "leave-comment-url": "http://example.com/sw-comment-form/?post=19",
+      "reply-label": "Reply",
+      "leave-comment-label": "Leave a comment"
     }
   },
   "bottom": {
