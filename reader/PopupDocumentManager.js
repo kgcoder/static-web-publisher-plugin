@@ -1094,8 +1094,8 @@ class PopupDocumentManager{
                 }
             }
 
-            if(topPanelLogoImage) topPanelLogoImage.style.display = 'none'
-            if(topPanelTitleSpan) topPanelTitleSpan.style.display = 'none'
+            topPanelLogoImage.style.display = 'none'
+            topPanelTitleSpan.style.display = 'none'
             if(topPanel.logo || topPanel.title){
                 let {isMainLinkStatic,logo:imageUrl,mainUrl:link,title} = topPanel
                 if(imageUrl){
