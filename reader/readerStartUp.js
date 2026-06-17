@@ -106,6 +106,8 @@ async function onLoad() {
                 }else{
                     await g.pdm.showEmptyCondoc(dataObject)
                 }
+                console.log('dispatch swpReaderReady in plugin')
+                document.dispatchEvent(new CustomEvent('swpReaderReady', { detail: { url: currentLocation } }))
 
                 return
 
@@ -123,9 +125,12 @@ async function onLoad() {
     }
     console.log({dataObject})
     await g.pdm.loadDocument(dataObject)
+    console.log('dispatch swpReaderReady in plugin after doc load')
+
+    document.dispatchEvent(new CustomEvent('swpReaderReady', { detail: { url: currentLocation } }))
 
 
- 
+
 
 }
 
