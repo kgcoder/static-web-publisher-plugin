@@ -106,8 +106,7 @@ async function onLoad() {
                 }else{
                     await g.pdm.showEmptyCondoc(dataObject)
                 }
-                console.log('dispatch swpReaderReady in plugin')
-                document.dispatchEvent(new CustomEvent('swpReaderReady', { detail: { url: currentLocation } }))
+                dispatchReaderReady(currentLocation)
 
                 return
 
@@ -125,9 +124,7 @@ async function onLoad() {
     }
     console.log({dataObject})
     await g.pdm.loadDocument(dataObject)
-    console.log('dispatch swpReaderReady in plugin after doc load')
-
-    document.dispatchEvent(new CustomEvent('swpReaderReady', { detail: { url: currentLocation } }))
+    dispatchReaderReady(currentLocation)
 
 
 
@@ -154,6 +151,14 @@ function loadUIAndIcons() {
 
 }
 
+
+function dispatchReaderReady(url) {
+    if (window.swpReaderReadyFired) return
+    window.swpReaderReadyFired = true
+    console.log('dispatch swpReaderReady in plugin after doc load')
+
+    document.dispatchEvent(new CustomEvent('swpReaderReady', { detail: { url } }))
+}
 
 async function useSavedTheme() {
     let { value: saved } = await getObjectFromLocalStorage('theme')
