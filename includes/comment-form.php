@@ -10,7 +10,7 @@ function stwbpb_handle_comment_form() {
     // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified below in POST branch.
     $parent_id = isset($_GET['parent_id']) ? absint(wp_unslash($_GET['parent_id'])) : 0;
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
         stwbpb_process_comment_form($post_id, $parent_id);
     } else {
         stwbpb_render_comment_form($post_id, $parent_id, '', '');
@@ -106,12 +106,12 @@ button[type="submit"]:hover { background: #111; }
 <h2><?php esc_html_e('Leave a comment', 'static-web-publisher'); ?></h2>
 <?php if ($parent_comment): ?>
 <div class="swp-cf-context">
-    <div class="swp-cf-context-label"><?php echo esc_html(sprintf(__('Replying to %s', 'static-web-publisher'), $parent_comment->comment_author)); ?></div>
+    <div class="swp-cf-context-label"><?php /* translators: %s: comment author's name */ echo esc_html(sprintf(__('Replying to %s', 'static-web-publisher'), $parent_comment->comment_author)); ?></div>
     <div class="swp-cf-context-excerpt"><?php echo esc_html(wp_trim_words(wp_strip_all_tags($parent_comment->comment_content), 30)); ?></div>
 </div>
 <?php elseif ($post_title): ?>
 <div class="swp-cf-context">
-    <div class="swp-cf-context-label"><?php echo esc_html(sprintf(__('Commenting on: %s', 'static-web-publisher'), $post_title)); ?></div>
+    <div class="swp-cf-context-label"><?php /* translators: %s: post title */ echo esc_html(sprintf(__('Commenting on: %s', 'static-web-publisher'), $post_title)); ?></div>
 </div>
 <?php endif; ?>
 <?php if ($error): ?>

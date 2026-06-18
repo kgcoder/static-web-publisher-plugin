@@ -111,7 +111,7 @@ if ($commenting_open) {
     $comments_attrs .= !empty($leave_comment_label) ? ' leave-comment-label="' . esc_attr($leave_comment_label) . '"' : '';
 }
 ?>
-<side<?php if(!empty($side_panel_left)){ echo ' left="true"'; } ?>><?php echo '<comments' . $comments_attrs . '>' . esc_url($comments_link) . '</comments>' ?></side>
+<side<?php if(!empty($side_panel_left)){ echo ' left="true"'; } ?>><?php echo '<comments' . $comments_attrs . '>' . esc_url($comments_link) . '</comments>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $comments_attrs is built entirely from esc_attr/esc_url calls above. ?></side>
 <?php endif; ?>
 <?php if($should_show_bottom_panel){ ?>
 <bottom>

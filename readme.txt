@@ -9,7 +9,7 @@ Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Make your WordPress site part of the Reader's Web — a new browsable web where readers control how content is presented and pages connect to each other visually.
+Make your WordPress site part of the Reader's Web.
 
 == Description ==
 
