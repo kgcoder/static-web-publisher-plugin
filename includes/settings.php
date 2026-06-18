@@ -30,8 +30,8 @@ function stwbpb_settings_page() {
             'bottom_message' => '',
             'sections' => array()
         ),
-        'page_mode' => 'embedded_hdoc',
-        'post_mode' => 'embedded_hdoc',
+        'page_mode' => 'embedded_hdoc_forced',
+        'post_mode' => 'embedded_hdoc_forced',
         'show_promotion_button' => false,
     );
 
@@ -296,8 +296,8 @@ function stwbpb_settings_init() {
             'bottom_message' => '',
             'sections' => array()
         ),
-        'page_mode' => 'embedded_hdoc',
-        'post_mode' => 'embedded_hdoc',
+        'page_mode' => 'embedded_hdoc_forced',
+        'post_mode' => 'embedded_hdoc_forced',
     ));
 
 

@@ -17,7 +17,7 @@ Make your WordPress site part of the Reader's Web — a new browsable web where 
 
 = What is the Reader's Web? =
 
-Reader's Web is a Web where authors provide content and readers control presentation. Pages from different websites look the same, which is convenient and good for readability. Standardized pages allow for features previously unavailable on the Web, like visible connections between parts of texts in different documents.
+Reader's Web is a Web where authors provide content and readers control presentation. Pages from different websites look and feel the same, which improves readability and makes navigation consistent across sites. Standardized pages also enable features previously unavailable on the Web, like visible connections between passages of text in different documents.
 
 The Reader's Web is not the first system where authors provide content without controlling presentation. Social networks already work this way. The difference is that social networks transfer control from authors to platform owners. The Reader's Web transfers control to readers instead.
 
@@ -27,26 +27,20 @@ The plugin can serve your WordPress content in three new document formats and ca
 
 **Document types:**
 
-* **HDOC** — a script-free, style-free XML document for text content. The main format of the Reader's Web. 
-* **CDOC** — an SVG-based collage document. 
+* **HDOC** — a script-free, style-free XML document for text content. The main format of the Reader's Web.
+* **CDOC** — an SVG-based collage document.
 * **CONDOC** — a connection-only document that loads a third-party page as its main content and annotates it with visible connections, without modifying the original page.
 
 **Display modes** (configurable globally in Settings, overridable per-post in the editor):
 
-* **Embedded HDOC** — your regular WordPress page is served as normal but includes hidden JSON metadata. Compatible apps detect it and render it as an HDOC. Visitors without compatible apps see your normal site.
-* **Embedded HDOC (forced)** — same as above but compatible apps always render the HDOC view, even when the page is the main document (not a connection).
-* **Reader UI** — WordPress serves a full Reader interface instead of your theme. Visitors get the Reader's Web experience directly without needing an app or extension. Both kinds of visitors — those with and without a compatible app — see the same reader layout.
-* **Standalone document** — WordPress serves the raw HDOC, CDOC, or CONDOC file at the post's URL with no surrounding HTML. Useful for documents you want compatible apps to handle exclusively.
-
-= Visible connections =
-
-Documents in the Reader's Web connect to each other through **visible connections** (floating links). A connection specifies a source anchor (a text range or a point on a CDOC) and a destination anchor in the target document. In the Reader UI, the main document is shown on the left; connected documents open in tabs on the right. The connection lines are drawn between the anchors in both documents.
+* **Embedded HDOC** — your regular WordPress page is served as normal but includes hidden JSON metadata. Compatible apps detect it and render it as an HDOC when the document is loaded as a connected document. 
+* **Embedded HDOC (forced)** — same as above but compatible apps always render the HDOC view, even when the page is the main document (not a connection). Visitors without compatible apps see your normal site.
+* **Reader UI** — WordPress serves a full Reader interface instead of your theme. Visitors get the Reader's Web experience directly without needing an app or extension. 
+* **Standalone document** — WordPress serves the raw HDOC, CDOC, or CONDOC file at the post's URL with no surrounding HTML. This will be useful if the Reader's Web becomes so popular that browsers start supporting the new document formats.  
 
 = Reader UI =
 
 When a post or page is set to **Reader UI** mode, the plugin replaces your WordPress theme with a built-in reader interface. This is the same interface used by the Visible Connections browser extension, so the experience is consistent regardless of whether the visitor has the extension installed.
-
-The Reader UI includes top and bottom panels (configurable in Settings), a comments section, and support for all three document types.
 
 = Comments =
 
@@ -62,7 +56,7 @@ You can also place standalone `.hdoc`, `.cdoc`, and `.condoc` files directly in 
 
 = Analytics =
 
-Standard WordPress analytics tools work normally on Embedded HDOC and Reader UI pages. When the Visible Connections extension is active and replaces the page UI, existing analytics scripts continue to run: they are already initialized before the extension takes over, and their session-level state (event listeners on `window` and `document`, timers, already-sent page view events) survives the DOM replacement.
+Standard WordPress analytics tools work normally on Embedded HDOC and Reader UI pages. When the Visible Connections extension is active and replaces the page UI, existing analytics scripts continue to run: page view events are already sent before the extension takes over, and session-level tracking continues uninterrupted.
 
 For analytics code that needs to run **after the Reader UI is fully initialized**, the plugin dispatches a `swpReaderReady` event on `document`. You can listen for it in any custom script:
 
@@ -82,7 +76,7 @@ Visitors without any compatible app will see your content normally on Embedded H
 
 = Background =
 
-The Reader's Web is an implementation of Ted Nelson's long-standing vision of hypertext: documents connected by visible, two-ended links rather than one-way anchors. You can read more about the project at [reinventingtheweb.com](https://reinventingtheweb.com).
+The Reader's Web is inspired by Ted Nelson's long-standing vision of hypertext. You can read more about the project at [reinventingtheweb.com](https://reinventingtheweb.com).
 
 
 == Installation ==
@@ -104,7 +98,7 @@ No. When a post is set to **Reader UI** mode, the plugin serves the full reader 
 
 = Will this break my site's appearance for regular visitors? =
 
-No, if you use **Embedded HDOC (forced)** mode (the default) or regular **Embedded HDOC** mode. Your site looks identical to regular visitors. Only compatible apps detect and use the hidden metadata.
+No. In **Embedded HDOC (forced)** mode (the default) your site looks identical to regular visitors. Only compatible apps detect and use the hidden metadata. **Reader UI** mode replaces your theme for those posts, which is intentional — it is meant for content you want to present in the reader layout for all visitors.
 
 = Is the proxy endpoint safe? =
 
@@ -116,7 +110,7 @@ Yes. Standard WordPress analytics tools work on all pages. On **Reader UI** page
 
 = What is the difference between Embedded HDOC and Embedded HDOC (forced)? =
 
-In regular **Embedded HDOC** mode, compatible apps render the HDOC view only when the document is opened as a connected document on the right side of the reader. In **Embedded HDOC (forced)** mode, the HDOC view is always used, even when the page is the main document on the left. It is possible that some compatible apps may ignore this distinction or let the user choose whether to use HDOC view when viewing regular Embedded HDOCs.
+In regular **Embedded HDOC** mode, compatible apps render the HDOC view only when the document is opened as a connected document on the right side of the reader. In **Embedded HDOC (forced)** mode, the HDOC view is always used, even when the page is the main document on the left.
 
 = Can I mix display modes across posts and pages? =
 
