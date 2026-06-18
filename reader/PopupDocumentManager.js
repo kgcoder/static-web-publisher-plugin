@@ -2295,7 +2295,7 @@ class PopupDocumentManager{
             const requestedPageHostname = new URL(commentsUrl).hostname
 
             if(requestedPageHostname !== currentPageHostname){
-                alert("To view comments open this page in another tab")
+                this.showOpenInNewTabAlert(currentPageUrl)
                 return
             }
         }
@@ -2347,7 +2347,7 @@ class PopupDocumentManager{
             const requestedPageHostname = new URL(commentsUrl).hostname
 
             if(requestedPageHostname !== currentPageHostname){
-                alert("To view comments open this page in another tab")
+                this.showOpenInNewTabAlert(currentPageUrl)
                 return
             }
         }
@@ -2393,7 +2393,7 @@ class PopupDocumentManager{
             const requestedPageHostname = new URL(commentsUrl).hostname
 
             if(requestedPageHostname !== currentPageHostname){
-                alert("To view comments open this page in another tab")
+                this.showOpenInNewTabAlert(noteData.url)
                 return
             }
         }
@@ -2433,7 +2433,7 @@ class PopupDocumentManager{
             const requestedPageHostname = new URL(commentsUrl).hostname
 
             if(requestedPageHostname !== currentPageHostname){
-                alert("To view comments open this page in another tab")
+                this.showOpenInNewTabAlert(noteData.url)
                 return
             }
         }
@@ -2506,6 +2506,46 @@ class PopupDocumentManager{
         popup.appendChild(closeBtn)
         popup.appendChild(iframe)
         overlay.appendChild(popup)
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove() })
+        document.body.appendChild(overlay)
+    }
+
+    showOpenInNewTabAlert = (currentPageUrl) => {
+        const parsed = new URL(currentPageUrl)
+        parsed.hash = ''
+        const cleanUrl = parsed.toString()
+
+        const overlay = document.createElement('div')
+        overlay.className = 'swp-comment-popup-overlay'
+
+        const dialog = document.createElement('div')
+        dialog.className = 'swp-open-tab-dialog'
+
+        const msg = document.createElement('p')
+        msg.className = 'swp-open-tab-dialog__message'
+        msg.textContent = 'To view comments, open this page in another tab.'
+
+        const actions = document.createElement('div')
+        actions.className = 'swp-open-tab-dialog__actions'
+
+        const openBtn = document.createElement('button')
+        openBtn.className = 'swp-open-tab-dialog__btn swp-open-tab-dialog__btn--open'
+        openBtn.textContent = 'Open in new tab'
+        openBtn.addEventListener('click', () => {
+            window.open(cleanUrl, '_blank')
+            overlay.remove()
+        })
+
+        const cancelBtn = document.createElement('button')
+        cancelBtn.className = 'swp-open-tab-dialog__btn swp-open-tab-dialog__btn--cancel'
+        cancelBtn.textContent = 'Cancel'
+        cancelBtn.addEventListener('click', () => overlay.remove())
+
+        actions.appendChild(openBtn)
+        actions.appendChild(cancelBtn)
+        dialog.appendChild(msg)
+        dialog.appendChild(actions)
+        overlay.appendChild(dialog)
         overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove() })
         document.body.appendChild(overlay)
     }
