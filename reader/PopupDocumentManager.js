@@ -1802,7 +1802,7 @@ class PopupDocumentManager{
 
             if(g.readingManager.rightNotesData.length === 1){
                 optionalTitleSpan.innerText = noteData.title ?? ''
-                optionalTitleSpan.style.display = 'flex'
+                optionalTitleSpan.style.display = 'block'
 
             }else{
                 optionalTitleSpan.style.display = 'none'

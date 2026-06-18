@@ -1375,7 +1375,8 @@ a.TopPanelOptionLink:hover {
     /* cursor: default; */
 }
 
-#CurrentDocumentOptionalTitleSpan{
+#CurrentDocumentOptionalTitleSpan,
+#RightDocumentOptionalTitleSpan{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
