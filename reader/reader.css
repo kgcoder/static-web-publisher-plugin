@@ -29,6 +29,12 @@ body {
     }
 }
 
+
+
+#ui-root button {
+    all: revert;
+}
+
 #ui-root {
     display: flex;
     all:initial;

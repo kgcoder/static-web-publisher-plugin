@@ -190,3 +190,5 @@ Standalone `.hdoc`, `.cdoc`, `.condoc` files can be placed in `ABSPATH/static-do
 - Connection URLs are cached in transients (`swp_connections_{post_id}`) and invalidated on `save_post`.
 - The admin JS/CSS in [includes/admin.js](includes/admin.js) and [includes/admin.css](includes/admin.css) power the settings page UI (dynamic link/section management and the WordPress media uploader for the logo).
 - A promo popup can be optionally shown via the `show_promotion_button` setting.
+- To build code for production use this command (esbuild is installed globally):
+esbuild reader/readerStartUp.js --bundle --minify --format=esm --outfile=dist/reader.bundle.min.js
