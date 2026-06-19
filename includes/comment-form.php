@@ -23,6 +23,15 @@ function stwbpb_render_comment_form($post_id, $parent_id, $error, $submitted) {
     $default_email = $current_user->exists() ? $current_user->user_email   : ($submitted['email'] ?? '');
     $default_body  = $submitted['comment'] ?? '';
 
+    $cf_settings               = get_option('stwbpb_settings', []);
+    $form_title                = !empty($cf_settings['form_title'])                ? $cf_settings['form_title']                : 'Leave a comment';
+    $replying_to_label         = !empty($cf_settings['replying_to_label'])         ? $cf_settings['replying_to_label']         : 'Replying to %s';
+    $commenting_on_label       = !empty($cf_settings['commenting_on_label'])       ? $cf_settings['commenting_on_label']       : 'Commenting on: %s';
+    $name_label                = !empty($cf_settings['name_label'])                ? $cf_settings['name_label']                : 'Name';
+    $email_label               = !empty($cf_settings['email_label'])               ? $cf_settings['email_label']               : 'Email';
+    $comment_label             = !empty($cf_settings['comment_label'])             ? $cf_settings['comment_label']             : 'Comment';
+    $submit_button_label       = !empty($cf_settings['submit_button_label'])       ? $cf_settings['submit_button_label']       : 'Post comment';
+
     $nonce = wp_create_nonce('swp_comment_form');
 
     $post           = $post_id ? get_post($post_id) : null;
@@ -36,7 +45,7 @@ function stwbpb_render_comment_form($post_id, $parent_id, $error, $submitted) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><?php esc_html_e('Leave a comment', 'static-web-publisher'); ?></title>
+<title><?php echo esc_html($form_title); ?></title>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -103,15 +112,15 @@ button[type="submit"]:hover { background: #111; }
 </style>
 </head>
 <body>
-<h2><?php esc_html_e('Leave a comment', 'static-web-publisher'); ?></h2>
+<h2><?php echo esc_html($form_title); ?></h2>
 <?php if ($parent_comment): ?>
 <div class="swp-cf-context">
-    <div class="swp-cf-context-label"><?php /* translators: %s: comment author's name */ echo esc_html(sprintf(__('Replying to %s', 'static-web-publisher'), $parent_comment->comment_author)); ?></div>
+    <div class="swp-cf-context-label"><?php echo esc_html(sprintf($replying_to_label, $parent_comment->comment_author)); ?></div>
     <div class="swp-cf-context-excerpt"><?php echo esc_html(wp_trim_words(wp_strip_all_tags($parent_comment->comment_content), 30)); ?></div>
 </div>
 <?php elseif ($post_title): ?>
 <div class="swp-cf-context">
-    <div class="swp-cf-context-label"><?php /* translators: %s: post title */ echo esc_html(sprintf(__('Commenting on: %s', 'static-web-publisher'), $post_title)); ?></div>
+    <div class="swp-cf-context-label"><?php echo esc_html(sprintf($commenting_on_label, $post_title)); ?></div>
 </div>
 <?php endif; ?>
 <?php if ($error): ?>
@@ -123,21 +132,21 @@ button[type="submit"]:hover { background: #111; }
     <input type="hidden" name="swp_parent_id" value="<?php echo esc_attr($parent_id); ?>">
     <?php if (!$current_user->exists()): ?>
     <div class="swp-cf-field">
-        <label for="swp-name"><?php esc_html_e('Name', 'static-web-publisher'); ?> *</label>
+        <label for="swp-name"><?php echo esc_html($name_label); ?> *</label>
         <input type="text" id="swp-name" name="swp_author" required
                value="<?php echo esc_attr($default_name); ?>">
     </div>
     <div class="swp-cf-field">
-        <label for="swp-email"><?php esc_html_e('Email', 'static-web-publisher'); ?> *</label>
+        <label for="swp-email"><?php echo esc_html($email_label); ?> *</label>
         <input type="email" id="swp-email" name="swp_email" required
                value="<?php echo esc_attr($default_email); ?>">
     </div>
     <?php endif; ?>
     <div class="swp-cf-field">
-        <label for="swp-comment"><?php esc_html_e('Comment', 'static-web-publisher'); ?> *</label>
+        <label for="swp-comment"><?php echo esc_html($comment_label); ?> *</label>
         <textarea id="swp-comment" name="swp_comment" required><?php echo esc_textarea($default_body); ?></textarea>
     </div>
-    <button type="submit"><?php esc_html_e('Post comment', 'static-web-publisher'); ?></button>
+    <button type="submit"><?php echo esc_html($submit_button_label); ?></button>
 </form>
 </body>
 </html>
@@ -145,10 +154,22 @@ button[type="submit"]:hover { background: #111; }
 }
 
 function stwbpb_process_comment_form($post_id, $parent_id) {
+    $cf_settings               = get_option('stwbpb_settings', []);
+    $submitted_title           = !empty($cf_settings['submitted_title'])           ? $cf_settings['submitted_title']           : 'Comment submitted';
+    $thank_you_message         = !empty($cf_settings['thank_you_message'])         ? $cf_settings['thank_you_message']         : 'Thank you for your comment!';
+    $awaiting_approval_message = !empty($cf_settings['awaiting_approval_message']) ? $cf_settings['awaiting_approval_message'] : 'It will appear once approved.';
+    $error_security            = !empty($cf_settings['error_security'])            ? $cf_settings['error_security']            : 'Security check failed. Please try again.';
+    $error_closed              = !empty($cf_settings['error_closed'])              ? $cf_settings['error_closed']              : 'Commenting is closed for this post.';
+    $error_invalid_parent      = !empty($cf_settings['error_invalid_parent'])      ? $cf_settings['error_invalid_parent']      : 'Invalid parent comment.';
+    $error_name_required       = !empty($cf_settings['error_name_required'])       ? $cf_settings['error_name_required']       : 'Please enter your name.';
+    $error_invalid_email       = !empty($cf_settings['error_invalid_email'])       ? $cf_settings['error_invalid_email']       : 'Please enter a valid email address.';
+    $error_comment_required    = !empty($cf_settings['error_comment_required'])    ? $cf_settings['error_comment_required']    : 'Please enter a comment.';
+    $error_save_failed         = !empty($cf_settings['error_save_failed'])         ? $cf_settings['error_save_failed']         : 'Could not save your comment. Please try again.';
+
     // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Verified with wp_verify_nonce.
     $nonce = isset($_POST['swp_nonce']) ? wp_unslash($_POST['swp_nonce']) : '';
     if (!wp_verify_nonce($nonce, 'swp_comment_form')) {
-        stwbpb_render_comment_form($post_id, $parent_id, __('Security check failed. Please try again.', 'static-web-publisher'), array());
+        stwbpb_render_comment_form($post_id, $parent_id, $error_security, array());
         return;
     }
 
@@ -157,14 +178,14 @@ function stwbpb_process_comment_form($post_id, $parent_id) {
 
     $post = $post_id ? get_post($post_id) : null;
     if (!$post || $post->comment_status !== 'open') {
-        stwbpb_render_comment_form($post_id, $parent_id, __('Commenting is closed for this post.', 'static-web-publisher'), array());
+        stwbpb_render_comment_form($post_id, $parent_id, $error_closed, array());
         return;
     }
 
     if ($parent_id > 0) {
         $parent_comment = get_comment($parent_id);
         if (!$parent_comment || (int) $parent_comment->comment_post_ID !== $post_id || $parent_comment->comment_approved !== '1') {
-            stwbpb_render_comment_form($post_id, $parent_id, __('Invalid parent comment.', 'static-web-publisher'), array());
+            stwbpb_render_comment_form($post_id, $parent_id, $error_invalid_parent, array());
             return;
         }
     }
@@ -190,17 +211,17 @@ function stwbpb_process_comment_form($post_id, $parent_id) {
     );
 
     if (empty($author)) {
-        stwbpb_render_comment_form($post_id, $parent_id, __('Please enter your name.', 'static-web-publisher'), $submitted);
+        stwbpb_render_comment_form($post_id, $parent_id, $error_name_required, $submitted);
         return;
     }
 
     if (empty($email) || !is_email($email)) {
-        stwbpb_render_comment_form($post_id, $parent_id, __('Please enter a valid email address.', 'static-web-publisher'), $submitted);
+        stwbpb_render_comment_form($post_id, $parent_id, $error_invalid_email, $submitted);
         return;
     }
 
     if (empty($comment_body)) {
-        stwbpb_render_comment_form($post_id, $parent_id, __('Please enter a comment.', 'static-web-publisher'), $submitted);
+        stwbpb_render_comment_form($post_id, $parent_id, $error_comment_required, $submitted);
         return;
     }
 
@@ -218,7 +239,7 @@ function stwbpb_process_comment_form($post_id, $parent_id) {
     $comment_id = wp_insert_comment(wp_filter_comment($commentdata));
 
     if (!$comment_id) {
-        stwbpb_render_comment_form($post_id, $parent_id, __('Could not save your comment. Please try again.', 'static-web-publisher'), $submitted);
+        stwbpb_render_comment_form($post_id, $parent_id, $error_save_failed, $submitted);
         return;
     }
 
@@ -228,7 +249,7 @@ function stwbpb_process_comment_form($post_id, $parent_id) {
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title><?php esc_html_e('Comment submitted', 'static-web-publisher'); ?></title>
+<title><?php echo esc_html($submitted_title); ?></title>
 <style>
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -255,8 +276,8 @@ body {
 <body>
 <div class="swp-cf-success">
     <div class="swp-check">&#10003;</div>
-    <p><?php esc_html_e('Thank you for your comment!', 'static-web-publisher'); ?></p>
-    <p><?php esc_html_e('It will appear once approved.', 'static-web-publisher'); ?></p>
+    <p><?php echo esc_html($thank_you_message); ?></p>
+    <p><?php echo esc_html($awaiting_approval_message); ?></p>
 </div>
 <script>window.parent.postMessage({type:'swp-comment-submitted'}, '*');</script>
 </body>

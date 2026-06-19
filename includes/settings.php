@@ -16,10 +16,27 @@ function stwbpb_settings_page() {
         'page_publish_date' => 'show',
         'post_author_name' => 'show',
         'post_publish_date' => 'show',
-        'comments_title' => '',
-        'no_comments_message' => '',
-        'reply_button_label' => '',
-        'leave_comment_label' => '',
+        'comments_title'            => '',
+        'no_comments_message'       => '',
+        'reply_button_label'        => '',
+        'leave_comment_label'       => '',
+        'form_title'                => '',
+        'replying_to_label'         => '',
+        'commenting_on_label'       => '',
+        'name_label'                => '',
+        'email_label'               => '',
+        'comment_label'             => '',
+        'submit_button_label'       => '',
+        'submitted_title'           => '',
+        'thank_you_message'         => '',
+        'awaiting_approval_message' => '',
+        'error_security'            => '',
+        'error_closed'              => '',
+        'error_invalid_parent'      => '',
+        'error_name_required'       => '',
+        'error_invalid_email'       => '',
+        'error_comment_required'    => '',
+        'error_save_failed'         => '',
         'top_panel' => array(
             'main_link' => '',
             'main_title' => '',
@@ -127,34 +144,6 @@ function stwbpb_settings_page() {
                 </select>
             </div>
 
-            <h2>Comments</h2>
-
-            <div class="settings-option-div">
-                <label>Comments title: </label>
-                <div class="spacerW10"></div>
-                <input class="single-text-input" type="text" name="stwbpb_settings[comments_title]" value="<?php echo esc_attr($settings['comments_title']); ?>" />
-            </div>
-
-            <div class="settings-option-div">
-                <label>No comments message: </label>
-                <div class="spacerW10"></div>
-                <input class="single-text-input" type="text" name="stwbpb_settings[no_comments_message]" value="<?php echo esc_attr($settings['no_comments_message']); ?>" />
-            </div>
-
-            <div class="settings-option-div">
-                <label>Reply button label: </label>
-                <div class="spacerW10"></div>
-                <input class="single-text-input" type="text" name="stwbpb_settings[reply_button_label]" value="<?php echo esc_attr($settings['reply_button_label']); ?>" />
-            </div>
-
-            <div class="settings-option-div">
-                <label>Leave a comment label: </label>
-                <div class="spacerW10"></div>
-                <input class="single-text-input" type="text" name="stwbpb_settings[leave_comment_label]" value="<?php echo esc_attr($settings['leave_comment_label']); ?>" />
-            </div>
-
-
-
             <h2>Top panel</h2>
 
             <div class="settings-option-div">
@@ -260,6 +249,139 @@ function stwbpb_settings_page() {
                 <div class="spacerW10"></div>
                 <input class="single-text-input" type="text" name="stwbpb_settings[bottom_panel][bottom_message]" value="<?php echo esc_attr($bottom_panel['bottom_message']); ?>" />
             </div>
+
+            <h2>Comments</h2>
+
+            <div class="settings-option-div">
+                <label>Comments title: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[comments_title]" value="<?php echo esc_attr($settings['comments_title']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>No comments message: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[no_comments_message]" value="<?php echo esc_attr($settings['no_comments_message']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Reply button label: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[reply_button_label]" value="<?php echo esc_attr($settings['reply_button_label']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Leave a comment label: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[leave_comment_label]" value="<?php echo esc_attr($settings['leave_comment_label']); ?>" />
+            </div>
+
+            <h2>Comment form labels</h2>
+
+            <div class="settings-option-div">
+                <label>Form title / heading: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[form_title]" value="<?php echo esc_attr($settings['form_title']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Replying to label: <small>(use %s for the author name)</small></label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[replying_to_label]" value="<?php echo esc_attr($settings['replying_to_label']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Commenting on label: <small>(use %s for the post title)</small></label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[commenting_on_label]" value="<?php echo esc_attr($settings['commenting_on_label']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Name field label: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[name_label]" value="<?php echo esc_attr($settings['name_label']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Email field label: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[email_label]" value="<?php echo esc_attr($settings['email_label']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Comment field label: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[comment_label]" value="<?php echo esc_attr($settings['comment_label']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Submit button label: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[submit_button_label]" value="<?php echo esc_attr($settings['submit_button_label']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Success page title: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[submitted_title]" value="<?php echo esc_attr($settings['submitted_title']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Thank you message: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[thank_you_message]" value="<?php echo esc_attr($settings['thank_you_message']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Awaiting approval message: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[awaiting_approval_message]" value="<?php echo esc_attr($settings['awaiting_approval_message']); ?>" />
+            </div>
+
+            <h2>Comment form error messages</h2>
+
+            <div class="settings-option-div">
+                <label>Security check failed: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[error_security]" value="<?php echo esc_attr($settings['error_security']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Commenting is closed: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[error_closed]" value="<?php echo esc_attr($settings['error_closed']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Invalid parent comment: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[error_invalid_parent]" value="<?php echo esc_attr($settings['error_invalid_parent']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Name required: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[error_name_required]" value="<?php echo esc_attr($settings['error_name_required']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Invalid email: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[error_invalid_email]" value="<?php echo esc_attr($settings['error_invalid_email']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Comment required: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[error_comment_required]" value="<?php echo esc_attr($settings['error_comment_required']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Could not save comment: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[error_save_failed]" value="<?php echo esc_attr($settings['error_save_failed']); ?>" />
+            </div>
+
           
             <?php submit_button(); ?>
         </form>
@@ -282,10 +404,27 @@ function stwbpb_settings_init() {
         'page_publish_date' => 'show',
         'post_author_name' => 'show',
         'post_publish_date' => 'show',
-        'comments_title' => '',
-        'no_comments_message' => '',
-        'reply_button_label' => '',
-        'leave_comment_label' => '',
+        'comments_title'            => '',
+        'no_comments_message'       => '',
+        'reply_button_label'        => '',
+        'leave_comment_label'       => '',
+        'form_title'                => '',
+        'replying_to_label'         => '',
+        'commenting_on_label'       => '',
+        'name_label'                => '',
+        'email_label'               => '',
+        'comment_label'             => '',
+        'submit_button_label'       => '',
+        'submitted_title'           => '',
+        'thank_you_message'         => '',
+        'awaiting_approval_message' => '',
+        'error_security'            => '',
+        'error_closed'              => '',
+        'error_invalid_parent'      => '',
+        'error_name_required'       => '',
+        'error_invalid_email'       => '',
+        'error_comment_required'    => '',
+        'error_save_failed'         => '',
         'top_panel' => array(
             'main_link' => '',
             'main_title' => '',
@@ -333,10 +472,27 @@ function stwbpb_sanitize_settings($input) {
     $sanitized['page_publish_date'] = isset($input['page_publish_date']) && in_array($input['page_publish_date'], $allowed_vis, true) ? $input['page_publish_date'] : 'show';
     $sanitized['post_author_name']  = isset($input['post_author_name'])  && in_array($input['post_author_name'],  $allowed_vis, true) ? $input['post_author_name']  : 'show';
     $sanitized['post_publish_date'] = isset($input['post_publish_date']) && in_array($input['post_publish_date'], $allowed_vis, true) ? $input['post_publish_date'] : 'show';
-    $sanitized['comments_title'] = isset($input['comments_title']) ? sanitize_text_field($input['comments_title']) : '';
-    $sanitized['no_comments_message'] = isset($input['no_comments_message']) ? sanitize_text_field($input['no_comments_message']) : '';
-    $sanitized['reply_button_label'] = isset($input['reply_button_label']) ? sanitize_text_field($input['reply_button_label']) : '';
-    $sanitized['leave_comment_label'] = isset($input['leave_comment_label']) ? sanitize_text_field($input['leave_comment_label']) : '';
+    $sanitized['comments_title']            = isset($input['comments_title'])            ? sanitize_text_field($input['comments_title'])            : '';
+    $sanitized['no_comments_message']       = isset($input['no_comments_message'])       ? sanitize_text_field($input['no_comments_message'])       : '';
+    $sanitized['reply_button_label']        = isset($input['reply_button_label'])        ? sanitize_text_field($input['reply_button_label'])        : '';
+    $sanitized['leave_comment_label']       = isset($input['leave_comment_label'])       ? sanitize_text_field($input['leave_comment_label'])       : '';
+    $sanitized['form_title']                = isset($input['form_title'])                ? sanitize_text_field($input['form_title'])                : '';
+    $sanitized['replying_to_label']         = isset($input['replying_to_label'])         ? sanitize_text_field($input['replying_to_label'])         : '';
+    $sanitized['commenting_on_label']       = isset($input['commenting_on_label'])       ? sanitize_text_field($input['commenting_on_label'])       : '';
+    $sanitized['name_label']                = isset($input['name_label'])                ? sanitize_text_field($input['name_label'])                : '';
+    $sanitized['email_label']               = isset($input['email_label'])               ? sanitize_text_field($input['email_label'])               : '';
+    $sanitized['comment_label']             = isset($input['comment_label'])             ? sanitize_text_field($input['comment_label'])             : '';
+    $sanitized['submit_button_label']       = isset($input['submit_button_label'])       ? sanitize_text_field($input['submit_button_label'])       : '';
+    $sanitized['submitted_title']           = isset($input['submitted_title'])           ? sanitize_text_field($input['submitted_title'])           : '';
+    $sanitized['thank_you_message']         = isset($input['thank_you_message'])         ? sanitize_text_field($input['thank_you_message'])         : '';
+    $sanitized['awaiting_approval_message'] = isset($input['awaiting_approval_message']) ? sanitize_text_field($input['awaiting_approval_message']) : '';
+    $sanitized['error_security']            = isset($input['error_security'])            ? sanitize_text_field($input['error_security'])            : '';
+    $sanitized['error_closed']              = isset($input['error_closed'])              ? sanitize_text_field($input['error_closed'])              : '';
+    $sanitized['error_invalid_parent']      = isset($input['error_invalid_parent'])      ? sanitize_text_field($input['error_invalid_parent'])      : '';
+    $sanitized['error_name_required']       = isset($input['error_name_required'])       ? sanitize_text_field($input['error_name_required'])       : '';
+    $sanitized['error_invalid_email']       = isset($input['error_invalid_email'])       ? sanitize_text_field($input['error_invalid_email'])       : '';
+    $sanitized['error_comment_required']    = isset($input['error_comment_required'])    ? sanitize_text_field($input['error_comment_required'])    : '';
+    $sanitized['error_save_failed']         = isset($input['error_save_failed'])         ? sanitize_text_field($input['error_save_failed'])         : '';
 
     $allowed_modes = array('embedded_hdoc_forced', 'embedded_hdoc', 'doc_in_reader', 'standalone_doc');
     $sanitized['page_mode'] = isset($input['page_mode']) && in_array($input['page_mode'], $allowed_modes, true) ? $input['page_mode'] : 'embedded_hdoc_forced';

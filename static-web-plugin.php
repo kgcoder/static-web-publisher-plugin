@@ -57,13 +57,30 @@ function stwbpb_activate() {
     $logo_url = isset($top_panel['logo_url']) ? trim($top_panel['logo_url']) : '';
 
     if ($main_link === '' && $main_title === '' && $logo_url === '') {
-        $settings['comments_title'] = 'Comments';
-        $settings['no_comments_message'] = 'No comments yet';
-        $settings['reply_button_label'] = 'Reply';
-        $settings['leave_comment_label'] = 'Leave a comment';
-        $settings['top_panel']['main_title'] = get_bloginfo('name');
-        $settings['top_panel']['main_link'] = home_url();
-        
+        $settings['comments_title']            = 'Comments';
+        $settings['no_comments_message']       = 'No comments yet';
+        $settings['reply_button_label']        = 'Reply';
+        $settings['leave_comment_label']       = 'Leave a comment';
+        $settings['form_title']                = 'Leave a comment';
+        $settings['replying_to_label']         = 'Replying to %s';
+        $settings['commenting_on_label']       = 'Commenting on: %s';
+        $settings['name_label']                = 'Name';
+        $settings['email_label']               = 'Email';
+        $settings['comment_label']             = 'Comment';
+        $settings['submit_button_label']       = 'Post comment';
+        $settings['submitted_title']           = 'Comment submitted';
+        $settings['thank_you_message']         = 'Thank you for your comment!';
+        $settings['awaiting_approval_message'] = 'It will appear once approved.';
+        $settings['error_security']            = 'Security check failed. Please try again.';
+        $settings['error_closed']              = 'Commenting is closed for this post.';
+        $settings['error_invalid_parent']      = 'Invalid parent comment.';
+        $settings['error_name_required']       = 'Please enter your name.';
+        $settings['error_invalid_email']       = 'Please enter a valid email address.';
+        $settings['error_comment_required']    = 'Please enter a comment.';
+        $settings['error_save_failed']         = 'Could not save your comment. Please try again.';
+        $settings['top_panel']['main_title']   = get_bloginfo('name');
+        $settings['top_panel']['main_link']    = home_url();
+
         update_option('stwbpb_settings', $settings);
     }
 }
