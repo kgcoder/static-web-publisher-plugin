@@ -110,7 +110,7 @@ Yes. Standard WordPress analytics tools work on all pages. On **Reader UI** page
 
 = What is the difference between Embedded HDOC and Embedded HDOC (forced)? =
 
-In regular **Embedded HDOC** mode, compatible apps render the HDOC view only when the document is opened as a connected document on the right side of the reader. In **Embedded HDOC (forced)** mode, the HDOC view is always used, even when the page is the main document shown on the left.
+In regular **Embedded HDOC** mode, compatible apps render the HDOC view only when the document is opened as a connected document on the right side of the reader. In **Embedded HDOC (forced)** mode, the HDOC view is always used, even when the page is the main document shown on the left side.
 
 = Can I mix display modes across posts and pages? =
 
