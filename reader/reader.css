@@ -31,10 +31,6 @@ body {
 
 
 
-#ui-root button {
-    all: revert;
-}
-
 #ui-root {
     display: flex;
     all:initial;
@@ -310,10 +306,11 @@ canvas {
 }
 
 
-.CancelButton {
+#ui-root .CancelButton {
     display: flex;
     flex: 1;
     height: 40px;
+    background-color: transparent;
     border-radius: 8px;
     border-color: rgb(188, 194, 203);
     border-style: solid;
@@ -327,7 +324,7 @@ canvas {
     cursor: default;
 }
 
-.ActionButton {
+#ui-root .ActionButton {
     display: flex;
     flex: 1;
     height: 40px;
@@ -343,29 +340,29 @@ canvas {
     border-width: 0;
 }
 
-.CancelButton:hover {
+#ui-root .CancelButton:hover {
     background-color: rgba(37, 38, 39, 0.05);
     border-color: rgba(37, 38, 39, 0.5);
 
 }
 
-.CancelButton:active {
+#ui-root .CancelButton:active {
     outline: 4px solid rgba(103, 110, 118, 0.16);
 }
 
 
 
-.ActionButton:hover {
+#ui-root .ActionButton:hover {
     color: rgb(246, 247, 251);
     background-color: rgb(76, 100, 255);
 }
 
 
-.ActionButton:active {
+#ui-root .ActionButton:active {
     outline: 4px solid rgba(72, 77, 233, 0.16);
 }
 
-.ActionButton:disabled {
+#ui-root .ActionButton:disabled {
     color: rgb(246, 247, 251);
     background-color: rgba(72, 77, 233, 0.5);
     border-width: 0;
@@ -575,7 +572,7 @@ code {
 
 }
 
-.SimpleBlueButton {
+#ui-root .SimpleBlueButton {
     font-family: 'Inter', sans-serif;
     font-size: 16px;
     font-weight: 500;
@@ -1054,7 +1051,7 @@ code {
     background-color: #eee;
 }
 
-.load-button {
+#ui-root .load-button {
     display: flex;
     cursor: pointer;
     /* padding: 10px 20px; */
@@ -1225,6 +1222,10 @@ body.admin-bar #AllDocumentsContainer {
     align-items: center;
 }
 
+#CurrentDocumentTopPanel{
+    display: flex;
+}
+
 .DocumentTopPanelOptionsRow {
     display: flex;
     height: 100%;
@@ -1273,6 +1274,10 @@ a.TopPanelOptionLink:hover {
     /* height:50px; */
     flex-direction: column;
     flex-shrink: 0;
+}
+
+#CurrentDocumentBottomPanel {
+    display: flex;
 }
 
 .DocumentBottomPanelRow {
@@ -1996,14 +2001,20 @@ p {
     margin: 10px 0 14px;
     padding: 6px 14px;
     font-size: 13px;
+    font-weight: 400;
+    font-family: Arial, sans-serif;
+    text-transform: none;
     cursor: pointer;
     background: transparent;
-    border: 1px solid currentColor;
+    color: #191919;
+    border: 1px solid #191919;
     border-radius: 4px;
     opacity: 0.75;
 }
 .swp-leave-comment-btn:hover {
     opacity: 1;
+    background: transparent;
+
 }
 
 .swp-reply-btn {
@@ -2011,14 +2022,19 @@ p {
     margin-top: 6px;
     padding: 3px 10px;
     font-size: 12px;
+    font-weight: 400;
+    font-family: Arial, sans-serif;
+    text-transform: none;
     cursor: pointer;
     background: transparent;
-    border: 1px solid currentColor;
+    color: #191919;
+    border: 1px solid #191919;
     border-radius: 4px;
     opacity: 0.6;
 }
 .swp-reply-btn:hover {
     opacity: 1;
+    background: transparent;
 }
 
 /* ── Comment popup overlay / modal ──────────────────────────────────────── */

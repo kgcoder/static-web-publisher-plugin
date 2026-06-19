@@ -63,7 +63,7 @@ window.onresize = () => {
     const middleSpaceDiv = document.getElementById("middle-space-div")
 
     middleSpaceDiv.style.left = `${g.readingManager.docWidth}px`
-    middleSpaceDiv.style.top = '61px'
+    middleSpaceDiv.style.top = '60px'
     middleSpaceDiv.style.width = `${kMiddleGap}px`
     middleSpaceDiv.style.bottom = 0
     
@@ -1869,7 +1869,7 @@ class PopupDocumentManager{
         const middleSpaceDiv = document.getElementById("middle-space-div")
 
         middleSpaceDiv.style.left = `${g.readingManager.docWidth}px`
-        middleSpaceDiv.style.top = '61px'
+        middleSpaceDiv.style.top = '60px'
         middleSpaceDiv.style.width = `${kMiddleGap}px`
         middleSpaceDiv.style.bottom = 0
         middleSpaceDiv.style.display = 'flex'
