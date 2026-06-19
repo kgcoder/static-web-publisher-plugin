@@ -47,7 +47,7 @@ export function fetchWebPage(url,isForCondoc = false) {
         }
       } else {
         try {
-          const proxyUrl = window.vcReaderData?.proxyUrl
+          const proxyUrl = window.vcReaderData != null ? window.vcReaderData.proxyUrl : undefined
           if (!proxyUrl) throw new Error('Proxy URL not configured')
           const params = new URLSearchParams({
             source_url: currentPageUrl.split('#')[0],

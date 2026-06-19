@@ -193,8 +193,8 @@ export function parseHtmlPageWithEmbeddedHDoc(httpPageUrl, contentString, hdocDa
 
         headerInfo.h1Text = unescapeHTML(mainTitle)
 
-        const authorName = headerJSON["author"] ?? ''
-        const publicationDate = headerJSON["date"] ?? ''
+        const authorName = headerJSON["author"] != null ? headerJSON["author"] : ''
+        const publicationDate = headerJSON["date"] != null ? headerJSON["date"] : ''
 
         if (authorName) {
             headerInfo.authorName = unescapeHTML(authorName)

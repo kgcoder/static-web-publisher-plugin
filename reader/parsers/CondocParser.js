@@ -43,7 +43,7 @@ export function parseCondoc(url, fullContentString) {
             for (let i = 0; i < flinkSets.length; i++) {
                 const flinkSet = flinkSets[i];
                 const flinkSetUrl = flinkSet.getAttribute('url')
-                const flinkSetTitle = flinkSet.getAttribute('title') ?? ''
+                const flinkSetTitle = flinkSet.getAttribute('title') != null ? flinkSet.getAttribute('title') : ''
 
                 const lines = flinkSet.textContent.split('\n').filter(line => !!line)
 

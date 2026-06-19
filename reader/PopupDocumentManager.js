@@ -669,7 +669,7 @@ class PopupDocumentManager{
 
     collageLoadedCallback = async () => {
 
-        if (!g.readingManager.mainCollageViewer?.content) return
+        if (!(g.readingManager.mainCollageViewer != null ? g.readingManager.mainCollageViewer.content : undefined)) return
         
 
 
@@ -1801,7 +1801,7 @@ class PopupDocumentManager{
             this.populatePanelsOfOneRightDoc()
 
             if(g.readingManager.rightNotesData.length === 1){
-                optionalTitleSpan.innerText = noteData.title ?? ''
+                optionalTitleSpan.innerText = noteData.title != null ? noteData.title : ''
                 optionalTitleSpan.style.display = 'block'
 
             }else{
@@ -1809,7 +1809,7 @@ class PopupDocumentManager{
             }
 
             const titleSpan = document.getElementById("RightDocumentTitleSpan")
-            titleSpan.innerText = noteData.url ?? ''
+            titleSpan.innerText = noteData.url != null ? noteData.url : ''
          
 
         }else{

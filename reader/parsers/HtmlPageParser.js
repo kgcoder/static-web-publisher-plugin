@@ -73,8 +73,9 @@ export function getActionsFromConfigString(configString){
     }
     
 
-    const selector = actions.find(item => item.action === 'c')?.text
-    
+    const _cAction = actions.find(item => item.action === 'c')
+    const selector = _cAction != null ? _cAction.text : undefined
+
     if (!selector) {
         showToastMessage('Something is wrong with the parsing config of the URL')
         return false
@@ -173,7 +174,7 @@ export function parseHtmlStringWithConfig(htmlString,configString,cleanUrl,proto
     const titleText = getH1TitleFromDoc(unsanitizedHtmlDoc, titleSelector) 
     
 
-    const pageTitleFromHead = unsanitizedHtmlDoc.title ?? ''
+    const pageTitleFromHead = unsanitizedHtmlDoc.title != null ? unsanitizedHtmlDoc.title : ''
 
 
     const content = removeTitleFromContent(contentHtml,titleText)

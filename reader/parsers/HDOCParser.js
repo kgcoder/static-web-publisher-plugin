@@ -75,7 +75,7 @@ export function parseHDOC(url,fullContentString){
         for (let i = 0; i < flinkSets.length; i++) {
             const flinkSet = flinkSets[i];
             const flinkSetUrl = flinkSet.getAttribute('url')
-            const flinkSetTitle = flinkSet.getAttribute('title') ?? ''
+            const flinkSetTitle = flinkSet.getAttribute('title') != null ? flinkSet.getAttribute('title') : ''
             const flinkSetHash = flinkSet.getAttribute('hash')
 
             const flinksString = flinkSet.textContent

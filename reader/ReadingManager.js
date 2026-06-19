@@ -583,8 +583,8 @@ setupFlinksCanvasDPR(){
         const optionalTitleSpan = document.getElementById("RightDocumentOptionalTitleSpan")
         if(g.readingManager.rightNotesData.length === 1){
 
-            optionalTitleSpan.innerText = noteData.title ?? ''
-           
+            optionalTitleSpan.innerText = noteData.title != null ? noteData.title : ''
+
             optionalTitleSpan.style.display = 'flex'
         }else{
             optionalTitleSpan.style.display = 'none'
@@ -594,7 +594,7 @@ setupFlinksCanvasDPR(){
         const titleSpan = document.getElementById("RightDocumentTitleSpan")
 
 
-        let title = noteData.url ?? ''
+        let title = noteData.url != null ? noteData.url : ''
      
         titleSpan.innerText = title
 

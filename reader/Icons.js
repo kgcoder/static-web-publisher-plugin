@@ -48,6 +48,10 @@ class IconsInfo{
         }
         
      
+        const assetsUrl = window.vcReaderData != null ? window.vcReaderData.assetsUrl : null
+        if (assetsUrl != null) {
+            return assetsUrl + result.replace('./images/', '')
+        }
         return new URL(result, import.meta.url).href;
 
     }

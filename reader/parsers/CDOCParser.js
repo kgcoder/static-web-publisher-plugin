@@ -103,7 +103,7 @@ export async function parseCDOC(url,contentString){
         if(isNaN(x1) || isNaN(y1) || isNaN(x2) || isNaN(y2))continue
 
 
-        const color = element.getAttribute('stroke') ?? 'black'
+        const color = element.getAttribute('stroke') != null ? element.getAttribute('stroke') : 'black'
         const lineWidth = element.getAttribute('stroke-width')
 
 
@@ -212,7 +212,7 @@ export async function parseCDOC(url,contentString){
             for (let i = 0; i < flinkSets.length; i++) {
                 const flinkSet = flinkSets[i];
                 const flinkSetUrl = flinkSet.getAttribute('url')
-                const flinkSetTitle = flinkSet.getAttribute('title') ?? ''
+                const flinkSetTitle = flinkSet.getAttribute('title') != null ? flinkSet.getAttribute('title') : ''
                 const flinkSetHash = flinkSet.getAttribute('hash')
                 const flinksString = flinkSet.textContent
 
