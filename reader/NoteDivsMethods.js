@@ -824,7 +824,7 @@ class NoteDivsManager{
     }
 
 
-    calculateHighlightPosition(notePresentationDiv,textNodesArray,startIndex,highlightLength,divX, divY){
+    calculateHighlightPosition(notePresentationDiv,textNodesArray,startIndex,highlightLength,divX, divY, padding, rightX){
    
 
        
@@ -965,10 +965,6 @@ class NoteDivsManager{
         mergedLineRects.push({left:lastLeft,top:lastRectTop,width:lastWidth,height:lastHeight})
 
   
-        const padding = (g.mainPadding.includes('%') ? parseFloat(g.mainPadding) * window.innerWidth / 100.0 : parseFloat(g.mainPadding)) - 10 
-
-        const rightX = window.innerWidth - padding
-
         let finalLineRects = mergedLineRects.filter(rect => rect.width != 0 && rect.height != 0)
         
         finalLineRects = finalLineRects.map((rect,index) => {
