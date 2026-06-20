@@ -4,7 +4,7 @@ Donate link: https://reinventingtheweb.com/donate
 Tags: reader, connections, hdoc, static, web
 Requires at least: 5.2
 Tested up to: 7.0
-Stable tag: 5.0.0
+Stable tag: 5.0.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -119,6 +119,9 @@ Yes. You can set a global default in Settings and override it per post or page i
 
 == Changelog ==
 
+= 5.0.1 =
+Bug fix
+
 = 5.0.0 =
 * Added Reader UI display mode: the plugin can now serve a full built-in reader interface as a WordPress template, so visitors without the extension get the complete Reader's Web experience.
 * Added support for embedded CDOC and embedded CONDOC document types.
@@ -170,6 +173,9 @@ Initial release.
 
 
 == Upgrade Notice ==
+
+= 5.0.1 =
+Minor changes. No action required.
 
 = 5.0.0 =
 After upgrading, go to Settings > Permalinks and click Save Changes to register new endpoints (/sw-proxy/ and /sw-comment-form/). Review your display mode settings — new options are available.
