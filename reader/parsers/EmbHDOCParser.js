@@ -71,8 +71,8 @@ export function parseHtmlPageWithEmbeddedHDoc(httpPageUrl, contentString, hdocDa
                     if (typeof item.text === "string" && item.text.trim() &&
                         typeof item.href === "string" && item.href.trim()) {
         
-                        const href = item.href.trim().toLowerCase() === 'op' ? httpPageUrl : item.href.trim()
-                        return {href,text:item.text.trim(),isStaticLink:!!item.static}
+                        const href = item.href.trim()
+                        return {href,text:item.text.trim()}
                     }
                 })
                 
@@ -86,7 +86,7 @@ export function parseHtmlPageWithEmbeddedHDoc(httpPageUrl, contentString, hdocDa
                 siteNameString = `<site-name href="${siteUrl}">${siteName}</site-name>`
             }
             
-            topLinksString = topLinks.length ? '\n' + topLinks.map(({href,text,isStaticLink}) => `<a href="${href}"${isStaticLink ? ' static="true"' : ''}>${text}</a>`).join('\n') + '\n' : ''
+            topLinksString = topLinks.length ? '\n' + topLinks.map(({href,text}) => `<a href="${href}">${text}</a>`).join('\n') + '\n' : ''
 
             if (siteNameString || topLinksString) {
                 topPanelString = `\n<top>${siteNameString}${topLinksString}</top>`    
@@ -149,9 +149,8 @@ export function parseHtmlPageWithEmbeddedHDoc(httpPageUrl, contentString, hdocDa
                         if (!link.href || !link.text) return ''
                         if (typeof link.text === "string" && link.text.trim() &&
                             typeof link.href === "string" && link.href.trim()) {
-                            const href = link.href.trim().toLowerCase() === 'op' ? httpPageUrl : link.href.trim()
-                            const isStaticLink = !!item.static
-                            return `<a href="${href}"${isStaticLink ? ' static="true"' : ''}>${link.text}</a>`
+                            const href = link.href.trim()
+                            return `<a href="${href}">${link.text}</a>`
                         } else {
                             return ''
                         }

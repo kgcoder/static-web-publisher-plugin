@@ -1041,7 +1041,6 @@ class CollageViewer{
                     e.stopPropagation()
                     hideUrlInTheCorner()
                     window.open(linkRect.url)
-                   // g.wn.openUrl(linkRect.url, linkRect.isStaticLink)
                     return
                 }
             }
@@ -1068,7 +1067,6 @@ class CollageViewer{
                     const link = selectedObj
                     hideUrlInTheCorner()
                     window.open(link.linkAddress)
-               //     g.wn.openUrl(link.linkAddress, link.isStaticLink)
             
                     break
                 }
