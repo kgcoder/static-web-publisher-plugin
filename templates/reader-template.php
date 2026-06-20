@@ -146,8 +146,8 @@ if (!empty($stwbpb_connections_info)) {
                 <div id="CurrentDocument" class="DocumentColumn theme-light">
                     <div id="CurrentDocumentTopPanel" class="DocumentTopPanel">
                         <a id="CurrentDocumentTopPanelLogoLink" class="TopPanelLogoLink" href="<?php echo esc_url($stwbpb_seo_panels['logo_href'] ?? $stwbpb_seo_panels['site_name_href'] ?? '#'); ?>">
-                            <img id="CurrentDocumentTopPanelLogo" src="<?php echo esc_url($stwbpb_seo_panels['logo_src'] ?? ''); ?>" width="150px" height="50px"/>
-                            <span id="CurrentDocumentTopPanelTitle" class="TopPanelTitle"><?php echo esc_html($stwbpb_seo_panels['site_name'] ?? $title); ?></span>
+                            <img id="CurrentDocumentTopPanelLogo" src="<?php echo esc_url($stwbpb_seo_panels['logo_src'] ?? ''); ?>" width="150px" height="50px"<?php if (empty($stwbpb_seo_panels['logo_src'])) echo ' style="display:none"'; ?>/>
+                            <span id="CurrentDocumentTopPanelTitle" class="TopPanelTitle"<?php if (empty($stwbpb_seo_panels['site_name'])) echo ' style="display:none"'; ?>><?php echo esc_html($stwbpb_seo_panels['site_name'] ?? $title); ?></span>
                         </a>
                         <div class="spacer"></div>
                         <div id="CurrentDocumentTopPanelOptionsRow" class="DocumentTopPanelOptionsRow"><?php
