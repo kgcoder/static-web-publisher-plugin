@@ -53,6 +53,7 @@ Example:
 ```html
 <script type="application/json" id="hdoc-data">
 {
+  "lang": "en",
   "removal-selectors": ".some-class,.other-class",
   "header": {
     "h1": "The Title",
@@ -67,13 +68,14 @@ Example:
 
 #### Fields:
 
+* **lang** (optional): IETF language tag (e.g. `"en"`, `"ar"`) identifying the primary language of the document. Clients use this to set text direction (LTR/RTL) and other locale-sensitive rendering.
 * **removal-selectors** (optional): CSS selectors to remove unwanted elements from the content.
 * **header** (optional):
 
   * `h1`: Page title
   * `author`: Author name
   * `date`: Publication date
-* **panels** (optional): Defines top, side, and bottom panels for standardized UI (see HDOC panels spec).
+* **panels** (optional): Defines top, sidebar, side, and bottom panels for standardized UI (see HDOC panels spec).
 * **connections** (optional): Array of connection objects (see specification at `specs/connections.md`).
 
 ---
@@ -92,8 +94,31 @@ Example:
       { "href": "https://example.com/archive", "text": "Archive" }
     ]
   },
+  "sidebar": {
+    "side": "right",
+    "search": {
+      "action": "https://example.com/?s=%s",
+      "placeholder": "Search…",
+      "target": "_self"
+    },
+    "post-nav": {
+      "prev": { "href": "https://example.com/older-post/", "title": "Older Post Title" },
+      "next": { "href": "https://example.com/newer-post/", "title": "Newer Post Title" }
+    },
+    "recent-posts": {
+      "title": "Recent Posts",
+      "posts": [
+        { "href": "https://example.com/post-slug/", "date": "2026-06-20", "title": "Post Title" }
+      ]
+    },
+    "recent-comments": {
+      "title": "Recent Comments",
+      "comments": [
+        { "post-href": "https://example.com/post-slug/", "author": "Jane", "excerpt": "Comment excerpt…" }
+      ]
+    }
+  },
   "side": {
-    "side": "left",
     "ipage": "https://example.com/interactive-page",
     "comments": {
       "url": "http://example.com/json-comments/?post=19",
@@ -119,6 +144,21 @@ Example:
   }
 }
 ```
+
+**`sidebar` fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `side` | string | `"left"` or `"right"` (default `"right"`) |
+| `search.action` | string | URL template; client replaces `%s` with the URL-encoded search term |
+| `search.placeholder` | string | Optional input hint text |
+| `search.target` | string | `"_self"` (default, same tab) or `"_blank"` (new tab) |
+| `post-nav.prev` | object | `{ href, title }` — omit if no previous post |
+| `post-nav.next` | object | `{ href, title }` — omit if no next post |
+| `recent-posts.title` | string | Optional section heading |
+| `recent-posts.posts[]` | array | Each item: `{ href, date, title }` |
+| `recent-comments.title` | string | Optional section heading |
+| `recent-comments.comments[]` | array | Each item: `{ post-href, author, excerpt }` |
 
 ---
 

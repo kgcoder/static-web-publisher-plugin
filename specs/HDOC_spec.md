@@ -48,8 +48,12 @@ It may optionally reference:
 The root element of every HDOC is:
 
 ```xml
-<hdoc> … </hdoc>
+<hdoc lang="en"> … </hdoc>
 ```
+
+### `lang` attribute (optional)
+
+An IETF language tag (e.g. `"en"`, `"ar"`, `"he"`, `"fr"`) identifying the primary language of the document. Clients use this to set text direction (LTR/RTL) and may use it for font selection, hyphenation, and other locale-sensitive rendering. When absent, clients should fall back to their own default or detect language from context.
 
 Children (in this order):
 
@@ -152,11 +156,12 @@ Clients must extract the HTML block from `<content>` using a **regular expressio
 # 7. Panels
 
 The `<panels>` section defines standardized UI panels that appear in all clients.
-It may contain three types of panels: `<top>`, `<side>`, and `<bottom>`.
+It may contain four types of panels: `<top>`, `<sidebar>`, `<side>`, and `<bottom>`.
 
 ```xml
 <panels>
     <top>…</top>
+    <sidebar>…</sidebar>
     <side>…</side>
     <bottom>…</bottom>
 </panels>
@@ -203,15 +208,11 @@ Multiple allowed.
 
 ## 7.2 `<side>` Panel
 
-Contains comments or an interactive page.
+Contains comments or an interactive page. This panel is shown on demand (opened via a button); its exact placement is determined by the client based on the document's language and its own UX conventions.
 
 ```xml
-<side side="left"> … </side>
+<side> … </side>
 ```
-
-Attributes:
-
-* `side="left"` or `"right"` (default: `"right"`)
 
 ### Child elements:
 
@@ -276,42 +277,164 @@ Contains plain text.
 
 ---
 
+## 7.4 `<sidebar>` Panel
+
+A persistent visible column displayed alongside the document content. Unlike `<side>` (which is opened on demand via a button), the sidebar is visible on page load.
+
+```xml
+<sidebar side="right">
+    <search action="https://example.com/?s=%s" placeholder="Search…" target="_self"/>
+    <post-nav>
+        <prev href="https://example.com/older-post/">Older Post Title</prev>
+        <next href="https://example.com/newer-post/">Newer Post Title</next>
+    </post-nav>
+    <recent-posts title="Recent Posts">
+        <post href="https://example.com/post-slug/" date="2026-06-20">Post Title</post>
+    </recent-posts>
+    <recent-comments title="Recent Comments">
+        <comment post-href="https://example.com/post-slug/" author="Jane">Comment excerpt…</comment>
+    </recent-comments>
+</sidebar>
+```
+
+**Attributes:**
+
+* `side` (optional) — `"left"` or `"right"` (default: `"right"`). Preferred placement when space allows.
+
+**Display behavior:**
+
+* When sufficient horizontal space is available (full-width view), the sidebar is rendered as a column on the preferred side of the main content.
+* When space is insufficient (narrow view, split-screen mode) or when the `<side>` panel is open, the sidebar content flows to the bottom, below the main content and above the `<bottom>` panel.
+* All child sections are optional.
+
+### 7.4.1 `<search>`
+
+Renders a search input.
+
+```xml
+<search action="https://example.com/?s=%s" placeholder="Search…" target="_self"/>
+```
+
+Attributes:
+
+* `action` (required) — URL template. The client replaces `%s` with the URL-encoded search term before navigating.
+* `placeholder` (optional) — hint text shown inside the input field.
+* `target` (optional) — where to open the search results page. Accepts `"_self"` (default, same tab) or `"_blank"` (new tab).
+
+### 7.4.2 `<post-nav>`
+
+Previous/next post navigation.
+
+```xml
+<post-nav>
+    <prev href="https://example.com/older-post/">Older Post Title</prev>
+    <next href="https://example.com/newer-post/">Newer Post Title</next>
+</post-nav>
+```
+
+Child elements:
+
+* `<prev href="…">` — link to the previous (older) post. Text content is the post title. Omit if no previous post exists.
+* `<next href="…">` — link to the next (newer) post. Text content is the post title. Omit if no next post exists.
+
+### 7.4.3 `<recent-posts>`
+
+A list of recent posts on the site.
+
+```xml
+<recent-posts title="Recent Posts">
+    <post href="https://example.com/post-slug/" date="2026-06-20">Post Title</post>
+    <post href="https://example.com/another-post/" date="2026-06-18">Another Post</post>
+</recent-posts>
+```
+
+Attributes on `<recent-posts>`:
+
+* `title` (optional) — section heading.
+
+Attributes on each `<post>`:
+
+* `href` (required) — URL of the post.
+* `date` (optional) — publication date in `YYYY-MM-DD` format.
+
+Text content of each `<post>` is the post title.
+
+### 7.4.4 `<recent-comments>`
+
+A list of recent comments across the site.
+
+```xml
+<recent-comments title="Recent Comments">
+    <comment post-href="https://example.com/post-slug/" author="Jane">Comment excerpt text…</comment>
+</recent-comments>
+```
+
+Attributes on `<recent-comments>`:
+
+* `title` (optional) — section heading.
+
+Attributes on each `<comment>`:
+
+* `post-href` (required) — URL of the post the comment belongs to.
+* `author` (required) — display name of the commenter.
+
+Text content of each `<comment>` is a short excerpt of the comment.
+
+---
+
 # 8. Copy Info
 
 `<copy-info>` is used only when the HDOC is a copy of another HDOC.
 In that case, this section becomes **required**.
 
 ```xml
-<copy-info>
-    <source copied-at="2025-01-01T12:00:00Z">https://example.com/original</source>
+<!-- direct copy of the original -->
+<copy-info original="https://example.com/original" copied-at="2025-01-01T12:00:00Z">
+    <media-mappings>…</media-mappings>
+</copy-info>
+
+<!-- copy of a copy -->
+<copy-info original="https://example.com/original" copied-at="2025-01-01T12:00:00Z">
+    <via copied-at="2025-06-01T09:00:00Z">https://mirror.com/copy1</via>
     <media-mappings>…</media-mappings>
 </copy-info>
 ```
 
+Attributes of `<copy-info>`:
+
+* `original` (required): URL of the true original document
+* `copied-at` (required): ISO-8601 timestamp of when the **first copy** in the chain was made — the oldest date in the log
+
 ---
 
-## 8.1 `<source>` (one or more)
+## 8.1 `<via>` (optional, repeatable)
+
+Each `<via>` entry records an intermediate copy in the chain, in ascending chronological order. The last `<via>` is the copy the current document was directly copied from.
 
 Attributes:
 
-* `copied-at` (required): ISO-8601 timestamp
+* `copied-at` (required): ISO-8601 timestamp of when that copy was made
 
-If copying a copy, include multiple `<source>` entries to preserve the history.
+Content: the URL of that intermediate copy.
+
+**How to extend the chain when copying a copy:** take the existing `<copy-info>` as-is, then append a new `<via copied-at="today">` with the URL you copied from and today's date. Never modify the existing `copied-at` attribute on `<copy-info>`.
 
 ---
 
 ## 8.2 `<media-mappings>` (optional)
 
-Contains remapping rules for resource URLs.
+Contains URL rewriting rules for media resources (images, audio, video, etc.) embedded in the content. Use this when the copy hosts media files locally instead of loading them from the original server.
+
+Each `<mapping>` rule is applied as a **prefix replacement**: any resource URL that starts with `from` has that prefix replaced with `to`. A full URL in `from` acts as an exact match.
 
 ```xml
 <media-mappings>
-    <m>
-        <old>https://example.com/img.jpg</old>
-        <new>https://copy.com/img.jpg</new>
-    </m>
+    <mapping from="https://example.com/media/" to="https://copy.com/media/" />
+    <mapping from="https://cdn.example.com/img.jpg" to="https://copy.com/img.jpg" />
 </media-mappings>
 ```
+
+Rules are applied in order; the first match wins.
 
 ---
 
@@ -368,7 +491,6 @@ Future versions of HDOC may add:
 * Additional metadata fields
 * More structured header fields
 * Standardized themes and CSS class lists
-* More panel types
 * More copy-tracking capabilities
 
 Everything in this document is subject to change during the draft phase.
