@@ -94,32 +94,35 @@ Example:
       { "href": "https://example.com/archive", "text": "Archive" }
     ]
   },
+  "post-nav": {
+    "prev": { "href": "https://example.com/older-post/", "title": "Older Post Title" },
+    "next": { "href": "https://example.com/newer-post/", "title": "Newer Post Title" }
+  },
   "sidebar": {
     "side": "right",
-    "search": {
-      "action": "https://example.com/?s=%s",
-      "placeholder": "Search…",
-      "target": "_self"
-    },
-    "post-nav": {
-      "prev": { "href": "https://example.com/older-post/", "title": "Older Post Title" },
-      "next": { "href": "https://example.com/newer-post/", "title": "Newer Post Title" }
-    },
-    "links": [
+    "items": [
       {
+        "type": "search",
+        "action": "https://example.com/?s=%s",
+        "placeholder": "Search…",
+        "target": "_self"
+      },
+      {
+        "type": "links",
         "title": "Popular Posts",
         "items": [
           { "href": "https://example.com/post-slug/", "text": "Post Title" },
           { "href": "https://example.com/another/", "text": "Another Post", "target": "_blank", "rel": "noopener" }
         ]
+      },
+      {
+        "type": "recent-comments",
+        "title": "Recent Comments",
+        "comments": [
+          { "post-href": "https://example.com/post-slug/", "author": "Jane", "excerpt": "Comment excerpt…" }
+        ]
       }
-    ],
-    "recent-comments": {
-      "title": "Recent Comments",
-      "comments": [
-        { "post-href": "https://example.com/post-slug/", "author": "Jane", "excerpt": "Comment excerpt…" }
-      ]
-    }
+    ]
   },
   "side": {
     "ipage": "https://example.com/interactive-page",
@@ -148,21 +151,26 @@ Example:
 }
 ```
 
+**`post-nav` fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `post-nav.prev` | object | `{ href, title }` — omit if no previous post |
+| `post-nav.next` | object | `{ href, title }` — omit if no next post |
+
 **`sidebar` fields:**
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `side` | string | `"left"` or `"right"` (default `"right"`) |
-| `search.action` | string | URL template; client replaces `%s` with the URL-encoded search term |
-| `search.placeholder` | string | Optional input hint text |
-| `search.target` | string | `"_self"` (default, same tab) or `"_blank"` (new tab) |
-| `post-nav.prev` | object | `{ href, title }` — omit if no previous post |
-| `post-nav.next` | object | `{ href, title }` — omit if no next post |
-| `links[]` | array | One or more link-list blocks (see below) |
-| `links[].title` | string | Optional section heading |
-| `links[].items[]` | array | Each item: `{ href, text, target?, rel? }` |
-| `recent-comments.title` | string | Optional section heading |
-| `recent-comments.comments[]` | array | Each item: `{ post-href, author, excerpt }` |
+| `sidebar.side` | string | `"left"` or `"right"` (default `"right"`) |
+| `sidebar.items[]` | array | Ordered list of sidebar widgets; multiple items of the same type are allowed |
+| `sidebar.items[].type` | string | `"search"`, `"links"`, or `"recent-comments"` |
+| `sidebar.items[].action` | string | *(type=search)* URL template; `%s` replaced with URL-encoded search term |
+| `sidebar.items[].placeholder` | string | *(type=search)* Optional input hint text |
+| `sidebar.items[].target` | string | *(type=search)* `"_self"` (default) or `"_blank"` |
+| `sidebar.items[].title` | string | *(type=links / recent-comments)* Optional section heading |
+| `sidebar.items[].items[]` | array | *(type=links)* Each: `{ href, text, target?, rel? }` |
+| `sidebar.items[].comments[]` | array | *(type=recent-comments)* Each: `{ post-href, author, excerpt }` |
 
 ---
 

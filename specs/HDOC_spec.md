@@ -156,11 +156,12 @@ Clients must extract the HTML block from `<content>` using a **regular expressio
 # 7. Panels
 
 The `<panels>` section defines standardized UI panels that appear in all clients.
-It may contain four types of panels: `<top>`, `<sidebar>`, `<side>`, and `<bottom>`.
+It may contain five types of panels: `<top>`, `<post-nav>`, `<sidebar>`, `<side>`, and `<bottom>`.
 
 ```xml
 <panels>
     <top>…</top>
+    <post-nav>…</post-nav>
     <sidebar>…</sidebar>
     <side>…</side>
     <bottom>…</bottom>
@@ -206,7 +207,25 @@ Multiple allowed.
 
 ---
 
-## 7.2 `<side>` Panel
+## 7.2 `<post-nav>` Panel
+
+Previous/next post navigation.
+
+```xml
+<post-nav>
+    <prev href="https://example.com/older-post/">Older Post Title</prev>
+    <next href="https://example.com/newer-post/">Newer Post Title</next>
+</post-nav>
+```
+
+Child elements:
+
+* `<prev href="…">` — link to the previous (older) post. Text content is the post title. Omit if no previous post exists.
+* `<next href="…">` — link to the next (newer) post. Text content is the post title. Omit if no next post exists.
+
+---
+
+## 7.3 `<side>` Panel
 
 Contains comments or an interactive page. This panel is shown on demand (opened via a button); its exact placement is determined by the client based on the document's language and its own UX conventions.
 
@@ -216,7 +235,7 @@ Contains comments or an interactive page. This panel is shown on demand (opened 
 
 ### Child elements:
 
-#### 7.2.1 `<comments>`
+#### 7.3.1 `<comments>`
 
 ```xml
 <comments
@@ -240,7 +259,7 @@ Content:
 
 * URL of a static-comments JSON array (see Static Comments Specification)
 
-#### 7.2.2 `<ipage>`
+#### 7.3.2 `<ipage>`
 
 URL of an interactive HTML page displayed in the side panel.
 
@@ -250,7 +269,7 @@ URL of an interactive HTML page displayed in the side panel.
 
 ---
 
-## 7.3 `<bottom>` Panel
+## 7.4 `<bottom>` Panel
 
 ```xml
 <bottom>
@@ -263,7 +282,7 @@ URL of an interactive HTML page displayed in the side panel.
 
 Child elements:
 
-### 7.3.1 `<section>`
+### 7.4.1 `<section>`
 
 Attributes:
 
@@ -271,23 +290,19 @@ Attributes:
 
 Contains multiple `<a>` elements.
 
-### 7.3.2 `<bottom-message>`
+### 7.4.2 `<bottom-message>`
 
 Contains plain text.
 
 ---
 
-## 7.4 `<sidebar>` Panel
+## 7.5 `<sidebar>` Panel
 
 A persistent visible column displayed alongside the document content. Unlike `<side>` (which is opened on demand via a button), the sidebar is visible on page load.
 
 ```xml
 <sidebar side="right">
     <search action="https://example.com/?s=%s" placeholder="Search…" target="_self"/>
-    <post-nav>
-        <prev href="https://example.com/older-post/">Older Post Title</prev>
-        <next href="https://example.com/newer-post/">Newer Post Title</next>
-    </post-nav>
     <links title="Popular Posts">
         <a href="https://example.com/post-slug/">Post Title</a>
         <a href="https://example.com/another-post/" target="_blank" rel="noopener">Another Post</a>
@@ -308,7 +323,7 @@ A persistent visible column displayed alongside the document content. Unlike `<s
 * When space is insufficient (narrow view, split-screen mode) or when the `<side>` panel is open, the sidebar content flows to the bottom, below the main content and above the `<bottom>` panel.
 * All child sections are optional.
 
-### 7.4.1 `<search>`
+### 7.5.1 `<search>`
 
 Renders a search input.
 
@@ -322,23 +337,7 @@ Attributes:
 * `placeholder` (optional) — hint text shown inside the input field.
 * `target` (optional) — where to open the search results page. Accepts `"_self"` (default, same tab) or `"_blank"` (new tab).
 
-### 7.4.2 `<post-nav>`
-
-Previous/next post navigation.
-
-```xml
-<post-nav>
-    <prev href="https://example.com/older-post/">Older Post Title</prev>
-    <next href="https://example.com/newer-post/">Newer Post Title</next>
-</post-nav>
-```
-
-Child elements:
-
-* `<prev href="…">` — link to the previous (older) post. Text content is the post title. Omit if no previous post exists.
-* `<next href="…">` — link to the next (newer) post. Text content is the post title. Omit if no next post exists.
-
-### 7.4.3 `<links>`
+### 7.5.2 `<links>`
 
 A titled list of arbitrary links. Multiple `<links>` blocks are allowed.
 
@@ -361,7 +360,7 @@ Attributes on each `<a>`:
 
 Text content of each `<a>` is the link label.
 
-### 7.4.4 `<recent-comments>`
+### 7.5.3 `<recent-comments>`
 
 A list of recent comments across the site.
 
