@@ -132,7 +132,9 @@ if (!empty($stwbpb_connections_info)) {
                         <span id="CurrentDocumentOptionalTitleSpan" style="display: none;"></span>
                         <a id="CurrentDocumentTitleLink" href="#"><span id="CurrentDocumentTitleSpan0"></span></a>
                     </div>
-                    
+
+                    <div id="CurrentDocumentCopyButton" class="DocumentTopBarButtonWrapper" title="This document is a copy of another document."></div>
+
                     <div id="CurrentDocumentEmbeddingSymbol" class="DocumentTopBarButtonWrapper" title="This document embeds another document. Click on the title to view the embedded document separately."></div>
 
                     <div id="mainDocSpinner"></div>
@@ -232,6 +234,9 @@ if (!empty($stwbpb_connections_info)) {
                     <span id="RightDocumentOptionalTitleSpan" style="display: none;"></span>
                     <a id="RightDocumentTitleLink"><span id="RightDocumentTitleSpan"></span></a>
                 </div>
+
+                <div id="RightDocumentCopyButton" class="DocumentTopBarButtonWrapper" title="This document is a copy of another document."></div>
+
             </div>
             <div id="RightDocumentCollectionContainer"></div>
             <div id="RightDocumentExportContainer"></div>
