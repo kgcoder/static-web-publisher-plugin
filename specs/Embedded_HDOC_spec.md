@@ -105,12 +105,15 @@ Example:
       "prev": { "href": "https://example.com/older-post/", "title": "Older Post Title" },
       "next": { "href": "https://example.com/newer-post/", "title": "Newer Post Title" }
     },
-    "recent-posts": {
-      "title": "Recent Posts",
-      "posts": [
-        { "href": "https://example.com/post-slug/", "date": "2026-06-20", "title": "Post Title" }
-      ]
-    },
+    "links": [
+      {
+        "title": "Popular Posts",
+        "items": [
+          { "href": "https://example.com/post-slug/", "text": "Post Title" },
+          { "href": "https://example.com/another/", "text": "Another Post", "target": "_blank", "rel": "noopener" }
+        ]
+      }
+    ],
     "recent-comments": {
       "title": "Recent Comments",
       "comments": [
@@ -155,8 +158,9 @@ Example:
 | `search.target` | string | `"_self"` (default, same tab) or `"_blank"` (new tab) |
 | `post-nav.prev` | object | `{ href, title }` — omit if no previous post |
 | `post-nav.next` | object | `{ href, title }` — omit if no next post |
-| `recent-posts.title` | string | Optional section heading |
-| `recent-posts.posts[]` | array | Each item: `{ href, date, title }` |
+| `links[]` | array | One or more link-list blocks (see below) |
+| `links[].title` | string | Optional section heading |
+| `links[].items[]` | array | Each item: `{ href, text, target?, rel? }` |
 | `recent-comments.title` | string | Optional section heading |
 | `recent-comments.comments[]` | array | Each item: `{ post-href, author, excerpt }` |
 

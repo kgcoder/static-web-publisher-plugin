@@ -288,9 +288,10 @@ A persistent visible column displayed alongside the document content. Unlike `<s
         <prev href="https://example.com/older-post/">Older Post Title</prev>
         <next href="https://example.com/newer-post/">Newer Post Title</next>
     </post-nav>
-    <recent-posts title="Recent Posts">
-        <post href="https://example.com/post-slug/" date="2026-06-20">Post Title</post>
-    </recent-posts>
+    <links title="Popular Posts">
+        <a href="https://example.com/post-slug/">Post Title</a>
+        <a href="https://example.com/another-post/" target="_blank" rel="noopener">Another Post</a>
+    </links>
     <recent-comments title="Recent Comments">
         <comment post-href="https://example.com/post-slug/" author="Jane">Comment excerpt…</comment>
     </recent-comments>
@@ -337,27 +338,28 @@ Child elements:
 * `<prev href="…">` — link to the previous (older) post. Text content is the post title. Omit if no previous post exists.
 * `<next href="…">` — link to the next (newer) post. Text content is the post title. Omit if no next post exists.
 
-### 7.4.3 `<recent-posts>`
+### 7.4.3 `<links>`
 
-A list of recent posts on the site.
+A titled list of arbitrary links. Multiple `<links>` blocks are allowed.
 
 ```xml
-<recent-posts title="Recent Posts">
-    <post href="https://example.com/post-slug/" date="2026-06-20">Post Title</post>
-    <post href="https://example.com/another-post/" date="2026-06-18">Another Post</post>
-</recent-posts>
+<links title="Popular Posts">
+    <a href="https://example.com/post-slug/">Post Title</a>
+    <a href="https://example.com/another-post/" target="_blank" rel="noopener">Another Post</a>
+</links>
 ```
 
-Attributes on `<recent-posts>`:
+Attributes on `<links>`:
 
 * `title` (optional) — section heading.
 
-Attributes on each `<post>`:
+Attributes on each `<a>`:
 
-* `href` (required) — URL of the post.
-* `date` (optional) — publication date in `YYYY-MM-DD` format.
+* `href` (required) — destination URL.
+* `target` (optional) — where to open the link (`"_self"`, `"_blank"`, etc.).
+* `rel` (optional) — link relationship (e.g. `"noopener"`, `"nofollow"`).
 
-Text content of each `<post>` is the post title.
+Text content of each `<a>` is the link label.
 
 ### 7.4.4 `<recent-comments>`
 

@@ -197,16 +197,18 @@ export function parseHtmlPageWithEmbeddedHDoc(httpPageUrl, contentString, hdocDa
                 }
             }
 
-            let recentPostsString = ''
-            const recentPostsJSON = sidebarPanelJSON['recent-posts']
-            if (recentPostsJSON && Array.isArray(recentPostsJSON.posts) && recentPostsJSON.posts.length) {
-                const postsString = recentPostsJSON.posts.map(p => {
-                    if (!p.href) return ''
-                    return `\n<post href="${escapeXml(p.href)}"${p.date ? ` date="${escapeXml(p.date)}"` : ''}>${escapeXml(p.title || '')}</post>`
+            let linksString = ''
+            const linksArrayJSON = sidebarPanelJSON['links']
+            if (linksArrayJSON && Array.isArray(linksArrayJSON) && linksArrayJSON.length) {
+                linksString = linksArrayJSON.map(block => {
+                    if (!block.items || !Array.isArray(block.items) || !block.items.length) return ''
+                    const itemsStr = block.items.map(item => {
+                        if (!item.href || !item.text) return ''
+                        return `\n<a href="${escapeXml(item.href)}"${item.target ? ` target="${escapeXml(item.target)}"` : ''}${item.rel ? ` rel="${escapeXml(item.rel)}"` : ''}>${escapeXml(item.text)}</a>`
+                    }).filter(Boolean).join('')
+                    if (!itemsStr) return ''
+                    return `\n<links${block.title ? ` title="${escapeXml(block.title)}"` : ''}>${itemsStr}\n</links>`
                 }).filter(Boolean).join('')
-                if (postsString) {
-                    recentPostsString = `\n<recent-posts${recentPostsJSON.title ? ` title="${escapeXml(recentPostsJSON.title)}"` : ''}>${postsString}\n</recent-posts>`
-                }
             }
 
             let recentCommentsString = ''
@@ -221,7 +223,7 @@ export function parseHtmlPageWithEmbeddedHDoc(httpPageUrl, contentString, hdocDa
                 }
             }
 
-            const sidebarInner = searchString + postNavString + recentPostsString + recentCommentsString
+            const sidebarInner = searchString + postNavString + linksString + recentCommentsString
             if (sidebarInner) {
                 sidebarPanelString = `\n<sidebar${sideAttr}>${sidebarInner}\n</sidebar>`
             }

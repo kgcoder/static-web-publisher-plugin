@@ -624,15 +624,18 @@ class NoteDivsManager{
                         if (nextEl) postNav.next = {href: nextEl.getAttribute('href'), title: nextEl.textContent.trim()}
                     }
 
-                    let recentPosts = null
-                    const recentPostsEl = sidebarEl.querySelector('recent-posts')
-                    if (recentPostsEl) {
-                        const posts = [...recentPostsEl.querySelectorAll('post')].map(p => ({
-                            href: p.getAttribute('href'),
-                            date: p.getAttribute('date'),
-                            title: p.textContent.trim()
-                        }))
-                        recentPosts = {title: recentPostsEl.getAttribute('title'), posts}
+                    let links = null
+                    const linksEls = sidebarEl.getElementsByTagName('links')
+                    if (linksEls && linksEls.length) {
+                        links = [...linksEls].map(linksEl => {
+                            const items = [...linksEl.querySelectorAll('a')].map(a => ({
+                                href: a.getAttribute('href'),
+                                text: a.textContent.trim(),
+                                target: a.getAttribute('target'),
+                                rel: a.getAttribute('rel')
+                            }))
+                            return {title: linksEl.getAttribute('title'), items}
+                        })
                     }
 
                     let recentComments = null
@@ -646,7 +649,7 @@ class NoteDivsManager{
                         recentComments = {title: recentCommentsEl.getAttribute('title'), comments}
                     }
 
-                    sidebarPanelInfo = {side: sidebarSide, search, postNav, recentPosts, recentComments}
+                    sidebarPanelInfo = {side: sidebarSide, search, postNav, links, recentComments}
                 }
 
                 panelsInfo = {
