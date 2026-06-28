@@ -100,12 +100,12 @@ if (!empty($stwbpb_connections_info)) {
     <?php wp_admin_bar_render(); ?>
 <?php endif; ?>
 
-<div id="ui-root">
-    <div id="AllDocumentsContainer" class="theme-light">
+<div id="ui-root" class="theme-light">
+    <div id="AllDocumentsContainer">
         <div id="OneDocumentContainer">
 
             <div id="CurrentDocumentTopBar">
-                <div id="CurrentDocumentTopBarRow" class="theme-light">
+                <div id="CurrentDocumentTopBarRow">
 
                     <div id="CurrentDocumentInfoButtonWrapper" class="DocumentTopBarButtonWrapper">
                         <div title="Page info" id="CurrentDocumentInfoButton1" class="DocumentTopBarButton" href="#">
@@ -130,7 +130,7 @@ if (!empty($stwbpb_connections_info)) {
 
                     <div class="TitleContainer">
                         <span id="CurrentDocumentOptionalTitleSpan" style="display: none;"></span>
-                        <a id="CurrentDocumentTitleLink" href="#"><span id="CurrentDocumentTitleSpan0"></span></a>
+                        <a id="CurrentDocumentTitleLink" href="#"><span id="CurrentDocumentTitleSpan0" class="DocumentTitleSpan"></span></a>
                     </div>
 
                     <div id="CurrentDocumentCopyButton" class="DocumentTopBarButtonWrapper" title="This document is a copy of another document."></div>
@@ -143,9 +143,9 @@ if (!empty($stwbpb_connections_info)) {
 
             <div id="CurrentDocumentMainRow" class="DocumentMainRow">
 
-                <div id="CurrentDocumentLeftPanel" class="DocumentSidePanel theme-light"></div>
+                <div id="CurrentDocumentLeftPanel" class="DocumentSidePanel"></div>
 
-                <div id="CurrentDocument" class="DocumentColumn theme-light">
+                <div id="CurrentDocument" class="DocumentColumn">
                     <div id="CurrentDocumentTopPanel" class="DocumentTopPanel">
                         <a id="CurrentDocumentTopPanelLogoLink" class="TopPanelLogoLink" href="<?php echo esc_url($stwbpb_seo_panels['logo_href'] ?? $stwbpb_seo_panels['site_name_href'] ?? '#'); ?>">
                             <img id="CurrentDocumentTopPanelLogo" src="<?php echo esc_url($stwbpb_seo_panels['logo_src'] ?? ''); ?>" width="150px" height="50px"<?php if (empty($stwbpb_seo_panels['logo_src'])) echo ' style="display:none"'; ?>/>
@@ -213,7 +213,7 @@ if (!empty($stwbpb_connections_info)) {
                     <div id="CurrentDocumentDropDownMenu" class="DocumentDropDownMenu"></div>
                 </div>
 
-                <div id="CurrentDocumentRightPanel" class="DocumentSidePanel theme-light"></div>
+                <div id="CurrentDocumentRightPanel" class="DocumentSidePanel"></div>
 
                 <div id="CurrentDocumentInfoContainer">
                     <div id="CurrentDocumentInfo"></div>
@@ -246,7 +246,7 @@ if (!empty($stwbpb_connections_info)) {
 
                 <div class="TitleContainer">
                     <span id="RightDocumentOptionalTitleSpan" style="display: none;"></span>
-                    <a id="RightDocumentTitleLink"><span id="RightDocumentTitleSpan"></span></a>
+                    <a id="RightDocumentTitleLink"><span id="RightDocumentTitleSpan" class="DocumentTitleSpan"></span></a>
                 </div>
 
                 <div id="RightDocumentCopyButton" class="DocumentTopBarButtonWrapper" title="This document is a copy of another document."></div>
@@ -259,7 +259,7 @@ if (!empty($stwbpb_connections_info)) {
         <canvas id="flinks-canvas"></canvas>
     </div>
 
-    <div id="LinksListContainerDiv" class="theme-light">
+    <div id="LinksListContainerDiv">
         <div id="LinksListTopRow">
             <div id="LinksListTopRowLeftSortButtonContainer"></div>
             <div id="LinksListTopRowMiddleSpacer"></div>
@@ -279,7 +279,7 @@ if (!empty($stwbpb_connections_info)) {
 
     <div id="spinner" class="spinner"></div>
     <div id="CurrentUrl"></div>
-    <div id="multiple-links-popup" class="theme-light"></div>
+    <div id="multiple-links-popup"></div>
 </div>
 <?php wp_footer(); ?>
 

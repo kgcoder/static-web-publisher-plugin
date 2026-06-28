@@ -13,11 +13,10 @@ https://github.com/kgcoder/default-web
 */
 
 import g from "./Globals.js"
-import { setTheme, showToastMessage } from "./helpers.js";
+import { showToastMessage } from "./helpers.js";
 import IconsInfo from "./Icons.js";
 import { parseStaticContent } from "./parsers/ParsingManager.js";
 import { checkKey } from "./KeyboardManager.js";
-import { getObjectFromLocalStorage } from "./LocalStorageManager.js";
 import { getHdocJsonAndContentFromCurrentDocument, parseHtmlPageWithEmbeddedHDoc } from "./parsers/EmbHDOCParser.js";
 import { parseCDOC } from "./parsers/CDOCParser.js";
 import { parseCondoc } from "./parsers/CondocParser.js";
@@ -145,8 +144,6 @@ function loadUIAndIcons() {
 
     document.onkeydown = checkKey
 
-    useSavedTheme()
-
 }
 
 
@@ -157,14 +154,7 @@ function dispatchReaderReady(url) {
     document.dispatchEvent(new CustomEvent('swpReaderReady', { detail: { url } }))
 }
 
-async function useSavedTheme() {
-    let { value: saved } = await getObjectFromLocalStorage('theme')
-    if (!saved) {
-        saved = "light"
-    }
-    setTheme(saved)
-    g.currentTheme = saved
-}
+
 
 
 

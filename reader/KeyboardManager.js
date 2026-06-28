@@ -13,8 +13,6 @@ https://github.com/kgcoder/default-web
 */
 
 import g from './Globals.js'
-import { setTheme } from './helpers.js'
-import { getObjectFromLocalStorage } from './LocalStorageManager.js'
 
 
 export const checkKey = async (e) => {
@@ -40,22 +38,7 @@ export const checkKey = async (e) => {
             g.pdm.toggleFullScreen()
         }
     }
-    if (e.key === '[' && e.ctrlKey) {
 
-        const {value: saved} = await getObjectFromLocalStorage('theme') || "light";
-
-        let next = 'light'
-        if (saved === 'light') {
-            next = 'dark'
-        } else if (saved === 'dark') {
-            next = 'sepia'
-        } else if (saved === 'sepia') {
-            next = 'light'
-        }
-        
-        setTheme(next, true)
-
-    }
 
 
 

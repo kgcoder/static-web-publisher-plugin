@@ -1477,8 +1477,8 @@ a.TopPanelOptionLink:hover {
     min-width: 0;
 }
 
-#CurrentDocumentTitleSpan,
-#RightDocumentTitleSpan {
+
+.DocumentTitleSpan {
     display: block;
     margin-right: 20px;
     
@@ -1493,13 +1493,12 @@ a.TopPanelOptionLink:hover {
     /* cursor: default; */
 }
 
-#RightDocumentTitleSpan::-webkit-scrollbar {
+.DocumentTitleSpan::-webkit-scrollbar {
     display: none; 
 }
 
 
-#CurrentDocumentTitleSpan0,
-#RightDocumentTitleSpan {
+.DocumentTitleSpan {
        display: block;
     margin-right: 20px;
     

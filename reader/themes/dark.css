@@ -7,7 +7,7 @@
     --top-bars:#252424;
 }
 
-#AllDocumentsContainer.theme-dark{
+.theme-dark #AllDocumentsContainer{
   background-color: rgb(40, 40, 40);
 }
 
@@ -16,20 +16,20 @@
     border-top: 2px solid #ffffff;
 }
 
-.DocumentColumn.theme-dark{
+.theme-dark .DocumentColumn{
     background-color: var(--bg-main); /* dark background */
 }
 
-#CurrentDocumentTopBar.theme-dark{
+.theme-dark #CurrentDocumentTopBar{
   background-color: var(--top-bars);
 }
 
-#RightDocumentsTopBar.theme-dark{
+.theme-dark #RightDocumentsTopBar{
   background-color: var(--top-bars);
 }
 
 
-#multiple-links-popup.theme-dark{
+.theme-dark #multiple-links-popup{
   background-color: var(--bg-main); 
 }
 
@@ -95,7 +95,7 @@
   color:white;
 }
 
-.theme-dark #CurrentDocumentTitleSpan{
+.theme-dark .DocumentTitleSpan{
   color:white;
 }
 
@@ -135,13 +135,10 @@
 }
 
 
-.theme-dark #RightDocumentTitleSpan{
-  color:white;
-}
-
 .theme-dark .NoteDiv{
     background-color: var(--bg-main); /* dark background */
 }
+
 
 
 .theme-dark .DocumentTopPanel{
@@ -162,7 +159,7 @@
   
 }
 
-#LinksListContainerDiv.theme-dark {
+.theme-dark #LinksListContainerDiv {
   background-color: var(--bg-main);
   /* //box-shadow: 0 0 5px rgba(255, 255, 255, 0.3); */
   border-width: 1px;
@@ -404,14 +401,14 @@
 
 .theme-dark pre::-webkit-scrollbar,
 .theme-dark #ExportTextDiv::-webkit-scrollbar,
-.DocumentColumn.theme-dark::-webkit-scrollbar,
+.theme-dark .DocumentColumn::-webkit-scrollbar,
 .theme-dark #SourceCodeTextDiv::-webkit-scrollbar,
 .theme-dark .StaticCommentsSection::-webkit-scrollbar{
     width: 15px;
     height: 15px;
 }
 
-.DocumentColumn.theme-dark::-webkit-scrollbar-track,
+.theme-dark .DocumentColumn::-webkit-scrollbar-track,
 .theme-dark #ExportTextDiv::-webkit-scrollbar-track,
 .theme-dark #SourceCodeTextDiv::-webkit-scrollbar-track,
 .theme-dark pre::-webkit-scrollbar-track,
@@ -422,7 +419,7 @@
 .theme-dark pre::-webkit-scrollbar-thumb,
 .theme-dark #ExportTextDiv::-webkit-scrollbar-thumb,
 .theme-dark #SourceCodeTextDiv::-webkit-scrollbar-thumb,
-.DocumentColumn.theme-dark::-webkit-scrollbar-thumb,
+.theme-dark .DocumentColumn::-webkit-scrollbar-thumb,
 .theme-dark .StaticCommentsSection::-webkit-scrollbar-thumb{
     background: #666;
     /* thumb color */
@@ -437,7 +434,7 @@
 .theme-dark pre::-webkit-scrollbar-thumb:hover,
 .theme-dark #ExportTextDiv::-webkit-scrollbar-thumb:hover,
 .theme-dark #SourceCodeTextDiv::-webkit-scrollbar-thumb:hover,
-.DocumentColumn.theme-dark::-webkit-scrollbar-thumb:hover,
+.theme-dark .DocumentColumn::-webkit-scrollbar-thumb:hover,
 .theme-dark .StaticCommentsSection::-webkit-scrollbar-thumb:hover{
     background: #888;
     border: 4px solid transparent;
@@ -446,7 +443,7 @@
     border-radius: 10px;
 }
 
-.DocumentColumn.theme-dark::-webkit-scrollbar-corner,
+.theme-dark .DocumentColumn::-webkit-scrollbar-corner,
 .theme-dark .StaticCommentsSection::-webkit-scrollbar-corner,
 .theme-dark #SourceCodeTextDiv::-webkit-scrollbar-corner{
     background: var(--header-footer-bg);
@@ -462,6 +459,7 @@
     margin-top: 15px;
     font-size: 25px;
 }
+
 
 .theme-dark .swp-leave-comment-btn {
   color:white;

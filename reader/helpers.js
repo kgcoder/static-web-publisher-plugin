@@ -14,7 +14,6 @@ https://github.com/kgcoder/default-web
 
 import g from "./Globals.js"
 import SHA256 from './hashing/sha256-es/src/sha256.js'
-import { saveObjectInLocalStorage } from "./LocalStorageManager.js";
 import DOMPurify from './dompurify/purify.es.mjs';
 import FloatingLink from "./models/FloatingLink.js";
 
@@ -24,44 +23,6 @@ export function timestamp() {
         : new Date().getTime();
 }
 
-
-export async function setTheme(themeName, shouldSave = false) {
-
-    const allDocumentsContainer = document.getElementById('AllDocumentsContainer')
-
-    const currentDocumentTopBar = document.getElementById('CurrentDocumentTopBar')
-    const currentDocumentTopBarRow = document.getElementById('CurrentDocumentTopBarRow')
-    const rightDocumentsTopBar = document.getElementById('RightDocumentsTopBar')
-
-    const columnDivs = document.getElementsByClassName('DocumentColumn')
-    const sidePanelDivs = document.getElementsByClassName('DocumentSidePanel')
-    const multipleFlinksPopup = document.getElementById('multiple-links-popup')
-    
-    const linksListContainerDiv = document.getElementById('LinksListContainerDiv')
-    
-    for (const div of [allDocumentsContainer,currentDocumentTopBar, rightDocumentsTopBar, currentDocumentTopBarRow,linksListContainerDiv,...columnDivs,...sidePanelDivs,multipleFlinksPopup]) {
-        // Remove any existing theme-* class
-        div.classList.forEach(cls => {
-        if (cls.startsWith('theme-')) {
-            div.classList.remove(cls);
-        }
-        });
-
-        // Add the new theme class
-        div.classList.add('theme-' + themeName); // e.g. "theme-dark"
-        g.currentTheme = themeName
-    }
-    
-    if (shouldSave) {
-        saveObjectInLocalStorage('theme',themeName)
-    }
-
-    g.readingManager.applyFlinksOnTheLeft()
-
-    g.readingManager.applyFlinksOnTheRight()
-     
-
-}
 
 
 export function createOneIconComponent(parent,iconPath,componentId,className,width = 24,height = 0){

@@ -14,7 +14,7 @@
     --top-bars:#FFEABD;
 }
 
-#AllDocumentsContainer.theme-sepia{
+.theme-sepia #AllDocumentsContainer{
   background-color: #fcf6e7;
 }
 
@@ -23,19 +23,19 @@
   background-color: var(--bg-main);
 }
 
-.DocumentColumn.theme-sepia {
+.theme-sepia .DocumentColumn {
     background-color: var(--bg-main); /* dark background */
 }
 
-#CurrentDocumentTopBar.theme-sepia{
+.theme-sepia #CurrentDocumentTopBar{
   background-color: var(--top-bars);
 }
 
-#RightDocumentsTopBar.theme-sepia{
+.theme-sepia #RightDocumentsTopBar{
   background-color: var(--top-bars);
 }
 
-#multiple-links-popup.theme-sepia{
+.theme-sepia #multiple-links-popup{
   background-color: var(--bg-main); 
 }
 
@@ -48,6 +48,8 @@
     background-color: var(--bg-main);
     color: var(--text-main);
 }
+
+
 
 
 .theme-sepia .linkInputTypeSelectorButton{
@@ -100,7 +102,7 @@
   background-color: var(--top-bars);
 }
 
-#LinksListContainerDiv.theme-sepia {
+.theme-sepia #LinksListContainerDiv{
   background-color: var(--bg-main);
   border-width: 1px;
   border-style: solid;
@@ -171,7 +173,6 @@
 .theme-sepia .PostNavBarSide * {
   color: var(--accent);
 }
-
 
 
 .theme-sepia ol,ul{
@@ -398,7 +399,7 @@
 }
 
 .theme-sepia pre::-webkit-scrollbar,
-.DocumentColumn.theme-sepia::-webkit-scrollbar,
+.theme-sepia .DocumentColumn::-webkit-scrollbar,
 .theme-sepia #SourceCodeTextDiv::-webkit-scrollbar,
 .theme-sepia .StaticCommentsSection::-webkit-scrollbar{
     width: 15px;
@@ -406,7 +407,7 @@
 }
 
 .theme-sepia pre::-webkit-scrollbar-track,
-.DocumentColumn.theme-sepia::-webkit-scrollbar-track,
+.theme-sepia .DocumentColumn::-webkit-scrollbar-track,
 .theme-sepia #SourceCodeTextDiv::-webkit-scrollbar-track,
 .theme-sepia .StaticCommentsSection::-webkit-scrollbar-track{
     background: #f3e4cb;
@@ -415,7 +416,7 @@
 
 
 .theme-sepia pre::-webkit-scrollbar-thumb,
-.DocumentColumn.theme-sepia::-webkit-scrollbar-thumb,
+.theme-sepia .DocumentColumn::-webkit-scrollbar-thumb,
 .theme-sepia #SourceCodeTextDiv::-webkit-scrollbar-thumb,
 .theme-sepia .StaticCommentsSection::-webkit-scrollbar-thumb{
     background: #c2a382;
@@ -429,7 +430,7 @@
 }
 
 .theme-sepia pre::-webkit-scrollbar-thumb:hover,
-.DocumentColumn.theme-sepia::-webkit-scrollbar-thumb:hover,
+.theme-sepia .DocumentColumn::-webkit-scrollbar-thumb:hover,
 .theme-sepia #SourceCodeTextDiv::-webkit-scrollbar-thumb:hover,
 .theme-sepia .StaticCommentsSection::-webkit-scrollbar-thumb:hover{
     background: #a07f5e;
@@ -440,7 +441,7 @@
 }
 
 .theme-sepia pre::-webkit-scrollbar-corner,
-.DocumentColumn.theme-sepia::-webkit-scrollbar-corner,
+.theme-sepia .DocumentColumn::-webkit-scrollbar-corner,
 .theme-sepia #SourceCodeTextDiv::-webkit-scrollbar-corner,
 .theme-sepia .StaticCommentsSection::-webkit-scrollbar-corner{
     background: #f3e4cb;
