@@ -100,7 +100,8 @@ if (!empty($stwbpb_connections_info)) {
     <?php wp_admin_bar_render(); ?>
 <?php endif; ?>
 
-<div id="ui-root" class="theme-light">
+<?php $stwbpb_theme = isset($stwbpb_settings['reader_ui_theme']) ? $stwbpb_settings['reader_ui_theme'] : 'light'; ?>
+<div id="ui-root" class="theme-<?php echo esc_attr($stwbpb_theme); ?>">
     <div id="AllDocumentsContainer">
         <div id="OneDocumentContainer">
 
