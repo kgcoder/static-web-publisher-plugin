@@ -118,8 +118,9 @@ Example:
       {
         "type": "recent-comments",
         "title": "Recent Comments",
+        "format": "{author} on {post}",
         "comments": [
-          { "post-href": "https://example.com/post-slug/", "author": "Jane", "excerpt": "Comment excerpt…" }
+          { "post-href": "https://example.com/post-slug/", "post-title": "Post Title", "author": "Jane", "excerpt": "Comment excerpt…" }
         ]
       }
     ]
@@ -170,7 +171,8 @@ Example:
 | `sidebar.items[].target` | string | *(type=search)* `"_self"` (default) or `"_blank"` |
 | `sidebar.items[].title` | string | *(type=links / recent-comments)* Optional section heading |
 | `sidebar.items[].items[]` | array | *(type=links)* Each: `{ href, text, target?, rel? }` |
-| `sidebar.items[].comments[]` | array | *(type=recent-comments)* Each: `{ post-href, author, excerpt }` |
+| `sidebar.items[].format` | string | *(type=recent-comments)* Template for each item; default `"{author} on {post}"`. Placeholders: `{author}`, `{post}` |
+| `sidebar.items[].comments[]` | array | *(type=recent-comments)* Each: `{ post-href, post-title, author, excerpt? }` |
 
 ---
 

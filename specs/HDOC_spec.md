@@ -307,9 +307,9 @@ A persistent visible column displayed alongside the document content. Unlike `<s
         <a href="https://example.com/post-slug/">Post Title</a>
         <a href="https://example.com/another-post/" target="_blank" rel="noopener">Another Post</a>
     </links>
-    <recent-comments title="Recent Comments">
-        <comment post-href="https://example.com/post-slug/" author="Jane">Comment excerpt…</comment>
-    </recent-comments>
+    <recent-comments title="Recent Comments" format="{author} on {post}">
+    <comment post-href="https://example.com/post-slug/" post-title="Post Title" author="Jane" excerpt="Comment excerpt…"/>
+</recent-comments>
 </sidebar>
 ```
 
@@ -365,21 +365,22 @@ Text content of each `<a>` is the link label.
 A list of recent comments across the site.
 
 ```xml
-<recent-comments title="Recent Comments">
-    <comment post-href="https://example.com/post-slug/" author="Jane">Comment excerpt text…</comment>
+<recent-comments title="Recent Comments" format="{author} on {post}">
+    <comment post-href="https://example.com/post-slug/" post-title="Post Title" author="Jane" excerpt="Comment excerpt…"/>
 </recent-comments>
 ```
 
 Attributes on `<recent-comments>`:
 
 * `title` (optional) — section heading.
+* `format` (optional) — template string for rendering each item. Default: `"{author} on {post}"`. Placeholders: `{author}` (commenter name) and `{post}` (post title, linked to `post-href`). Reorder freely to suit any language: e.g. `"{post} · {author}"` or `"{post}に{author}がコメント"`.
 
 Attributes on each `<comment>`:
 
 * `post-href` (required) — URL of the post the comment belongs to.
+* `post-title` (required) — title of the post.
 * `author` (required) — display name of the commenter.
-
-Text content of each `<comment>` is a short excerpt of the comment.
+* `excerpt` (optional) — short excerpt of the comment text.
 
 ---
 

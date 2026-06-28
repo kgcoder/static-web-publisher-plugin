@@ -636,10 +636,16 @@ class NoteDivsManager{
                         } else if (tag === 'recent-comments') {
                             const comments = [...child.querySelectorAll('comment')].map(c => ({
                                 postHref: c.getAttribute('post-href'),
+                                postTitle: c.getAttribute('post-title'),
                                 author: c.getAttribute('author'),
-                                excerpt: c.textContent.trim()
+                                excerpt: c.getAttribute('excerpt')
                             }))
-                            sidebarItems.push({type: 'recent-comments', title: child.getAttribute('title'), comments})
+                            sidebarItems.push({
+                                type: 'recent-comments',
+                                title: child.getAttribute('title'),
+                                format: child.getAttribute('format'),
+                                comments
+                            })
                         }
                     }
 
