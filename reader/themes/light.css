@@ -31,9 +31,7 @@
     background-color: var(--bg-main);
 }
 
-.theme-light .NoteEditingDiv{
-    color: var(--text-main);
-}
+
 
 .theme-light .linkInputTypeSelectorButton{
   background-color: white;
@@ -150,6 +148,11 @@
     padding: 2rem;
 
 }
+
+.theme-light .PostNavBarSide * {
+  color: var(--accent);
+}
+
 
 
 .theme-light ol,ul{

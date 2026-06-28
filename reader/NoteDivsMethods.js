@@ -430,8 +430,9 @@ class NoteDivsManager{
         }
 
 
-            const panelsMatch = xmlContent.match(/<panels\b[^>]*>([\s\S]*?)<\/panels>/im)
-            if(panelsMatch){
+        const panelsMatch = xmlContent.match(/<panels\b[^>]*>([\s\S]*?)<\/panels>/im)
+        if(panelsMatch){
+
 
                 let topPanelInfo = null
                 let sidePanelInfo = null
@@ -506,7 +507,7 @@ class NoteDivsManager{
 
                     topPanelInfo = {isMainLinkStatic,mainUrl:mainLinkUrl,logo:topPanelLogoUrl,title:mainTitle,links:topPanelLinksInfo}
                     
-                }
+            }
 
 
                 

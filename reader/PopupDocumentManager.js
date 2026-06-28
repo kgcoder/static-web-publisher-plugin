@@ -529,7 +529,6 @@ class PopupDocumentManager{
         const rightDocumentCenterCollageButton = document.getElementById("RightDocumentCenterCollageButton")
         rightDocumentCenterCollageButton.style.display = noteData.docType === 'c' ? 'flex' : 'none'
 
-        console.log('noteData',noteData)
 
         const rightDocumentCopyButton = document.getElementById("RightDocumentCopyButton")
         
@@ -792,8 +791,6 @@ class PopupDocumentManager{
         const div = document.getElementById("CurrentDocument")
 
      
-        
-
         const result = g.noteDivsManager.populateDivWithTextFromDoc(div,dataObject.xmlString,dataObject.url)
         if (!result) {
             
@@ -877,14 +874,19 @@ class PopupDocumentManager{
             const bottomMessageDiv = document.getElementById("CurrentDocumentBottomPanelBottomMessage")
             const dropdownMenuDiv = document.getElementById("CurrentDocumentDropDownMenu") 
             const sandwichButtonDiv = document.getElementById("LeftSandwichButton")
-
+            const documentSidebar = document.getElementById("CurrentDocumentSidebar")
+            const documentBottomBar = document.getElementById("CurrentDocumentBottomBar")
+    
+            const postNavBar = document.getElementById("CurrentDocumentPostNavBar")
 
       
             const allDivs = {
                 documentLeftPanelButton,documentRightPanelButton,
                 topPanelDiv,topPanelLogoLink,topPanelLogoImage,topPanelTitleSpan,
                 bottomPanelDiv,bottomPanelRowDiv,topPanelOptionsRow,leftPanelDiv,rightPanelDiv,bottomMessageDiv,
-                dropdownMenuDiv,sandwichButtonDiv
+                dropdownMenuDiv,sandwichButtonDiv,
+                documentSidebar, documentBottomBar,
+                postNavBar
                 
             }
 
@@ -892,6 +894,8 @@ class PopupDocumentManager{
             this.populatePanels(panels,allDivs,this,false)
 
         }    
+
+        this.updateSidebarVisibility()
 
 
         
@@ -1079,16 +1083,40 @@ class PopupDocumentManager{
         const sandwichButtonDiv = document.getElementById("SandwichButton" + docId)
         const dropdownMenuDiv = document.getElementById("DocumentDropDownMenu" + docId)
 
+        const documentBottomBar = document.getElementById("RightDocumentBottomBar" + docId)
+
+        const postNavBar = document.getElementById("RightDocumentPostNavBar" + docId)
+
         const allDivs = {
             documentLeftPanelButton,documentRightPanelButton,
             topPanelDiv,topPanelLogoLink,topPanelLogoImage,topPanelTitleSpan,
             bottomPanelDiv,bottomPanelRowDiv,topPanelOptionsRow,leftPanelDiv,rightPanelDiv,bottomMessageDiv,
-            sandwichButtonDiv,dropdownMenuDiv
+            sandwichButtonDiv,dropdownMenuDiv,
+            documentSidebar:null, documentBottomBar,
+            postNavBar
         }
 
         this.populatePanels(noteData.panels,allDivs,noteData,true)
     }
 
+    updateSidebarVisibility = () => {
+        const sidebar = document.getElementById("CurrentDocumentSidebar")
+        const bottomBar = document.getElementById("CurrentDocumentBottomBar")
+
+        if(!g.readingManager.mainDocCopyInfo){
+            sidebar.style.display = 'none'
+            bottomBar.style.display = 'none'
+            return
+        }
+
+        if(!g.readingManager.isFullScreen || this.currentDocLeftPanelShowing || this.currentDocRightPanelShowing){
+            sidebar.style.display = 'none'
+            bottomBar.style.display = 'flex'
+        }else{
+            sidebar.style.display = 'flex'
+            bottomBar.style.display = 'none'
+        }
+    }
 
     populatePanels(panelsInfo,allDivs,dataObject,isRight = false){
 
@@ -1096,11 +1124,24 @@ class PopupDocumentManager{
             documentLeftPanelButton,documentRightPanelButton,
             topPanelDiv,topPanelLogoLink,topPanelLogoImage,topPanelTitleSpan,
             bottomPanelDiv,bottomPanelRowDiv,topPanelOptionsRow,leftPanelDiv,rightPanelDiv,bottomMessageDiv,
-            sandwichButtonDiv,dropdownMenuDiv
+            sandwichButtonDiv,dropdownMenuDiv,
+            documentSidebar, documentBottomBar,
+            postNavBar
         } = allDivs
 
-    
 
+        if(panelsInfo.sidebarPanel){
+            if(documentSidebar){
+                this.populateSidebar(documentSidebar, panelsInfo.sidebarPanel)
+            }
+            if(documentBottomBar){
+                this.populateSidebar(documentBottomBar, panelsInfo.sidebarPanel)
+            }
+        }
+
+        if(panelsInfo.postNavPanel){
+            this.populatePostNavPanel(postNavBar, panelsInfo.postNavPanel)
+        }
       
 
 
@@ -1397,6 +1438,160 @@ class PopupDocumentManager{
 
     }
 
+    populateSidebar(div, sidebarInfo) {
+        removeAllChildren(div)
+
+        for (const item of sidebarInfo.items) {
+            if (item.type === 'search') {
+                const widget = document.createElement('div')
+                widget.className = 'SideBarWidget'
+
+                const form = document.createElement('div')
+                form.className = 'SideBarSearchForm'
+
+                const input = document.createElement('input')
+                input.type = 'search'
+                input.className = 'SideBarSearchInput'
+                input.placeholder = item.placeholder || 'Search…'
+
+                input.addEventListener('keydown', (event) => {
+                    if (event.key !== 'Enter') return
+                    const query = encodeURIComponent(input.value.trim())
+                    if (!query) return
+                    const url = item.action.replace('%s', query)
+                    window.open(url, item.target || '_self')
+                })
+
+                form.appendChild(input)
+                widget.appendChild(form)
+                div.appendChild(widget)
+
+            } else if (item.type === 'links') {
+                const widget = document.createElement('div')
+                widget.className = 'SideBarWidget'
+
+                if (item.title) {
+                    const title = document.createElement('p')
+                    title.className = 'SideBarWidgetTitle'
+                    title.textContent = item.title
+                    widget.appendChild(title)
+                }
+
+                const ul = document.createElement('ul')
+                ul.className = 'SideBarLinks'
+
+                for (const link of item.items) {
+                    const li = document.createElement('li')
+                    const a = document.createElement('a')
+                    a.href = link.href
+                    a.textContent = link.text
+                    if (link.target) a.target = link.target
+                    if (link.rel) a.rel = link.rel
+                    li.appendChild(a)
+                    ul.appendChild(li)
+                }
+
+                widget.appendChild(ul)
+                div.appendChild(widget)
+
+            } else if (item.type === 'recent-comments') {
+                const widget = document.createElement('div')
+                widget.className = 'SideBarWidget'
+
+                if (item.title) {
+                    const title = document.createElement('p')
+                    title.className = 'SideBarWidgetTitle'
+                    title.textContent = item.title
+                    widget.appendChild(title)
+                }
+
+                const format = item.format || '{author} on {post}'
+
+                for (const comment of item.comments) {
+                    const entry = document.createElement('div')
+                    entry.className = 'SideBarCommentItem'
+
+                    const header = document.createElement('span')
+                    header.className = 'SideBarCommentHeader'
+                    for (const part of format.split(/(\{author\}|\{post\})/g)) {
+                        if (part === '{author}') {
+                            const authorSpan = document.createElement('span')
+                            authorSpan.className = 'SideBarCommentAuthor'
+                            authorSpan.textContent = comment.author
+                            header.appendChild(authorSpan)
+                        } else if (part === '{post}') {
+                            const postLink = document.createElement('a')
+                            postLink.href = comment.postHref
+                            postLink.textContent = comment.postTitle
+                            header.appendChild(postLink)
+                        } else if (part) {
+                            header.appendChild(document.createTextNode(part))
+                        }
+                    }
+
+                    entry.appendChild(header)
+                    if (comment.excerpt) {
+                        const excerpt = document.createElement('span')
+                        excerpt.className = 'SideBarCommentExcerpt'
+                        excerpt.textContent = comment.excerpt
+                        entry.appendChild(excerpt)
+                    }
+                    widget.appendChild(entry)
+                }
+
+                div.appendChild(widget)
+            }
+        }
+    }
+
+
+    populatePostNavPanel(div, postNavPanelInfo) {
+        removeAllChildren(div)
+
+        const leftDiv = document.createElement('div')
+        leftDiv.className = 'PostNavBarSide'
+        leftDiv.style.justifyContent = 'flex-start'
+        div.appendChild(leftDiv)
+
+        const rightDiv = document.createElement('div')
+        rightDiv.className = 'PostNavBarSide'
+        rightDiv.style.justifyContent = 'flex-end'
+
+        div.appendChild(rightDiv)
+
+
+        if(postNavPanelInfo.prev){
+            const leftArrowIconDiv = document.createElement('div')
+            leftArrowIconDiv.style.width = '24px'
+            leftArrowIconDiv.style.height = '24px'
+            this.createOneSVGIconComponent(leftArrowIconDiv,g.iconsInfo.svgIcons.arrowLeft)
+            leftDiv.appendChild(leftArrowIconDiv)
+
+            const leftLink = document.createElement('a')
+            leftLink.href = postNavPanelInfo.prev.href
+            leftLink.innerText = postNavPanelInfo.prev.title
+            leftDiv.appendChild(leftLink)
+        }
+
+        if(postNavPanelInfo.next){
+
+            const rightLink = document.createElement('a')
+            rightLink.href = postNavPanelInfo.next.href
+            rightLink.innerText = postNavPanelInfo.next.title
+            rightDiv.appendChild(rightLink)
+
+            const rightArrowIconDiv = document.createElement('div')
+            rightArrowIconDiv.style.width = '24px'
+            rightArrowIconDiv.style.height = '24px'
+            this.createOneSVGIconComponent(rightArrowIconDiv,g.iconsInfo.svgIcons.arrowRight)
+            rightDiv.appendChild(rightArrowIconDiv)
+            
+            
+        }
+
+
+
+    }
 
 
 
@@ -1755,10 +1950,19 @@ class PopupDocumentManager{
             g.readingManager.mainCollageViewer.updateWidth(currentDocumentWidth)
         }
 
+        const currentDocumentBody = document.getElementById("CurrentDocumentBody")
+
+        if(g.readingManager.isFullScreen && g.readingManager.copyInfo && !this.currentDocLeftPanelShowing && 
+        !this.currentDocRightPanelShowing){
+            currentDocumentBody.style.width = `100%`
+        }else{
+            currentDocumentBody.style.width = '70%'
+        }
+
         this.updateMainDocumentPadding()
         const mainPresentationDiv = document.getElementById("CurrentDocumentMainDiv")
 
-         mainPresentationDiv.style.width = `${currentDocumentWidth}px`
+         mainPresentationDiv.style.width = '100%'
 
         const fullScreenButton = document.getElementById("CurrentDocumentFullScreenButton")
         while(fullScreenButton.firstChild){
@@ -1772,6 +1976,9 @@ class PopupDocumentManager{
 
 
         this.updateLeftDocumentPanels()
+
+        this.updateSidebarVisibility()
+
 
         if (g.readingManager.mainDocType === 'h') {
             this.updateDocumentImageWidths(mainPresentationDiv)   
@@ -2442,6 +2649,9 @@ class PopupDocumentManager{
         this.updateMainDocumentPadding()
    
         this.updateLeftDocumentPanels()
+
+        this.updateSidebarVisibility()
+
       
 
         g.readingManager.applyFlinksOnTheLeft()
@@ -2492,6 +2702,9 @@ class PopupDocumentManager{
         this.updateMainDocumentPadding()
 
         this.updateLeftDocumentPanels() 
+
+        this.updateSidebarVisibility()
+
 
         g.readingManager.applyFlinksOnTheLeft()
 
@@ -3154,7 +3367,7 @@ class PopupDocumentManager{
     getMainDocumentPadding(){
         const screenWidth = window.innerWidth
         const mainPadding = this.isPaddingOn && !g.isMobileMode && 
-        g.readingManager.isFullScreen && !this.currentDocLeftPanelShowing && 
+        g.readingManager.isFullScreen && !g.readingManager.mainDocCopyInfo && !this.currentDocLeftPanelShowing && 
         !this.currentDocRightPanelShowing ? screenWidth * 0.2 : kDefaultPadding
 
         return mainPadding

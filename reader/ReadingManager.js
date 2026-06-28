@@ -389,12 +389,19 @@ setupFlinksCanvasDPR(){
 
 
          const presentationDiv = document.createElement('div')
-         presentationDiv.className = "RightDocumentPresentationDiv"
+         presentationDiv.className = "RightDocumentPresentationDiv PresentationDiv"
         // presentationDiv.style.width = `${this.docWidth}px`
          div.appendChild(presentationDiv)
-         const textearea = document.createElement('textarea')
-         textearea.className = "RightDocumentTextArea"
-         div.appendChild(textearea)
+
+         const bottomBarDiv = document.createElement('div')
+         bottomBarDiv.id = 'RightDocumentBottomBar' + rightDocId
+         bottomBarDiv.className = "RightDocumentBottomBar BottomBar"
+         div.appendChild(bottomBarDiv)
+
+         const postNavBarDiv = document.createElement('div')
+         postNavBarDiv.id = 'RightDocumentPostNavBar' + rightDocId
+         postNavBarDiv.className = "RightDocumentPostNavBar PostNavBar"
+         div.appendChild(postNavBarDiv)
 
          const bottomPanelDiv = document.createElement('div')
          bottomPanelDiv.className = "DocumentBottomPanel"

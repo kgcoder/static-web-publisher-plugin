@@ -165,16 +165,30 @@ if (!empty($stwbpb_connections_info)) {
                             <div class="LeftSandwichLine"></div>
                         </div>
                     </div>
-                    <div id="CurrentDocumentHeader" class="HeaderDiv"><h1><?php echo esc_html($title); ?></h1></div>
-                    <div id="CurrentDocumentMainDiv" class="<?php echo ($stwbpb_doc_source !== null) ? '' : 'hdoc-content'; ?>">
-                        <?php if ($stwbpb_doc_source !== null): ?>
-                            <script type="application/json" style="display:none;" id="<?php echo esc_attr($stwbpb_source_class); ?>"><?php echo wp_json_encode(['source' => $stwbpb_doc_source]); ?></script>
-                        <?php else: ?>
-                            <?php echo wp_kses($stwbpb_html_content, $stwbpb_allowed_tags); ?>
-                            <a id="MainDocDownloadLink">Download main document</a>
-                        <?php endif; ?>
+
+                    <div id="CurrentDocumentInnerRow">
+
+                        <div id="CurrentDocumentBody">
+                            <div id="CurrentDocumentHeader" class="HeaderDiv"><h1><?php echo esc_html($title); ?></h1></div>
+                            <div id="CurrentDocumentMainDiv" class="PresentationDiv<?php echo ($stwbpb_doc_source !== null) ? '' : ' hdoc-content'; ?>">
+                                <?php if ($stwbpb_doc_source !== null): ?>
+                                    <script type="application/json" style="display:none;" id="<?php echo esc_attr($stwbpb_source_class); ?>"><?php echo wp_json_encode(['source' => $stwbpb_doc_source]); ?></script>
+                                <?php else: ?>
+                                    <?php echo wp_kses($stwbpb_html_content, $stwbpb_allowed_tags); ?>
+                                    <a id="MainDocDownloadLink">Download main document</a>
+                                <?php endif; ?>
+                            </div>
+
+                        </div>
+
+                        <div id="CurrentDocumentSidebar" class="SideBar"></div>
+
                     </div>
-                    <textarea id="CurrentDocumentTextarea" class="NoteEditingDiv"></textarea>
+
+                    <div id="CurrentDocumentBottomBar" class="BottomBar"></div>
+
+                    <div id="CurrentDocumentPostNavBar" class="PostNavBar"></div>
+
                     <div id="CurrentDocumentBottomPanel" class="DocumentBottomPanel">
                         <div id="CurrentDocumentBottomPanelRow" class="DocumentBottomPanelRow"><?php
                         if (!empty($stwbpb_seo_panels['bottom_sections'])) {

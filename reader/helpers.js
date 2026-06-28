@@ -636,22 +636,17 @@ export function interpolate(startX, endX = 0, startY, endY, currentX, totalDiffX
 export function getTopBarDivFrom(div){
         const childNodes = Array.from(div.childNodes).filter(node => node.nodeType === 1)
         return childNodes[0]
-    }
+}
 
 export function getHeaderDivFrom(div){
-        const childNodes = Array.from(div.childNodes).filter(node => node.nodeType === 1)
-        return childNodes[1]
-    }
+    return div.querySelector('.HeaderDiv')
+}
 
 export function getPresentationDivFrom(div) {
-        const childNodes = Array.from(div.childNodes).filter(node => node.nodeType === 1)
-        return childNodes[2]
-    }
-
-export function getEditingDivFrom(div){
-        const childNodes = Array.from(div.childNodes).filter(node => node.nodeType === 1)
-        return childNodes[3]
+    return div.querySelector('.PresentationDiv')
 }
+
+
 
 export function getConnectionsJSON() {
 
