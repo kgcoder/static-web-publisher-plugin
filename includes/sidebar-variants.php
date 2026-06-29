@@ -206,35 +206,27 @@ function stwbpb_sidebar_variants_list_page() {
         <?php if (empty($variants)): ?>
             <p>No sidebar variants yet.</p>
         <?php else: ?>
-            <table class="widefat fixed striped" style="max-width:600px;margin-top:16px;">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th style="width:120px;"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($variants as $variant): ?>
-                        <?php
-                        $vid       = isset($variant['id'])    ? esc_attr($variant['id'])    : '';
-                        $vtitle    = isset($variant['title']) ? esc_html($variant['title']) : '(untitled)';
-                        $edit_url  = admin_url('admin.php?page=stwbpb-sidebar-variant-edit&variant_id=' . urlencode($vid));
-                        ?>
-                        <tr>
-                            <td><?php echo $vtitle; ?></td>
-                            <td>
-                                <a href="<?php echo esc_url($edit_url); ?>" class="button button-secondary" style="margin-right:6px;">Edit</a>
-                                <form method="post" style="display:inline;">
-                                    <?php wp_nonce_field('stwbpb_sidebar_variant_action'); ?>
-                                    <input type="hidden" name="action" value="stwbpb_delete_sidebar_variant" />
-                                    <input type="hidden" name="variant_id" value="<?php echo $vid; ?>" />
-                                    <button type="submit" class="button" onclick="return confirm('Delete this sidebar variant?');">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+            <div style="max-width:600px;margin-top:16px;">
+                <?php foreach ($variants as $variant): ?>
+                    <?php
+                    $vid      = isset($variant['id'])    ? esc_attr($variant['id'])    : '';
+                    $vtitle   = isset($variant['title']) ? esc_html($variant['title']) : '(untitled)';
+                    $edit_url = admin_url('admin.php?page=stwbpb-sidebar-variant-edit&variant_id=' . urlencode($vid));
+                    ?>
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #e0e0e0;">
+                        <span><?php echo $vtitle; ?></span>
+                        <div style="display:flex;gap:6px;flex-shrink:0;">
+                            <a href="<?php echo esc_url($edit_url); ?>" class="button button-secondary">Edit</a>
+                            <form method="post">
+                                <?php wp_nonce_field('stwbpb_sidebar_variant_action'); ?>
+                                <input type="hidden" name="action" value="stwbpb_delete_sidebar_variant" />
+                                <input type="hidden" name="variant_id" value="<?php echo $vid; ?>" />
+                                <button type="submit" class="button" onclick="return confirm('Delete this sidebar variant?');">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         <?php endif; ?>
     </div>
     <?php
