@@ -27,6 +27,8 @@ function stwbpb_custom_post_endpoints_meta_box_callback($post) {
     $condoc_description   = get_post_meta($post->ID, '_condoc_description', true);
     $condoc_main_url      = get_post_meta($post->ID, '_condoc_main_url', true);
     $cdoc_svg             = get_post_meta($post->ID, '_cdoc_svg', true);
+    $sidebar_value        = get_post_meta($post->ID, '_stwbpb_sidebar', true) ?: 'default';
+    $sidebar_variants     = stwbpb_sidebar_variants_get_all();
 
     wp_nonce_field('custom_post_endpoints_meta_box_nonce', 'custom_post_endpoints_nonce');
     ?>
@@ -71,6 +73,15 @@ function stwbpb_custom_post_endpoints_meta_box_callback($post) {
         <option value="default" <?php selected($date_display, 'default'); ?>>Default (use global setting)</option>
         <option value="show"    <?php selected($date_display, 'show'); ?>>Show</option>
         <option value="hide"    <?php selected($date_display, 'hide'); ?>>Hide</option>
+    </select>
+    <br><br>
+    <label for="stwbpb_sidebar_override"><strong>Sidebar:</strong></label><br>
+    <select name="stwbpb_sidebar_override" id="stwbpb_sidebar_override" style="width:100%;margin-top:4px;">
+        <option value="default" <?php selected($sidebar_value, 'default'); ?>>Default (use global setting)</option>
+        <option value="none" <?php selected($sidebar_value, 'none'); ?>>None</option>
+        <?php foreach ($sidebar_variants as $sv): ?>
+            <option value="<?php echo esc_attr($sv['id']); ?>" <?php selected($sidebar_value, $sv['id']); ?>><?php echo esc_html($sv['title']); ?></option>
+        <?php endforeach; ?>
     </select>
     <br><br>
     <label for="static_web_connections_info"><strong>Connections Info:</strong></label>
@@ -167,8 +178,14 @@ function stwbpb_custom_post_endpoints_save_meta_box($post_id) {
         : 'default';
     update_post_meta($post_id, '_hdoc_publish_date_display', $date_vis);
 
+    $allowed_sidebar_values = array_merge(array('default', 'none'), array_column(stwbpb_sidebar_variants_get_all(), 'id'));
+    $sidebar_override = isset($_POST['stwbpb_sidebar_override']) && in_array($_POST['stwbpb_sidebar_override'], $allowed_sidebar_values, true)
+        ? sanitize_text_field(wp_unslash($_POST['stwbpb_sidebar_override']))
+        : 'default';
+    update_post_meta($post_id, '_stwbpb_sidebar', $sidebar_override);
+
     $allowed_tags = array(
-        'doc'  => array('url' => true, 'title' => true, 'hash' => true), 
+        'doc'  => array('url' => true, 'title' => true, 'hash' => true),
     );
 
     if (isset($_POST['static_web_connections_info'])) {
@@ -225,6 +242,16 @@ function stwbpb_get_doc_effective_display_mode($post) {
         return ($mode === 'standalone_doc') ? 'standalone_doc' : 'doc_in_reader';
     }
     return $mode;
+}
+
+function stwbpb_get_effective_sidebar($post) {
+    $meta = get_post_meta($post->ID, '_stwbpb_sidebar', true);
+    if (!empty($meta) && $meta !== 'default') {
+        return $meta; // 'none' or a variant ID
+    }
+    $settings = get_option('stwbpb_settings', array());
+    $key = ($post->post_type === 'page') ? 'page_sidebar' : 'post_sidebar';
+    return isset($settings[$key]) ? $settings[$key] : 'none';
 }
 
 

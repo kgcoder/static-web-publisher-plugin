@@ -207,43 +207,48 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>`
     }
 
-    document.getElementById('add-sidebar-section').addEventListener('click', function () {
-        const container = document.getElementById('sidebar-sections-container')
-        container.insertAdjacentHTML('beforeend', sidebarSectionTemplate(sidebarSectionIndex))
-        container.style.display = 'block'
-        sidebarSectionIndex++
-    })
+    const addSidebarSectionBtn = document.getElementById('add-sidebar-section')
+    if (addSidebarSectionBtn) {
+        addSidebarSectionBtn.addEventListener('click', function () {
+            const container = document.getElementById('sidebar-sections-container')
+            container.insertAdjacentHTML('beforeend', sidebarSectionTemplate(sidebarSectionIndex))
+            container.style.display = 'block'
+            sidebarSectionIndex++
+        })
+    }
 
-    document.getElementById('sidebar-sections-container').addEventListener('change', function (event) {
-        const target = event.target
-        if (target.classList.contains('sidebar-section-type')) {
-            const section = target.closest('.sidebar-section')
-            section.querySelectorAll('.sidebar-section-fields').forEach(function (el) {
-                el.style.display = 'none'
-                el.querySelectorAll('input, select, textarea').forEach(function (input) {
-                    input.disabled = true
+    const sidebarSectionsContainer = document.getElementById('sidebar-sections-container')
+    if (sidebarSectionsContainer) {
+        sidebarSectionsContainer.addEventListener('change', function (event) {
+            const target = event.target
+            if (target.classList.contains('sidebar-section-type')) {
+                const section = target.closest('.sidebar-section')
+                section.querySelectorAll('.sidebar-section-fields').forEach(function (el) {
+                    el.style.display = 'none'
+                    el.querySelectorAll('input, select, textarea').forEach(function (input) {
+                        input.disabled = true
+                    })
                 })
-            })
-            const selected = target.value.replace(/[^a-z-]/g, '')
-            const activeFields = section.querySelector('.sidebar-type-' + selected)
-            if (activeFields) {
-                activeFields.style.display = ''
-                activeFields.querySelectorAll('input, select, textarea').forEach(function (input) {
-                    input.disabled = false
-                })
+                const selected = target.value.replace(/[^a-z-]/g, '')
+                const activeFields = section.querySelector('.sidebar-type-' + selected)
+                if (activeFields) {
+                    activeFields.style.display = ''
+                    activeFields.querySelectorAll('input, select, textarea').forEach(function (input) {
+                        input.disabled = false
+                    })
+                }
             }
-        }
-    })
+        })
 
-    document.getElementById('sidebar-sections-container').addEventListener('click', function (event) {
-        const target = event.target
+        sidebarSectionsContainer.addEventListener('click', function (event) {
+            const target = event.target
 
-        if (target.classList.contains('add-sidebar-link')) {
-            const section = target.closest('.sidebar-section')
-            const allSections = Array.from(document.querySelectorAll('#sidebar-sections-container .sidebar-section'))
-            const secIdx = allSections.indexOf(section)
-            const linkIdx = section.querySelectorAll('.sidebar-link').length
-            const linkTemplate = `
+            if (target.classList.contains('add-sidebar-link')) {
+                const section = target.closest('.sidebar-section')
+                const allSections = Array.from(document.querySelectorAll('#sidebar-sections-container .sidebar-section'))
+                const secIdx = allSections.indexOf(section)
+                const linkIdx = section.querySelectorAll('.sidebar-link').length
+                const linkTemplate = `
             <div class="sidebar-link">
                 <label>Link text: </label>
                 <input type="text" name="${sidebarFieldPrefix}[sections][${secIdx}][links][${linkIdx}][text]" value="" />
@@ -253,21 +258,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="spacerH10"></div>
                 <button type="button" class="remove-sidebar-link">Remove Link</button>
             </div>`
-            section.querySelector('.sidebar-links').insertAdjacentHTML('beforeend', linkTemplate)
-        }
-
-        if (target.classList.contains('remove-sidebar-link')) {
-            target.closest('.sidebar-link').remove()
-        }
-
-        if (target.classList.contains('remove-sidebar-section')) {
-            target.closest('.sidebar-section').remove()
-            const container = document.getElementById('sidebar-sections-container')
-            if (!container.querySelectorAll('.sidebar-section').length) {
-                container.style.display = 'none'
+                section.querySelector('.sidebar-links').insertAdjacentHTML('beforeend', linkTemplate)
             }
-        }
-    })
+
+            if (target.classList.contains('remove-sidebar-link')) {
+                target.closest('.sidebar-link').remove()
+            }
+
+            if (target.classList.contains('remove-sidebar-section')) {
+                target.closest('.sidebar-section').remove()
+                const container = document.getElementById('sidebar-sections-container')
+                if (!container.querySelectorAll('.sidebar-section').length) {
+                    container.style.display = 'none'
+                }
+            }
+        })
+    }
 
     // Delegate event for dynamically added elements
     if (sectionsContainer) {

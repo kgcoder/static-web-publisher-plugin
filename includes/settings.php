@@ -52,7 +52,8 @@ function stwbpb_settings_page() {
         'reader_ui_theme' => 'light',
         'show_promotion_button' => false,
         'show_post_nav' => false,
-        'post_sidebar' => array('sections' => array()),
+        'post_sidebar' => 'none',
+        'page_sidebar' => 'none',
     );
 
     $existing_settings = get_option('stwbpb_settings', array());
@@ -60,7 +61,7 @@ function stwbpb_settings_page() {
 
     $top_panel = $settings['top_panel'];
     $bottom_panel = $settings['bottom_panel'];
-    $post_sidebar = isset($settings['post_sidebar']) ? $settings['post_sidebar'] : array('sections' => array());
+    $sidebar_variants = stwbpb_sidebar_variants_get_all();
     ?>
     <div class="wrap">
         <h1>Static Web Plugin Settings</h1>
@@ -221,128 +222,30 @@ function stwbpb_settings_page() {
                 <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[show_post_nav]" value="1" <?php echo !empty($settings['show_post_nav']) ? 'checked' : ''; ?>/>
             </div>
 
-            <h2>Post sidebar</h2>
+            <h2>Sidebar</h2>
             <p><a href="<?php echo esc_url(admin_url('admin.php?page=stwbpb-sidebar-variants')); ?>">Manage Sidebar Variants</a></p>
 
-            <div id="sidebar-sections-container"<?php if (empty($post_sidebar['sections'])) echo ' style="display:none"'; ?>>
-                <?php
-                if (!empty($post_sidebar['sections'])) {
-                    foreach ($post_sidebar['sections'] as $si => $sec) {
-                        $sec_type = isset($sec['type']) ? $sec['type'] : 'search';
-                        ?>
-                        <div class="sidebar-section">
-                            <div class="settings-option-div">
-                                <label>Section type: </label>
-                                <div class="spacerW10"></div>
-                                <select name="stwbpb_settings[post_sidebar][sections][<?php echo esc_attr($si); ?>][type]" class="sidebar-section-type">
-                                    <option value="search" <?php selected($sec_type, 'search'); ?>>Search</option>
-                                    <option value="recent-comments" <?php selected($sec_type, 'recent-comments'); ?>>Recent Comments</option>
-                                    <option value="links" <?php selected($sec_type, 'links'); ?>>Links</option>
-                                    <option value="recent-posts" <?php selected($sec_type, 'recent-posts'); ?>>Recent Posts</option>
-                                </select>
-                            </div>
-
-                            <?php
-                            $d_search  = $sec_type !== 'search'           ? ' disabled' : '';
-                            $d_rc      = $sec_type !== 'recent-comments'  ? ' disabled' : '';
-                            $d_links   = $sec_type !== 'links'            ? ' disabled' : '';
-                            $d_rp      = $sec_type !== 'recent-posts'     ? ' disabled' : '';
-                            ?>
-                            <div class="sidebar-section-fields sidebar-type-search"<?php if ($sec_type !== 'search') echo ' style="display:none"'; ?>>
-                                <div class="settings-option-div">
-                                    <label>Search action URL (use %s for the search term): </label>
-                                    <div class="spacerW10"></div>
-                                    <input class="single-text-input" type="text" name="stwbpb_settings[post_sidebar][sections][<?php echo esc_attr($si); ?>][action]" value="<?php echo esc_attr($sec['action'] ?? ''); ?>"<?php echo $d_search; ?> />
-                                </div>
-                                <div class="settings-option-div">
-                                    <label>Placeholder: </label>
-                                    <div class="spacerW10"></div>
-                                    <input class="single-text-input" type="text" name="stwbpb_settings[post_sidebar][sections][<?php echo esc_attr($si); ?>][placeholder]" value="<?php echo esc_attr($sec['placeholder'] ?? ''); ?>"<?php echo $d_search; ?> />
-                                </div>
-                                <div class="settings-option-div">
-                                    <label>Open results in: </label>
-                                    <div class="spacerW10"></div>
-                                    <select name="stwbpb_settings[post_sidebar][sections][<?php echo esc_attr($si); ?>][target]"<?php echo $d_search; ?>>
-                                        <option value="_self" <?php selected($sec['target'] ?? '_self', '_self'); ?>>Same tab</option>
-                                        <option value="_blank" <?php selected($sec['target'] ?? '_self', '_blank'); ?>>New tab</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="sidebar-section-fields sidebar-type-recent-comments"<?php if ($sec_type !== 'recent-comments') echo ' style="display:none"'; ?>>
-                                <div class="settings-option-div">
-                                    <label>Title: </label>
-                                    <div class="spacerW10"></div>
-                                    <input class="single-text-input" type="text" name="stwbpb_settings[post_sidebar][sections][<?php echo esc_attr($si); ?>][title]" value="<?php echo esc_attr($sec['title'] ?? ''); ?>"<?php echo $d_rc; ?> />
-                                </div>
-                                <div class="settings-option-div">
-                                    <label>Max number of comments: </label>
-                                    <div class="spacerW10"></div>
-                                    <input type="number" min="1" name="stwbpb_settings[post_sidebar][sections][<?php echo esc_attr($si); ?>][max]" value="<?php echo esc_attr($sec['max'] ?? 5); ?>"<?php echo $d_rc; ?> />
-                                </div>
-                                <div class="settings-option-div">
-                                    <label>Format (use {author} and {post}): </label>
-                                    <div class="spacerW10"></div>
-                                    <input class="single-text-input" type="text" name="stwbpb_settings[post_sidebar][sections][<?php echo esc_attr($si); ?>][format]" value="<?php echo esc_attr($sec['format'] ?? ''); ?>"<?php echo $d_rc; ?> />
-                                </div>
-                                <div class="settings-option-div">
-                                    <label>Include excerpt</label>
-                                    <div class="spacerW10"></div>
-                                    <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[post_sidebar][sections][<?php echo esc_attr($si); ?>][include_excerpt]" value="1" <?php echo !empty($sec['include_excerpt']) ? 'checked' : ''; ?><?php echo $d_rc; ?>/>
-                                </div>
-                            </div>
-
-                            <div class="sidebar-section-fields sidebar-type-links"<?php if ($sec_type !== 'links') echo ' style="display:none"'; ?>>
-                                <div class="settings-option-div">
-                                    <label>Title: </label>
-                                    <div class="spacerW10"></div>
-                                    <input class="single-text-input" type="text" name="stwbpb_settings[post_sidebar][sections][<?php echo esc_attr($si); ?>][title]" value="<?php echo esc_attr($sec['title'] ?? ''); ?>"<?php echo $d_links; ?> />
-                                </div>
-                                <div class="sidebar-links">
-                                    <?php
-                                    if (!empty($sec['links'])) {
-                                        foreach ($sec['links'] as $li => $lnk) {
-                                            ?>
-                                            <div class="sidebar-link">
-                                                <label>Link text: </label>
-                                                <input type="text" name="stwbpb_settings[post_sidebar][sections][<?php echo esc_attr($si); ?>][links][<?php echo esc_attr($li); ?>][text]" value="<?php echo esc_attr($lnk['text']); ?>"<?php echo $d_links; ?> />
-                                                <div class="spacerH10"></div>
-                                                <label>Link URL: </label>
-                                                <input type="text" name="stwbpb_settings[post_sidebar][sections][<?php echo esc_attr($si); ?>][links][<?php echo esc_attr($li); ?>][url]" value="<?php echo esc_url($lnk['url']); ?>"<?php echo $d_links; ?> />
-                                                <div class="spacerH10"></div>
-                                                <button type="button" class="remove-sidebar-link">Remove Link</button>
-                                            </div>
-                                            <?php
-                                        }
-                                    }
-                                    ?>
-                                </div>
-                                <button type="button" class="add-sidebar-link">Add Link</button>
-                            </div>
-
-                            <div class="sidebar-section-fields sidebar-type-recent-posts"<?php if ($sec_type !== 'recent-posts') echo ' style="display:none"'; ?>>
-                                <div class="settings-option-div">
-                                    <label>Title: </label>
-                                    <div class="spacerW10"></div>
-                                    <input class="single-text-input" type="text" name="stwbpb_settings[post_sidebar][sections][<?php echo esc_attr($si); ?>][title]" value="<?php echo esc_attr($sec['title'] ?? ''); ?>"<?php echo $d_rp; ?> />
-                                </div>
-                                <div class="settings-option-div">
-                                    <label>Max number of posts: </label>
-                                    <div class="spacerW10"></div>
-                                    <input type="number" min="1" name="stwbpb_settings[post_sidebar][sections][<?php echo esc_attr($si); ?>][max]" value="<?php echo esc_attr($sec['max'] ?? 5); ?>"<?php echo $d_rp; ?> />
-                                </div>
-                            </div>
-
-                            <div class="spacerH10"></div>
-                            <button type="button" class="remove-sidebar-section">Remove Section</button>
-                        </div>
-                        <?php
-                    }
-                }
-                ?>
+            <div class="settings-option-div">
+                <label>Post sidebar: </label>
+                <div class="spacerW10"></div>
+                <select name="stwbpb_settings[post_sidebar]">
+                    <option value="none" <?php selected($settings['post_sidebar'], 'none'); ?>>None</option>
+                    <?php foreach ($sidebar_variants as $sv): ?>
+                        <option value="<?php echo esc_attr($sv['id']); ?>" <?php selected($settings['post_sidebar'], $sv['id']); ?>><?php echo esc_html($sv['title']); ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
-            <button type="button" id="add-sidebar-section">Add Section</button>
-            <div class="spacerH10"></div>
+
+            <div class="settings-option-div">
+                <label>Page sidebar: </label>
+                <div class="spacerW10"></div>
+                <select name="stwbpb_settings[page_sidebar]">
+                    <option value="none" <?php selected($settings['page_sidebar'], 'none'); ?>>None</option>
+                    <?php foreach ($sidebar_variants as $sv): ?>
+                        <option value="<?php echo esc_attr($sv['id']); ?>" <?php selected($settings['page_sidebar'], $sv['id']); ?>><?php echo esc_html($sv['title']); ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
             <h2>Bottom panel</h2>
 
@@ -706,53 +609,12 @@ function stwbpb_sanitize_settings($input) {
         }
     }
 
-    // Sanitize post_sidebar
-    $allowed_sidebar_targets = array('_self', '_blank');
-    $sanitized['post_sidebar'] = array('sections' => array());
-    if (isset($input['post_sidebar']['sections']) && is_array($input['post_sidebar']['sections'])) {
-        foreach ($input['post_sidebar']['sections'] as $sec) {
-            if (!is_array($sec)) continue;
-            $type = isset($sec['type']) ? $sec['type'] : '';
-            if ($type === 'search') {
-                $sanitized['post_sidebar']['sections'][] = array(
-                    'type'        => 'search',
-                    'action'      => isset($sec['action'])      ? sanitize_text_field($sec['action'])      : '',
-                    'placeholder' => isset($sec['placeholder']) ? sanitize_text_field($sec['placeholder']) : '',
-                    'target'      => isset($sec['target']) && in_array($sec['target'], $allowed_sidebar_targets, true) ? $sec['target'] : '_self',
-                );
-            } elseif ($type === 'recent-comments') {
-                $sanitized['post_sidebar']['sections'][] = array(
-                    'type'            => 'recent-comments',
-                    'title'           => isset($sec['title'])   ? sanitize_text_field($sec['title'])   : '',
-                    'max'             => isset($sec['max'])      ? max(1, absint($sec['max']))          : 5,
-                    'format'          => isset($sec['format'])   ? sanitize_text_field($sec['format'])  : '',
-                    'include_excerpt' => boolval($sec['include_excerpt'] ?? false),
-                );
-            } elseif ($type === 'links') {
-                $sanitized_links = array();
-                if (isset($sec['links']) && is_array($sec['links'])) {
-                    foreach ($sec['links'] as $lnk) {
-                        if (!is_array($lnk)) continue;
-                        $sanitized_links[] = array(
-                            'text' => isset($lnk['text']) ? sanitize_text_field($lnk['text']) : '',
-                            'url'  => isset($lnk['url'])  ? esc_url_raw($lnk['url'])          : '',
-                        );
-                    }
-                }
-                $sanitized['post_sidebar']['sections'][] = array(
-                    'type'  => 'links',
-                    'title' => isset($sec['title']) ? sanitize_text_field($sec['title']) : '',
-                    'links' => $sanitized_links,
-                );
-            } elseif ($type === 'recent-posts') {
-                $sanitized['post_sidebar']['sections'][] = array(
-                    'type'  => 'recent-posts',
-                    'title' => isset($sec['title']) ? sanitize_text_field($sec['title']) : '',
-                    'max'   => isset($sec['max'])   ? max(1, absint($sec['max']))        : 5,
-                );
-            }
-        }
-    }
+    // Sanitize post_sidebar and page_sidebar (variant ID or 'none')
+    $allowed_sidebar_values = array_merge(array('none'), array_column(stwbpb_sidebar_variants_get_all(), 'id'));
+    $sanitized['post_sidebar'] = isset($input['post_sidebar']) && in_array($input['post_sidebar'], $allowed_sidebar_values, true)
+        ? $input['post_sidebar'] : 'none';
+    $sanitized['page_sidebar'] = isset($input['page_sidebar']) && in_array($input['page_sidebar'], $allowed_sidebar_values, true)
+        ? $input['page_sidebar'] : 'none';
 
     return $sanitized;
 }
@@ -797,10 +659,6 @@ function stwbpb_enqueue_scripts($hook) {
         filemtime(plugin_dir_path(__FILE__) . 'admin.js'),
         true // Load in the footer
     );
-
-    if ($is_settings) {
-        wp_add_inline_script('static-web-publisher-admin', 'window.swpSidebarFieldPrefix = "stwbpb_settings[post_sidebar]";', 'before');
-    }
 
     if ($is_variant_edit) {
         wp_add_inline_script('static-web-publisher-admin', 'window.swpSidebarFieldPrefix = "stwbpb_variant";', 'before');

@@ -58,9 +58,14 @@ function stwbpb_get_panels($post) {
         $should_show_post_nav = !empty($prev_post) || !empty($next_post);
     }
 
-    $post_sidebar = isset($settings['post_sidebar']) ? $settings['post_sidebar'] : array('sections' => array());
-    $sidebar_sections = !empty($post_sidebar['sections']) ? $post_sidebar['sections'] : array();
-    $should_show_sidebar = $post->post_type === 'post' && !empty($sidebar_sections);
+    $effective_sidebar_id = stwbpb_get_effective_sidebar($post);
+    if ($effective_sidebar_id !== 'none') {
+        $sidebar_variant = stwbpb_sidebar_variants_get_by_id($effective_sidebar_id);
+        $sidebar_sections = ($sidebar_variant && !empty($sidebar_variant['sections'])) ? $sidebar_variant['sections'] : array();
+    } else {
+        $sidebar_sections = array();
+    }
+    $should_show_sidebar = !empty($sidebar_sections);
 
     $should_show_top_panel = !empty($site_name) || !empty($main_link) || !empty($logo_url) || !empty($top_panel['links']);
     $should_show_side_panel = stwbpb_has_comment_section($post);
