@@ -466,6 +466,8 @@ function stwbpb_xml_to_array_with_attributes($xml, $parent_name = '') {
             $arr['text'] = $text;
         } elseif ($parent_name === 'comments') {
             $arr['url'] = $text;
+        } elseif ($parent_name === 'prev' || $parent_name === 'next') {
+            $arr['title'] = $text;
         } elseif ($parent_name === 'bottom-message') {
             return $text;
         }else {

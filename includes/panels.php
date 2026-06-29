@@ -48,12 +48,21 @@ function stwbpb_get_panels($post) {
 
     $bottom_message = $bottom_panel['bottom_message'];
 
+    $show_post_nav = !empty($settings['show_post_nav']);
+    $prev_post = null;
+    $next_post = null;
+    $should_show_post_nav = false;
+    if ($show_post_nav && $post->post_type === 'post') {
+        $prev_post = get_adjacent_post(false, '', true);
+        $next_post = get_adjacent_post(false, '', false);
+        $should_show_post_nav = !empty($prev_post) || !empty($next_post);
+    }
 
     $should_show_top_panel = !empty($site_name) || !empty($main_link) || !empty($logo_url) || !empty($top_panel['links']);
     $should_show_side_panel = stwbpb_has_comment_section($post);
     $should_show_bottom_panel = !empty($bottom_message) || !empty($bottom_panel['sections']);
 
-    $should_show_panels = $should_show_top_panel || $should_show_side_panel || $should_show_bottom_panel;
+    $should_show_panels = $should_show_top_panel || $should_show_post_nav || $should_show_side_panel || $should_show_bottom_panel;
 
     $side_panel_left = (bool) ($settings['side_panel_on_the_left'] ?? false);
     $side_panel_attribute = $side_panel_left ? ' side="left"' : '';
@@ -98,6 +107,13 @@ if (!empty($top_panel['links'])) {
 <?php
 }
 ?>
+<?php if ($should_show_post_nav): ?>
+<post-nav>
+<?php if (!empty($prev_post)): ?><prev href="<?php echo esc_url(get_permalink($prev_post->ID)); ?>"><?php echo esc_html($prev_post->post_title); ?></prev>
+<?php endif; if (!empty($next_post)): ?><next href="<?php echo esc_url(get_permalink($next_post->ID)); ?>"><?php echo esc_html($next_post->post_title); ?></next>
+<?php endif; ?>
+</post-nav>
+<?php endif; ?>
 <?php if ($should_show_side_panel): ?>
 <?php
 $commenting_open = $post->comment_status === 'open';
@@ -170,6 +186,7 @@ function stwbpb_get_seo_panel_data($panels_xml) {
         'site_name'       => null,
         'site_name_href'  => null,
         'top_links'       => [],
+        'post_nav'        => null,
         'bottom_sections' => [],
         'bottom_message'  => null,
     ];
@@ -192,6 +209,26 @@ function stwbpb_get_seo_panel_data($panels_xml) {
             if ($href !== '') {
                 $data['top_links'][] = ['href' => $href, 'text' => $text];
             }
+        }
+    }
+
+    if (isset($xml->{'post-nav'})) {
+        $pn = $xml->{'post-nav'};
+        $post_nav_data = [];
+        if (isset($pn->prev)) {
+            $post_nav_data['prev'] = [
+                'href'  => isset($pn->prev['href']) ? (string) $pn->prev['href'] : '',
+                'title' => (string) $pn->prev,
+            ];
+        }
+        if (isset($pn->next)) {
+            $post_nav_data['next'] = [
+                'href'  => isset($pn->next['href']) ? (string) $pn->next['href'] : '',
+                'title' => (string) $pn->next,
+            ];
+        }
+        if (!empty($post_nav_data)) {
+            $data['post_nav'] = $post_nav_data;
         }
     }
 

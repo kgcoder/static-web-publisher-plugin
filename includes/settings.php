@@ -51,6 +51,7 @@ function stwbpb_settings_page() {
         'post_mode' => 'embedded_hdoc_forced',
         'reader_ui_theme' => 'light',
         'show_promotion_button' => false,
+        'show_post_nav' => false,
     );
 
     $existing_settings = get_option('stwbpb_settings', array());
@@ -210,9 +211,17 @@ function stwbpb_settings_page() {
                 <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[side_panel_on_the_left]" value="1" <?php echo !empty($settings['side_panel_on_the_left']) ? 'checked' : ''; ?>/>
             </div>
 
+            <h2>Post navigation</h2>
+
+            <div class="settings-option-div">
+                <label>Show previous and next post links</label>
+                <div class="spacerW10"></div>
+                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[show_post_nav]" value="1" <?php echo !empty($settings['show_post_nav']) ? 'checked' : ''; ?>/>
+            </div>
+
             <h2>Bottom panel</h2>
+
             
-          
             <div id="sections-container">
                 <?php
                 if (!empty($bottom_panel['sections'])) {
@@ -448,6 +457,7 @@ function stwbpb_settings_init() {
         ),
         'page_mode' => 'embedded_hdoc_forced',
         'post_mode' => 'embedded_hdoc_forced',
+        'show_post_nav' => false,
     ));
 
 
@@ -475,6 +485,7 @@ function stwbpb_sanitize_settings($input) {
     }
 
     $sanitized['show_promotion_button'] = boolval($input['show_promotion_button'] ?? false);
+    $sanitized['show_post_nav'] = boolval($input['show_post_nav'] ?? false);
 
     $sanitized['removal_selectors'] = isset($input['removal_selectors']) ? sanitize_text_field($input['removal_selectors']) : '';
 

@@ -72,6 +72,9 @@ function stwbpb_send_hdoc_for_post($post){
         $panels_allowed_tags = array(
             'panels' => true,
             'top' => true,
+            'post-nav' => array(),
+            'prev' => array('href' => true),
+            'next' => array('href' => true),
             'side' => array('side' => true),
             'bottom' => true,
             'comments' => array('title' => true, 'empty' => true, 'leave-comment-url' => true, 'reply-label' => true, 'leave-comment-label' => true),

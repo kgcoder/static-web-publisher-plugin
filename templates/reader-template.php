@@ -188,7 +188,21 @@ if (!empty($stwbpb_connections_info)) {
 
                     <div id="CurrentDocumentBottomBar" class="BottomBar"></div>
 
-                    <div id="CurrentDocumentPostNavBar" class="PostNavBar"></div>
+                    <div id="CurrentDocumentPostNavBar" class="PostNavBar"><?php
+                    if (!empty($stwbpb_seo_panels['post_nav'])) {
+                        $stwbpb_pn = $stwbpb_seo_panels['post_nav'];
+                        echo '<div class="PostNavBarSide" style="justify-content:flex-start">';
+                        if (!empty($stwbpb_pn['prev'])) {
+                            echo '<a href="' . esc_url($stwbpb_pn['prev']['href']) . '">' . esc_html($stwbpb_pn['prev']['title']) . '</a>';
+                        }
+                        echo '</div>';
+                        echo '<div class="PostNavBarSide" style="justify-content:flex-end">';
+                        if (!empty($stwbpb_pn['next'])) {
+                            echo '<a href="' . esc_url($stwbpb_pn['next']['href']) . '">' . esc_html($stwbpb_pn['next']['title']) . '</a>';
+                        }
+                        echo '</div>';
+                    }
+                    ?></div>
 
                     <div id="CurrentDocumentBottomPanel" class="DocumentBottomPanel">
                         <div id="CurrentDocumentBottomPanelRow" class="DocumentBottomPanelRow"><?php
