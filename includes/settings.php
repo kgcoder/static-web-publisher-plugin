@@ -222,6 +222,7 @@ function stwbpb_settings_page() {
             </div>
 
             <h2>Post sidebar</h2>
+            <p><a href="<?php echo esc_url(admin_url('admin.php?page=stwbpb-sidebar-variants')); ?>">Manage Sidebar Variants</a></p>
 
             <div id="sidebar-sections-container"<?php if (empty($post_sidebar['sections'])) echo ' style="display:none"'; ?>>
                 <?php
@@ -778,13 +779,16 @@ add_action('admin_init', 'stwbpb_settings_init');
 
 
 function stwbpb_enqueue_scripts($hook) {
-    // Only enqueue on the settings page for the plugin
-    
-    if ($hook !== 'toplevel_page_static_web_publisher_settings') {
+    $is_settings     = ($hook === 'toplevel_page_static_web_publisher_settings');
+    $is_variant_edit = (strpos($hook, 'sidebar-variant-edit') !== false);
+
+    if (!$is_settings && !$is_variant_edit) {
         return;
     }
 
-    wp_enqueue_media(); // Enqueues the media uploader
+    if ($is_settings) {
+        wp_enqueue_media(); // Enqueues the media uploader
+    }
 
     wp_enqueue_script(
         'static-web-publisher-admin',
@@ -794,7 +798,13 @@ function stwbpb_enqueue_scripts($hook) {
         true // Load in the footer
     );
 
-    
+    if ($is_settings) {
+        wp_add_inline_script('static-web-publisher-admin', 'window.swpSidebarFieldPrefix = "stwbpb_settings[post_sidebar]";', 'before');
+    }
+
+    if ($is_variant_edit) {
+        wp_add_inline_script('static-web-publisher-admin', 'window.swpSidebarFieldPrefix = "stwbpb_variant";', 'before');
+    }
 
     wp_enqueue_style(
         'static-web-publisher-admin-style',
@@ -802,7 +812,5 @@ function stwbpb_enqueue_scripts($hook) {
         array(),
         filemtime(plugin_dir_path(__FILE__) . 'admin.css')
     );
-
-   
 }
 add_action('admin_enqueue_scripts', 'stwbpb_enqueue_scripts');

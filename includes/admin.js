@@ -1,11 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
    // let topPanelLinkIndex = document.querySelectorAll('#top-panel-links-container .section').length;
-    
+
    const sectionsContainer = document.getElementById('sections-container')
 
-    const sections = document.getElementsByClassName('section')
-    if(!sections.length){
-        sectionsContainer.style.display = 'none'
+    if (sectionsContainer) {
+        const sections = document.getElementsByClassName('section')
+        if(!sections.length){
+            sectionsContainer.style.display = 'none'
+        }
     }
 
     // Dynamic visibility for settings options
@@ -36,36 +38,41 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-   let sectionIndex = document.querySelectorAll('#sections-container .section').length;
+   let sectionIndex = sectionsContainer ? document.querySelectorAll('#sections-container .section').length : 0;
 
     const selectImageButton = document.getElementById('select-image');
     const imageUrlInput = document.getElementById('image-url');
 
-    selectImageButton.addEventListener('click', () => {
-        // Open WordPress Media Library
-        const mediaFrame = wp.media({
-            title: 'Select Image',
-            button: { text: 'Use This Image' },
-            multiple: false,
-        });
+    if (selectImageButton) {
+        selectImageButton.addEventListener('click', () => {
+            // Open WordPress Media Library
+            const mediaFrame = wp.media({
+                title: 'Select Image',
+                button: { text: 'Use This Image' },
+                multiple: false,
+            });
 
-        mediaFrame.on('select', () => {
-            const attachment = mediaFrame.state().get('selection').first().toJSON();
-            imageUrlInput.value = attachment.url; // Set the URL of the selected image
-        });
+            mediaFrame.on('select', () => {
+                const attachment = mediaFrame.state().get('selection').first().toJSON();
+                imageUrlInput.value = attachment.url; // Set the URL of the selected image
+            });
 
-        mediaFrame.open();
-    });
+            mediaFrame.open();
+        });
+    }
+
     // Add a new section
      // Delegate event for dynamically added elements
-     document.getElementById('top-panel-links-container').addEventListener('click', function (event) {
-        const target = event.target;
+    const topPanelLinksContainer = document.getElementById('top-panel-links-container')
+    if (topPanelLinksContainer) {
+        topPanelLinksContainer.addEventListener('click', function (event) {
+            const target = event.target;
 
-        // Add a new link
-        if (target.classList.contains('add-link')) {
-            const section = target.closest('#top-panel-links-container');
-            const linkIndex = section.querySelectorAll('.link').length;
-            const linkTemplate = `
+            // Add a new link
+            if (target.classList.contains('add-link')) {
+                const section = target.closest('#top-panel-links-container');
+                const linkIndex = section.querySelectorAll('.link').length;
+                const linkTemplate = `
             <div class="link">
                 <label>Link text: </label>
                 <input type="text" name="stwbpb_settings[top_panel][links][${linkIndex}][text]" value="" />
@@ -75,22 +82,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="spacerH10"></div>
                 <button type="button" class="remove-link">Remove Link</button>
             </div>`;
-            section.querySelector('.links').insertAdjacentHTML('beforeend', linkTemplate);
-        }
+                section.querySelector('.links').insertAdjacentHTML('beforeend', linkTemplate);
+            }
 
-        // Remove a link
-        if (target.classList.contains('remove-link')) {
-            target.closest('.link').remove();
-        }
+            // Remove a link
+            if (target.classList.contains('remove-link')) {
+                target.closest('.link').remove();
+            }
 
-        // Remove a section
-        if (target.classList.contains('remove-section')) {
-            target.closest('.section').remove();
-        }
-    });
+            // Remove a section
+            if (target.classList.contains('remove-section')) {
+                target.closest('.section').remove();
+            }
+        });
+    }
+
     // Add a new section
-    document.getElementById('add-section').addEventListener('click', function () {
-        const sectionTemplate = `
+    const addSectionBtn = document.getElementById('add-section')
+    if (addSectionBtn) {
+        addSectionBtn.addEventListener('click', function () {
+            const sectionTemplate = `
         <div class="section">
             <label>Section Title: </label>
             <input class="single-text-input" type="text" name="stwbpb_settings[bottom_panel][sections][${sectionIndex}][title]" value="" />
@@ -101,14 +112,18 @@ document.addEventListener('DOMContentLoaded', function () {
             <button type="button" class="remove-section">Remove Section</button>
         </div>`;
 
-        const sectionsContainer = document.getElementById('sections-container')
-        sectionsContainer.insertAdjacentHTML('beforeend', sectionTemplate);
-        sectionsContainer.style.display = 'block'
-        
-        sectionIndex++;
-    });
+            sectionsContainer.insertAdjacentHTML('beforeend', sectionTemplate);
+            sectionsContainer.style.display = 'block'
+
+            sectionIndex++;
+        });
+    }
 
     // Sidebar sections
+    const sidebarFieldPrefix = (window.swpSidebarFieldPrefix !== undefined)
+        ? window.swpSidebarFieldPrefix
+        : 'stwbpb_settings[post_sidebar]'
+
     let sidebarSectionIndex = document.querySelectorAll('#sidebar-sections-container .sidebar-section').length
 
     function sidebarSectionTemplate(idx) {
@@ -117,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="settings-option-div">
                 <label>Section type: </label>
                 <div class="spacerW10"></div>
-                <select name="stwbpb_settings[post_sidebar][sections][${idx}][type]" class="sidebar-section-type">
+                <select name="${sidebarFieldPrefix}[sections][${idx}][type]" class="sidebar-section-type">
                     <option value="search">Search</option>
                     <option value="recent-comments">Recent Comments</option>
                     <option value="links">Links</option>
@@ -128,17 +143,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="settings-option-div">
                     <label>Search action URL (use %s for the search term): </label>
                     <div class="spacerW10"></div>
-                    <input class="single-text-input" type="text" name="stwbpb_settings[post_sidebar][sections][${idx}][action]" value="" />
+                    <input class="single-text-input" type="text" name="${sidebarFieldPrefix}[sections][${idx}][action]" value="" />
                 </div>
                 <div class="settings-option-div">
                     <label>Placeholder: </label>
                     <div class="spacerW10"></div>
-                    <input class="single-text-input" type="text" name="stwbpb_settings[post_sidebar][sections][${idx}][placeholder]" value="" />
+                    <input class="single-text-input" type="text" name="${sidebarFieldPrefix}[sections][${idx}][placeholder]" value="" />
                 </div>
                 <div class="settings-option-div">
                     <label>Open results in: </label>
                     <div class="spacerW10"></div>
-                    <select name="stwbpb_settings[post_sidebar][sections][${idx}][target]">
+                    <select name="${sidebarFieldPrefix}[sections][${idx}][target]">
                         <option value="_self">Same tab</option>
                         <option value="_blank">New tab</option>
                     </select>
@@ -148,29 +163,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="settings-option-div">
                     <label>Title: </label>
                     <div class="spacerW10"></div>
-                    <input class="single-text-input" type="text" name="stwbpb_settings[post_sidebar][sections][${idx}][title]" value="" disabled />
+                    <input class="single-text-input" type="text" name="${sidebarFieldPrefix}[sections][${idx}][title]" value="" disabled />
                 </div>
                 <div class="settings-option-div">
                     <label>Max number of comments: </label>
                     <div class="spacerW10"></div>
-                    <input type="number" min="1" name="stwbpb_settings[post_sidebar][sections][${idx}][max]" value="5" disabled />
+                    <input type="number" min="1" name="${sidebarFieldPrefix}[sections][${idx}][max]" value="5" disabled />
                 </div>
                 <div class="settings-option-div">
                     <label>Format (use {author} and {post}): </label>
                     <div class="spacerW10"></div>
-                    <input class="single-text-input" type="text" name="stwbpb_settings[post_sidebar][sections][${idx}][format]" value="" disabled />
+                    <input class="single-text-input" type="text" name="${sidebarFieldPrefix}[sections][${idx}][format]" value="" disabled />
                 </div>
                 <div class="settings-option-div">
                     <label>Include excerpt</label>
                     <div class="spacerW10"></div>
-                    <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[post_sidebar][sections][${idx}][include_excerpt]" value="1" disabled />
+                    <input class="single-checkbox-input" type="checkbox" name="${sidebarFieldPrefix}[sections][${idx}][include_excerpt]" value="1" disabled />
                 </div>
             </div>
             <div class="sidebar-section-fields sidebar-type-links" style="display:none">
                 <div class="settings-option-div">
                     <label>Title: </label>
                     <div class="spacerW10"></div>
-                    <input class="single-text-input" type="text" name="stwbpb_settings[post_sidebar][sections][${idx}][title]" value="" disabled />
+                    <input class="single-text-input" type="text" name="${sidebarFieldPrefix}[sections][${idx}][title]" value="" disabled />
                 </div>
                 <div class="sidebar-links"></div>
                 <button type="button" class="add-sidebar-link">Add Link</button>
@@ -179,12 +194,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="settings-option-div">
                     <label>Title: </label>
                     <div class="spacerW10"></div>
-                    <input class="single-text-input" type="text" name="stwbpb_settings[post_sidebar][sections][${idx}][title]" value="" disabled />
+                    <input class="single-text-input" type="text" name="${sidebarFieldPrefix}[sections][${idx}][title]" value="" disabled />
                 </div>
                 <div class="settings-option-div">
                     <label>Max number of posts: </label>
                     <div class="spacerW10"></div>
-                    <input type="number" min="1" name="stwbpb_settings[post_sidebar][sections][${idx}][max]" value="5" disabled />
+                    <input type="number" min="1" name="${sidebarFieldPrefix}[sections][${idx}][max]" value="5" disabled />
                 </div>
             </div>
             <div class="spacerH10"></div>
@@ -231,10 +246,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const linkTemplate = `
             <div class="sidebar-link">
                 <label>Link text: </label>
-                <input type="text" name="stwbpb_settings[post_sidebar][sections][${secIdx}][links][${linkIdx}][text]" value="" />
+                <input type="text" name="${sidebarFieldPrefix}[sections][${secIdx}][links][${linkIdx}][text]" value="" />
                 <div class="spacerH10"></div>
                 <label>Link URL: </label>
-                <input type="text" name="stwbpb_settings[post_sidebar][sections][${secIdx}][links][${linkIdx}][url]" value="" />
+                <input type="text" name="${sidebarFieldPrefix}[sections][${secIdx}][links][${linkIdx}][url]" value="" />
                 <div class="spacerH10"></div>
                 <button type="button" class="remove-sidebar-link">Remove Link</button>
             </div>`
@@ -255,21 +270,22 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
     // Delegate event for dynamically added elements
-    document.getElementById('sections-container').addEventListener('click', function (event) {
-        const target = event.target;
+    if (sectionsContainer) {
+        sectionsContainer.addEventListener('click', function (event) {
+            const target = event.target;
 
-        // Add a new link
-        if (target.classList.contains('add-link')) {
-            const section = target.closest('.section');
-            // Get the parent container of all sections
-            const sectionsContainer = document.querySelector('#sections-container');
-            
-            // Find the index of the current section
-            const sections = Array.from(sectionsContainer.querySelectorAll('.section'));
-            const sectionIndex = sections.indexOf(section); // Get the correct index
-            const linkIndex = section.querySelectorAll('.link').length;
-            //const sectionName = section.querySelector('input[type="text"]').name.replace('title', `links[${linkIndex}][url]`);
-            const linkTemplate = `
+            // Add a new link
+            if (target.classList.contains('add-link')) {
+                const section = target.closest('.section');
+                // Get the parent container of all sections
+                const sc = document.querySelector('#sections-container');
+
+                // Find the index of the current section
+                const sections = Array.from(sc.querySelectorAll('.section'));
+                const sectionIndex = sections.indexOf(section); // Get the correct index
+                const linkIndex = section.querySelectorAll('.link').length;
+                //const sectionName = section.querySelector('input[type="text"]').name.replace('title', `links[${linkIndex}][url]`);
+                const linkTemplate = `
             <div class="link">
                 <label>Link text: </label>
                 <input type="text" name="stwbpb_settings[bottom_panel][sections][${sectionIndex}][links][${linkIndex}][text]" value="" />
@@ -279,23 +295,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="spacerH10"></div>
                 <button type="button" class="remove-link">Remove Link</button>
             </div>`;
-            section.querySelector('.links').insertAdjacentHTML('beforeend', linkTemplate);
-        }
-
-        // Remove a link
-        if (target.classList.contains('remove-link')) {
-            target.closest('.link').remove();
-        }
-
-        // Remove a section
-        if (target.classList.contains('remove-section')) {
-            target.closest('.section').remove();
-            const sectionsContainer = document.getElementById('sections-container')
-
-            const sections = document.getElementsByClassName('section')
-            if(!sections.length){
-                sectionsContainer.style.display = 'none'
+                section.querySelector('.links').insertAdjacentHTML('beforeend', linkTemplate);
             }
-        }
-    });
+
+            // Remove a link
+            if (target.classList.contains('remove-link')) {
+                target.closest('.link').remove();
+            }
+
+            // Remove a section
+            if (target.classList.contains('remove-section')) {
+                target.closest('.section').remove();
+                const sc = document.getElementById('sections-container')
+
+                const sections = document.getElementsByClassName('section')
+                if(!sections.length){
+                    sc.style.display = 'none'
+                }
+            }
+        });
+    }
 });

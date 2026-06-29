@@ -26,6 +26,7 @@ require_once plugin_dir_path(__FILE__) . 'includes/hdoc.php';
 require_once plugin_dir_path(__FILE__) . 'includes/cdoc.php';
 require_once plugin_dir_path(__FILE__) . 'includes/condoc.php';
 require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
+require_once plugin_dir_path(__FILE__) . 'includes/sidebar-variants.php';
 require_once plugin_dir_path(__FILE__) . 'includes/proxy.php';
 
 
