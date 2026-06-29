@@ -108,6 +108,152 @@ document.addEventListener('DOMContentLoaded', function () {
         sectionIndex++;
     });
 
+    // Sidebar sections
+    let sidebarSectionIndex = document.querySelectorAll('#sidebar-sections-container .sidebar-section').length
+
+    function sidebarSectionTemplate(idx) {
+        return `
+        <div class="sidebar-section">
+            <div class="settings-option-div">
+                <label>Section type: </label>
+                <div class="spacerW10"></div>
+                <select name="stwbpb_settings[post_sidebar][sections][${idx}][type]" class="sidebar-section-type">
+                    <option value="search">Search</option>
+                    <option value="recent-comments">Recent Comments</option>
+                    <option value="links">Links</option>
+                    <option value="recent-posts">Recent Posts</option>
+                </select>
+            </div>
+            <div class="sidebar-section-fields sidebar-type-search">
+                <div class="settings-option-div">
+                    <label>Search action URL (use %s for the search term): </label>
+                    <div class="spacerW10"></div>
+                    <input class="single-text-input" type="text" name="stwbpb_settings[post_sidebar][sections][${idx}][action]" value="" />
+                </div>
+                <div class="settings-option-div">
+                    <label>Placeholder: </label>
+                    <div class="spacerW10"></div>
+                    <input class="single-text-input" type="text" name="stwbpb_settings[post_sidebar][sections][${idx}][placeholder]" value="" />
+                </div>
+                <div class="settings-option-div">
+                    <label>Open results in: </label>
+                    <div class="spacerW10"></div>
+                    <select name="stwbpb_settings[post_sidebar][sections][${idx}][target]">
+                        <option value="_self">Same tab</option>
+                        <option value="_blank">New tab</option>
+                    </select>
+                </div>
+            </div>
+            <div class="sidebar-section-fields sidebar-type-recent-comments" style="display:none">
+                <div class="settings-option-div">
+                    <label>Title: </label>
+                    <div class="spacerW10"></div>
+                    <input class="single-text-input" type="text" name="stwbpb_settings[post_sidebar][sections][${idx}][title]" value="" disabled />
+                </div>
+                <div class="settings-option-div">
+                    <label>Max number of comments: </label>
+                    <div class="spacerW10"></div>
+                    <input type="number" min="1" name="stwbpb_settings[post_sidebar][sections][${idx}][max]" value="5" disabled />
+                </div>
+                <div class="settings-option-div">
+                    <label>Format (use {author} and {post}): </label>
+                    <div class="spacerW10"></div>
+                    <input class="single-text-input" type="text" name="stwbpb_settings[post_sidebar][sections][${idx}][format]" value="" disabled />
+                </div>
+                <div class="settings-option-div">
+                    <label>Include excerpt</label>
+                    <div class="spacerW10"></div>
+                    <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[post_sidebar][sections][${idx}][include_excerpt]" value="1" disabled />
+                </div>
+            </div>
+            <div class="sidebar-section-fields sidebar-type-links" style="display:none">
+                <div class="settings-option-div">
+                    <label>Title: </label>
+                    <div class="spacerW10"></div>
+                    <input class="single-text-input" type="text" name="stwbpb_settings[post_sidebar][sections][${idx}][title]" value="" disabled />
+                </div>
+                <div class="sidebar-links"></div>
+                <button type="button" class="add-sidebar-link">Add Link</button>
+            </div>
+            <div class="sidebar-section-fields sidebar-type-recent-posts" style="display:none">
+                <div class="settings-option-div">
+                    <label>Title: </label>
+                    <div class="spacerW10"></div>
+                    <input class="single-text-input" type="text" name="stwbpb_settings[post_sidebar][sections][${idx}][title]" value="" disabled />
+                </div>
+                <div class="settings-option-div">
+                    <label>Max number of posts: </label>
+                    <div class="spacerW10"></div>
+                    <input type="number" min="1" name="stwbpb_settings[post_sidebar][sections][${idx}][max]" value="5" disabled />
+                </div>
+            </div>
+            <div class="spacerH10"></div>
+            <button type="button" class="remove-sidebar-section">Remove Section</button>
+        </div>`
+    }
+
+    document.getElementById('add-sidebar-section').addEventListener('click', function () {
+        const container = document.getElementById('sidebar-sections-container')
+        container.insertAdjacentHTML('beforeend', sidebarSectionTemplate(sidebarSectionIndex))
+        container.style.display = 'block'
+        sidebarSectionIndex++
+    })
+
+    document.getElementById('sidebar-sections-container').addEventListener('change', function (event) {
+        const target = event.target
+        if (target.classList.contains('sidebar-section-type')) {
+            const section = target.closest('.sidebar-section')
+            section.querySelectorAll('.sidebar-section-fields').forEach(function (el) {
+                el.style.display = 'none'
+                el.querySelectorAll('input, select, textarea').forEach(function (input) {
+                    input.disabled = true
+                })
+            })
+            const selected = target.value.replace(/[^a-z-]/g, '')
+            const activeFields = section.querySelector('.sidebar-type-' + selected)
+            if (activeFields) {
+                activeFields.style.display = ''
+                activeFields.querySelectorAll('input, select, textarea').forEach(function (input) {
+                    input.disabled = false
+                })
+            }
+        }
+    })
+
+    document.getElementById('sidebar-sections-container').addEventListener('click', function (event) {
+        const target = event.target
+
+        if (target.classList.contains('add-sidebar-link')) {
+            const section = target.closest('.sidebar-section')
+            const allSections = Array.from(document.querySelectorAll('#sidebar-sections-container .sidebar-section'))
+            const secIdx = allSections.indexOf(section)
+            const linkIdx = section.querySelectorAll('.sidebar-link').length
+            const linkTemplate = `
+            <div class="sidebar-link">
+                <label>Link text: </label>
+                <input type="text" name="stwbpb_settings[post_sidebar][sections][${secIdx}][links][${linkIdx}][text]" value="" />
+                <div class="spacerH10"></div>
+                <label>Link URL: </label>
+                <input type="text" name="stwbpb_settings[post_sidebar][sections][${secIdx}][links][${linkIdx}][url]" value="" />
+                <div class="spacerH10"></div>
+                <button type="button" class="remove-sidebar-link">Remove Link</button>
+            </div>`
+            section.querySelector('.sidebar-links').insertAdjacentHTML('beforeend', linkTemplate)
+        }
+
+        if (target.classList.contains('remove-sidebar-link')) {
+            target.closest('.sidebar-link').remove()
+        }
+
+        if (target.classList.contains('remove-sidebar-section')) {
+            target.closest('.sidebar-section').remove()
+            const container = document.getElementById('sidebar-sections-container')
+            if (!container.querySelectorAll('.sidebar-section').length) {
+                container.style.display = 'none'
+            }
+        }
+    })
+
     // Delegate event for dynamically added elements
     document.getElementById('sections-container').addEventListener('click', function (event) {
         const target = event.target;

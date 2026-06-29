@@ -1103,8 +1103,7 @@ class PopupDocumentManager{
         const sidebar = document.getElementById("CurrentDocumentSidebar")
         const bottomBar = document.getElementById("CurrentDocumentBottomBar")
 
-        if(!g.readingManager.mainDocCopyInfo){
-            sidebar.style.display = 'none'
+        if(!g.readingManager.mainDocPanels || !g.readingManager.mainDocPanels.sidebarPanel){            sidebar.style.display = 'none'
             bottomBar.style.display = 'none'
             return
         }
@@ -3367,7 +3366,7 @@ class PopupDocumentManager{
     getMainDocumentPadding(){
         const screenWidth = window.innerWidth
         const mainPadding = this.isPaddingOn && !g.isMobileMode && 
-        g.readingManager.isFullScreen && !g.readingManager.mainDocCopyInfo && !this.currentDocLeftPanelShowing && 
+        g.readingManager.isFullScreen && (!g.readingManager.mainDocPanels || !g.readingManager.mainDocPanels.sidebarPanel) && !this.currentDocLeftPanelShowing && 
         !this.currentDocRightPanelShowing ? screenWidth * 0.2 : kDefaultPadding
 
         return mainPadding

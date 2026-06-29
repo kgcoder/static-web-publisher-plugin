@@ -426,6 +426,31 @@ function stwbpb_xml_to_array_with_attributes($xml, $parent_name = '') {
             continue; // skip adding as 'a' key
         }
 
+        if ($parent_name === 'sidebar') {
+            $child_array['type'] = $child_name;
+            if (!isset($arr['items'])) {
+                $arr['items'] = [];
+            }
+            $arr['items'][] = $child_array;
+            continue;
+        }
+
+        if ($parent_name === 'links' && $child_name === 'a') {
+            if (!isset($arr['items'])) {
+                $arr['items'] = [];
+            }
+            $arr['items'][] = $child_array;
+            continue;
+        }
+
+        if ($parent_name === 'recent-comments' && $child_name === 'comment') {
+            if (!isset($arr['comments'])) {
+                $arr['comments'] = [];
+            }
+            $arr['comments'][] = $child_array;
+            continue;
+        }
+
         if ($parent_name === 'bottom' && $child_name === 'section') {
             if (!isset($arr['sections'])) {
                 $arr['sections'] = [];

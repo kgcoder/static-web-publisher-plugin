@@ -182,7 +182,33 @@ if (!empty($stwbpb_connections_info)) {
 
                         </div>
 
-                        <div id="CurrentDocumentSidebar" class="SideBar"></div>
+                        <div id="CurrentDocumentSidebar" class="SideBar"><?php
+                        if (!empty($stwbpb_seo_panels['sidebar'])) {
+                            foreach ($stwbpb_seo_panels['sidebar']['items'] as $stwbpb_si) {
+                                if ($stwbpb_si['type'] === 'links' && !empty($stwbpb_si['links'])) {
+                                    if (!empty($stwbpb_si['title'])) echo '<h3>' . esc_html($stwbpb_si['title']) . '</h3>';
+                                    echo '<ul>';
+                                    foreach ($stwbpb_si['links'] as $stwbpb_sl) {
+                                        echo '<li><a href="' . esc_url($stwbpb_sl['href']) . '">' . esc_html($stwbpb_sl['text']) . '</a></li>';
+                                    }
+                                    echo '</ul>';
+                                } elseif ($stwbpb_si['type'] === 'recent-comments' && !empty($stwbpb_si['comments'])) {
+                                    if (!empty($stwbpb_si['title'])) echo '<h3>' . esc_html($stwbpb_si['title']) . '</h3>';
+                                    echo '<ul>';
+                                    foreach ($stwbpb_si['comments'] as $stwbpb_sc) {
+                                        echo '<li><a href="' . esc_url($stwbpb_sc['post-href']) . '">' . esc_html($stwbpb_sc['post-title']) . '</a> — ' . esc_html($stwbpb_sc['author']) . '</li>';
+                                    }
+                                    echo '</ul>';
+                                } elseif ($stwbpb_si['type'] === 'search' && !empty($stwbpb_si['action'])) {
+                                    $stwbpb_search_url = str_replace('%s', '', $stwbpb_si['action']);
+                                    echo '<form action="' . esc_url($stwbpb_search_url) . '" method="get">';
+                                    $stwbpb_placeholder = !empty($stwbpb_si['placeholder']) ? ' placeholder="' . esc_attr($stwbpb_si['placeholder']) . '"' : '';
+                                    echo '<input type="search" name="s"' . $stwbpb_placeholder . '/>';
+                                    echo '<button type="submit">Search</button></form>';
+                                }
+                            }
+                        }
+                        ?></div>
 
                     </div>
 

@@ -70,19 +70,24 @@ function stwbpb_send_hdoc_for_post($post){
         );
 
         $panels_allowed_tags = array(
-            'panels' => true,
-            'top' => true,
-            'post-nav' => array(),
-            'prev' => array('href' => true),
-            'next' => array('href' => true),
-            'side' => array('side' => true),
-            'bottom' => true,
-            'comments' => array('title' => true, 'empty' => true, 'leave-comment-url' => true, 'reply-label' => true, 'leave-comment-label' => true),
-            'logo' => array('src' => true, 'href' => true),
-            'site-name' => array('href' => true),
-            'a' => array('href' => true),
-            'section' => array('title' => true),
-            'bottom-message' => array(),
+            'panels'          => true,
+            'top'             => true,
+            'post-nav'        => array(),
+            'prev'            => array('href' => true),
+            'next'            => array('href' => true),
+            'sidebar'         => array('side' => true),
+            'search'          => array('action' => true, 'placeholder' => true, 'target' => true),
+            'links'           => array('title' => true),
+            'recent-comments' => array('title' => true, 'format' => true),
+            'comment'         => array('post-href' => true, 'post-title' => true, 'author' => true, 'excerpt' => true),
+            'side'            => array('side' => true),
+            'bottom'          => true,
+            'comments'        => array('title' => true, 'empty' => true, 'leave-comment-url' => true, 'reply-label' => true, 'leave-comment-label' => true),
+            'logo'            => array('src' => true, 'href' => true),
+            'site-name'       => array('href' => true),
+            'a'               => array('href' => true),
+            'section'         => array('title' => true),
+            'bottom-message'  => array(),
         );
 
 

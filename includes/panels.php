@@ -58,11 +58,15 @@ function stwbpb_get_panels($post) {
         $should_show_post_nav = !empty($prev_post) || !empty($next_post);
     }
 
+    $post_sidebar = isset($settings['post_sidebar']) ? $settings['post_sidebar'] : array('sections' => array());
+    $sidebar_sections = !empty($post_sidebar['sections']) ? $post_sidebar['sections'] : array();
+    $should_show_sidebar = $post->post_type === 'post' && !empty($sidebar_sections);
+
     $should_show_top_panel = !empty($site_name) || !empty($main_link) || !empty($logo_url) || !empty($top_panel['links']);
     $should_show_side_panel = stwbpb_has_comment_section($post);
     $should_show_bottom_panel = !empty($bottom_message) || !empty($bottom_panel['sections']);
 
-    $should_show_panels = $should_show_top_panel || $should_show_post_nav || $should_show_side_panel || $should_show_bottom_panel;
+    $should_show_panels = $should_show_top_panel || $should_show_post_nav || $should_show_sidebar || $should_show_side_panel || $should_show_bottom_panel;
 
     $side_panel_left = (bool) ($settings['side_panel_on_the_left'] ?? false);
     $side_panel_attribute = $side_panel_left ? ' side="left"' : '';
@@ -113,6 +117,68 @@ if (!empty($top_panel['links'])) {
 <?php endif; if (!empty($next_post)): ?><next href="<?php echo esc_url(get_permalink($next_post->ID)); ?>"><?php echo esc_html($next_post->post_title); ?></next>
 <?php endif; ?>
 </post-nav>
+<?php endif; ?>
+<?php if ($should_show_sidebar): ?>
+<sidebar>
+<?php
+foreach ($sidebar_sections as $sec) {
+    $sec_type = $sec['type'] ?? '';
+    if ($sec_type === 'search') {
+        $search_action = $sec['action'] ?? '';
+        if (!empty($search_action)) {
+            echo '<search action="' . esc_attr($search_action) . '"';
+            if (!empty($sec['placeholder'])) echo ' placeholder="' . esc_attr($sec['placeholder']) . '"';
+            if (!empty($sec['target']))      echo ' target="' . esc_attr($sec['target']) . '"';
+            echo '/>' . PHP_EOL;
+        }
+    } elseif ($sec_type === 'links') {
+        if (!empty($sec['links'])) {
+            echo '<links';
+            if (!empty($sec['title'])) echo ' title="' . esc_attr($sec['title']) . '"';
+            echo '>' . PHP_EOL;
+            foreach ($sec['links'] as $lnk) {
+                if (!empty($lnk['url'])) {
+                    echo '<a href="' . esc_url($lnk['url']) . '">' . esc_html($lnk['text']) . '</a>' . PHP_EOL;
+                }
+            }
+            echo '</links>' . PHP_EOL;
+        }
+    } elseif ($sec_type === 'recent-posts') {
+        $recent_posts = get_posts(array('numberposts' => (int) ($sec['max'] ?? 5), 'post_type' => 'post', 'post_status' => 'publish'));
+        if (!empty($recent_posts)) {
+            echo '<links';
+            if (!empty($sec['title'])) echo ' title="' . esc_attr($sec['title']) . '"';
+            echo '>' . PHP_EOL;
+            foreach ($recent_posts as $rp) {
+                echo '<a href="' . esc_url(get_permalink($rp->ID)) . '">' . esc_html($rp->post_title) . '</a>' . PHP_EOL;
+            }
+            echo '</links>' . PHP_EOL;
+        }
+    } elseif ($sec_type === 'recent-comments') {
+        $recent_comments = get_comments(array('number' => (int) ($sec['max'] ?? 5), 'status' => 'approve', 'type' => 'comment'));
+        if (!empty($recent_comments)) {
+            echo '<recent-comments';
+            if (!empty($sec['title']))  echo ' title="' . esc_attr($sec['title']) . '"';
+            if (!empty($sec['format'])) echo ' format="' . esc_attr($sec['format']) . '"';
+            echo '>' . PHP_EOL;
+            $include_excerpt = !empty($sec['include_excerpt']);
+            foreach ($recent_comments as $rc) {
+                $rc_post = get_post($rc->comment_post_ID);
+                if (!$rc_post) continue;
+                echo '<comment post-href="' . esc_url(get_permalink($rc_post->ID)) . '"';
+                echo ' post-title="' . esc_attr($rc_post->post_title) . '"';
+                echo ' author="' . esc_attr($rc->comment_author) . '"';
+                if ($include_excerpt && !empty($rc->comment_content)) {
+                    echo ' excerpt="' . esc_attr(wp_trim_words($rc->comment_content, 15, '…')) . '"';
+                }
+                echo '/>' . PHP_EOL;
+            }
+            echo '</recent-comments>' . PHP_EOL;
+        }
+    }
+}
+?>
+</sidebar>
 <?php endif; ?>
 <?php if ($should_show_side_panel): ?>
 <?php
@@ -187,6 +253,7 @@ function stwbpb_get_seo_panel_data($panels_xml) {
         'site_name_href'  => null,
         'top_links'       => [],
         'post_nav'        => null,
+        'sidebar'         => null,
         'bottom_sections' => [],
         'bottom_message'  => null,
     ];
@@ -229,6 +296,52 @@ function stwbpb_get_seo_panel_data($panels_xml) {
         }
         if (!empty($post_nav_data)) {
             $data['post_nav'] = $post_nav_data;
+        }
+    }
+
+    if (isset($xml->sidebar)) {
+        $sb = $xml->sidebar;
+        $sb_side = isset($sb['side']) ? (string) $sb['side'] : 'right';
+        $sb_items = [];
+        foreach ($sb->children() as $sb_child_name => $sb_child) {
+            if ($sb_child_name === 'search') {
+                $sb_items[] = [
+                    'type'        => 'search',
+                    'action'      => isset($sb_child['action'])      ? (string) $sb_child['action']      : '',
+                    'placeholder' => isset($sb_child['placeholder']) ? (string) $sb_child['placeholder'] : '',
+                ];
+            } elseif ($sb_child_name === 'links') {
+                $sb_links = [];
+                foreach ($sb_child->a as $a) {
+                    $sb_links[] = [
+                        'href' => isset($a['href']) ? (string) $a['href'] : '',
+                        'text' => (string) $a,
+                    ];
+                }
+                $sb_items[] = [
+                    'type'  => 'links',
+                    'title' => isset($sb_child['title']) ? (string) $sb_child['title'] : '',
+                    'links' => $sb_links,
+                ];
+            } elseif ($sb_child_name === 'recent-comments') {
+                $sb_comments = [];
+                foreach ($sb_child->comment as $c) {
+                    $sb_comments[] = [
+                        'post-href'  => isset($c['post-href'])  ? (string) $c['post-href']  : '',
+                        'post-title' => isset($c['post-title']) ? (string) $c['post-title'] : '',
+                        'author'     => isset($c['author'])     ? (string) $c['author']     : '',
+                        'excerpt'    => isset($c['excerpt'])    ? (string) $c['excerpt']    : '',
+                    ];
+                }
+                $sb_items[] = [
+                    'type'     => 'recent-comments',
+                    'title'    => isset($sb_child['title']) ? (string) $sb_child['title'] : '',
+                    'comments' => $sb_comments,
+                ];
+            }
+        }
+        if (!empty($sb_items)) {
+            $data['sidebar'] = ['side' => $sb_side, 'items' => $sb_items];
         }
     }
 
