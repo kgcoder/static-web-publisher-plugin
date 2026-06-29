@@ -138,10 +138,11 @@ function stwbpb_handle_sidebar_variant_admin() {
     }
 
     if ($action === 'stwbpb_save_sidebar_variant') {
-        $raw      = isset($_POST['stwbpb_variant']) && is_array($_POST['stwbpb_variant']) ? $_POST['stwbpb_variant'] : array();
-        $id       = isset($raw['id']) ? sanitize_text_field($raw['id']) : '';
-        $title    = isset($raw['title']) ? sanitize_text_field($raw['title']) : '';
-        $sections = stwbpb_sanitize_sidebar_sections(isset($raw['sections']) ? $raw['sections'] : array());
+        $raw       = isset($_POST['stwbpb_variant']) && is_array($_POST['stwbpb_variant']) ? $_POST['stwbpb_variant'] : array();
+        $id        = isset($raw['id']) ? sanitize_text_field($raw['id']) : '';
+        $title     = isset($raw['title']) ? sanitize_text_field($raw['title']) : '';
+        $side_left = !empty($raw['side_left']);
+        $sections  = stwbpb_sanitize_sidebar_sections(isset($raw['sections']) ? $raw['sections'] : array());
 
         if ($title === '') {
             $edit_url = admin_url('admin.php?page=stwbpb-sidebar-variant-edit&variant_id=' . urlencode($id) . '&swp_notice=empty_title');
@@ -163,8 +164,9 @@ function stwbpb_handle_sidebar_variant_admin() {
         $updated = false;
         foreach ($variants as &$v) {
             if (isset($v['id']) && $v['id'] === $id) {
-                $v['title']    = $title;
-                $v['sections'] = $sections;
+                $v['title']     = $title;
+                $v['side_left'] = $side_left;
+                $v['sections']  = $sections;
                 $updated = true;
                 break;
             }
@@ -173,7 +175,7 @@ function stwbpb_handle_sidebar_variant_admin() {
 
         if (!$updated) {
             // Variant not found — add it (edge case: saving a brand-new variant whose create step was skipped)
-            $variants[] = array('id' => $id, 'title' => $title, 'sections' => $sections);
+            $variants[] = array('id' => $id, 'title' => $title, 'side_left' => $side_left, 'sections' => $sections);
         }
 
         stwbpb_sidebar_variants_save_all($variants);
@@ -248,8 +250,9 @@ function stwbpb_sidebar_variant_edit_page() {
         return;
     }
 
-    $title    = isset($variant['title'])    ? $variant['title']    : '';
-    $sections = isset($variant['sections']) ? $variant['sections'] : array();
+    $title     = isset($variant['title'])     ? $variant['title']     : '';
+    $side_left = !empty($variant['side_left']);
+    $sections  = isset($variant['sections']) ? $variant['sections'] : array();
     $notice   = isset($_GET['swp_notice'])  ? sanitize_key($_GET['swp_notice'])  : '';
     $list_url = admin_url('admin.php?page=stwbpb-sidebar-variants');
     ?>
@@ -274,6 +277,13 @@ function stwbpb_sidebar_variant_edit_page() {
                     <td>
                         <input id="stwbpb-variant-title" class="regular-text" type="text" name="stwbpb_variant[title]" value="<?php echo esc_attr($title); ?>" required />
                         <p class="description">Used in dropdowns to identify this sidebar. Must be unique.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="stwbpb-variant-side-left">Show sidebar on the left</label></th>
+                    <td>
+                        <input id="stwbpb-variant-side-left" type="checkbox" name="stwbpb_variant[side_left]" value="1" <?php checked($side_left); ?> />
+                        <p class="description">When checked, emits <code>side="left"</code> on the sidebar element. Default (unchecked) is right.</p>
                     </td>
                 </tr>
             </table>

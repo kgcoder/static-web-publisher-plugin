@@ -124,7 +124,7 @@ if (!empty($top_panel['links'])) {
 </post-nav>
 <?php endif; ?>
 <?php if ($should_show_sidebar): ?>
-<sidebar>
+<sidebar<?php if (!empty($sidebar_variant['side_left'])) echo ' side="left"'; ?>>
 <?php
 foreach ($sidebar_sections as $sec) {
     $sec_type = $sec['type'] ?? '';

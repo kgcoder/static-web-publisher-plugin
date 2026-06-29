@@ -1112,6 +1112,13 @@ class PopupDocumentManager{
             sidebar.style.display = 'none'
             bottomBar.style.display = 'flex'
         }else{
+
+            if(g.readingManager.mainDocPanels.sidebarPanel.side === 'left'){
+                const row = document.getElementById("CurrentDocumentInnerRow")
+                row.style.flexDirection = 'row-reverse'
+            }
+
+
             sidebar.style.display = 'flex'
             bottomBar.style.display = 'none'
         }
