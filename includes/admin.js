@@ -256,6 +256,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 <label>Link URL: </label>
                 <input type="text" name="${sidebarFieldPrefix}[sections][${secIdx}][links][${linkIdx}][url]" value="" />
                 <div class="spacerH10"></div>
+                <label>Open in: </label>
+                <select name="${sidebarFieldPrefix}[sections][${secIdx}][links][${linkIdx}][target]">
+                    <option value="">Default</option>
+                    <option value="_self">Same tab</option>
+                    <option value="_blank">New tab</option>
+                </select>
+                <div class="spacerH10"></div>
+                <label>rel: </label>
+                <input type="text" name="${sidebarFieldPrefix}[sections][${secIdx}][links][${linkIdx}][rel]" value="" placeholder="e.g. noopener noreferrer" />
+                <div class="spacerH10"></div>
                 <button type="button" class="remove-sidebar-link">Remove Link</button>
             </div>`
                 section.querySelector('.sidebar-links').insertAdjacentHTML('beforeend', linkTemplate)

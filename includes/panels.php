@@ -143,7 +143,10 @@ foreach ($sidebar_sections as $sec) {
             echo '>' . PHP_EOL;
             foreach ($sec['links'] as $lnk) {
                 if (!empty($lnk['url'])) {
-                    echo '<a href="' . esc_url($lnk['url']) . '">' . esc_html($lnk['text']) . '</a>' . PHP_EOL;
+                    $lnk_attrs = ' href="' . esc_url($lnk['url']) . '"';
+                    if (!empty($lnk['target'])) $lnk_attrs .= ' target="' . esc_attr($lnk['target']) . '"';
+                    if (!empty($lnk['rel']))    $lnk_attrs .= ' rel="' . esc_attr($lnk['rel']) . '"';
+                    echo '<a' . $lnk_attrs . '>' . esc_html($lnk['text']) . '</a>' . PHP_EOL;
                 }
             }
             echo '</links>' . PHP_EOL;

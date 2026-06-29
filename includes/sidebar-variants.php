@@ -52,9 +52,12 @@ function stwbpb_sanitize_sidebar_sections($raw) {
             if (isset($sec['links']) && is_array($sec['links'])) {
                 foreach ($sec['links'] as $lnk) {
                     if (!is_array($lnk)) continue;
+                    $lnk_target = isset($lnk['target']) && in_array($lnk['target'], $allowed_targets, true) ? $lnk['target'] : '';
                     $sanitized_links[] = array(
-                        'text' => isset($lnk['text']) ? sanitize_text_field($lnk['text']) : '',
-                        'url'  => isset($lnk['url'])  ? esc_url_raw($lnk['url'])          : '',
+                        'text'   => isset($lnk['text']) ? sanitize_text_field($lnk['text']) : '',
+                        'url'    => isset($lnk['url'])  ? esc_url_raw($lnk['url'])          : '',
+                        'target' => $lnk_target,
+                        'rel'    => isset($lnk['rel'])  ? sanitize_text_field($lnk['rel'])  : '',
                     );
                 }
             }
@@ -356,6 +359,16 @@ function stwbpb_sidebar_variant_edit_page() {
                                         <div class="spacerH10"></div>
                                         <label>Link URL: </label>
                                         <input type="text" name="<?php echo $prefix; ?>[links][<?php echo esc_attr($li); ?>][url]" value="<?php echo esc_url($lnk['url']); ?>"<?php echo $d_links; ?> />
+                                        <div class="spacerH10"></div>
+                                        <label>Open in: </label>
+                                        <select name="<?php echo $prefix; ?>[links][<?php echo esc_attr($li); ?>][target]"<?php echo $d_links; ?>>
+                                            <option value="" <?php selected($lnk['target'] ?? '', ''); ?>>Default</option>
+                                            <option value="_self" <?php selected($lnk['target'] ?? '', '_self'); ?>>Same tab</option>
+                                            <option value="_blank" <?php selected($lnk['target'] ?? '', '_blank'); ?>>New tab</option>
+                                        </select>
+                                        <div class="spacerH10"></div>
+                                        <label>rel: </label>
+                                        <input type="text" name="<?php echo $prefix; ?>[links][<?php echo esc_attr($li); ?>][rel]" value="<?php echo esc_attr($lnk['rel'] ?? ''); ?>" placeholder="e.g. noopener noreferrer"<?php echo $d_links; ?> />
                                         <div class="spacerH10"></div>
                                         <button type="button" class="remove-sidebar-link">Remove Link</button>
                                     </div>
