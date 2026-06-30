@@ -1061,7 +1061,7 @@ class NoteDivsManager{
                 if (g.readingManager.isFullScreen) {
                     left = padding
 
-                    width = rect.left - left + rect.width
+                    width = rect.left - left + rect.width - divX
 
                 } else {
                     left = 0

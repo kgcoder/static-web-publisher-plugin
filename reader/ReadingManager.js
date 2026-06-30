@@ -20,7 +20,7 @@ import CollageViewer from "./CollageViewer.js";
 import { loadStaticContentFromUrl } from "./parsers/ParsingManager.js";
 import FLTextEnd from "./models/FLTextEnd.js";
 import FLPointEnd from "./models/FLPointEnd.js";
-import { maxFlinksNumberBeforeOptimization } from "./constants.js";
+import { kSidebarWidthToScreenWidthRatio, maxFlinksNumberBeforeOptimization } from "./constants.js";
 import { showMultipleLinksPopup } from "./MultipleLinksPopupManager.js";
 const kFlinkHorizontalThickness = 5
 
@@ -1540,9 +1540,9 @@ setupFlinksCanvasDPR(){
         const textNodesArray = getTextNodesArrayFromDiv(notePresentationDiv)
 
         let divX = g.pdm.getCurrentDocLeftVerticalPanelWidth()
-        if(divX < 0.01 && g.readingManager.isFullScreen){
-            if(g.readingManager.mainDocPanels && g.readingManager.mainDocPanels.sidebarPanel){
-                divX = window.innerWidth * 0.2
+        if(divX < 0.01 && g.readingManager.isFullScreen && !g.isMobileMode){
+            if(g.readingManager.mainDocPanels && g.readingManager.mainDocPanels.sidebarPanel && g.readingManager.mainDocPanels.sidebarPanel.side === 'left'){
+                divX = window.innerWidth * kSidebarWidthToScreenWidthRatio
             }
         }
         const rightPanelWidth = g.pdm.getCurrentDocRightVerticalPanelWidth()

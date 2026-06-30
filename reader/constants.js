@@ -22,6 +22,7 @@ export const kDefaultHeightOfNote = 160
 
 export const maxFlinksNumberBeforeOptimization = 50
 
+export const kSidebarWidthToScreenWidthRatio = 0.2
 
 
 
