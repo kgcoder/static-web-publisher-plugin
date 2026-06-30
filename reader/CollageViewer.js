@@ -15,7 +15,7 @@ https://github.com/kgcoder/default-web
 import { loadCollageContentFromFile } from './CollageDataLoader.js'
 import { themeColors } from './constants.js'
 import g from './Globals.js'
-import { hideUrlInTheCorner, interpolate, isDotInsideFrame, showUrlInTheCorner, timestamp } from './helpers.js'
+import { hideUrlInTheCorner, interpolate, isDotInsideFrame, mapUrlWithMappings, showUrlInTheCorner, timestamp } from './helpers.js'
 import Crosshair from './models/Crosshair.js'
 import Viewport from './models/Viewport.js'
 import { kLeftDivTop } from './PopupDocumentManager.js'
@@ -190,6 +190,16 @@ class CollageViewer{
                     titleSpan.innerText = url
                 }else{
                     titleSpan.innerText = title
+                }
+            }
+
+            if(this.content.copyInfo && this.content.copyInfo.mediaMappings){
+                for(const image of this.content.images){
+                    const newUrl = mapUrlWithMappings(image.url, this.content.copyInfo.mediaMappings)
+                    if(newUrl !== image.url){
+                        image.url = newUrl
+                        image.image.src = newUrl
+                    }
                 }
             }
 

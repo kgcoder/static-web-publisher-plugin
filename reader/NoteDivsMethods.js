@@ -14,7 +14,7 @@ https://github.com/kgcoder/default-web
 
 import g from "./Globals.js"
 import { getHeaderInfoFromXML, populateHeaderDiv } from "./HeaderMethods.js"
-import { absolutizeUrls, escapeHTML, getHeaderDivFrom, getPresentationDivFrom, getTextColumnWidth, parseCopyInfoFromElement, replaceMediaTagsWithLinksInDiv, scrollToIdInContainer, stickBottomLineRectToTheTopOne } from "./helpers.js"
+import { absolutizeUrls, applyMediaMappings, escapeHTML, getHeaderDivFrom, getPresentationDivFrom, getTextColumnWidth, parseCopyInfoFromElement, replaceMediaTagsWithLinksInDiv, scrollToIdInContainer, stickBottomLineRectToTheTopOne } from "./helpers.js"
 import { kMiddleGap, kMinDocWidthForDesktop } from "./PopupDocumentManager.js"
 
 
@@ -79,6 +79,9 @@ class NoteDivsManager{
         }
       
       
+        if (copyInfo && copyInfo.mediaMappings) {
+            applyMediaMappings(notePresentationDiv, copyInfo.mediaMappings)
+        }
 
 
      
