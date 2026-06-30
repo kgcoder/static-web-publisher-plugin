@@ -122,23 +122,23 @@ function stwbpb_handle_sidebar_variant_admin() {
         $variants = stwbpb_sidebar_variants_get_all();
         $variants[] = array('id' => $id, 'title' => '', 'sections' => array());
         stwbpb_sidebar_variants_save_all($variants);
-        wp_redirect(admin_url('admin.php?page=stwbpb-sidebar-variant-edit&variant_id=' . urlencode($id)));
+        wp_safe_redirect(admin_url('admin.php?page=stwbpb-sidebar-variant-edit&variant_id=' . urlencode($id)));
         exit;
     }
 
     if ($action === 'stwbpb_delete_sidebar_variant') {
-        $id = isset($_POST['variant_id']) ? sanitize_text_field($_POST['variant_id']) : '';
+        $id = isset($_POST['variant_id']) ? sanitize_text_field(wp_unslash($_POST['variant_id'])) : '';
         $variants = stwbpb_sidebar_variants_get_all();
         $variants = array_filter($variants, function ($v) use ($id) {
             return isset($v['id']) && $v['id'] !== $id;
         });
         stwbpb_sidebar_variants_save_all($variants);
-        wp_redirect($list_url . '&swp_notice=deleted');
+        wp_safe_redirect($list_url . '&swp_notice=deleted');
         exit;
     }
 
     if ($action === 'stwbpb_save_sidebar_variant') {
-        $raw       = isset($_POST['stwbpb_variant']) && is_array($_POST['stwbpb_variant']) ? $_POST['stwbpb_variant'] : array();
+        $raw       = isset($_POST['stwbpb_variant']) && is_array($_POST['stwbpb_variant']) ? wp_unslash($_POST['stwbpb_variant']) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized field-by-field in stwbpb_sanitize_sidebar_sections()
         $id        = isset($raw['id']) ? sanitize_text_field($raw['id']) : '';
         $title     = isset($raw['title']) ? sanitize_text_field($raw['title']) : '';
         $side_left = !empty($raw['side_left']);
@@ -146,7 +146,7 @@ function stwbpb_handle_sidebar_variant_admin() {
 
         if ($title === '') {
             $edit_url = admin_url('admin.php?page=stwbpb-sidebar-variant-edit&variant_id=' . urlencode($id) . '&swp_notice=empty_title');
-            wp_redirect($edit_url);
+            wp_safe_redirect($edit_url);
             exit;
         }
 
@@ -156,7 +156,7 @@ function stwbpb_handle_sidebar_variant_admin() {
         foreach ($variants as $v) {
             if (isset($v['id']) && $v['id'] !== $id && isset($v['title']) && $v['title'] === $title) {
                 $edit_url = admin_url('admin.php?page=stwbpb-sidebar-variant-edit&variant_id=' . urlencode($id) . '&swp_notice=duplicate_title');
-                wp_redirect($edit_url);
+                wp_safe_redirect($edit_url);
                 exit;
             }
         }
@@ -179,7 +179,7 @@ function stwbpb_handle_sidebar_variant_admin() {
         }
 
         stwbpb_sidebar_variants_save_all($variants);
-        wp_redirect($list_url . '&swp_notice=saved');
+        wp_safe_redirect($list_url . '&swp_notice=saved');
         exit;
     }
 }
@@ -191,7 +191,7 @@ function stwbpb_sidebar_variants_list_page() {
     if (!current_user_can('manage_options')) return;
 
     $variants = stwbpb_sidebar_variants_get_all();
-    $notice   = isset($_GET['swp_notice']) ? sanitize_key($_GET['swp_notice']) : '';
+    $notice   = isset($_GET['swp_notice']) ? sanitize_key($_GET['swp_notice']) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only redirect param, not form submission
     ?>
     <div class="wrap">
         <h1>Sidebar Variants</h1>
@@ -242,7 +242,7 @@ function stwbpb_sidebar_variants_list_page() {
 function stwbpb_sidebar_variant_edit_page() {
     if (!current_user_can('manage_options')) return;
 
-    $variant_id = isset($_GET['variant_id']) ? sanitize_text_field($_GET['variant_id']) : '';
+    $variant_id = isset($_GET['variant_id']) ? sanitize_text_field(wp_unslash($_GET['variant_id'])) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only redirect param, not form submission
     $variant    = stwbpb_sidebar_variants_get_by_id($variant_id);
 
     if (!$variant) {
@@ -253,7 +253,7 @@ function stwbpb_sidebar_variant_edit_page() {
     $title     = isset($variant['title'])     ? $variant['title']     : '';
     $side_left = !empty($variant['side_left']);
     $sections  = isset($variant['sections']) ? $variant['sections'] : array();
-    $notice   = isset($_GET['swp_notice'])  ? sanitize_key($_GET['swp_notice'])  : '';
+    $notice   = isset($_GET['swp_notice'])  ? sanitize_key($_GET['swp_notice'])  : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only redirect param, not form submission
     $list_url = admin_url('admin.php?page=stwbpb-sidebar-variants');
     ?>
     <div class="wrap">
