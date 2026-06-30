@@ -1127,7 +1127,7 @@ class PopupDocumentManager{
             return
         }
 
-        if(!g.readingManager.isFullScreen || this.currentDocLeftPanelShowing || this.currentDocRightPanelShowing){
+        if(!g.readingManager.isFullScreen || this.currentDocLeftPanelShowing || this.currentDocRightPanelShowing || g.isMobileMode){
             sidebar.style.display = 'none'
             bottomBar.style.display = 'flex'
         }else{
