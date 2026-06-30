@@ -4,7 +4,7 @@ Donate link: https://reinventingtheweb.com/donate
 Tags: reader, connections, hdoc, static, web
 Requires at least: 5.2
 Tested up to: 7.0
-Stable tag: 5.0.1
+Stable tag: 5.1.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -88,13 +88,14 @@ The Reader's Web is inspired by Ted Nelson's long-standing vision of hypertext. 
 5. To use **Reader UI** mode, set the display mode to **Reader UI** either globally or per-post. The plugin will replace your theme with the built-in reader interface for those posts.
 6. To serve standalone document files, create a folder named `static-documents` in the root of your WordPress installation (the same folder that contains `wp-config.php`). Place `.hdoc`, `.cdoc`, or `.condoc` files inside it. They will be accessible at `https://yoursite.com/static/filename.hdoc`.
 7. After changing any plugin settings, go to **Settings > Permalinks** and click **Save Changes** to ensure all custom endpoints are registered.
+8. If you use caching plugins, perge all cache. Also purge cache after any changes you make in the Settings of this plugin that would affect how pages and posts are presented.
 
 
 == Frequently Asked Questions ==
 
 = Do visitors need to install anything to use the Reader UI? =
 
-No. When a post is set to **Reader UI** mode, the plugin serves the full reader interface as a regular web page. Any visitor can use it. Visitors who do have the Visible Connections extension installed will also benefit from it on Embedded HDOC pages.
+No. When a post is set to **Reader UI** mode, the plugin serves the full reader interface as a regular web page. Any visitor can use it. That post will also be available for Visitors who do have the Visible Connections extension installed.
 
 = Will this break my site's appearance for regular visitors? =
 
@@ -118,6 +119,9 @@ Yes. You can set a global default in Settings and override it per post or page i
 
 
 == Changelog ==
+
+= 5.1.0 =
+Sidebar is now configurable in the Settings. Reader UI now supports copy-info tag.  
 
 = 5.0.1 =
 Bug fix
@@ -173,6 +177,9 @@ Initial release.
 
 
 == Upgrade Notice ==
+
+= 5.1.0 =
+No action required.
 
 = 5.0.1 =
 Minor changes. No action required.

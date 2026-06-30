@@ -51,10 +51,10 @@ The main document is shown on the left; any connected documents open in tabs on 
 
 ### Specs
 
-Spec files live in [specs/](specs/). Currently present:
-- [specs/HDOC_spec.md](specs/HDOC_spec.md) — full HDOC format specification
-- [specs/Embedded_HDOC_spec.md](specs/Embedded_HDOC_spec.md) — Embedded HDOC specification
-- [specs/Static_comments_spec.md](specs/Static_comments_spec.md) — comments JSON format
+Spec files live in [noinclude/specs/](noinclude/specs/). Currently present:
+- [noinclude/specs/HDOC_spec.md](noinclude/specs/HDOC_spec.md) — full HDOC format specification
+- [noinclude/specs/Embedded_HDOC_spec.md](noinclude/specs/Embedded_HDOC_spec.md) — Embedded HDOC specification
+- [noinclude/specs/Static_comments_spec.md](noinclude/specs/Static_comments_spec.md) — comments JSON format
 
 Not all document types have specs in this repo yet.
 
