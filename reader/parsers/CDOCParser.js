@@ -12,7 +12,7 @@ For the official list of document types and specifications, see:
 https://github.com/kgcoder/default-web
 */
 
-import { getFirstElementOfArray } from "../helpers.js";
+import { getFirstElementOfArray, parseCopyInfoFromElement } from "../helpers.js";
 import FloatingLink from "../models/FloatingLink.js";
 import ImageView from "../models/ImageView.js";
 import Line from "../models/Line.js";
@@ -228,6 +228,12 @@ export async function parseCDOC(url,contentString){
     }
 
 
+    const copyInfoEls = rootElement.getElementsByTagName('copy-info')
+    let copyInfo = null
+    if (copyInfoEls && copyInfoEls.length) {
+        copyInfo = parseCopyInfoFromElement(copyInfoEls[0])
+    }
+
     return {
         url,
         title,
@@ -238,7 +244,7 @@ export async function parseCDOC(url,contentString){
         markers,
         connectedDocsData,
         docType:'c',
-  
+
         lines,
         texts,
         images,
@@ -246,7 +252,8 @@ export async function parseCDOC(url,contentString){
         textViews,
         type:'collage',
         xmlString: contentString,
-        docSubtype:5
+        docSubtype:5,
+        copyInfo
     }
 }
 

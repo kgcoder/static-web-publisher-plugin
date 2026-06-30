@@ -730,7 +730,26 @@ class PopupDocumentManager{
     collageLoadedCallback = async () => {
 
         if (!(g.readingManager.mainCollageViewer != null ? g.readingManager.mainCollageViewer.content : undefined)) return
-        
+
+        const collageContent = g.readingManager.mainCollageViewer.content
+        if (collageContent && collageContent.copyInfo) {
+            const copyInfo = collageContent.copyInfo
+            const currentDocumentCopyButton = document.getElementById("CurrentDocumentCopyButton")
+            currentDocumentCopyButton.style.display = 'flex'
+            if (copyInfo.original) {
+                const titleSpan = document.getElementById("CurrentDocumentTitleSpan0")
+                const optionalTitleSpan = document.getElementById("CurrentDocumentOptionalTitleSpan")
+                optionalTitleSpan.innerText = collageContent.title
+                titleSpan.innerText = copyInfo.original
+                const leftTitleLink = document.getElementById("CurrentDocumentTitleLink")
+                leftTitleLink.href = copyInfo.original
+                leftTitleLink.target = '_blank'
+                leftTitleLink.classList.add('onHoverUnderlineDecoration')
+                leftTitleLink.style.cursor = 'pointer'
+                optionalTitleSpan.style.display = 'block'
+            }
+            g.readingManager.mainDocCopyInfo = copyInfo
+        }
 
 
         const currentDocumentSourceCodeButton = document.getElementById("CurrentDocumentSourceCodeButton")

@@ -70,7 +70,8 @@ export async function loadCollageContentFromFile(xmlString, url, collageId){
             markers,
             mainImage,
             title,
-            connectedDocsData
+            connectedDocsData,
+            copyInfo: data.copyInfo
         }
        
         
