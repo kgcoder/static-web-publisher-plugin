@@ -214,18 +214,18 @@ function stwbpb_sidebar_variants_list_page() {
             <div style="max-width:600px;margin-top:16px;">
                 <?php foreach ($variants as $variant): ?>
                     <?php
-                    $vid      = isset($variant['id'])    ? esc_attr($variant['id'])    : '';
-                    $vtitle   = isset($variant['title']) ? esc_html($variant['title']) : '(untitled)';
+                    $vid      = isset($variant['id'])    ? $variant['id']    : '';
+                    $vtitle   = isset($variant['title']) ? $variant['title'] : '(untitled)';
                     $edit_url = admin_url('admin.php?page=stwbpb-sidebar-variant-edit&variant_id=' . urlencode($vid));
                     ?>
                     <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #e0e0e0;">
-                        <span><?php echo $vtitle; ?></span>
+                        <span><?php echo esc_html($vtitle); ?></span>
                         <div style="display:flex;gap:6px;flex-shrink:0;">
                             <a href="<?php echo esc_url($edit_url); ?>" class="button button-secondary">Edit</a>
                             <form method="post">
                                 <?php wp_nonce_field('stwbpb_sidebar_variant_action'); ?>
                                 <input type="hidden" name="action" value="stwbpb_delete_sidebar_variant" />
-                                <input type="hidden" name="variant_id" value="<?php echo $vid; ?>" />
+                                <input type="hidden" name="variant_id" value="<?php echo esc_attr($vid); ?>" />
                                 <button type="submit" class="button" onclick="return confirm('Delete this sidebar variant?');">Delete</button>
                             </form>
                         </div>
@@ -297,13 +297,13 @@ function stwbpb_sidebar_variant_edit_page() {
                     $d_rc     = $sec_type !== 'recent-comments'  ? ' disabled' : '';
                     $d_links  = $sec_type !== 'links'            ? ' disabled' : '';
                     $d_rp     = $sec_type !== 'recent-posts'     ? ' disabled' : '';
-                    $prefix   = 'stwbpb_variant[sections][' . esc_attr($si) . ']';
+                    $prefix   = 'stwbpb_variant[sections][' . intval($si) . ']';
                     ?>
                     <div class="sidebar-section">
                         <div class="settings-option-div">
                             <label>Section type: </label>
                             <div class="spacerW10"></div>
-                            <select name="<?php echo $prefix; ?>[type]" class="sidebar-section-type">
+                            <select name="<?php echo esc_attr($prefix); ?>[type]" class="sidebar-section-type">
                                 <option value="search" <?php selected($sec_type, 'search'); ?>>Search</option>
                                 <option value="recent-comments" <?php selected($sec_type, 'recent-comments'); ?>>Recent Comments</option>
                                 <option value="links" <?php selected($sec_type, 'links'); ?>>Links</option>
@@ -315,17 +315,17 @@ function stwbpb_sidebar_variant_edit_page() {
                             <div class="settings-option-div">
                                 <label>Search action URL (use %s for the search term): </label>
                                 <div class="spacerW10"></div>
-                                <input class="single-text-input" type="text" name="<?php echo $prefix; ?>[action]" value="<?php echo esc_attr($sec['action'] ?? ''); ?>"<?php echo $d_search; ?> />
+                                <input class="single-text-input" type="text" name="<?php echo esc_attr($prefix); ?>[action]" value="<?php echo esc_attr($sec['action'] ?? ''); ?>"<?php echo esc_attr($d_search); ?> />
                             </div>
                             <div class="settings-option-div">
                                 <label>Placeholder: </label>
                                 <div class="spacerW10"></div>
-                                <input class="single-text-input" type="text" name="<?php echo $prefix; ?>[placeholder]" value="<?php echo esc_attr($sec['placeholder'] ?? ''); ?>"<?php echo $d_search; ?> />
+                                <input class="single-text-input" type="text" name="<?php echo esc_attr($prefix); ?>[placeholder]" value="<?php echo esc_attr($sec['placeholder'] ?? ''); ?>"<?php echo esc_attr($d_search); ?> />
                             </div>
                             <div class="settings-option-div">
                                 <label>Open results in: </label>
                                 <div class="spacerW10"></div>
-                                <select name="<?php echo $prefix; ?>[target]"<?php echo $d_search; ?>>
+                                <select name="<?php echo esc_attr($prefix); ?>[target]"<?php echo esc_attr($d_search); ?>>
                                     <option value="_self" <?php selected($sec['target'] ?? '_self', '_self'); ?>>Same tab</option>
                                     <option value="_blank" <?php selected($sec['target'] ?? '_self', '_blank'); ?>>New tab</option>
                                 </select>
@@ -336,22 +336,22 @@ function stwbpb_sidebar_variant_edit_page() {
                             <div class="settings-option-div">
                                 <label>Title: </label>
                                 <div class="spacerW10"></div>
-                                <input class="single-text-input" type="text" name="<?php echo $prefix; ?>[title]" value="<?php echo esc_attr($sec['title'] ?? ''); ?>"<?php echo $d_rc; ?> />
+                                <input class="single-text-input" type="text" name="<?php echo esc_attr($prefix); ?>[title]" value="<?php echo esc_attr($sec['title'] ?? ''); ?>"<?php echo esc_attr($d_rc); ?> />
                             </div>
                             <div class="settings-option-div">
                                 <label>Max number of comments: </label>
                                 <div class="spacerW10"></div>
-                                <input type="number" min="1" name="<?php echo $prefix; ?>[max]" value="<?php echo esc_attr($sec['max'] ?? 5); ?>"<?php echo $d_rc; ?> />
+                                <input type="number" min="1" name="<?php echo esc_attr($prefix); ?>[max]" value="<?php echo esc_attr($sec['max'] ?? 5); ?>"<?php echo esc_attr($d_rc); ?> />
                             </div>
                             <div class="settings-option-div">
                                 <label>Format (use {author} and {post}): </label>
                                 <div class="spacerW10"></div>
-                                <input class="single-text-input" type="text" name="<?php echo $prefix; ?>[format]" value="<?php echo esc_attr($sec['format'] ?? ''); ?>"<?php echo $d_rc; ?> />
+                                <input class="single-text-input" type="text" name="<?php echo esc_attr($prefix); ?>[format]" value="<?php echo esc_attr($sec['format'] ?? ''); ?>"<?php echo esc_attr($d_rc); ?> />
                             </div>
                             <div class="settings-option-div">
                                 <label>Include excerpt</label>
                                 <div class="spacerW10"></div>
-                                <input class="single-checkbox-input" type="checkbox" name="<?php echo $prefix; ?>[include_excerpt]" value="1" <?php echo !empty($sec['include_excerpt']) ? 'checked' : ''; ?><?php echo $d_rc; ?> />
+                                <input class="single-checkbox-input" type="checkbox" name="<?php echo esc_attr($prefix); ?>[include_excerpt]" value="1" <?php echo !empty($sec['include_excerpt']) ? 'checked' : ''; ?><?php echo esc_attr($d_rc); ?> />
                             </div>
                         </div>
 
@@ -359,26 +359,26 @@ function stwbpb_sidebar_variant_edit_page() {
                             <div class="settings-option-div">
                                 <label>Title: </label>
                                 <div class="spacerW10"></div>
-                                <input class="single-text-input" type="text" name="<?php echo $prefix; ?>[title]" value="<?php echo esc_attr($sec['title'] ?? ''); ?>"<?php echo $d_links; ?> />
+                                <input class="single-text-input" type="text" name="<?php echo esc_attr($prefix); ?>[title]" value="<?php echo esc_attr($sec['title'] ?? ''); ?>"<?php echo esc_attr($d_links); ?> />
                             </div>
                             <div class="sidebar-links">
                                 <?php if (!empty($sec['links'])): foreach ($sec['links'] as $li => $lnk): ?>
                                     <div class="sidebar-link">
                                         <label>Link text: </label>
-                                        <input type="text" name="<?php echo $prefix; ?>[links][<?php echo esc_attr($li); ?>][text]" value="<?php echo esc_attr($lnk['text']); ?>"<?php echo $d_links; ?> />
+                                        <input type="text" name="<?php echo esc_attr($prefix); ?>[links][<?php echo esc_attr($li); ?>][text]" value="<?php echo esc_attr($lnk['text']); ?>"<?php echo esc_attr($d_links); ?> />
                                         <div class="spacerH10"></div>
                                         <label>Link URL: </label>
-                                        <input type="text" name="<?php echo $prefix; ?>[links][<?php echo esc_attr($li); ?>][url]" value="<?php echo esc_url($lnk['url']); ?>"<?php echo $d_links; ?> />
+                                        <input type="text" name="<?php echo esc_attr($prefix); ?>[links][<?php echo esc_attr($li); ?>][url]" value="<?php echo esc_url($lnk['url']); ?>"<?php echo esc_attr($d_links); ?> />
                                         <div class="spacerH10"></div>
                                         <label>Open in: </label>
-                                        <select name="<?php echo $prefix; ?>[links][<?php echo esc_attr($li); ?>][target]"<?php echo $d_links; ?>>
+                                        <select name="<?php echo esc_attr($prefix); ?>[links][<?php echo esc_attr($li); ?>][target]"<?php echo esc_attr($d_links); ?>>
                                             <option value="" <?php selected($lnk['target'] ?? '', ''); ?>>Default</option>
                                             <option value="_self" <?php selected($lnk['target'] ?? '', '_self'); ?>>Same tab</option>
                                             <option value="_blank" <?php selected($lnk['target'] ?? '', '_blank'); ?>>New tab</option>
                                         </select>
                                         <div class="spacerH10"></div>
                                         <label>rel: </label>
-                                        <input type="text" name="<?php echo $prefix; ?>[links][<?php echo esc_attr($li); ?>][rel]" value="<?php echo esc_attr($lnk['rel'] ?? ''); ?>" placeholder="e.g. noopener noreferrer"<?php echo $d_links; ?> />
+                                        <input type="text" name="<?php echo esc_attr($prefix); ?>[links][<?php echo esc_attr($li); ?>][rel]" value="<?php echo esc_attr($lnk['rel'] ?? ''); ?>" placeholder="e.g. noopener noreferrer"<?php echo esc_attr($d_links); ?> />
                                         <div class="spacerH10"></div>
                                         <button type="button" class="remove-sidebar-link">Remove Link</button>
                                     </div>
@@ -391,12 +391,12 @@ function stwbpb_sidebar_variant_edit_page() {
                             <div class="settings-option-div">
                                 <label>Title: </label>
                                 <div class="spacerW10"></div>
-                                <input class="single-text-input" type="text" name="<?php echo $prefix; ?>[title]" value="<?php echo esc_attr($sec['title'] ?? ''); ?>"<?php echo $d_rp; ?> />
+                                <input class="single-text-input" type="text" name="<?php echo esc_attr($prefix); ?>[title]" value="<?php echo esc_attr($sec['title'] ?? ''); ?>"<?php echo esc_attr($d_rp); ?> />
                             </div>
                             <div class="settings-option-div">
                                 <label>Max number of posts: </label>
                                 <div class="spacerW10"></div>
-                                <input type="number" min="1" name="<?php echo $prefix; ?>[max]" value="<?php echo esc_attr($sec['max'] ?? 5); ?>"<?php echo $d_rp; ?> />
+                                <input type="number" min="1" name="<?php echo esc_attr($prefix); ?>[max]" value="<?php echo esc_attr($sec['max'] ?? 5); ?>"<?php echo esc_attr($d_rp); ?> />
                             </div>
                         </div>
 
