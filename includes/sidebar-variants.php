@@ -110,7 +110,7 @@ function stwbpb_handle_sidebar_variant_admin() {
     }
 
     if (!current_user_can('manage_options')) {
-        wp_die(esc_html__('You do not have permission to perform this action.'));
+        wp_die(esc_html__('You do not have permission to perform this action.', 'static-web-publisher'));
     }
 
     check_admin_referer('stwbpb_sidebar_variant_action');

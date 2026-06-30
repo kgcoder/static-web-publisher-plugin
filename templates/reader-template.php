@@ -202,8 +202,9 @@ if (!empty($stwbpb_connections_info)) {
                                 } elseif ($stwbpb_si['type'] === 'search' && !empty($stwbpb_si['action'])) {
                                     $stwbpb_search_url = str_replace('%s', '', $stwbpb_si['action']);
                                     echo '<form action="' . esc_url($stwbpb_search_url) . '" method="get">';
-                                    $stwbpb_placeholder = !empty($stwbpb_si['placeholder']) ? ' placeholder="' . esc_attr($stwbpb_si['placeholder']) . '"' : '';
-                                    echo '<input type="search" name="s"' . $stwbpb_placeholder . '/>';
+                                    echo '<input type="search" name="s"';
+                                    if (!empty($stwbpb_si['placeholder'])) echo ' placeholder="' . esc_attr($stwbpb_si['placeholder']) . '"';
+                                    echo '/>';
                                     echo '<button type="submit">Search</button></form>';
                                 }
                             }
