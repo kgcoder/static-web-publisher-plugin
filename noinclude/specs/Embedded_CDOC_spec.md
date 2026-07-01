@@ -81,9 +81,11 @@ i:769;l:256;h:ff3d6e;e:Vy4=_p|x:42.5;y:118.3;r:0.147
 The CDOC structure inside `source` follows the standalone CDOC format:
 
 * Root element: `<cdoc>`
-* `<metadata>` (optional) — contains `<title>`
+* `<metadata>` (optional) — contains `<title>` and optionally `<republishing-policy>`
 * `<svg>` (required) — the collage image; must have numeric `width` and `height` attributes
 * `<connections>` (optional) — outgoing connections (same format as in HDOC)
+
+The `<metadata>` block may include a `<republishing-policy>` tag with the value `allow` or `do-not-republish`. When absent, republishing is implicitly allowed. See the HDOC specification (section 3.2) for full semantics.
 
 ---
 

@@ -49,6 +49,7 @@ function stwbpb_settings_page() {
         ),
         'page_mode' => 'embedded_hdoc_forced',
         'post_mode' => 'embedded_hdoc_forced',
+        'republishing_policy' => 'implicit_allow',
         'reader_ui_theme' => 'light',
         'show_promotion_button' => false,
         'show_post_nav' => false,
@@ -100,6 +101,16 @@ function stwbpb_settings_page() {
                     <option value="embedded_hdoc" <?php selected($settings['post_mode'], 'embedded_hdoc'); ?>>Embedded HDOC</option>
                     <option value="doc_in_reader" <?php selected($settings['post_mode'], 'doc_in_reader'); ?>>Reader UI</option>
                     <option value="standalone_doc" <?php selected($settings['post_mode'], 'standalone_doc'); ?>>Standalone document</option>
+                </select>
+            </div>
+
+            <div class="settings-option-div">
+                <label>Republishing policy: </label>
+                <div class="spacerW10"></div>
+                <select name="stwbpb_settings[republishing_policy]">
+                    <option value="implicit_allow" <?php selected($settings['republishing_policy'], 'implicit_allow'); ?>>Implicitly allow (no tag)</option>
+                    <option value="explicit_allow" <?php selected($settings['republishing_policy'], 'explicit_allow'); ?>>Explicitly allow</option>
+                    <option value="prohibit" <?php selected($settings['republishing_policy'], 'prohibit'); ?>>Prohibit (do-not-republish)</option>
                 </select>
             </div>
 
@@ -485,6 +496,7 @@ function stwbpb_settings_init() {
         ),
         'page_mode' => 'embedded_hdoc_forced',
         'post_mode' => 'embedded_hdoc_forced',
+        'republishing_policy' => 'implicit_allow',
         'show_post_nav' => false,
         'post_sidebar' => array('sections' => array()),
     ));
@@ -548,6 +560,9 @@ function stwbpb_sanitize_settings($input) {
     $allowed_modes = array('embedded_hdoc_forced', 'embedded_hdoc', 'doc_in_reader', 'standalone_doc');
     $sanitized['page_mode'] = isset($input['page_mode']) && in_array($input['page_mode'], $allowed_modes, true) ? $input['page_mode'] : 'embedded_hdoc_forced';
     $sanitized['post_mode'] = isset($input['post_mode']) && in_array($input['post_mode'], $allowed_modes, true) ? $input['post_mode'] : 'embedded_hdoc_forced';
+
+    $allowed_rep_policies = array('implicit_allow', 'explicit_allow', 'prohibit');
+    $sanitized['republishing_policy'] = isset($input['republishing_policy']) && in_array($input['republishing_policy'], $allowed_rep_policies, true) ? $input['republishing_policy'] : 'implicit_allow';
 
     $allowed_themes = array('light', 'dark', 'sepia');
     $sanitized['reader_ui_theme'] = isset($input['reader_ui_theme']) && in_array($input['reader_ui_theme'], $allowed_themes, true) ? $input['reader_ui_theme'] : 'light';

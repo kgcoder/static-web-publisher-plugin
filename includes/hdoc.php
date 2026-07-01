@@ -101,6 +101,12 @@ function stwbpb_send_hdoc_for_post($post){
         echo '<hdoc>' . PHP_EOL  . PHP_EOL;
         echo '<metadata>' . PHP_EOL;
         echo '<title>' . esc_html( $title ) . '</title>' . PHP_EOL;
+        $rep_policy = stwbpb_get_effective_republishing_policy($post);
+        if ($rep_policy === 'explicit_allow') {
+            echo '<republishing-policy>allow</republishing-policy>' . PHP_EOL;
+        } elseif ($rep_policy === 'prohibit') {
+            echo '<republishing-policy>do-not-republish</republishing-policy>' . PHP_EOL;
+        }
         echo '</metadata>' . PHP_EOL . PHP_EOL;
 
         echo wp_kses($panels_escaped,$panels_allowed_tags) . PHP_EOL . PHP_EOL;

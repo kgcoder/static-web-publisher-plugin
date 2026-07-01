@@ -77,6 +77,7 @@ Example:
   * `date`: Publication date
 * **panels** (optional): Defines top, sidebar, side, and bottom panels for standardized UI (see HDOC panels spec).
 * **connections** (optional): Array of connection objects (see specification at `specs/connections.md`).
+* **republishing-policy** (optional): Republishing policy for the document. Allowed values: `"allow"` or `"do-not-republish"`. When present, the client inserts `<republishing-policy>{value}</republishing-policy>` inside the `<metadata>` block of the reconstructed HDOC XML. When absent, no tag is included (implicitly allowed). See the HDOC specification (section 3.2) for full semantics.
 
 ---
 

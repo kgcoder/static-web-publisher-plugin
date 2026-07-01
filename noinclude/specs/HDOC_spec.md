@@ -85,7 +85,30 @@ The metadata section functions similarly to the `<head>` section in HTML.
 Contains the document’s title in plain text.
 Client software may display this in browser UI, tabs, link previews, etc.
 
-Other metadata fields are not yet defined.
+---
+
+## 3.2 `<republishing-policy>` (optional)
+
+Declares the author’s policy regarding republishing this document.
+
+**Republishing** means copying an existing HDOC or CDOC and hosting it at a new URL — typically to create a stable snapshot so that visible connections to that document never break due to the original being moved or deleted.
+
+```xml
+<republishing-policy>allow</republishing-policy>
+```
+
+or
+
+```xml
+<republishing-policy>do-not-republish</republishing-policy>
+```
+
+Allowed values:
+
+* `allow` — the author explicitly permits republishing.
+* `do-not-republish` — the author explicitly prohibits republishing.
+
+When this tag is **absent**, republishing is **implicitly allowed** by default. Using HDOC or CDOC formats is understood as consent to the republishing mechanism that keeps visible connections stable.
 
 ---
 

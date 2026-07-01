@@ -22,6 +22,12 @@ function stwbpb_build_cdoc_source($post) {
     $out  = '<cdoc>' . PHP_EOL . PHP_EOL;
     $out .= '<metadata>' . PHP_EOL;
     $out .= '<title>' . esc_html($title) . '</title>' . PHP_EOL;
+    $rep_policy = stwbpb_get_effective_republishing_policy($post);
+    if ($rep_policy === 'explicit_allow') {
+        $out .= '<republishing-policy>allow</republishing-policy>' . PHP_EOL;
+    } elseif ($rep_policy === 'prohibit') {
+        $out .= '<republishing-policy>do-not-republish</republishing-policy>' . PHP_EOL;
+    }
     $out .= '</metadata>' . PHP_EOL . PHP_EOL;
     if (!empty($svg)) {
         $out .= $svg . PHP_EOL . PHP_EOL;

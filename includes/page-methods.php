@@ -19,16 +19,17 @@ function stwbpb_custom_post_endpoints_add_meta_box() {
 add_action('add_meta_boxes', 'stwbpb_custom_post_endpoints_add_meta_box');
 
 function stwbpb_custom_post_endpoints_meta_box_callback($post) {
-    $connections_info     = get_post_meta($post->ID, '_static_web_connections_info', true);
-    $mode_value           = get_post_meta($post->ID, '_hdoc_display_mode', true) ?: 'default';
-    $author_display       = get_post_meta($post->ID, '_hdoc_author_name_display', true) ?: 'default';
-    $date_display         = get_post_meta($post->ID, '_hdoc_publish_date_display', true) ?: 'default';
-    $doc_type             = get_post_meta($post->ID, '_doc_type', true) ?: 'HDOC';
-    $condoc_description   = get_post_meta($post->ID, '_condoc_description', true);
-    $condoc_main_url      = get_post_meta($post->ID, '_condoc_main_url', true);
-    $cdoc_svg             = get_post_meta($post->ID, '_cdoc_svg', true);
-    $sidebar_value        = get_post_meta($post->ID, '_stwbpb_sidebar', true) ?: 'default';
-    $sidebar_variants     = stwbpb_sidebar_variants_get_all();
+    $connections_info        = get_post_meta($post->ID, '_static_web_connections_info', true);
+    $mode_value              = get_post_meta($post->ID, '_hdoc_display_mode', true) ?: 'default';
+    $author_display          = get_post_meta($post->ID, '_hdoc_author_name_display', true) ?: 'default';
+    $date_display            = get_post_meta($post->ID, '_hdoc_publish_date_display', true) ?: 'default';
+    $doc_type                = get_post_meta($post->ID, '_doc_type', true) ?: 'HDOC';
+    $condoc_description      = get_post_meta($post->ID, '_condoc_description', true);
+    $condoc_main_url         = get_post_meta($post->ID, '_condoc_main_url', true);
+    $cdoc_svg                = get_post_meta($post->ID, '_cdoc_svg', true);
+    $sidebar_value           = get_post_meta($post->ID, '_stwbpb_sidebar', true) ?: 'default';
+    $republishing_policy     = get_post_meta($post->ID, '_republishing_policy', true) ?: 'default';
+    $sidebar_variants        = stwbpb_sidebar_variants_get_all();
 
     wp_nonce_field('custom_post_endpoints_meta_box_nonce', 'custom_post_endpoints_nonce');
     ?>
@@ -73,6 +74,14 @@ function stwbpb_custom_post_endpoints_meta_box_callback($post) {
         <option value="default" <?php selected($date_display, 'default'); ?>>Default (use global setting)</option>
         <option value="show"    <?php selected($date_display, 'show'); ?>>Show</option>
         <option value="hide"    <?php selected($date_display, 'hide'); ?>>Hide</option>
+    </select>
+    <br><br>
+    <label for="republishing_policy"><strong>Republishing policy:</strong></label><br>
+    <select name="republishing_policy" id="republishing_policy" style="width:100%;margin-top:4px;">
+        <option value="default"        <?php selected($republishing_policy, 'default'); ?>>Default (use global setting)</option>
+        <option value="implicit_allow" <?php selected($republishing_policy, 'implicit_allow'); ?>>Implicitly allow (no tag)</option>
+        <option value="explicit_allow" <?php selected($republishing_policy, 'explicit_allow'); ?>>Explicitly allow</option>
+        <option value="prohibit"       <?php selected($republishing_policy, 'prohibit'); ?>>Prohibit (do-not-republish)</option>
     </select>
     <br><br>
     <label for="stwbpb_sidebar_override"><strong>Sidebar:</strong></label><br>
@@ -184,6 +193,12 @@ function stwbpb_custom_post_endpoints_save_meta_box($post_id) {
         : 'default';
     update_post_meta($post_id, '_stwbpb_sidebar', $sidebar_override);
 
+    $allowed_rep_policies = array('default', 'implicit_allow', 'explicit_allow', 'prohibit');
+    $rep_policy = isset($_POST['republishing_policy']) && in_array($_POST['republishing_policy'], $allowed_rep_policies, true)
+        ? sanitize_text_field(wp_unslash($_POST['republishing_policy']))
+        : 'default';
+    update_post_meta($post_id, '_republishing_policy', $rep_policy);
+
     $allowed_tags = array(
         'doc'  => array('url' => true, 'title' => true, 'hash' => true),
     );
@@ -228,6 +243,15 @@ function stwbpb_get_effective_date_display($post) {
     $settings = get_option('stwbpb_settings', array());
     $key = ($post->post_type === 'page') ? 'page_publish_date' : 'post_publish_date';
     return isset($settings[$key]) ? $settings[$key] : 'show';
+}
+
+function stwbpb_get_effective_republishing_policy($post) {
+    $meta = get_post_meta($post->ID, '_republishing_policy', true);
+    if (!empty($meta) && $meta !== 'default') {
+        return $meta;
+    }
+    $settings = get_option('stwbpb_settings', array());
+    return isset($settings['republishing_policy']) ? $settings['republishing_policy'] : 'implicit_allow';
 }
 
 function stwbpb_get_effective_doc_type($post) {

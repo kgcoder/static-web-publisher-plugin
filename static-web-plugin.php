@@ -391,6 +391,13 @@ function stwbpb_output_xml() {
         $data['forced'] = true;
     }
 
+    $rep_policy = stwbpb_get_effective_republishing_policy($post);
+    if ($rep_policy === 'explicit_allow') {
+        $data['republishing-policy'] = 'allow';
+    } elseif ($rep_policy === 'prohibit') {
+        $data['republishing-policy'] = 'do-not-republish';
+    }
+
     $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     
     // Replace any accidental </script> in JSON strings
