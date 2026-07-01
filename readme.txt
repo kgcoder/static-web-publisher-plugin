@@ -78,6 +78,10 @@ Visitors without any compatible app will see your content normally on Embedded H
 
 The Reader's Web is inspired by Ted Nelson's long-standing vision of hypertext. You can read more about the project at [reinventingtheweb.com](https://reinventingtheweb.com).
 
+= Source Code =
+
+Development happens on [GitHub](https://github.com/kgcoder/static-web-publisher-plugin). Bug reports and pull requests are welcome.
+
 
 == Installation ==
 
