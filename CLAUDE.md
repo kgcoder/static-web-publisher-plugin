@@ -53,12 +53,11 @@ The main document is shown on the left; any connected documents open in tabs on 
 
 Spec files live in [noinclude/specs/](noinclude/specs/). Currently present:
 - [noinclude/specs/HDOC_spec.md](noinclude/specs/HDOC_spec.md) — full HDOC format specification
+- [noinclude/specs/CDOC_spec.md](noinclude/specs/CDOC_spec.md) — full CDOC format specification
 - [noinclude/specs/Embedded_HDOC_spec.md](noinclude/specs/Embedded_HDOC_spec.md) — Embedded HDOC specification
 - [noinclude/specs/Embedded_CDOC_spec.md](noinclude/specs/Embedded_CDOC_spec.md) — Embedded CDOC specification
 - [noinclude/specs/Embedded_CONDOC_spec.md](noinclude/specs/Embedded_CONDOC_spec.md) — Embedded CONDOC specification
 - [noinclude/specs/Static_comments_spec.md](noinclude/specs/Static_comments_spec.md) — comments JSON format
-
-Not all document types have specs in this repo yet.
 
 ---
 
@@ -82,7 +81,7 @@ The reader JS is authored as ES modules. In production (`WP_DEBUG` false) a mini
 
 | File | Purpose |
 |------|---------|
-| [includes/page-methods.php](includes/page-methods.php) | Per-post meta box (doc type, display mode, author/date visibility, connections, CDOC SVG, CONDOC URL). Helper functions: `stwbpb_get_effective_display_mode()`, `stwbpb_get_effective_doc_type()`, `stwbpb_get_doc_effective_display_mode()`. |
+| [includes/page-methods.php](includes/page-methods.php) | Per-post meta box (doc type, display mode, author/date visibility, republishing policy, connections, CDOC SVG, CONDOC URL). Helper functions: `stwbpb_get_effective_display_mode()`, `stwbpb_get_effective_doc_type()`, `stwbpb_get_doc_effective_display_mode()`, `stwbpb_get_effective_republishing_policy()`. |
 | [includes/hdoc.php](includes/hdoc.php) | `stwbpb_send_hdoc_for_post()` — builds and outputs a standalone HDOC. |
 | [includes/cdoc.php](includes/cdoc.php) | `stwbpb_build_cdoc_source()` / `stwbpb_send_cdoc_for_post()` — builds CDOC output. |
 | [includes/condoc.php](includes/condoc.php) | `stwbpb_build_condoc_source()` / `stwbpb_send_condoc_for_post()` — builds CONDOC output. |
@@ -151,6 +150,7 @@ All rules use priority `top`. After adding or changing rewrite rules, go to **Se
 | `_hdoc_display_mode` | Per-post display mode override (`default`, `embedded_hdoc`, `embedded_hdoc_forced`, `doc_in_reader`, `standalone_doc`) |
 | `_hdoc_author_name_display` | `default`, `show`, or `hide` |
 | `_hdoc_publish_date_display` | `default`, `show`, or `hide` |
+| `_republishing_policy` | Per-post republishing policy override (`default`, `implicit_allow`, `explicit_allow`, `prohibit`). Resolved by `stwbpb_get_effective_republishing_policy()`. Not applied to CONDOC posts. |
 | `_static_web_connections_info` | Raw XML fragment of `<doc>` elements listing outgoing connections |
 | `_cdoc_svg` | Raw SVG markup for CDOC posts |
 | `_condoc_description` | Description text for CONDOC posts |
@@ -162,7 +162,9 @@ All rules use priority `top`. After adding or changing rewrite rules, go to **Se
 
 Stored as a PHP array in the `stwbpb_settings` WordPress option.
 
-Key fields: `page_mode`, `post_mode`, `page_author_name`, `page_publish_date`, `post_author_name`, `post_publish_date`, `removal_selectors`, `side_panel_on_the_left`, `comments_title`, `no_comments_message`, `reply_button_label`, `leave_comment_label`, `top_panel` (main_link, main_title, logo_url, links[]), `bottom_panel` (bottom_message, sections[]), `show_promotion_button`.
+Key fields: `page_mode`, `post_mode`, `republishing_policy` (`implicit_allow` / `explicit_allow` / `prohibit`; default `implicit_allow`), `page_author_name`, `page_publish_date`, `post_author_name`, `post_publish_date`, `removal_selectors`, `side_panel_on_the_left`, `comments_title`, `no_comments_message`, `reply_button_label`, `leave_comment_label`, `top_panel` (main_link, main_title, logo_url, links[]), `bottom_panel` (bottom_message, sections[]), `show_promotion_button`.
+
+The `republishing_policy` setting controls whether a `<republishing-policy>` tag is included inside `<metadata>` in HDOC and CDOC output. `implicit_allow` omits the tag entirely (default Reader's Web behaviour). Per-post overrides are stored in `_republishing_policy` meta. CONDOC posts never receive the tag regardless of settings. For embedded HDOCs the value is passed as `"republishing-policy"` in the `#hdoc-data` JSON and injected into the reconstructed XML by `EmbHDOCParser.js`.
 
 ---
 
