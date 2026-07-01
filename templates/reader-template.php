@@ -147,14 +147,14 @@ if (!empty($stwbpb_connections_info)) {
                 <div id="CurrentDocumentLeftPanel" class="DocumentSidePanel"></div>
 
                 <div id="CurrentDocument" class="DocumentColumn">
-                    <div id="CurrentDocumentTopPanel" class="DocumentTopPanel">
+                    <div id="CurrentDocumentTopPanel" class="DocumentTopPanel"<?php if ($stwbpb_doc_type !== 'HDOC') echo ' style="display:none"'; ?>>
                         <a id="CurrentDocumentTopPanelLogoLink" class="TopPanelLogoLink" href="<?php echo esc_url($stwbpb_seo_panels['logo_href'] ?? $stwbpb_seo_panels['site_name_href'] ?? '#'); ?>">
                             <img id="CurrentDocumentTopPanelLogo" src="<?php echo esc_url($stwbpb_seo_panels['logo_src'] ?? ''); ?>" width="150px" height="50px"<?php if (empty($stwbpb_seo_panels['logo_src'])) echo ' style="display:none"'; ?>/>
                             <span id="CurrentDocumentTopPanelTitle" class="TopPanelTitle"<?php if (empty($stwbpb_seo_panels['site_name'])) echo ' style="display:none"'; ?>><?php echo esc_html($stwbpb_seo_panels['site_name'] ?? $title); ?></span>
                         </a>
                         <div class="spacer"></div>
                         <div id="CurrentDocumentTopPanelOptionsRow" class="DocumentTopPanelOptionsRow"><?php
-                        if (!empty($stwbpb_seo_panels['top_links'])) {
+                        if ($stwbpb_doc_type === 'HDOC' && !empty($stwbpb_seo_panels['top_links'])) {
                             foreach ($stwbpb_seo_panels['top_links'] as $stwbpb_tl) {
                                 echo '<a href="' . esc_url($stwbpb_tl['href']) . '">' . esc_html($stwbpb_tl['text']) . '</a>';
                             }
@@ -182,8 +182,8 @@ if (!empty($stwbpb_connections_info)) {
 
                         </div>
 
-                        <div id="CurrentDocumentSidebar" class="SideBar"><?php
-                        if (!empty($stwbpb_seo_panels['sidebar'])) {
+                        <div id="CurrentDocumentSidebar" class="SideBar"<?php if ($stwbpb_doc_type !== 'HDOC') echo ' style="display:none"'; ?>><?php
+                        if ($stwbpb_doc_type === 'HDOC' && !empty($stwbpb_seo_panels['sidebar'])) {
                             foreach ($stwbpb_seo_panels['sidebar']['items'] as $stwbpb_si) {
                                 if ($stwbpb_si['type'] === 'links' && !empty($stwbpb_si['links'])) {
                                     if (!empty($stwbpb_si['title'])) echo '<h3>' . esc_html($stwbpb_si['title']) . '</h3>';
@@ -215,8 +215,8 @@ if (!empty($stwbpb_connections_info)) {
 
                     <div id="CurrentDocumentBottomBar" class="BottomBar"></div>
 
-                    <div id="CurrentDocumentPostNavBar" class="PostNavBar"><?php
-                    if (!empty($stwbpb_seo_panels['post_nav'])) {
+                    <div id="CurrentDocumentPostNavBar" class="PostNavBar"<?php if ($stwbpb_doc_type !== 'HDOC') echo ' style="display:none"'; ?>><?php
+                    if ($stwbpb_doc_type === 'HDOC' && !empty($stwbpb_seo_panels['post_nav'])) {
                         $stwbpb_pn = $stwbpb_seo_panels['post_nav'];
                         echo '<div class="PostNavBarSide" style="justify-content:flex-start">';
                         if (!empty($stwbpb_pn['prev'])) {
@@ -231,9 +231,9 @@ if (!empty($stwbpb_connections_info)) {
                     }
                     ?></div>
 
-                    <div id="CurrentDocumentBottomPanel" class="DocumentBottomPanel">
+                    <div id="CurrentDocumentBottomPanel" class="DocumentBottomPanel"<?php if ($stwbpb_doc_type !== 'HDOC') echo ' style="display:none"'; ?>>
                         <div id="CurrentDocumentBottomPanelRow" class="DocumentBottomPanelRow"><?php
-                        if (!empty($stwbpb_seo_panels['bottom_sections'])) {
+                        if ($stwbpb_doc_type === 'HDOC' && !empty($stwbpb_seo_panels['bottom_sections'])) {
                             foreach ($stwbpb_seo_panels['bottom_sections'] as $stwbpb_bs) {
                                 echo '<section';
                                 if (!empty($stwbpb_bs['title'])) {
