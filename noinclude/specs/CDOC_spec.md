@@ -56,7 +56,20 @@ Example:
 
 * `<metadata>` **must appear before** the `<svg>` section.
 * `<title>` is optional but recommended.
-* Additional metadata fields may be defined in future versions of the spec (e.g., authorship, timestamps, tags). At present, a title is the only defined field.
+* Additional metadata fields may be defined in future versions of the spec (e.g., authorship, timestamps, tags).
+
+### 1.1 `<republishing-policy>` (optional)
+
+Declares the author's policy regarding republishing this document. Has the same semantics as in HDOC (see HDOC specification, section 3.2).
+
+```xml
+<metadata>
+  <title>Title of my post</title>
+  <republishing-policy>allow</republishing-policy>
+</metadata>
+```
+
+Allowed values: `allow` or `do-not-republish`. When absent, republishing is implicitly allowed.
 
 ---
 

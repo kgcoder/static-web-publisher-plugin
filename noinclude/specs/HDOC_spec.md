@@ -91,7 +91,7 @@ Client software may display this in browser UI, tabs, link previews, etc.
 
 Declares the author’s policy regarding republishing this document.
 
-**Republishing** means copying an existing HDOC or CDOC and hosting it at a new URL — typically to create a stable snapshot so that visible connections to that document never break due to the original being moved or deleted.
+**Republishing** means copying an existing HDOC or CDOC and hosting it at a new URL — typically to create a stable snapshot so that visible connections to that document never break due to the original being updated, moved or deleted.
 
 ```xml
 <republishing-policy>allow</republishing-policy>
