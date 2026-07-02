@@ -8,12 +8,16 @@ body {
     height: 100%;
     width: 100%;
     flex: 1;
-    padding: 0;
-    margin: 0;
+    padding: 0 !important;
+    margin: 0 !important;
     position: fixed;
+}
 
-    
-    
+body::before,
+body::after {
+    display: none !important;
+    content: none !important;
+    height: 0 !important;
 }
 
 
@@ -45,6 +49,21 @@ body {
 
     font-family: Arial, Helvetica, sans-serif !important;
     line-height: 1.55;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.admin-bar #ui-root {
+    top: 32px;
+}
+
+@media screen and (max-width: 782px) {
+    .admin-bar #ui-root {
+        top: 46px;
+    }
 }
 
 #MainContainer {
