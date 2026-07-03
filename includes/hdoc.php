@@ -46,6 +46,7 @@ function stwbpb_send_hdoc_for_post($post){
         $htmlContent = preg_replace_callback($embedPattern, $callback, $htmlContent);
 
         $htmlContent = stwbpb_strip_wp_tags($htmlContent);
+        $htmlContent = do_shortcode($htmlContent);
 
 
         //$finalContent = '<h1>' . $title . "</h1>" .  $htmlContent;

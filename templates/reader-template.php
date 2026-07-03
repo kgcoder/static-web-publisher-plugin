@@ -48,6 +48,7 @@ $stwbpb_html_content = preg_replace_callback($stwbpb_embed_pattern, function ($m
 }, $stwbpb_html_content);
 
 $stwbpb_html_content = stwbpb_strip_wp_tags($stwbpb_html_content);
+$stwbpb_html_content = do_shortcode($stwbpb_html_content);
 
 $stwbpb_allowed_tags = wp_kses_allowed_html('post');
 $stwbpb_allowed_tags['iframe'] = [
