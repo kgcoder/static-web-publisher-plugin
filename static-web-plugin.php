@@ -155,6 +155,9 @@ function stwbpb_custom_post_endpoints_template_redirect() {
 
     if (is_singular(['post', 'page'])) {
         global $post;
+        if ($post && !stwbpb_request_matches_post($post)) {
+            $post = null;
+        }
         if ($post && stwbpb_get_doc_effective_display_mode($post) === 'standalone_doc') {
             $type = stwbpb_get_effective_doc_type($post);
             if ($type === 'CDOC') {
@@ -228,11 +231,19 @@ add_action('save_post', function($post_id) {
 
 add_filter('the_content', function($content) {
     if (is_admin()) return $content;
+    // the_content only fires from within a template that WordPress's own
+    // pipeline loaded; if template_include never ran (another plugin
+    // hijacked template_redirect) this filter shouldn't apply either, but
+    // guard defensively in case some theme calls the_content() directly.
+    if (empty($GLOBALS['stwbpb_core_template_loaded'])) return $content;
     $settings = get_option('stwbpb_settings', array());
 
     // Only for single post/page
     if (is_singular(['post', 'page'])) {
-        return '<div id="hdoc-content">' . $content . '</div>';
+        global $post;
+        if ($post && stwbpb_request_matches_post($post)) {
+            return '<div id="hdoc-content">' . $content . '</div>';
+        }
     }
 
     return $content;
@@ -244,13 +255,21 @@ add_filter('the_content', function($content) {
 
 add_filter('template_include', function ($template) {
 
+    // Marks that WordPress's normal template-loading pipeline actually ran
+    // for this request. Other hooks below (wp_enqueue_scripts, wp_footer,
+    // the_content) rely on this flag: if another plugin short-circuits
+    // template_redirect with its own include+exit, this filter never fires,
+    // so those hooks know not to inject HDOC output into that response even
+    // though $post may still point at a real, matching post.
+    $GLOBALS['stwbpb_core_template_loaded'] = true;
+
     if (is_admin()) return $template;
     if (!is_singular(['post', 'page'])) return $template;
 
     $settings = get_option('stwbpb_settings', []);
 
     global $post;
-    if (!$post) return $template;
+    if (!$post || !stwbpb_request_matches_post($post)) return $template;
 
     $mode = stwbpb_get_doc_effective_display_mode($post);
     if ($mode === 'doc_in_reader') {
@@ -263,9 +282,10 @@ add_filter('template_include', function ($template) {
 
 
 add_action('wp_enqueue_scripts', function () {
+    if (empty($GLOBALS['stwbpb_core_template_loaded'])) return;
     if (is_admin() || !is_singular(['post', 'page'])) return;
     global $post;
-    if (!$post) return;
+    if (!$post || !stwbpb_request_matches_post($post)) return;
     if (stwbpb_get_doc_effective_display_mode($post) !== 'doc_in_reader') return;
 
     $reader_url  = plugins_url('reader/', __FILE__);
@@ -306,9 +326,10 @@ add_filter('script_loader_tag', function ($tag, $handle) {
 
 add_action('wp_footer', 'stwbpb_output_xml', 9999);
 function stwbpb_output_xml() {
+    if (empty($GLOBALS['stwbpb_core_template_loaded'])) return;
     if (!is_singular()) return;
     global $post;
-    if (!$post) return;
+    if (!$post || !stwbpb_request_matches_post($post)) return;
 
 
 

@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', onLoad);
 async function onLoad() {
 
     const mainContainer = document.getElementById("AllDocumentsContainer");
+    if(!mainContainer)return
     const mainContainerRect = mainContainer.getBoundingClientRect();
     g.adminBarHeight = mainContainerRect.top
 
