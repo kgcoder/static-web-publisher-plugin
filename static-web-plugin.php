@@ -3,7 +3,7 @@
 /*
 Plugin Name: Static Web Publisher
 Description: Publishes your posts and pages on the Static Web
-Version: 5.1.2
+Version: 5.1.3
 Author: Karen Grigorian
 Author URI: https://github.com/kgcoder
 License: GPLv2 or later

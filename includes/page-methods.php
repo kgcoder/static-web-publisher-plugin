@@ -294,11 +294,13 @@ function stwbpb_request_matches_post($post) {
     // ?name=slug, ?pagename=slug) is always valid in WordPress regardless of
     // permalink structure and won't match the pretty permalink path below.
     foreach (array('p', 'page_id', 'attachment_id') as $id_var) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only comparison against the current query, not form processing.
         if (isset($_GET[$id_var]) && (int) $_GET[$id_var] === (int) $post->ID) {
             return true;
         }
     }
     foreach (array('name', 'pagename') as $slug_var) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only comparison against the current query, not form processing.
         if (isset($_GET[$slug_var]) && sanitize_title(wp_unslash($_GET[$slug_var])) === $post->post_name) {
             return true;
         }
@@ -309,7 +311,7 @@ function stwbpb_request_matches_post($post) {
         return false;
     }
 
-    $request_path   = isset($_SERVER['REQUEST_URI']) ? wp_parse_url(wp_unslash($_SERVER['REQUEST_URI']), PHP_URL_PATH) : '';
+    $request_path   = isset($_SERVER['REQUEST_URI']) ? wp_parse_url(sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI'])), PHP_URL_PATH) : '';
     $permalink_path = wp_parse_url($permalink, PHP_URL_PATH);
 
     return untrailingslashit((string) $request_path) === untrailingslashit((string) $permalink_path);
