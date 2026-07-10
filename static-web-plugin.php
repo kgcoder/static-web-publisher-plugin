@@ -190,7 +190,21 @@ function stwbpb_custom_post_endpoints_template_redirect() {
                     $parent->removeChild($contentTemp);
                 }
 
-                return $dom->saveHTML();
+                if (!$dom->documentElement) {
+                    return $html;
+                }
+
+                // Serialize node-by-node: the whole-document saveHTML() form
+                // entity-encodes every non-ASCII character (’ becomes &rsquo;),
+                // which corrupts the #hdoc-data JSON, and it also emits the
+                // xml-encoding parser hack from loadHTML() into the page.
+                $out = '';
+                if ($dom->doctype) {
+                    $out .= '<!DOCTYPE ' . $dom->doctype->name . '>' . "\n";
+                }
+                $out .= $dom->saveHTML($dom->documentElement);
+
+                return $out;
             });
         }
     }
@@ -344,7 +358,7 @@ function stwbpb_output_xml() {
     $removal_selectors = isset($settings['removal_selectors']) ? $settings['removal_selectors'] : '';
 
     $header = [
-        'h1'  => get_the_title($post),
+        'h1'  => html_entity_decode(get_the_title($post), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
     ];
 
     if (stwbpb_get_effective_author_display($post) === 'show') {
@@ -431,6 +445,16 @@ function stwbpb_output_xml() {
     echo PHP_EOL .'</script>';
 
     // exit;
+}
+
+
+function stwbpb_esc_xml($text) {
+    // Decode any HTML entities (named or numeric) to real UTF-8 characters,
+    // then escape the five XML-special characters. XML defines no named
+    // entities beyond lt/gt/amp/quot/apos, so esc_html() output that
+    // preserves e.g. &rsquo; or &hellip; is not valid XML.
+    $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    return htmlspecialchars($text, ENT_QUOTES | ENT_XML1, 'UTF-8');
 }
 
 
