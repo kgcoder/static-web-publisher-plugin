@@ -101,7 +101,7 @@ function stwbpb_send_hdoc_for_post($post){
         header('Content-Type: text/plain');
         echo '<hdoc>' . PHP_EOL  . PHP_EOL;
         echo '<metadata>' . PHP_EOL;
-        echo '<title>' . stwbpb_esc_xml( $title ) . '</title>' . PHP_EOL;
+        echo '<title>' . esc_html( stwbpb_decode_entities( $title ) ) . '</title>' . PHP_EOL;
         $rep_policy = stwbpb_get_effective_republishing_policy($post);
         if ($rep_policy === 'explicit_allow') {
             echo '<republishing-policy>allow</republishing-policy>' . PHP_EOL;
@@ -113,15 +113,15 @@ function stwbpb_send_hdoc_for_post($post){
         echo wp_kses($panels_escaped,$panels_allowed_tags) . PHP_EOL . PHP_EOL;
 
         echo '<header>' . PHP_EOL;
-        echo '<h1>' . stwbpb_esc_xml($title) . '</h1>' . PHP_EOL;
+        echo '<h1>' . esc_html(stwbpb_decode_entities($title)) . '</h1>' . PHP_EOL;
         if (stwbpb_get_effective_author_display($post) === 'show') {
             $author_id   = get_post_field('post_author', $post->ID);
             $author_name = get_the_author_meta('display_name', $author_id);
-            echo '<author>' . stwbpb_esc_xml($author_name) . '</author>' . PHP_EOL;
+            echo '<author>' . esc_html(stwbpb_decode_entities($author_name)) . '</author>' . PHP_EOL;
         }
         if (stwbpb_get_effective_date_display($post) === 'show') {
             $date = get_the_date(get_option('date_format'), $post->ID);
-            echo '<date>' . stwbpb_esc_xml($date) . '</date>' . PHP_EOL;
+            echo '<date>' . esc_html(stwbpb_decode_entities($date)) . '</date>' . PHP_EOL;
         }
         echo '</header>' . PHP_EOL . PHP_EOL;
 

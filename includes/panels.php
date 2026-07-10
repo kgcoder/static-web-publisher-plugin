@@ -99,7 +99,7 @@ if(!empty($site_name)){
     if(!empty($main_link) && empty($logo_url)){ 
         echo ' href="' . esc_url($main_link) . '"';
     }
-    echo '>' . stwbpb_esc_xml($site_name) . '</site-name>';
+    echo '>' . esc_html(stwbpb_decode_entities($site_name)) . '</site-name>';
 }
 
 ?>
@@ -108,7 +108,7 @@ if (!empty($top_panel['links'])) {
     foreach ($top_panel['links'] as $index => $link) {
         $link_to_use = $link['url'];
 
-        echo '<a href="' . esc_url($link_to_use) . '">' . stwbpb_esc_xml($link['text']) . '</a>' . PHP_EOL; 
+        echo '<a href="' . esc_url($link_to_use) . '">' . esc_html(stwbpb_decode_entities($link['text'])) . '</a>' . PHP_EOL; 
     }
 }
 ?>
@@ -118,8 +118,8 @@ if (!empty($top_panel['links'])) {
 ?>
 <?php if ($should_show_post_nav): ?>
 <post-nav>
-<?php if (!empty($prev_post)): ?><prev href="<?php echo esc_url(get_permalink($prev_post->ID)); ?>"><?php echo stwbpb_esc_xml($prev_post->post_title); ?></prev>
-<?php endif; if (!empty($next_post)): ?><next href="<?php echo esc_url(get_permalink($next_post->ID)); ?>"><?php echo stwbpb_esc_xml($next_post->post_title); ?></next>
+<?php if (!empty($prev_post)): ?><prev href="<?php echo esc_url(get_permalink($prev_post->ID)); ?>"><?php echo esc_html(stwbpb_decode_entities($prev_post->post_title)); ?></prev>
+<?php endif; if (!empty($next_post)): ?><next href="<?php echo esc_url(get_permalink($next_post->ID)); ?>"><?php echo esc_html(stwbpb_decode_entities($next_post->post_title)); ?></next>
 <?php endif; ?>
 </post-nav>
 <?php endif; ?>
@@ -131,22 +131,22 @@ foreach ($sidebar_sections as $sec) {
     if ($sec_type === 'search') {
         $search_action = $sec['action'] ?? '';
         if (!empty($search_action)) {
-            echo '<search action="' . stwbpb_esc_xml($search_action) . '"';
-            if (!empty($sec['placeholder'])) echo ' placeholder="' . stwbpb_esc_xml($sec['placeholder']) . '"';
-            if (!empty($sec['target']))      echo ' target="' . stwbpb_esc_xml($sec['target']) . '"';
+            echo '<search action="' . esc_attr(stwbpb_decode_entities($search_action)) . '"';
+            if (!empty($sec['placeholder'])) echo ' placeholder="' . esc_attr(stwbpb_decode_entities($sec['placeholder'])) . '"';
+            if (!empty($sec['target']))      echo ' target="' . esc_attr(stwbpb_decode_entities($sec['target'])) . '"';
             echo '/>' . PHP_EOL;
         }
     } elseif ($sec_type === 'links') {
         if (!empty($sec['links'])) {
             echo '<links';
-            if (!empty($sec['title'])) echo ' title="' . stwbpb_esc_xml($sec['title']) . '"';
+            if (!empty($sec['title'])) echo ' title="' . esc_attr(stwbpb_decode_entities($sec['title'])) . '"';
             echo '>' . PHP_EOL;
             foreach ($sec['links'] as $lnk) {
                 if (!empty($lnk['url'])) {
                     echo '<a href="' . esc_url($lnk['url']) . '"';
-                    if (!empty($lnk['target'])) echo ' target="' . stwbpb_esc_xml($lnk['target']) . '"';
-                    if (!empty($lnk['rel']))    echo ' rel="' . stwbpb_esc_xml($lnk['rel']) . '"';
-                    echo '>' . stwbpb_esc_xml($lnk['text']) . '</a>' . PHP_EOL;
+                    if (!empty($lnk['target'])) echo ' target="' . esc_attr(stwbpb_decode_entities($lnk['target'])) . '"';
+                    if (!empty($lnk['rel']))    echo ' rel="' . esc_attr(stwbpb_decode_entities($lnk['rel'])) . '"';
+                    echo '>' . esc_html(stwbpb_decode_entities($lnk['text'])) . '</a>' . PHP_EOL;
                 }
             }
             echo '</links>' . PHP_EOL;
@@ -155,10 +155,10 @@ foreach ($sidebar_sections as $sec) {
         $recent_posts = get_posts(array('numberposts' => (int) ($sec['max'] ?? 5), 'post_type' => 'post', 'post_status' => 'publish'));
         if (!empty($recent_posts)) {
             echo '<links';
-            if (!empty($sec['title'])) echo ' title="' . stwbpb_esc_xml($sec['title']) . '"';
+            if (!empty($sec['title'])) echo ' title="' . esc_attr(stwbpb_decode_entities($sec['title'])) . '"';
             echo '>' . PHP_EOL;
             foreach ($recent_posts as $rp) {
-                echo '<a href="' . esc_url(get_permalink($rp->ID)) . '">' . stwbpb_esc_xml($rp->post_title) . '</a>' . PHP_EOL;
+                echo '<a href="' . esc_url(get_permalink($rp->ID)) . '">' . esc_html(stwbpb_decode_entities($rp->post_title)) . '</a>' . PHP_EOL;
             }
             echo '</links>' . PHP_EOL;
         }
@@ -166,18 +166,18 @@ foreach ($sidebar_sections as $sec) {
         $recent_comments = get_comments(array('number' => (int) ($sec['max'] ?? 5), 'status' => 'approve', 'type' => 'comment'));
         if (!empty($recent_comments)) {
             echo '<recent-comments';
-            if (!empty($sec['title']))  echo ' title="' . stwbpb_esc_xml($sec['title']) . '"';
-            if (!empty($sec['format'])) echo ' format="' . stwbpb_esc_xml($sec['format']) . '"';
+            if (!empty($sec['title']))  echo ' title="' . esc_attr(stwbpb_decode_entities($sec['title'])) . '"';
+            if (!empty($sec['format'])) echo ' format="' . esc_attr(stwbpb_decode_entities($sec['format'])) . '"';
             echo '>' . PHP_EOL;
             $include_excerpt = !empty($sec['include_excerpt']);
             foreach ($recent_comments as $rc) {
                 $rc_post = get_post($rc->comment_post_ID);
                 if (!$rc_post) continue;
                 echo '<comment post-href="' . esc_url(get_permalink($rc_post->ID)) . '"';
-                echo ' post-title="' . stwbpb_esc_xml($rc_post->post_title) . '"';
-                echo ' author="' . stwbpb_esc_xml($rc->comment_author) . '"';
+                echo ' post-title="' . esc_attr(stwbpb_decode_entities($rc_post->post_title)) . '"';
+                echo ' author="' . esc_attr(stwbpb_decode_entities($rc->comment_author)) . '"';
                 if ($include_excerpt && !empty($rc->comment_content)) {
-                    echo ' excerpt="' . stwbpb_esc_xml(wp_trim_words($rc->comment_content, 15, '…')) . '"';
+                    echo ' excerpt="' . esc_attr(stwbpb_decode_entities(wp_trim_words($rc->comment_content, 15, '…'))) . '"';
                 }
                 echo '/>' . PHP_EOL;
             }
@@ -192,16 +192,16 @@ foreach ($sidebar_sections as $sec) {
 <?php
 $commenting_open = $post->comment_status === 'open';
 $comments_attrs = '';
-$comments_attrs .= !empty($comments_title)      ? ' title="'              . stwbpb_esc_xml($comments_title)      . '"' : '';
-$comments_attrs .= !empty($no_comments_message) ? ' empty="'              . stwbpb_esc_xml($no_comments_message) . '"' : '';
+$comments_attrs .= !empty($comments_title)      ? ' title="'              . esc_attr(stwbpb_decode_entities($comments_title))      . '"' : '';
+$comments_attrs .= !empty($no_comments_message) ? ' empty="'              . esc_attr(stwbpb_decode_entities($no_comments_message)) . '"' : '';
 if ($commenting_open) {
     $leave_comment_url = home_url("/sw-comment-form/?post={$post->ID}");
     $comments_attrs .= ' leave-comment-url="'                             . esc_url($leave_comment_url)     . '"';
-    $comments_attrs .= !empty($reply_button_label)  ? ' reply-label="'         . stwbpb_esc_xml($reply_button_label)  . '"' : '';
-    $comments_attrs .= !empty($leave_comment_label) ? ' leave-comment-label="' . stwbpb_esc_xml($leave_comment_label) . '"' : '';
+    $comments_attrs .= !empty($reply_button_label)  ? ' reply-label="'         . esc_attr(stwbpb_decode_entities($reply_button_label))  . '"' : '';
+    $comments_attrs .= !empty($leave_comment_label) ? ' leave-comment-label="' . esc_attr(stwbpb_decode_entities($leave_comment_label)) . '"' : '';
 }
 ?>
-<side<?php if(!empty($side_panel_left)){ echo ' left="true"'; } ?>><?php echo '<comments' . $comments_attrs . '>' . esc_url($comments_link) . '</comments>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $comments_attrs is built entirely from stwbpb_esc_xml/esc_url calls above. ?></side>
+<side<?php if(!empty($side_panel_left)){ echo ' left="true"'; } ?>><?php echo '<comments' . $comments_attrs . '>' . esc_url($comments_link) . '</comments>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $comments_attrs is built entirely from esc_attr/esc_url calls above. ?></side>
 <?php endif; ?>
 <?php if($should_show_bottom_panel){ ?>
 <bottom>
@@ -212,7 +212,7 @@ if (!empty($bottom_panel['sections'])) {
 ?>
 <section<?php 
 if(!empty($section_title)){
-    echo ' title="' . stwbpb_esc_xml($section_title) . '"';
+    echo ' title="' . esc_attr(stwbpb_decode_entities($section_title)) . '"';
 }
 ?>>
 <?php
@@ -220,7 +220,7 @@ if (!empty($section['links'])) {
     foreach ($section['links'] as $index => $link) {
         $link_to_use = $link['url'];
         
-        echo '<a href="' . esc_url($link_to_use) . '">' . stwbpb_esc_xml($link['text']) . '</a>' . PHP_EOL; 
+        echo '<a href="' . esc_url($link_to_use) . '">' . esc_html(stwbpb_decode_entities($link['text'])) . '</a>' . PHP_EOL; 
     }
 }
 ?>
@@ -230,7 +230,7 @@ if (!empty($section['links'])) {
 }
 ?>
 <?php if(!empty($bottom_message)){
-    echo '<bottom-message>' . stwbpb_esc_xml($bottom_message) . '</bottom-message>';
+    echo '<bottom-message>' . esc_html(stwbpb_decode_entities($bottom_message)) . '</bottom-message>';
 }
 ?>
 </bottom>

@@ -358,7 +358,7 @@ function stwbpb_output_xml() {
     $removal_selectors = isset($settings['removal_selectors']) ? $settings['removal_selectors'] : '';
 
     $header = [
-        'h1'  => html_entity_decode(get_the_title($post), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+        'h1'  => stwbpb_decode_entities(get_the_title($post)),
     ];
 
     if (stwbpb_get_effective_author_display($post) === 'show') {
@@ -448,13 +448,13 @@ function stwbpb_output_xml() {
 }
 
 
-function stwbpb_esc_xml($text) {
-    // Decode any HTML entities (named or numeric) to real UTF-8 characters,
-    // then escape the five XML-special characters. XML defines no named
-    // entities beyond lt/gt/amp/quot/apos, so esc_html() output that
-    // preserves e.g. &rsquo; or &hellip; is not valid XML.
-    $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-    return htmlspecialchars($text, ENT_QUOTES | ENT_XML1, 'UTF-8');
+function stwbpb_decode_entities($text) {
+    // Decode any HTML entities (named or numeric) to real UTF-8 characters.
+    // Used before esc_html()/esc_attr() in XML-building code: XML defines no
+    // named entities beyond lt/gt/amp/quot/apos, and the core escapers
+    // preserve pre-existing entities like &rsquo; or &hellip;, which would
+    // make the XML invalid. After decoding, their output is XML-safe.
+    return html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
 }
 
 

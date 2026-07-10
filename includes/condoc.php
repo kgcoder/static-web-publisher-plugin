@@ -21,9 +21,9 @@ function stwbpb_build_condoc_source($post) {
     }
 
     $out  = '<condoc>' . PHP_EOL . PHP_EOL;
-    $out .= '<title>' . stwbpb_esc_xml($title) . '</title>' . PHP_EOL . PHP_EOL;
+    $out .= '<title>' . esc_html(stwbpb_decode_entities($title)) . '</title>' . PHP_EOL . PHP_EOL;
     if (!empty($description)) {
-        $out .= '<description>' . stwbpb_esc_xml($description) . '</description>' . PHP_EOL . PHP_EOL;
+        $out .= '<description>' . esc_html(stwbpb_decode_entities($description)) . '</description>' . PHP_EOL . PHP_EOL;
     }
     if (!empty($main_url)) {
         $out .= '<main>' . htmlspecialchars($main_url, ENT_XML1 | ENT_QUOTES, 'UTF-8') . '</main>' . PHP_EOL . PHP_EOL;
