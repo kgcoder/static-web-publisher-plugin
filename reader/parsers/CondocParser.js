@@ -51,7 +51,7 @@ export function parseCondoc(url, fullContentString) {
 
                 const flinks = []
                 for(const line of lines){
-                    const flink = FloatingLink.fromExportString(line)
+                    const flink = FloatingLink.fromExportString(line.trim())
                     if (flink) {
                         flinks.push(flink) 
                     }
@@ -66,8 +66,6 @@ export function parseCondoc(url, fullContentString) {
       
 
   }
-
-
 
 
 
