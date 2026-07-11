@@ -145,25 +145,25 @@ function stwbpb_custom_post_endpoints_save_meta_box($post_id) {
         : '';
     update_post_meta($post_id, '_condoc_main_url', $condoc_main_url);
 
+    // CDOC static dialect: geometry, text, images and links only. No style
+    // attributes/elements, no use/symbol/defs, no animation, no filters.
+    // Mirrors sanitizeCdocSvg() in reader/helpers.js.
     $svg_allowed_tags = array(
-        'svg'      => array('xmlns' => true, 'width' => true, 'height' => true, 'viewbox' => true, 'viewBox' => true, 'class' => true, 'id' => true, 'style' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'transform' => true, 'preserveaspectratio' => true, 'preserveAspectRatio' => true),
-        'g'        => array('id' => true, 'class' => true, 'transform' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'style' => true),
-        'path'     => array('d' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'id' => true, 'class' => true, 'style' => true, 'transform' => true, 'opacity' => true),
-        'circle'   => array('cx' => true, 'cy' => true, 'r' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'id' => true, 'class' => true, 'style' => true, 'opacity' => true),
-        'rect'     => array('x' => true, 'y' => true, 'width' => true, 'height' => true, 'rx' => true, 'ry' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'id' => true, 'class' => true, 'style' => true, 'transform' => true, 'opacity' => true),
-        'ellipse'  => array('cx' => true, 'cy' => true, 'rx' => true, 'ry' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'id' => true, 'class' => true, 'style' => true, 'opacity' => true),
-        'line'     => array('x1' => true, 'y1' => true, 'x2' => true, 'y2' => true, 'stroke' => true, 'stroke-width' => true, 'id' => true, 'class' => true, 'style' => true),
-        'polyline' => array('points' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'id' => true, 'class' => true, 'style' => true),
-        'polygon'  => array('points' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'id' => true, 'class' => true, 'style' => true),
-        'text'     => array('x' => true, 'y' => true, 'fill' => true, 'font-size' => true, 'font-family' => true, 'text-anchor' => true, 'id' => true, 'class' => true, 'style' => true, 'transform' => true),
-        'tspan'    => array('x' => true, 'y' => true, 'dx' => true, 'dy' => true, 'fill' => true, 'font-size' => true, 'id' => true, 'class' => true, 'style' => true),
-        'defs'     => array('id' => true),
-        'use'      => array('href' => true, 'xlink:href' => true, 'x' => true, 'y' => true, 'width' => true, 'height' => true, 'id' => true, 'class' => true, 'style' => true),
-        'symbol'   => array('id' => true, 'viewbox' => true, 'viewBox' => true, 'width' => true, 'height' => true),
+        'svg'      => array('xmlns' => true, 'width' => true, 'height' => true, 'viewbox' => true, 'viewBox' => true, 'class' => true, 'id' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'transform' => true, 'preserveaspectratio' => true, 'preserveAspectRatio' => true),
+        'g'        => array('id' => true, 'class' => true, 'transform' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true),
+        'path'     => array('d' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'id' => true, 'class' => true, 'transform' => true, 'opacity' => true),
+        'circle'   => array('cx' => true, 'cy' => true, 'r' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'id' => true, 'class' => true, 'opacity' => true),
+        'rect'     => array('x' => true, 'y' => true, 'width' => true, 'height' => true, 'rx' => true, 'ry' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'id' => true, 'class' => true, 'transform' => true, 'opacity' => true),
+        'ellipse'  => array('cx' => true, 'cy' => true, 'rx' => true, 'ry' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'id' => true, 'class' => true, 'opacity' => true),
+        'line'     => array('x1' => true, 'y1' => true, 'x2' => true, 'y2' => true, 'stroke' => true, 'stroke-width' => true, 'id' => true, 'class' => true, 'vector-effect' => true),
+        'polyline' => array('points' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'id' => true, 'class' => true),
+        'polygon'  => array('points' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'id' => true, 'class' => true),
+        'text'     => array('x' => true, 'y' => true, 'fill' => true, 'font-size' => true, 'font-family' => true, 'text-anchor' => true, 'id' => true, 'class' => true, 'transform' => true),
+        'tspan'    => array('x' => true, 'y' => true, 'dx' => true, 'dy' => true, 'fill' => true, 'font-size' => true, 'id' => true, 'class' => true),
         'title'    => array(),
         'desc'     => array(),
-        'a'        => array('href' => true, 'xlink:href' => true, 'target' => true, 'id' => true, 'class' => true, 'style' => true, 'transform' => true),
-        'image'    => array('href' => true, 'xlink:href' => true, 'x' => true, 'y' => true, 'width' => true, 'height' => true, 'id' => true, 'class' => true, 'style' => true, 'transform' => true, 'preserveaspectratio' => true, 'preserveAspectRatio' => true),
+        'a'        => array('href' => true, 'xlink:href' => true, 'target' => true, 'id' => true, 'class' => true, 'transform' => true),
+        'image'    => array('href' => true, 'xlink:href' => true, 'x' => true, 'y' => true, 'width' => true, 'height' => true, 'id' => true, 'class' => true, 'transform' => true, 'preserveaspectratio' => true, 'preserveAspectRatio' => true),
     );
     $cdoc_svg = isset($_POST['cdoc_svg'])
         ? wp_kses(wp_unslash($_POST['cdoc_svg']), $svg_allowed_tags)
