@@ -12,7 +12,7 @@ For the official list of document types and specifications, see:
 https://github.com/kgcoder/default-web
 */
 
-import { escapeXml, getBaseFromHtmlDoc, getBaseOuterXML, getXMlAndDataArrayFromJSONConnections, removeTitleFromContent, sanitizeHtml, showToastMessage, unescapeHTML } from "../helpers.js"
+import { escapeXml, getBaseFromHtmlDoc, getBaseOuterXML, getXMlAndDataArrayFromJSONConnections, removeTitleFromContent, sanitizeHtml, showToastMessage, stripHtmlTags, unescapeHTML } from "../helpers.js"
 import { getXMLFromHeaderInfo } from "../HeaderMethods.js"
 
 
@@ -83,12 +83,12 @@ export function parseHtmlPageWithEmbeddedHDoc(httpPageUrl, contentString, hdocDa
 
             let siteNameString = ''
             if (siteLogo && siteUrl) {
-               siteNameString = `<logo src="${siteLogo}" href="${siteUrl}"/>` 
+               siteNameString = `<logo src="${escapeXml(siteLogo)}" href="${escapeXml(siteUrl)}"/>`
             } else if (siteName && siteUrl) {
-                siteNameString = `<site-name href="${siteUrl}">${siteName}</site-name>`
+                siteNameString = `<site-name href="${escapeXml(siteUrl)}">${escapeXml(siteName)}</site-name>`
             }
-            
-            topLinksString = topLinks.length ? '\n' + topLinks.map(({href,text}) => `<a href="${href}">${text}</a>`).join('\n') + '\n' : ''
+
+            topLinksString = topLinks.length ? '\n' + topLinks.map(({href,text}) => `<a href="${escapeXml(href)}">${escapeXml(text)}</a>`).join('\n') + '\n' : ''
 
             if (siteNameString || topLinksString) {
                 topPanelString = `\n<top>${siteNameString}${topLinksString}</top>`    
@@ -111,7 +111,7 @@ export function parseHtmlPageWithEmbeddedHDoc(httpPageUrl, contentString, hdocDa
             
             const ipage = sidePanelJSON.ipage
 
-            const ipageString = ipage ? `\n<ipage>${ipage}</ipage>` : ''
+            const ipageString = ipage ? `\n<ipage>${escapeXml(ipage)}</ipage>` : ''
             
             let commentsString = ''
 
@@ -126,12 +126,12 @@ export function parseHtmlPageWithEmbeddedHDoc(httpPageUrl, contentString, hdocDa
 
                 if (commentsUrl) {
                     commentsString = `\n<comments`
-                        + (commentsTitle       ? ` title="${commentsTitle}"`                     : '')
-                        + (commentsEmptyMessage ? ` empty="${commentsEmptyMessage}"`              : '')
-                        + (leaveCommentUrl     ? ` leave-comment-url="${leaveCommentUrl}"`        : '')
-                        + (replyLabel          ? ` reply-label="${replyLabel}"`                   : '')
-                        + (leaveLabel          ? ` leave-comment-label="${leaveLabel}"`           : '')
-                        + `>${commentsUrl}</comments>`
+                        + (commentsTitle       ? ` title="${escapeXml(commentsTitle)}"`                     : '')
+                        + (commentsEmptyMessage ? ` empty="${escapeXml(commentsEmptyMessage)}"`              : '')
+                        + (leaveCommentUrl     ? ` leave-comment-url="${escapeXml(leaveCommentUrl)}"`        : '')
+                        + (replyLabel          ? ` reply-label="${escapeXml(replyLabel)}"`                   : '')
+                        + (leaveLabel          ? ` leave-comment-label="${escapeXml(leaveLabel)}"`           : '')
+                        + `>${escapeXml(commentsUrl)}</comments>`
                 }
 
             }
@@ -147,7 +147,7 @@ export function parseHtmlPageWithEmbeddedHDoc(httpPageUrl, contentString, hdocDa
             const sections = bottomPanelJSON.sections
             const bottomMessage = bottomPanelJSON["bottom-message"]
 
-            let bottomMessageString = bottomMessage ? `<bottom-message>${bottomMessage}</bottom-message>` : ''
+            let bottomMessageString = bottomMessage ? `<bottom-message>${escapeXml(bottomMessage)}</bottom-message>` : ''
 
             let sectionsString = ''
 
@@ -160,14 +160,14 @@ export function parseHtmlPageWithEmbeddedHDoc(httpPageUrl, contentString, hdocDa
                         if (typeof link.text === "string" && link.text.trim() &&
                             typeof link.href === "string" && link.href.trim()) {
                             const href = link.href.trim()
-                            return `<a href="${href}">${link.text}</a>`
+                            return `<a href="${escapeXml(href)}">${escapeXml(link.text)}</a>`
                         } else {
                             return ''
                         }
                     }).filter(item => !!item).join('\n')
 
                     if (linksString) {
-                        return `<section${section.title ? ` title="${section.title}"` : ''}>\n${linksString}\n</section>`   
+                        return `<section${section.title ? ` title="${escapeXml(section.title)}"` : ''}>\n${linksString}\n</section>`
                     }
                     return ''
                 }).filter(item => !!item).join('\n')
@@ -278,6 +278,10 @@ export function parseHtmlPageWithEmbeddedHDoc(httpPageUrl, contentString, hdocDa
     let headerString = getXMLFromHeaderInfo(headerInfo)
 
     headerString = headerString ? `\n\n${headerString}\n\n` : '\n\n'
+
+    if (headerInfo.h1Text) headerInfo.h1Text = stripHtmlTags(headerInfo.h1Text)
+    if (headerInfo.authorName) headerInfo.authorName = stripHtmlTags(headerInfo.authorName)
+    if (headerInfo.publicationDate) headerInfo.publicationDate = stripHtmlTags(headerInfo.publicationDate)
 
 
     const base = getBaseFromHtmlDoc(unsanitizedHtmlDoc)

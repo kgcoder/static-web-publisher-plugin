@@ -12,6 +12,7 @@ For the official list of document types and specifications, see:
 https://github.com/kgcoder/default-web
 */
 
+import { sanitizeUrl, stripHtmlTags } from "../helpers.js";
 import FloatingLink from "../models/FloatingLink.js";
 
 
@@ -28,7 +29,8 @@ export function parseCondoc(url, fullContentString) {
     const rootElement = xmlDoc.documentElement;
 
     const mainUrlTag = rootElement.querySelector('main')
-    const externalDocUrl = mainUrlTag.textContent
+    const externalDocUrl = mainUrlTag ? sanitizeUrl(mainUrlTag.textContent) : ''
+    if (!externalDocUrl) return
 
     const connectionsRoot = rootElement.querySelector('connections')
 
@@ -42,8 +44,8 @@ export function parseCondoc(url, fullContentString) {
         if(flinkSets && flinkSets.length){
             for (let i = 0; i < flinkSets.length; i++) {
                 const flinkSet = flinkSets[i];
-                const flinkSetUrl = flinkSet.getAttribute('url')
-                const flinkSetTitle = flinkSet.getAttribute('title') != null ? flinkSet.getAttribute('title') : ''
+                const flinkSetUrl = sanitizeUrl(flinkSet.getAttribute('url'))
+                const flinkSetTitle = stripHtmlTags(flinkSet.getAttribute('title'))
 
                 const lines = flinkSet.textContent.split('\n').filter(line => !!line)
 

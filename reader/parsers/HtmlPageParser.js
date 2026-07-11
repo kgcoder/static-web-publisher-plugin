@@ -13,7 +13,7 @@ https://github.com/kgcoder/default-web
 */
 
 import { getXMLFromHeaderInfo } from "../HeaderMethods.js"
-import { escapeXml, getBaseFromHtmlDoc, getBaseOuterXML, getH1TitleFromDoc, getProtocolAndDomainFromUrl, removeTitleFromContent, sanitizeHtml, showToastMessage } from "../helpers.js"
+import { escapeXml, getBaseFromHtmlDoc, getBaseOuterXML, getH1TitleFromDoc, getProtocolAndDomainFromUrl, removeTitleFromContent, sanitizeHtml, showToastMessage, stripHtmlTags } from "../helpers.js"
 
 
 export function getSelectorsFromConfigString(configString){
@@ -198,6 +198,10 @@ export function parseHtmlStringWithConfig(htmlString,configString,cleanUrl,proto
 
     
     const xmlString = `<hdoc>\n\n<metadata>\n<title>${escapeXml(pageTitleFromHead)}</title>\n${getBaseOuterXML(base)}</metadata>\n\n<panels>\n<top>\n<site-name href="${protocol}://${domain}">${domain}</site-name>\n</top>\n</panels>${headerString}<content>${content}</content>\n\n</hdoc>`
+
+    if (headerInfo.h1Text) headerInfo.h1Text = stripHtmlTags(headerInfo.h1Text)
+    if (headerInfo.authorName) headerInfo.authorName = stripHtmlTags(headerInfo.authorName)
+    if (headerInfo.publicationDate) headerInfo.publicationDate = stripHtmlTags(headerInfo.publicationDate)
 
     const dataObject = {html:content,headerInfo,base,xmlString,connectedDocsData:[],type:'text',url:`${cleanUrl}#pr=${configString}`,docSubtype:3,docType:'h'}
 

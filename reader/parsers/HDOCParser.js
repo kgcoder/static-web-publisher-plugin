@@ -13,7 +13,7 @@ https://github.com/kgcoder/default-web
 */
 
 import { getHeaderInfoFromXML } from "../HeaderMethods.js"
-import { getFirstElementOfArray, sanitizeHtml } from "../helpers.js"
+import { getFirstElementOfArray, sanitizeHtml, sanitizeUrl, stripHtmlTags } from "../helpers.js"
 import FloatingLink from "../models/FloatingLink.js"
 
 export function parseHDOC(url,fullContentString){
@@ -43,11 +43,6 @@ export function parseHDOC(url,fullContentString){
 
 
     const sanitizedHtml = isPlainText ? htmlString : sanitizeHtml(htmlString)
-    
-    let updatedFullContentString = newXMLContentStringWithHtmlPlaceholder.replace('<content_placeholder></content_placeholder>', firstContentTag + sanitizedHtml + `</content>`)
-    
-    updatedFullContentString = updatedFullContentString.replace('<content_placeholder/>', firstContentTag + sanitizedHtml + `</content>`)
-    
 
     const rootElement = xmlDoc.documentElement;
 
@@ -74,8 +69,8 @@ export function parseHDOC(url,fullContentString){
     if(flinkSets && flinkSets.length){
         for (let i = 0; i < flinkSets.length; i++) {
             const flinkSet = flinkSets[i];
-            const flinkSetUrl = flinkSet.getAttribute('url')
-            const flinkSetTitle = flinkSet.getAttribute('title') != null ? flinkSet.getAttribute('title') : ''
+            const flinkSetUrl = sanitizeUrl(flinkSet.getAttribute('url'))
+            const flinkSetTitle = stripHtmlTags(flinkSet.getAttribute('title'))
             const flinkSetHash = flinkSet.getAttribute('hash')
 
             const flinksString = flinkSet.textContent
@@ -102,7 +97,7 @@ export function parseHDOC(url,fullContentString){
         headerInfo,
         isPlainText,
         html:sanitizedHtml,
-        xmlString:updatedFullContentString,
+        xmlString:fullContentString,
         connectedDocsData,
         type: 'text',
         docType:'h',

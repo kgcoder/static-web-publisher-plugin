@@ -12,7 +12,7 @@ For the official list of document types and specifications, see:
 https://github.com/kgcoder/default-web
 */
 
-import { createHtmlWrapper, escapeXml, getFirstElementOfArray, removeAllChildren } from "./helpers.js"
+import { createHtmlWrapper, escapeXml, getFirstElementOfArray, removeAllChildren, stripHtmlTags } from "./helpers.js"
 
 
 export function getHeaderInfoFromXML(frontRoot) {
@@ -28,9 +28,9 @@ export function getHeaderInfoFromXML(frontRoot) {
         const authorName = getFirstElementOfArray(frontRoot.getElementsByTagName('author'))
         const publicationDate = getFirstElementOfArray(frontRoot.getElementsByTagName('date'))
 
-        if(title)headerInfo.h1Text = title.textContent
-        if (authorName) headerInfo.authorName = authorName.textContent
-        if(publicationDate) headerInfo.publicationDate = publicationDate.textContent
+        if(title)headerInfo.h1Text = stripHtmlTags(title.textContent)
+        if (authorName) headerInfo.authorName = stripHtmlTags(authorName.textContent)
+        if(publicationDate) headerInfo.publicationDate = stripHtmlTags(publicationDate.textContent)
 
     }
 

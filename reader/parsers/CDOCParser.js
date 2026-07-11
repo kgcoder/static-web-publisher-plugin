@@ -12,7 +12,7 @@ For the official list of document types and specifications, see:
 https://github.com/kgcoder/default-web
 */
 
-import { getFirstElementOfArray, parseCopyInfoFromElement } from "../helpers.js";
+import { getFirstElementOfArray, parseCopyInfoFromElement, sanitizeUrl, stripHtmlTags } from "../helpers.js";
 import FloatingLink from "../models/FloatingLink.js";
 import ImageView from "../models/ImageView.js";
 import Line from "../models/Line.js";
@@ -36,8 +36,8 @@ export async function parseCDOC(url,contentString){
     if(docmeta){
         const titles = docmeta.getElementsByTagName('title')
         if(titles && titles.length){
-            title = titles[0].textContent
-           
+            title = stripHtmlTags(titles[0].textContent)
+
         }
 
     }
@@ -135,7 +135,7 @@ export async function parseCDOC(url,contentString){
             const widthString = element.getAttribute('width')
             const heightString = element.getAttribute('height')
             
-            const url = element.getAttribute('href');
+            const url = sanitizeUrl(element.getAttribute('href'));
 
 
             const x = parseFloat(xString)
@@ -211,8 +211,8 @@ export async function parseCDOC(url,contentString){
         if(flinkSets && flinkSets.length){
             for (let i = 0; i < flinkSets.length; i++) {
                 const flinkSet = flinkSets[i];
-                const flinkSetUrl = flinkSet.getAttribute('url')
-                const flinkSetTitle = flinkSet.getAttribute('title') != null ? flinkSet.getAttribute('title') : ''
+                const flinkSetUrl = sanitizeUrl(flinkSet.getAttribute('url'))
+                const flinkSetTitle = stripHtmlTags(flinkSet.getAttribute('title'))
                 const flinkSetHash = flinkSet.getAttribute('hash')
                 const flinksString = flinkSet.textContent
 
@@ -286,7 +286,7 @@ function extractLinkRectanglesFromOffscreen(svgString) {
           if (targetElement) {
             const bbox = targetElement.getBBox(); // Extract bounding box
             rectangles.push({
-              url: link.getAttribute("xlink:href") || link.getAttribute("href"),
+              url: sanitizeUrl(link.getAttribute("xlink:href") || link.getAttribute("href")),
               minX: bbox.x,
               minY: bbox.y,
               maxX: bbox.x + bbox.width,
