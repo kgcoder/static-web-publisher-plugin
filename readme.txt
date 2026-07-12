@@ -4,7 +4,7 @@ Donate link: https://reinventingtheweb.com/donate
 Tags: reader, connections, hdoc, static, web
 Requires at least: 5.2
 Tested up to: 7.0
-Stable tag: 5.1.3
+Stable tag: 5.2.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -124,8 +124,8 @@ Yes. You can set a global default in Settings and override it per post or page i
 
 == Changelog ==
 
-= 5.1.3 =
-Bug fix
+= 5.2.0 =
+Sanitization of documents is updated. Bug fixes.
 
 = 5.1.2 =
 Bug fix
@@ -191,7 +191,7 @@ Initial release.
 
 == Upgrade Notice ==
 
-= 5.1.3 =
+= 5.2.0 =
 No action required.
 
 = 5.1.2 =

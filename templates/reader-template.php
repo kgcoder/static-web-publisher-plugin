@@ -117,14 +117,14 @@ if (!empty($stwbpb_connections_info)) {
 
                     <div title="Download all connected documents" id="CurrentDocumentDownloadAllDocsButton" class="DocumentTopBarButtonWrapper"></div>
                     <div title="Toggle full screen" id="CurrentDocumentFullScreenButton" class="DocumentTopBarButtonWrapper"></div>
-                    <div id="CurrentDocumentExportButton" class="DocumentTopBarButtonWrapper"></div>
-                    <div title="Veiw Page Source" id="CurrentDocumentSourceCodeButton" class="DocumentTopBarButtonWrapper"></div>
+                    <div title="Export connections" id="CurrentDocumentExportButton" class="DocumentTopBarButtonWrapper"></div>
+                    <div title="Veiw source" id="CurrentDocumentSourceCodeButton" class="DocumentTopBarButtonWrapper"></div>
                     <div title="Center collage" id="CurrentDocumentCenterCollageButton" class="DocumentTopBarButtonWrapper"></div>
-                    <div id="CurrentDocumentRightPanelButton" class="DocumentTopBarButtonWrapper"></div>
-                    <div id="CurrentDocumentLeftPanelButton" class="DocumentTopBarButtonWrapper"></div>
+                    <div title="Toggle side panel" id="CurrentDocumentRightPanelButton" class="DocumentTopBarButtonWrapper"></div>
+                    <div title="Toggle side panel" id="CurrentDocumentLeftPanelButton" class="DocumentTopBarButtonWrapper"></div>
 
                     <?php if (!empty($stwbpb_settings['show_promotion_button'])): ?>
-                    <div id="PromotionButton" class="DocumentTopBarButtonWrapper"></div>
+                    <div title="Learn about Reader's Web" id="PromotionButton" class="DocumentTopBarButtonWrapper"></div>
                     <?php endif; ?>
 
 
@@ -270,7 +270,7 @@ if (!empty($stwbpb_connections_info)) {
 
         <div id="middle-canvas-topDiv">
             <svg id="svgArrow" width="28" height="12" viewBox="0 0 28 12" fill="none" xmlns="http://www.w3.org/2000/svg"></svg>
-            <a id="LinksOpenButton"></a>
+            <a title="List of floating links" id="LinksOpenButton"></a>
         </div>
 
         <div id="middle-space-div"></div>
@@ -280,9 +280,9 @@ if (!empty($stwbpb_connections_info)) {
         <div id="AllRightDocumentsContainer">
             <div id="RightDocumentsTabsContainer"></div>
             <div id="RightDocumentsTopBar">
-                <div title="Veiw Page Source" id="RightDocumentSourceCodeButton" class="DocumentTopBarButtonWrapper"></div>
-                <div id="RightDocumentRightPanelButton" class="DocumentTopBarButtonWrapper"></div>
-                <div id="RightDocumentLeftPanelButton" class="DocumentTopBarButtonWrapper"></div>
+                <div title="Veiw source" id="RightDocumentSourceCodeButton" class="DocumentTopBarButtonWrapper"></div>
+                <div title="Toggle side panel" id="RightDocumentRightPanelButton" class="DocumentTopBarButtonWrapper"></div>
+                <div title="Toggle side panel" id="RightDocumentLeftPanelButton" class="DocumentTopBarButtonWrapper"></div>
                 <div title="Center collage" id="RightDocumentCenterCollageButton" class="DocumentTopBarButtonWrapper"></div>
             
                 <div class="spacer10px"></div>
