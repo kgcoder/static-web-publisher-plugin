@@ -999,13 +999,15 @@ class CollageViewer{
                 }
             }
 
-            if(linkThatMouseTouches){
+            if(this.showPointerForFlink){
+                this.canvas.style.cursor = 'pointer'
+                hideUrlInTheCorner()
+            }else if(linkThatMouseTouches){
                 this.canvas.style.cursor = 'pointer'
                 showUrlInTheCorner(linkThatMouseTouches)
             }else{
                 this.canvas.style.cursor = 'default'
                 hideUrlInTheCorner()
-
             }
 
 
