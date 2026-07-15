@@ -49,21 +49,31 @@ async function onLoad() {
         }
     })
 
-    container.addEventListener('scrollend', () => {
+    const snapToNearestEdge = () => {
         const halfway = container.scrollWidth / 4;
 
         if (container.scrollLeft > halfway) {
             container.scrollTo({
-            left: container.scrollWidth,
-            behavior: 'smooth'
+                left: container.scrollWidth,
+                behavior: 'smooth'
             });
         } else {
             container.scrollTo({
-            left: 0,
-            behavior: 'smooth'
+                left: 0,
+                behavior: 'smooth'
             });
         }
-    });
+    };
+
+    if ('onscrollend' in window) {
+        container.addEventListener('scrollend', snapToNearestEdge);
+    } else {
+        let scrollEndTimer = null;
+        container.addEventListener('scroll', () => {
+            if (scrollEndTimer) clearTimeout(scrollEndTimer);
+            scrollEndTimer = setTimeout(snapToNearestEdge, 150);
+        }, { passive: true });
+    }
 
 
     let isEmbeddedCdoc = false
