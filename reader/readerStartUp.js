@@ -13,7 +13,7 @@ https://github.com/kgcoder/default-web
 */
 
 import g from "./Globals.js"
-import { showToastMessage } from "./helpers.js";
+import { addScrollEndListener, showToastMessage } from "./helpers.js";
 import IconsInfo from "./Icons.js";
 import { parseStaticContent } from "./parsers/ParsingManager.js";
 import { checkKey } from "./KeyboardManager.js";
@@ -65,15 +65,7 @@ async function onLoad() {
         }
     };
 
-    if ('onscrollend' in window) {
-        container.addEventListener('scrollend', snapToNearestEdge);
-    } else {
-        let scrollEndTimer = null;
-        container.addEventListener('scroll', () => {
-            if (scrollEndTimer) clearTimeout(scrollEndTimer);
-            scrollEndTimer = setTimeout(snapToNearestEdge, 150);
-        }, { passive: true });
-    }
+    addScrollEndListener(container, snapToNearestEdge);
 
 
     let isEmbeddedCdoc = false

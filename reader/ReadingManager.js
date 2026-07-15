@@ -14,7 +14,7 @@ https://github.com/kgcoder/default-web
 
 import { kDefaultPadding, kLeftDivTop, kMiddleGap, kRightDivTopBarHeight, kRightDocsTabRowHeight } from "./PopupDocumentManager.js"
 import g from "./Globals.js"
-import { addTransparencyToHexColor, escapeRegExp, getIndexAndLengthOfSelection, getPresentationDivFrom, getShortHash, getTextFromDiv, getTextNodesArrayFromDiv, isDotInsideFrame, isSubstringUniqueInText, removeAllChildren, showToastMessage, timestamp } from "./helpers.js";
+import { addScrollEndListener, addTransparencyToHexColor, escapeRegExp, getIndexAndLengthOfSelection, getPresentationDivFrom, getShortHash, getTextFromDiv, getTextNodesArrayFromDiv, isDotInsideFrame, isSubstringUniqueInText, removeAllChildren, showToastMessage, timestamp } from "./helpers.js";
 import FloatingLink from "./models/FloatingLink.js";
 import CollageViewer from "./CollageViewer.js";
 import { loadStaticContentFromUrl } from "./parsers/ParsingManager.js";
@@ -1960,7 +1960,7 @@ setupFlinksCanvasDPR(){
 
             const mainScrollDocDiv = document.getElementById("CurrentDocument")
             mainScrollDocDiv.addEventListener("scroll", mainDocScrollEvent);
-            mainScrollDocDiv.addEventListener("scrollend", () => this.addFlinksToLeftDiv());
+            addScrollEndListener(mainScrollDocDiv, () => this.addFlinksToLeftDiv());
 
             g.noteDivsManager.addEventListenersToNote(mainScrollDocDiv, g.readingManager, this.mainDocId)
             
@@ -1981,7 +1981,7 @@ setupFlinksCanvasDPR(){
         const secondScrollDiv = noteData.scrollDiv
 
         secondScrollDiv.addEventListener("scroll", secondDocScrollEvent);
-        secondScrollDiv.addEventListener("scrollend", () => this.addFlinksToRightDiv());
+        addScrollEndListener(secondScrollDiv, () => this.addFlinksToRightDiv());
     }
 
 
