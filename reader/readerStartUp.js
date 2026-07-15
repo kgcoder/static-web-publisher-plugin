@@ -39,7 +39,7 @@ async function onLoad() {
     }
 
 
-    const container = mainContainer.parentElement.parentElement
+    const container = mainContainer.parentElement
     //snapping
 
     container.addEventListener('scroll',() => {
@@ -50,7 +50,6 @@ async function onLoad() {
     })
 
     container.addEventListener('scrollend', () => {
-        
         const halfway = container.scrollWidth / 4;
 
         if (container.scrollLeft > halfway) {
