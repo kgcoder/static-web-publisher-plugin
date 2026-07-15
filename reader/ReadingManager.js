@@ -2256,7 +2256,7 @@ setupFlinksCanvasDPR(){
                 
                 
             }else if(finalArray.length){
-                showMultipleLinksPopup(pageX,pageY - g.adminBarHeight,finalArray)
+                showMultipleLinksPopup(pageX,pageY,finalArray)
 
             }
 
@@ -2394,7 +2394,7 @@ setupFlinksCanvasDPR(){
                 this.flinkPressedInRightDocument(flink,noteData)
                      
             }else if(finalArray.length){
-                showMultipleLinksPopup(pageX,pageY - g.adminBarHeight,finalArray,noteData)
+                showMultipleLinksPopup(pageX,pageY,finalArray,noteData)
 
             }
 

@@ -1287,13 +1287,13 @@ body.admin-bar #AllDocumentsContainer {
 
 
 .DocumentColumn {
-    display: flex;
+    display: block;
 
     position: relative;
 
     /* flex:1; */
 
-    flex-direction: column;
+    /* flex-direction: column; */
     /* flex:6; */
     /* width:400px; */
     /* border-width: 1px;
@@ -2080,8 +2080,8 @@ div.MenuHorizontalLine {
 
 
 .HeaderDiv {
-    display: flex;
-    flex-direction: column;
+    display: block;
+    /* flex-direction: column; */
 }
 
 .RowInHeaderDiv {
