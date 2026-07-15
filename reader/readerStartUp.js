@@ -38,8 +38,8 @@ async function onLoad() {
         currentLocation = currentLocation.split('#')[0]
     }
 
-
-    const container = mainContainer.parentElement
+    const container = document.getElementById("ui-root")
+    
     //snapping
 
     container.addEventListener('scroll',() => {
