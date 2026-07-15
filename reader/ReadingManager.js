@@ -1410,26 +1410,39 @@ setupFlinksCanvasDPR(){
 
         let someFlinksAreBrokenOnTheLeft = false
 
+        let leftText = ''
+        if(this.mainDocType === 'h'){
+            const mainDocDiv = document.getElementById("CurrentDocument")
+            const firstPresentationDiv = getPresentationDivFrom(mainDocDiv)
+            leftText = getTextFromDiv(firstPresentationDiv)
+        }
+
         let secondDiv
         for(const flinksData of this.connections){
             if(!flinksData.activeFlinks)continue
-            
+
             const noteData = this.getNoteDataByUrl(flinksData.url)
 
 
             let secondDocType
             if (noteData) {
-                secondDiv = noteData.scrollDiv 
+                secondDiv = noteData.scrollDiv
                 secondDocType = noteData.docType
             }
-    
+
+            let rightText = ''
+            if(secondDiv && secondDocType === 'h'){
+                const secondPresentationDiv = getPresentationDivFrom(secondDiv)
+                rightText = getTextFromDiv(secondPresentationDiv)
+            }
+
             flinksData.leftSideIsBroken = false
             flinksData.rightSideIsBroken = false
 
             for(let flink of flinksData.activeFlinks){
-    
-       
-                this.checkIfFlinkIsBroken(flink,secondDiv,this.mainDocType, secondDocType)
+
+
+                this.checkIfFlinkIsBroken(flink,secondDiv,this.mainDocType, secondDocType,leftText,rightText)
   
                 if (flink.leftSideIsBroken || flink.leftEndOutOfBounds) {
                     flinksData.leftSideIsBroken = true
@@ -1451,21 +1464,17 @@ setupFlinksCanvasDPR(){
     
     
     
-    checkIfFlinkIsBroken(flink,secondDiv,leftDocType,rightDocType){
+    checkIfFlinkIsBroken(flink,secondDiv,leftDocType,rightDocType,leftText,rightText){
 
         if(leftDocType === 'h'){
             const leftEnd = flink.leftEnds[0]
-    
+
             if(leftEnd.hIndex > leftEnd.index || leftEnd.hIndex + leftEnd.hLength < leftEnd.index + leftEnd.length){
                 flink.leftSideIsBroken = true
             }
 
             if(!flink.leftSideIsBroken && !flink.leftEndOutOfBounds){
-                const mainDocDiv = document.getElementById("CurrentDocument")
-
-                const firstPresentationDiv = getPresentationDivFrom(mainDocDiv)
-                
-                const text = getTextFromDiv(firstPresentationDiv) 
+                const text = leftText
                 const line = text.substring(leftEnd.hIndex,leftEnd.hIndex + leftEnd.hLength)
     
                 const isUnique = isSubstringUniqueInText(line,text)
@@ -1496,10 +1505,9 @@ setupFlinksCanvasDPR(){
             }
 
             if(!flink.rightSideIsBroken && !flink.rightEndOutOfBounds){
-                
-                
-                const secondPresentationDiv = getPresentationDivFrom(secondDiv)
-                const text = getTextFromDiv(secondPresentationDiv) 
+
+
+                const text = rightText
                 const line = text.substring(rightEnd.hIndex,rightEnd.hIndex + rightEnd.hLength)
     
 
