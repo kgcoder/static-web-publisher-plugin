@@ -103,6 +103,17 @@ if (!empty($stwbpb_connections_info)) {
 
 <?php $stwbpb_theme = isset($stwbpb_settings['reader_ui_theme']) ? $stwbpb_settings['reader_ui_theme'] : 'light'; ?>
 <div id="ui-root" class="theme-<?php echo esc_attr($stwbpb_theme); ?>">
+<script>
+(function() {
+    var bar = document.getElementById('wpadminbar');
+    var uiRoot = document.getElementById('ui-root');
+    if (bar && uiRoot) {
+        var h = bar.offsetHeight;
+        uiRoot.style.marginTop = h + 'px';
+        uiRoot.style.height = 'calc(100vh - ' + h + 'px)';
+    }
+})();
+</script>
     <div id="AllDocumentsContainer">
         <div id="OneDocumentContainer">
 

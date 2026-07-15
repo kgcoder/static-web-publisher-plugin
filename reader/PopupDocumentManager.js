@@ -2371,9 +2371,9 @@ class PopupDocumentManager{
         const iconPaths = g.iconsInfo.iconPaths
         const flinksListContainerDiv = document.getElementById("LinksListContainerDiv")
         const flinksContainerWidth = isFullscreenList ? window.innerWidth : kMaxListWidth 
-        flinksListContainerDiv.style.top = (kLeftDivTop + 1) + 'px'
+        flinksListContainerDiv.style.top = (kLeftDivTop + 1 + g.adminBarHeight) + 'px'
         flinksListContainerDiv.style.width = `${isFullscreenList ? window.innerWidth : kMaxListWidth}px`
-        flinksListContainerDiv.style.maxHeight = `${window.innerHeight - kLeftDivTop - g.adminBarHeight}px`
+        flinksListContainerDiv.style.maxHeight = `${window.innerHeight - kLeftDivTop - 1 - g.adminBarHeight}px`
         
 
         if(g.isMobileMode){
