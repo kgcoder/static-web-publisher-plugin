@@ -53,7 +53,9 @@ body {
     height: 100vh;
     overflow-x: auto;
     overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
+    /* no -webkit-overflow-scrolling: touch here: on iOS it promotes ui-root to
+       a composited scroll layer, which breaks Safari's status-bar tinting in
+       the light theme; horizontal snapping will work without momentum in older browsers */
 }
 
 #MainContainer {
@@ -283,7 +285,6 @@ canvas {
     pointer-events: none;
     z-index: 2000;
     opacity: 0;
-    /* background-color: red; */
     background-color: #D4D4D4;
     /* rgb(169, 169, 169); */
 }
@@ -979,7 +980,6 @@ code {
 .NoteEditButton {
     display: flex;
     position: absolute;
-    /* background-color: red; */
     /* width:40px;
     height: 20px; */
     padding: 5px;
@@ -1180,26 +1180,7 @@ code {
 }
 
 
-.text-color-red {
-    color: red;
-}
 
-
-
-
-#DataTransferDiv {
-    display: flex;
-    position: absolute;
-    top: 3000px;
-    /* background-color: blue; */
-}
-
-#DataTransferCanvas {
-    display: flex;
-    /* flex:1; */
-    /* background-color: red; */
-    background-color: #ffffff;
-}
 
 #AllDocumentsContainer {
     display: flex;
@@ -1634,7 +1615,6 @@ a.TopPanelOptionLink:hover {
 #CurrentDocumentMainCollageDiv {
     display: none;
     flex: 1;
-    background-color: red;
     box-sizing: border-box;
     overflow: hidden;
 }
@@ -1738,7 +1718,6 @@ a.TopPanelOptionLink:hover {
     display: none;
     flex: 1;
     position: relative;
-    background-color: red;
     flex-direction: column;
     /* overflow-y: scroll; */
     /* padding: 20px; */
@@ -1773,7 +1752,7 @@ a.TopPanelOptionLink:hover {
     width: 40px;
     flex-shrink: 0;
     cursor: pointer;
-    color:red;
+    
 }
 
 .Reader-OneIconComponent {
@@ -1938,7 +1917,6 @@ div.MenuHorizontalLine {
 
     border-radius: 8px;
     padding: 10px;
-    background-color: red;
 
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 
