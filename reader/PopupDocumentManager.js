@@ -161,7 +161,10 @@ class PopupDocumentManager{
 
     
         const infoButton = document.getElementById("CurrentDocumentInfoButton1")
-        if(!infoButton)return
+        if(!infoButton){
+            g.extensionTookControl = true
+            return
+        }
         this.createOneSVGIconComponent(infoButton,g.iconsInfo.svgIcons.infoIcon,'Reader-InfoButton')
         if(infoButton)infoButton.addEventListener('click', this.infoButtonPressed)
         
@@ -816,6 +819,7 @@ class PopupDocumentManager{
       
 
         setTimeout(() => {
+            if(g.extensionTookControl)return
             g.readingManager.drawFlinksOnTheLeftOnly()  
         
             if (!g.readingManager.isFullScreen) {
@@ -992,6 +996,7 @@ class PopupDocumentManager{
 
 
         setTimeout(() => {
+            if(g.extensionTookControl)return
             g.readingManager.drawFlinksOnTheLeftOnly()  
          
             if (!g.readingManager.isFullScreen) {

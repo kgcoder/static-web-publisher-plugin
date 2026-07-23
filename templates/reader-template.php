@@ -186,12 +186,12 @@ if (!empty($stwbpb_connections_info)) {
                             <div id="CurrentDocumentMainDiv" class="PresentationDiv<?php echo ($stwbpb_doc_source !== null) ? '' : ' hdoc-content'; ?>">
                                 <?php if ($stwbpb_doc_source !== null): ?>
                                     <script type="application/json" style="display:none;" id="<?php echo esc_attr($stwbpb_source_class); ?>"><?php echo wp_json_encode(['source' => $stwbpb_doc_source]); ?></script>
-                                <?php else: ?>
-                                    <?php echo wp_kses($stwbpb_html_content, $stwbpb_allowed_tags); ?>
+                                <?php elseif ($stwbpb_doc_type === 'HDOC'):
+                                    echo wp_kses($stwbpb_html_content, $stwbpb_allowed_tags);
+                                elseif ($stwbpb_doc_type === 'CONDOC'): ?>
                                     <a id="MainDocDownloadLink">Download main document</a>
                                 <?php endif; ?>
-                            </div>
-
+                           </div>
                         </div>
 
                         <div id="CurrentDocumentSidebar" class="SideBar"<?php if ($stwbpb_doc_type !== 'HDOC') echo ' style="display:none"'; ?>><?php
