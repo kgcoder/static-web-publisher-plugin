@@ -11,7 +11,6 @@ function stwbpb_settings_page() {
 
     $default_settings = array(
         'removal_selectors' => '',
-        'side_panel_on_the_left' => false,
         'page_author_name' => 'show',
         'page_publish_date' => 'show',
         'post_author_name' => 'show',
@@ -215,14 +214,6 @@ function stwbpb_settings_page() {
                 <button type="button" class="add-link">Add Link</button>
           
               
-            </div>
-
-            <h2>Side panel</h2>
-
-            <div class="settings-option-div">
-                <label>Side panel on the left? </label>
-                <div class="spacerW10"></div>
-                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[side_panel_on_the_left]" value="1" <?php echo !empty($settings['side_panel_on_the_left']) ? 'checked' : ''; ?>/>
             </div>
 
             <h2>Post navigation</h2>
@@ -458,7 +449,6 @@ function stwbpb_settings_init() {
    
     $default_settings = wp_json_encode(array(
         'removal_selectors' => '',
-        'side_panel_on_the_left' => false,
         'page_author_name' => 'show',
         'page_publish_date' => 'show',
         'post_author_name' => 'show',
@@ -520,10 +510,6 @@ function stwbpb_sanitize_settings($input) {
 
 
     //Sanitize main object
-
-    if(isset($input['side_panel_on_the_left'])){
-        $sanitized['side_panel_on_the_left'] = boolval($input['side_panel_on_the_left']);
-    }
 
     $sanitized['show_promotion_button'] = boolval($input['show_promotion_button'] ?? false);
     $sanitized['show_post_nav'] = boolval($input['show_post_nav'] ?? false);

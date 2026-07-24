@@ -81,7 +81,6 @@ function stwbpb_send_hdoc_for_post($post){
             'links'           => array('title' => true),
             'recent-comments' => array('title' => true, 'format' => true),
             'comment'         => array('post-href' => true, 'post-title' => true, 'author' => true, 'excerpt' => true),
-            'side'            => array('side' => true),
             'bottom'          => true,
             'comments'        => array('title' => true, 'empty' => true, 'leave-comment-url' => true, 'reply-label' => true, 'leave-comment-label' => true),
             'logo'            => array('src' => true, 'href' => true),

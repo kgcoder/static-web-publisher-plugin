@@ -15,7 +15,6 @@ function stwbpb_get_panels($post) {
 
     $settings = get_option('stwbpb_settings', array(
         'removal_selectors' => '',
-        'side_panel_on_the_left' => false,
         'comments_title' => '',
         'no_comments_message' => '',
         'top_panel' => array(
@@ -68,14 +67,11 @@ function stwbpb_get_panels($post) {
     $should_show_sidebar = !empty($sidebar_sections);
 
     $should_show_top_panel = !empty($site_name) || !empty($main_link) || !empty($logo_url) || !empty($top_panel['links']);
-    $should_show_side_panel = stwbpb_has_comment_section($post);
+    $should_show_comments_panel = stwbpb_has_comment_section($post);
     $should_show_bottom_panel = !empty($bottom_message) || !empty($bottom_panel['sections']);
 
-    $should_show_panels = $should_show_top_panel || $should_show_post_nav || $should_show_sidebar || $should_show_side_panel || $should_show_bottom_panel;
+    $should_show_panels = $should_show_top_panel || $should_show_post_nav || $should_show_sidebar || $should_show_comments_panel || $should_show_bottom_panel;
 
-    $side_panel_left = (bool) ($settings['side_panel_on_the_left'] ?? false);
-    $side_panel_attribute = $side_panel_left ? ' side="left"' : '';
-    
     if(!$should_show_panels){
         return '';
     }
@@ -188,7 +184,7 @@ foreach ($sidebar_sections as $sec) {
 ?>
 </sidebar>
 <?php endif; ?>
-<?php if ($should_show_side_panel): ?>
+<?php if ($should_show_comments_panel): ?>
 <?php
 $commenting_open = $post->comment_status === 'open';
 $comments_attrs = '';
@@ -201,7 +197,7 @@ if ($commenting_open) {
     $comments_attrs .= !empty($leave_comment_label) ? ' leave-comment-label="' . esc_attr(stwbpb_decode_entities($leave_comment_label)) . '"' : '';
 }
 ?>
-<side<?php if(!empty($side_panel_left)){ echo ' left="true"'; } ?>><?php echo '<comments' . $comments_attrs . '>' . esc_url($comments_link) . '</comments>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $comments_attrs is built entirely from esc_attr/esc_url calls above. ?></side>
+<?php echo '<comments' . $comments_attrs . '>' . esc_url($comments_link) . '</comments>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $comments_attrs is built entirely from esc_attr/esc_url calls above. ?>
 <?php endif; ?>
 <?php if($should_show_bottom_panel){ ?>
 <bottom>
