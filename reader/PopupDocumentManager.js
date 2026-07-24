@@ -1262,7 +1262,7 @@ class PopupDocumentManager{
 
        
 
-        if(sidePanel && (sidePanel.url || sidePanel.commentsUrl)){
+        if(sidePanel && sidePanel.commentsUrl){
 
 
             const isLeft = sidePanel.side === 'left'
@@ -1271,24 +1271,18 @@ class PopupDocumentManager{
             isRightPanelButtonVisible = !isLeft
 
 
-           
+
 
             if(isLeft){
 
                 let id = isRight ? 'rightDocLeftPanel' : 'leftDocLeftPanel'
-                
+
                 if(isRight){
                     id += dataObject.index
                 }
 
-                if(sidePanel.commentsUrl){
-
-                    id += 'Comments'
-                    this.addCommentsSectionToSidePanel(leftPanelDiv, id)
-                }else{
-                    this.addIframeToSidePanel(leftPanelDiv,id)
-
-                }
+                id += 'Comments'
+                this.addCommentsSectionToSidePanel(leftPanelDiv, id)
 
             }else{
                 let id = isRight ? 'rightDocRightPanel' : 'leftDocRightPanel'
@@ -1297,13 +1291,8 @@ class PopupDocumentManager{
                     id += dataObject.index
                 }
 
-                if(sidePanel.commentsUrl){
-                    id += 'Comments'
-                    this.addCommentsSectionToSidePanel(rightPanelDiv, id)
-                }else{
-                    this.addIframeToSidePanel(rightPanelDiv,id)
-
-                }
+                id += 'Comments'
+                this.addCommentsSectionToSidePanel(rightPanelDiv, id)
 
             }
         }
@@ -2755,17 +2744,12 @@ class PopupDocumentManager{
                 this.getComments(commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, this, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel)
 
             }
-
-            const iframe = document.getElementById("leftDocLeftPanel")
-            if(iframe && !iframe.src){
-                iframe.src = g.readingManager.mainDocPanels.sidePanel.url
-            }
         } else {
             this.cleanCommentsDiv(commentsDiv, this)
         }
 
         this.updateMainDocumentPadding()
-   
+
         this.updateLeftDocumentPanels()
 
         this.updateSidebarVisibility()
@@ -2806,13 +2790,6 @@ class PopupDocumentManager{
                 const {commentsTitle, noCommentsMessage, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel} = g.readingManager.mainDocPanels.sidePanel
                 this.getComments(commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, this, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel)
             }
-
-            const iframe = document.getElementById("leftDocRightPanel")
-            if(iframe && !iframe.src){
-               iframe.src = g.readingManager.mainDocPanels.sidePanel.url
-            }
-
-
         } else {
             this.cleanCommentsDiv(commentsDiv, this)
         }
@@ -2853,11 +2830,6 @@ class PopupDocumentManager{
                 const {commentsTitle, noCommentsMessage, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel} = noteData.panels.sidePanel
                 this.getComments(commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, noteData, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel)
             }
-
-            const iframe = document.getElementById("rightDocLeftPanel" + noteData.index)
-            if(iframe && !iframe.src){
-                iframe.src = noteData.panels.sidePanel.url
-            }
         } else {
             this.cleanCommentsDiv(commentsDiv, noteData)
         }
@@ -2892,11 +2864,6 @@ class PopupDocumentManager{
             if (commentsUrl) {
                 const {commentsTitle, noCommentsMessage, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel} = noteData.panels.sidePanel
                 this.getComments(commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, noteData, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel)
-            }
-
-            const webview = document.getElementById("rightDocRightPanel" + noteData.index)
-            if(webview && !webview.src){
-                webview.src = noteData.panels.sidePanel.url
             }
         } else {
             this.cleanCommentsDiv(commentsDiv, noteData)
@@ -3375,16 +3342,6 @@ class PopupDocumentManager{
         div.id = id
         div.className = 'StaticCommentsSection'
         panelDiv.appendChild(div)
-
-    }
-
-
-    addIframeToSidePanel = (panelDiv, id) => {
-        const iframe = document.createElement('iframe')
-        iframe.id = id
-        iframe.className = 'WidgetIframe'
-
-        panelDiv.appendChild(iframe)
 
     }
 
