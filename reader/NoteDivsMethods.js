@@ -888,7 +888,6 @@ class NoteDivsManager{
 
     calculateHighlightPosition(notePresentationDiv,textNodesArray,startIndex,highlightLength,divX, divY, padding, rightX){
    
-
        
         const divWidthWithoutScrollBar = notePresentationDiv.clientWidth
 
@@ -900,6 +899,8 @@ class NoteDivsManager{
         let didFindRange = false
         let indexOfCharacterInHighlight = 0
         const lineRects = []
+
+        let atLeastOneRectIsInsidePre = false
         for(let i = 0; i < textNodesArray.length; i++){
             if(didFindRange && highlightLength === 1)break
             const nodeText = textNodesArray[i].textContent
@@ -932,11 +933,12 @@ class NoteDivsManager{
                 range.setStart(textNodesArray[i], currentIndex);
                 range.setEnd(textNodesArray[i], currentIndex + 1);
 
-             //   
-            
+
+                atLeastOneRectIsInsidePre = textNodesArray[i].parentElement.closest('pre, blockquote') !== null;
+                          
                 const rawRect = range.getBoundingClientRect();
               
-              //  
+           
 
 
                
@@ -997,8 +999,7 @@ class NoteDivsManager{
          
         }
 
-       // 
-       // 
+      
 
         let lastRectTop = -1
         let lastLeft = 0
@@ -1037,14 +1038,16 @@ class NoteDivsManager{
             let width
 
 
+        
             const leftOffset = g.pdm.getMainLeftOffset()
+
 
             if (isFirst && isLast) {
                 left = rect.left - divX - leftOffset
                 width = rect.width    
             } else if (!isFirst && !isLast) {
                 if (g.readingManager.isFullScreen) {
-                    left = padding
+                    left = padding 
                     width = rightX - left
                 } else {
                     left = 0
@@ -1071,8 +1074,6 @@ class NoteDivsManager{
             }
 
 
-
-
             const newRect = {
                 top: rect.top - divY,
                 left,
@@ -1086,9 +1087,9 @@ class NoteDivsManager{
         })
 
     //    
-        if(finalLineRects.length === 0)return finalLineRects
+        if(finalLineRects.length === 0)return {rects:finalLineRects,isInsidePre:atLeastOneRectIsInsidePre}
 
-        if(finalLineRects.length === 1)return finalLineRects
+        if(finalLineRects.length === 1)return {rects:finalLineRects,isInsidePre:atLeastOneRectIsInsidePre}
 
 
         if(finalLineRects.length === 2){
@@ -1097,7 +1098,7 @@ class NoteDivsManager{
             stickBottomLineRectToTheTopOne(firstLineRect,secondLineRect)
 
 
-            return finalLineRects
+            return {rects:finalLineRects,isInsidePre:atLeastOneRectIsInsidePre}
         }
 
         const firstLineRect = finalLineRects[0]
@@ -1121,7 +1122,7 @@ class NoteDivsManager{
 
 
 
-        return finalLineRects
+        return {rects:finalLineRects,isInsidePre:atLeastOneRectIsInsidePre}
     }
 
 
