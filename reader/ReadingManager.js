@@ -166,8 +166,10 @@ setupFlinksCanvasDPR(){
 
     downloadOnePage = async (url, hideSpinner = false) => {
         if(!hideSpinner)g.pdm.showMainDocSpinner()
+
         const dataObject = await loadStaticContentFromUrl(url)
 
+    
         if(!dataObject){
             showToastMessage("Something is wrong")
             if(!hideSpinner)g.pdm.hideMainDocSpinner()
@@ -243,17 +245,30 @@ setupFlinksCanvasDPR(){
             }
                         
                         
-                        
-                        
+                
+
+                   
 
             g.pdm.showTab(g.readingManager.rightNotesData.length - 1)
+            
+
+            
             g.readingManager.redrawFlinks()
+
+
 
             g.pdm.applyFontSizeToPresentationDivs()
 
             g.readingManager.addListenerToCurrentRightDoc()
 
+
+
+
             g.readingManager.applyFlinksOnTheRight(false)
+
+
+      
+
 
             const {total,count} = g.pdm.configureConnectionsCountOnInfoButton()
 
@@ -1242,12 +1257,13 @@ setupFlinksCanvasDPR(){
             if(g.readingManager.mainDocData && g.readingManager.mainDocData.docType === 'condoc' && !g.readingManager.embeddedDocData)return
 
             if (!this.isFullScreen) {
+
                 this.checkIfFlinksAreBroken()
                 this.fixRightFlinksAutomaticallyIfNeeded()
                 this.prepareRightLinks()
                 this.addFlinksToRightDiv()
-
                 this.redrawFlinks()
+
 
                 const flinksData = g.readingManager.currentConnection
                 flinksData.flinksUpdateNeeded = false
@@ -2106,6 +2122,7 @@ setupFlinksCanvasDPR(){
     
             for(let flink of flinks){
                 if (flink.rightEndOutOfBounds) continue
+                if(!flink.rightRects || !flink.rightRects.length)continue
                 for(let rect of flink.rightRects){
 
                     if(isDotInsideFrame(x,y,{minX:rect.left,minY:rect.top,maxX:rect.left + rect.width,maxY:rect.top + rect.height})){
