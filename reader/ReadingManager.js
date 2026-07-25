@@ -1660,7 +1660,6 @@ setupFlinksCanvasDPR(){
  
 
         const {rects:rightRects,isInsidePre} = g.noteDivsManager.calculateHighlightPosition(rightScrollDiv,textNodesArray,rightEnd.index,rightEnd.length,divX,topY, kDefaultPadding)
-
       
         if(rightRects.length){
             flink.isRightEndInsidePre = isInsidePre
@@ -1803,7 +1802,8 @@ setupFlinksCanvasDPR(){
 
         canvas.style.backgroundColor = 'transparent'
         canvas.style.pointerEvents = 'none'
-        canvas.style.zIndex = -1
+        canvas.style.zIndex = isInsidePre ? 1 : -1
+
 
     
 

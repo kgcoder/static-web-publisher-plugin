@@ -156,6 +156,10 @@
 .theme-light ol,ul{
     padding-inline-start: 10px;
 }
+
+.theme-light figcaption {
+    color: #636363;
+}
   
   
 /* Paragraphs */
