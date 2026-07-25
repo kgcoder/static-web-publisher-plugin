@@ -2376,13 +2376,11 @@ class PopupDocumentManager{
         }else if(g.isMobileMode){
             const leftOffset = this.getMainLeftOffset()
             if(leftOffset >=0){
-
                flinksListContainerDiv.style.left = ''
                flinksListContainerDiv.style.right = '0px'
             }else{
-                flinksListContainerDiv.style.left = `${-leftOffset}px`
+                flinksListContainerDiv.style.left = '0px'
                 flinksListContainerDiv.style.right = ''
-
             }
         }else{
             flinksListContainerDiv.style.left = `${g.readingManager.docWidth + kMiddleGap / 2 - flinksContainerWidth / 2}px`
