@@ -1,15 +1,15 @@
 /*
-Visible Connections
+RW Reader
 
 Copyright (c) 2025 Karen Grigorian
 Code licensed under the MIT License.
 
-This software implements document types defined by the Default Web project.
+This software implements document types defined by the Reader's Web project.
 
-Default Web document types are licensed under CC BY-ND 4.0 and are maintained externally.
+Reader's Web document types are licensed under CC BY-ND 4.0 and are maintained externally.
 
 For the official list of document types and specifications, see:
-https://github.com/kgcoder/default-web
+https://github.com/kgcoder/readers-web-specs
 */
 
 import { parseCDOC } from "./parsers/CDOCParser.js"

@@ -12,8 +12,6 @@ The plugin serves content in several document formats, embeds metadata into regu
 
 The Reader's Web is a new part of the browsable web where **content is separated from presentation**. It is similar in philosophy to RSS — the site owner provides only the content, while the reader's software decides how to style and display it — but unlike RSS it is part of the browsable web and supports visible connections between pages.
 
-The Reader's Web is also referred to as the **Default Web** or **Web 1.1** in the codebase and specs.
-
 ### Document Formats
 
 There are three new standalone document formats and three equivalent embedded variants.
@@ -63,7 +61,7 @@ Spec files live in [noinclude/specs/](noinclude/specs/). Currently present:
 
 ## The Browser Extension
 
-The **Visible Connections** Chrome extension (available on the Chrome Web Store) is the primary client that supports these document formats. When the user mentions "extension," they are referring to this extension.
+The **RW Reader** Chrome extension (available on the Chrome Web Store) is the primary client that supports these document formats. When the user mentions "extension," they are referring to this extension.
 
 The entire [reader/](reader/) folder is code **copied from the extension**. It provides the same Reader UI that the extension injects into the browser. The plugin uses this code to serve the Reader UI directly as a WordPress template — so visitors without the extension can still experience the Reader's Web.
 

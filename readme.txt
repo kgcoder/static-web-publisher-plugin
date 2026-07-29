@@ -40,7 +40,7 @@ The plugin can serve your WordPress content in three new document formats and ca
 
 = Reader UI =
 
-When a post or page is set to **Reader UI** mode, the plugin replaces your WordPress theme with a built-in reader interface. This is the same interface used by the Visible Connections browser extension, so the experience is consistent regardless of whether the visitor has the extension installed.
+When a post or page is set to **Reader UI** mode, the plugin replaces your WordPress theme with a built-in reader interface. This is the same interface used by the RW Reader browser extension, so the experience is consistent regardless of whether the visitor has the extension installed.
 
 = Comments =
 
@@ -56,7 +56,7 @@ You can also place standalone `.hdoc`, `.cdoc`, and `.condoc` files directly in 
 
 = Analytics =
 
-Standard WordPress analytics tools work normally on Embedded HDOC and Reader UI pages. When the Visible Connections extension is active and replaces the page UI, existing analytics scripts continue to run: page view events are already sent before the extension takes over, and session-level tracking continues uninterrupted.
+Standard WordPress analytics tools work normally on Embedded HDOC and Reader UI pages. When the RW Reader extension is active and replaces the page UI, existing analytics scripts continue to run: page view events are already sent before the extension takes over, and session-level tracking continues uninterrupted.
 
 For analytics code that needs to run **after the Reader UI is fully initialized**, the plugin dispatches a `swpReaderReady` event on `document`. You can listen for it in any custom script:
 
@@ -69,7 +69,7 @@ The event is fired at most once per page load regardless of whether the reader w
 
 = Compatible apps =
 
-* [Visible Connections](https://chromewebstore.google.com/detail/visible-connections/hlckcdbgknflkkciojgdbhomdnegimbm) — a Chrome extension that shows visible connections between pages in your browser and renders Embedded HDOCs in a reader view.
+* [RW Reader](https://chromewebstore.google.com/detail/visible-connections/hlckcdbgknflkkciojgdbhomdnegimbm) — a Chrome extension that shows visible connections between pages in your browser and renders Embedded HDOCs in a reader view.
 * [LZ Desktop](https://reinventingtheweb.com/download) — a standalone app for exploring and creating Reader's Web documents.
 
 Visitors without any compatible app will see your content normally on Embedded HDOC pages, or through the built-in Reader UI if you enable Reader UI mode.
@@ -99,7 +99,7 @@ Development happens on [GitHub](https://github.com/kgcoder/static-web-publisher-
 
 = Do visitors need to install anything to use the Reader UI? =
 
-No. When a post is set to **Reader UI** mode, the plugin serves the full reader interface as a regular web page. Any visitor can use it. That post will also be available for Visitors who do have the Visible Connections extension installed.
+No. When a post is set to **Reader UI** mode, the plugin serves the full reader interface as a regular web page. Any visitor can use it. That post will also be available for Visitors who do have the RW Reader extension installed.
 
 = Will this break my site's appearance for regular visitors? =
 
@@ -111,7 +111,7 @@ Yes. The proxy at `/sw-proxy/` only fetches URLs that are explicitly listed as c
 
 = Can I use my existing analytics with this plugin? =
 
-Yes. Standard WordPress analytics tools work on all pages. On **Reader UI** pages they load via the normal WordPress head hooks. On **Embedded HDOC** pages visited through the Visible Connections extension, analytics scripts initialize before the extension takes over the UI and continue tracking the session afterward. For analytics that need to run after the reader finishes rendering, listen for the `swpReaderReady` event on `document`.
+Yes. Standard WordPress analytics tools work on all pages. On **Reader UI** pages they load via the normal WordPress head hooks. On **Embedded HDOC** pages visited through the RW Reader extension, analytics scripts initialize before the extension takes over the UI and continue tracking the session afterward. For analytics that need to run after the reader finishes rendering, listen for the `swpReaderReady` event on `document`.
 
 = What is the difference between Embedded HDOC and Embedded HDOC (forced)? =
 

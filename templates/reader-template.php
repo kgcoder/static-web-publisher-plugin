@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Converted from original HTML file in Visible Connections Chrome Extension
+ * Converted from original HTML file in RW Reader Chrome Extension
  *
  * Copyright (c) 2025 Karen Grigorian
  * Licensed under the MIT License.
