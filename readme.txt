@@ -1,10 +1,10 @@
 === Static Web Publisher ===
 Contributors: kgcoder
-Donate link: https://reinventingtheweb.com/donate
+Donate link: https://readersweb.org/donate
 Tags: reader, connections, hdoc, static, web
 Requires at least: 5.2
 Tested up to: 7.0
-Stable tag: 5.3.0
+Stable tag: 5.3.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -13,7 +13,7 @@ Make your WordPress site part of the Reader's Web.
 
 == Description ==
 
-**Static Web Publisher** turns your WordPress site into a publisher on the **Reader's Web** (also called the Static Web or Web 1.1) — a new part of the browsable web where content is separated from presentation and pages can form visible connections with each other.
+**Static Web Publisher** allows you to publish your pages as Reader's-Web-compatible documents. 
 
 = What is the Reader's Web? =
 
@@ -70,13 +70,13 @@ The event is fired at most once per page load regardless of whether the reader w
 = Compatible apps =
 
 * [RW Reader](https://chromewebstore.google.com/detail/visible-connections/hlckcdbgknflkkciojgdbhomdnegimbm) — a Chrome extension that shows visible connections between pages in your browser and renders Embedded HDOCs in a reader view.
-* [LZ Desktop](https://reinventingtheweb.com/download) — a standalone app for exploring and creating Reader's Web documents.
+* [LZ Desktop](https://readersweb.org/download) — a standalone app for exploring and creating Reader's Web documents.
 
 Visitors without any compatible app will see your content normally on Embedded HDOC pages, or through the built-in Reader UI if you enable Reader UI mode.
 
 = Background =
 
-The Reader's Web is inspired by Ted Nelson's long-standing vision of hypertext. You can read more about the project at [reinventingtheweb.com](https://reinventingtheweb.com).
+The Reader's Web is inspired by Ted Nelson's long-standing vision of hypertext. You can read more about the project at [readersweb.org](https://readersweb.org).
 
 = Source Code =
 
@@ -123,6 +123,9 @@ Yes. You can set a global default in Settings and override it per post or page i
 
 
 == Changelog ==
+
+= 5.3.1 =
+Info popup link was updated.
 
 = 5.3.0 =
 Comments handling updated to reflect changes in HDOC and Embedded HDOC specs. Bug fixes.
@@ -196,6 +199,9 @@ Initial release.
 
 
 == Upgrade Notice ==
+
+= 5.3.1 =
+No action required.
 
 = 5.3.0 =
 No action required.

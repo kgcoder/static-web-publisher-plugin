@@ -2879,7 +2879,7 @@ class PopupDocumentManager{
     }
 
     openPromotionPopup = () => {
-        const PROMOTION_URL = 'https://reinventingtheweb.com/uploads/readers-web-promo-popup.html'
+        const PROMOTION_URL = 'https://readersweb.org/uploads/readers-web-promo-popup.html'
 
         const overlay = document.createElement('div')
         overlay.className = 'swp-comment-popup-overlay'
