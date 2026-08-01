@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
 function stwbpb_custom_post_endpoints_add_meta_box() {
     add_meta_box(
         'custom_post_endpoints_meta_box',
-        'Static Web Publisher Settings',
+        'Reader\'s Web Publisher Settings',
         'stwbpb_custom_post_endpoints_meta_box_callback',
         array('post', 'page'), // Enable for posts and pages
         'side',

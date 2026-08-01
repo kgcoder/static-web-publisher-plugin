@@ -1,8 +1,8 @@
-# Static Web Publisher — CLAUDE.md
+# Reader's Web Publisher — CLAUDE.md
 
 ## Project Overview
 
-**Static Web Publisher** is a WordPress plugin (plugin slug: `static-web-publisher`, PHP prefix: `stwbpb_`) that makes WordPress sites part of the **Reader's Web** — a new browsable web ecosystem where site owners provide content but readers control styling and layout.
+**Reader's Web Publisher** is a WordPress plugin (plugin slug: `static-web-publisher`, PHP prefix: `stwbpb_`) that makes WordPress sites part of the **Reader's Web** — a new browsable web ecosystem where site owners provide content but readers control styling and layout.
 
 The plugin serves content in several document formats, embeds metadata into regular HTML pages for compatible clients, and can also serve the full Reader UI directly from WordPress.
 

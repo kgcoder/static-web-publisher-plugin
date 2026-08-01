@@ -1,4 +1,4 @@
-# Testing Roadmap — Static Web Publisher
+# Testing Roadmap — Reader's Web Publisher
 
 A phased plan for testing the plugin, written to be picked up incrementally whenever time allows.
 Nothing here needs to be done all at once; each phase is useful on its own.

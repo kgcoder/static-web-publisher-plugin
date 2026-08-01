@@ -1,10 +1,10 @@
-=== Static Web Publisher ===
+=== Reader's Web Publisher ===
 Contributors: kgcoder
 Donate link: https://readersweb.org/donate
 Tags: reader, connections, hdoc, static, web
 Requires at least: 5.2
 Tested up to: 7.0
-Stable tag: 5.3.1
+Stable tag: 5.3.2
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -13,7 +13,7 @@ Make your WordPress site part of the Reader's Web.
 
 == Description ==
 
-**Static Web Publisher** allows you to publish your pages as Reader's-Web-compatible documents. 
+**Reader's Web Publisher** allows you to publish your pages as Reader's-Web-compatible documents. 
 
 = What is the Reader's Web? =
 
@@ -85,9 +85,9 @@ Development happens on [GitHub](https://github.com/kgcoder/static-web-publisher-
 
 == Installation ==
 
-1. Go to **Plugins > Add New** in your WordPress dashboard and search for **Static Web Publisher**.
+1. Go to **Plugins > Add New** in your WordPress dashboard and search for **Reader's Web Publisher**.
 2. Install and activate the plugin.
-3. Go to **Static Web Publisher** in the sidebar to configure panels, display modes, and comments labels.
+3. Go to **Reader's Web Publisher** in the sidebar to configure panels, display modes, and comments labels.
 4. Set the default display mode for posts and pages. **Embedded HDOC** is a safe starting point — it adds hidden metadata without changing anything visitors see.
 5. To use **Reader UI** mode, set the display mode to **Reader UI** either globally or per-post. The plugin will replace your theme with the built-in reader interface for those posts.
 6. To serve standalone document files, create a folder named `static-documents` in the root of your WordPress installation (the same folder that contains `wp-config.php`). Place `.hdoc`, `.cdoc`, or `.condoc` files inside it. They will be accessible at `https://yoursite.com/static/filename.hdoc`.
@@ -123,6 +123,9 @@ Yes. You can set a global default in Settings and override it per post or page i
 
 
 == Changelog ==
+
+= 5.3.2 =
+Plugin name was changed.
 
 = 5.3.1 =
 Info popup link was updated.
@@ -199,6 +202,9 @@ Initial release.
 
 
 == Upgrade Notice ==
+
+= 5.3.2 =
+No action required.
 
 = 5.3.1 =
 No action required.

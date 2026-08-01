@@ -1,9 +1,9 @@
 <?php
 
 /*
-Plugin Name: Static Web Publisher
-Description: Publishes your posts and pages on the Static Web
-Version: 5.3.1
+Plugin Name: Reader's Web Publisher
+Description: Publishes your posts and pages on the Reader's Web
+Version: 5.3.2
 Author: Karen Grigorian
 Author URI: https://github.com/kgcoder
 License: GPLv2 or later

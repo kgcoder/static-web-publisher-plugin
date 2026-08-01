@@ -64,7 +64,7 @@ function stwbpb_settings_page() {
     $sidebar_variants = stwbpb_sidebar_variants_get_all();
     ?>
     <div class="wrap">
-        <h1>Static Web Plugin Settings</h1>
+        <h1>Reader's Web Publisher Plugin Settings</h1>
         <form method="post" action="options.php">
         <?php
             // Outputs nonce, action, and option_page fields for the settings
@@ -626,8 +626,8 @@ function stwbpb_sanitize_settings($input) {
 function stwbpb_menu() {
     // Add a menu item to the sidebar
     add_menu_page(
-        'Static Web Publisher Settings',          // Page title
-        'Static Web Publisher',                   // Menu title
+        'Reader\'s Web Publisher Settings',          // Page title
+        'Reader\'s Web Publisher',                   // Menu title
         'manage_options',              // Capability required
         'static_web_publisher_settings',          // Menu slug
         'stwbpb_settings_page',     // Callback function to render the settings page

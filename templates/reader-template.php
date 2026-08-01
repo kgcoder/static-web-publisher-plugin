@@ -6,7 +6,7 @@
  * Copyright (c) 2025 Karen Grigorian
  * Licensed under the MIT License.
  *
- * Original source was adapted into PHP for use in the Static Web Publisher WordPress plugin.
+ * Original source was adapted into PHP for use in the Reader's Web Publisher WordPress plugin.
  */
 
 if (!defined('ABSPATH')) {
