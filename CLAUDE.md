@@ -164,6 +164,8 @@ Key fields: `page_mode`, `post_mode`, `republishing_policy` (`implicit_allow` / 
 
 The `republishing_policy` setting controls whether a `<republishing-policy>` tag is included inside `<metadata>` in HDOC and CDOC output. `implicit_allow` omits the tag entirely (default Reader's Web behaviour). Per-post overrides are stored in `_republishing_policy` meta. CONDOC posts never receive the tag regardless of settings. For embedded HDOCs the value is passed as `"republishing-policy"` in the `#hdoc-data` JSON and injected into the reconstructed XML by `EmbHDOCParser.js`.
 
+A draft license governing republishing (Reader's Web Republishing License, RWRL) is being worked out — see [noinclude/legal/RWRL-1.0-DRAFT.md](noinclude/legal/RWRL-1.0-DRAFT.md). It currently covers only the connection-stabilization use case (`implicit_allow` / `explicit_allow`, both the same scope). A broader `allow-aggregation`-style policy value, permitting inclusion in feeds/aggregation services, has been discussed but is deliberately deferred — not useful until multiple independent aggregation services exist; a single early service can rely on a private opt-in/signup relationship with sites instead, which needs no public policy value at all. Do not add an aggregation policy tier without revisiting that draft's §5.
+
 ---
 
 ## Static Document Files

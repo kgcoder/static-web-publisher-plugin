@@ -112,7 +112,8 @@ function stwbpb_settings_page() {
                     <option value="prohibit" <?php selected($settings['republishing_policy'], 'prohibit'); ?>>Prohibit (do-not-republish)</option>
                 </select>
             </div>
-
+            <p class="description">This is the default for all posts and pages (individual posts can override it). Allowing republishing lets other Reader's Web sites host a stable copy of your content if the original page is moved or removed, so links to it don't break. "Implicitly allow" (the default) permits this without adding any tag to the document; "Explicitly allow" states the same permission in the document itself. You can revoke this permission at any time by asking a site hosting a copy to take it down. Choose "Prohibit" to opt out entirely.</p>
+            <div style="height:20px"></div>
             <div class="settings-option-div">
                 <label>Reader UI theme: </label>
                 <div class="spacerW10"></div>

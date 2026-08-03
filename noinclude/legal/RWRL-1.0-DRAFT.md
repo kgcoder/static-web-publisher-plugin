@@ -35,8 +35,16 @@ This license exists so that:
 
 - Authors publishing in these formats do not need to fear that enabling this
   mechanism means giving up their rights, and
-- Republishers (individual sites, or aggregation services) have clear,
-  predictable terms instead of having to guess or negotiate case by case.
+- Republishers have clear, predictable terms for the connection-stabilization
+  use case this version covers, instead of having to guess or negotiate case
+  by case.
+
+A broader, aggregation-oriented tier (allowing inclusion in feeds, indexes,
+or aggregation services) has been discussed but is **deliberately deferred**
+— see §5. It isn't useful until multiple independent aggregation services
+exist; a single early service can rely on a private opt-in/signup
+relationship with the sites it works with, which doesn't require any public
+document-level policy at all.
 
 This license governs **only** the republishing mechanism defined by the
 Reader's Web document formats. It does not apply to, and grants no rights
@@ -66,7 +74,13 @@ A Document's Republishing Policy determines the license grant:
 |---|---|
 | `do-not-republish` / `prohibit` | **No license granted.** See §3. |
 | *(tag absent)* / `implicit_allow` (default) | **Stabilization License** granted. See §4. |
-| `allow` / `explicit_allow` | **Aggregation License** granted (superset of §4). See §5. |
+| `allow` / `explicit_allow` | **Stabilization License** granted, same scope as above, stated explicitly in-document rather than relying on the default. |
+
+There is currently no policy value that grants broader aggregation rights —
+see §5. A private, bilateral relationship with a specific service (e.g. a
+signup-based submission flow) is a separate matter, governed by that
+service's own terms, and does not require or imply any particular
+Republishing Policy value on the Document itself.
 
 By publishing a Document using Reader's Web-compatible software without
 changing the default Republishing Policy, the Rights Holder grants the
@@ -106,35 +120,41 @@ b. The content and title must not be materially altered, beyond the format
 c. The Copy must be clearly presented as a copy, not as the original.
 d. This grant does **not** authorize distributing the Copy as part of a
    feed, index, aggregator, or collection of documents gathered from
-   multiple sources for browsing/discovery purposes — that use case requires
-   the Aggregation License (§5).
+   multiple sources for browsing/discovery purposes — see §5.
 
-## 5. Aggregation License (opt-in tier)
+## 5. Aggregation License — reserved, not yet defined
 
-Subject to the conditions below, a Rights Holder who sets their Republishing
-Policy to `allow` / `explicit_allow` grants everything in §4, **plus** a
-worldwide, royalty-free, non-exclusive, **revocable** license to:
+No Republishing Policy value currently grants a license to include a
+Document in a feed, index, or aggregation service assembled from multiple
+sources. This section is a placeholder for that future tier, kept here so
+the design isn't lost and so this section number stays stable if/when it is
+defined.
 
-- Include the Document (as a Copy) in a feed, index, aggregation service, or
-  similar collection assembled from multiple sources, for the purpose of
-  discovery, browsing, or archival access.
+**Why deferred:** a public, document-level "yes, any aggregator may include
+this" signal is only useful once multiple independent aggregation services
+actually exist for it to address. Until then, a single aggregation service
+can operate on a private, bilateral basis — sites opt in by signing up and
+submitting content directly to that service, under that service's own
+terms. That relationship does not require, and should not be signaled by,
+any particular value of this Document's Republishing Policy (see §2).
 
-**Conditions (in addition to §4's, except (d) which no longer applies):**
+**When this tier is eventually defined, open questions to resolve include:**
 
-a. Content and title must be preserved.
-b. Panel/sidebar information may be preserved or omitted, but if omitted or
-   altered it must not be **replaced with anything that misrepresents the
-   Copy's source or affiliation**, or otherwise misleads the reader about
-   where the content came from.
-c. A visible, reasonably prominent link back to the original URL is
-   **mandatory** — this is a non-negotiable condition of the grant, not
-   optional attribution.
-d. The Copy must not be presented in a way that implies endorsement by, or
-   affiliation with, the Rights Holder beyond the attribution required by
-   `<copy-info>`.
-e. `[OPEN — see Notes for review: should commercial redistribution require a
-   separate/further tier, or additional conditions, beyond what's listed
-   here?]`
+- What policy value names it (a distinct value, not a reuse of `allow` /
+  `explicit_allow` — those must keep meaning stabilization-only, since an
+  author restating the default shouldn't silently also opt into a much
+  broader grant).
+- Whether commercial redistribution (ads/paywalls against verbatim content)
+  needs stricter conditions than non-commercial aggregation — this was the
+  main friction point in real-world aggregator disputes (news snippet-tax
+  cases, Meltwater/AP, etc.) even where attribution was present.
+- Content/title preservation, mandatory link-back, and no-misrepresentation
+  conditions, along the lines discussed during design but not yet made
+  operative here.
+- Whether a Copy hosted under a private, bilateral arrangement (per above)
+  should be barred from carrying this tier's policy value itself, so a
+  privately-granted permission can't silently cascade into a public one the
+  original Rights Holder never gave.
 
 ## 6. Explicitly out of scope
 
@@ -190,12 +210,10 @@ time the Document was published, unless the specification says otherwise.
 
 Open questions raised during drafting that still need a decision:
 
-1. **Commercial vs. non-commercial aggregation** (§5e) — should monetized
-   redistribution (ads, paywalls, etc. against verbatim content) require
-   stricter conditions, or a further explicit tier, beyond attribution +
-   link-back? This was flagged as the main friction point in real-world
-   aggregator disputes (news snippet-tax cases, Meltwater/AP, etc.) even
-   when attribution was present.
+1. **Aggregation tier** (§5) — intentionally reserved/undefined for now.
+   Only worth defining once multiple independent aggregation services exist
+   to address; see the rationale and sub-questions already captured in §5
+   itself. Also noted in [CLAUDE.md](../../CLAUDE.md) as a forward pointer.
 2. **Takedown notice channel and timeframe** (§7) — needs a concrete
    mechanism (email? a metadata field? a form?) and a concrete number of
    days.
@@ -213,5 +231,4 @@ Open questions raised during drafting that still need a decision:
    exist.
 6. **Legal review** — this entire draft needs a qualified IP lawyer's pass
    before anything resembling this text is published as a live license,
-   especially §7 (revocation mechanics) and §5 (commercial use) and §8
-   (moral rights / jurisdiction).
+   especially §7 (revocation mechanics) and §8 (moral rights / jurisdiction).

@@ -83,6 +83,7 @@ function stwbpb_custom_post_endpoints_meta_box_callback($post) {
         <option value="explicit_allow" <?php selected($republishing_policy, 'explicit_allow'); ?>>Explicitly allow</option>
         <option value="prohibit"       <?php selected($republishing_policy, 'prohibit'); ?>>Prohibit (do-not-republish)</option>
     </select>
+    <p class="description">Allowing republishing lets other Reader's Web sites host a stable copy of this document if the original page is moved or removed, so links to it don't break. "Implicitly allow" (the default) permits this without adding any tag to the document; "Explicitly allow" states the same permission in the document itself. You can revoke this permission at any time by asking a site hosting a copy to take it down. Choose "Prohibit" to opt out entirely.</p>
     <br><br>
     <label for="stwbpb_sidebar_override"><strong>Sidebar:</strong></label><br>
     <select name="stwbpb_sidebar_override" id="stwbpb_sidebar_override" style="width:100%;margin-top:4px;">
