@@ -33,6 +33,7 @@ function stwbpb_get_panels($post) {
     $no_comments_message = $settings['no_comments_message'];
     $reply_button_label = $settings['reply_button_label'] ?? '';
     $leave_comment_label = $settings['leave_comment_label'] ?? '';
+    $load_more_comments_label = $settings['load_more_comments_label'] ?? '';
 
 
     $top_panel = $settings['top_panel'];
@@ -190,6 +191,7 @@ $commenting_open = $post->comment_status === 'open';
 $comments_attrs = '';
 $comments_attrs .= !empty($comments_title)      ? ' title="'              . esc_attr(stwbpb_decode_entities($comments_title))      . '"' : '';
 $comments_attrs .= !empty($no_comments_message) ? ' empty="'              . esc_attr(stwbpb_decode_entities($no_comments_message)) . '"' : '';
+$comments_attrs .= !empty($load_more_comments_label) ? ' load-more-label="'  . esc_attr(stwbpb_decode_entities($load_more_comments_label)) . '"' : '';
 if ($commenting_open) {
     $leave_comment_url = home_url("/sw-comment-form/?post={$post->ID}");
     $comments_attrs .= ' leave-comment-url="'                             . esc_url($leave_comment_url)     . '"';

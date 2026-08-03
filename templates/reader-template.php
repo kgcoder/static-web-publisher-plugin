@@ -225,6 +225,8 @@ if (!empty($stwbpb_connections_info)) {
 
                     </div>
 
+                    <div id="CurrentDocumentBelowContentComments" class="BelowContentComments" style="display:none"></div>
+
                     <div id="CurrentDocumentBottomBar" class="BottomBar"></div>
 
                     <div id="CurrentDocumentPostNavBar" class="PostNavBar"<?php if ($stwbpb_doc_type !== 'HDOC') echo ' style="display:none"'; ?>><?php

@@ -958,16 +958,17 @@ class PopupDocumentManager{
             const documentBottomBar = document.getElementById("CurrentDocumentBottomBar")
     
             const postNavBar = document.getElementById("CurrentDocumentPostNavBar")
+            const belowContentCommentsDiv = document.getElementById("CurrentDocumentBelowContentComments")
 
-      
+
             const allDivs = {
                 documentLeftPanelButton,documentRightPanelButton,
                 topPanelDiv,topPanelLogoLink,topPanelLogoImage,topPanelTitleSpan,
                 bottomPanelDiv,bottomPanelRowDiv,topPanelOptionsRow,leftPanelDiv,rightPanelDiv,bottomMessageDiv,
                 dropdownMenuDiv,sandwichButtonDiv,
                 documentSidebar, documentBottomBar,
-                postNavBar
-                
+                postNavBar, belowContentCommentsDiv
+
             }
 
             g.readingManager.mainDocPanels = panels
@@ -1167,6 +1168,7 @@ class PopupDocumentManager{
         const documentBottomBar = document.getElementById("RightDocumentBottomBar" + docId)
 
         const postNavBar = document.getElementById("RightDocumentPostNavBar" + docId)
+        const belowContentCommentsDiv = document.getElementById("RightDocumentBelowContentComments" + docId)
 
         const allDivs = {
             documentLeftPanelButton,documentRightPanelButton,
@@ -1174,7 +1176,7 @@ class PopupDocumentManager{
             bottomPanelDiv,bottomPanelRowDiv,topPanelOptionsRow,leftPanelDiv,rightPanelDiv,bottomMessageDiv,
             sandwichButtonDiv,dropdownMenuDiv,
             documentSidebar:null, documentBottomBar,
-            postNavBar
+            postNavBar, belowContentCommentsDiv
         }
 
         this.populatePanels(noteData.panels,allDivs,noteData,true)
@@ -1213,7 +1215,7 @@ class PopupDocumentManager{
             bottomPanelDiv,bottomPanelRowDiv,topPanelOptionsRow,leftPanelDiv,rightPanelDiv,bottomMessageDiv,
             sandwichButtonDiv,dropdownMenuDiv,
             documentSidebar, documentBottomBar,
-            postNavBar
+            postNavBar, belowContentCommentsDiv
         } = allDivs
 
 
@@ -1299,6 +1301,32 @@ class PopupDocumentManager{
 
         documentLeftPanelButton.style.display = isLeftPanelButtonVisible ? 'flex' : 'none'
         documentRightPanelButton.style.display = isRightPanelButtonVisible ? 'flex' : 'none'
+
+        if(belowContentCommentsDiv){
+            const hasComments = !!(sidePanel && sidePanel.commentsUrl)
+            belowContentCommentsDiv.style.display = hasComments ? 'block' : 'none'
+            if(!dataObject.belowContentComments) dataObject.belowContentComments = {}
+            if(hasComments){
+                this.getComments(belowContentCommentsDiv, sidePanel.commentsUrl, sidePanel.commentsTitle,
+                    sidePanel.noCommentsMessage, dataObject.belowContentComments, sidePanel.leaveCommentUrl,
+                    sidePanel.commentsReplyLabel, sidePanel.commentsLeaveLabel, 1, 'button', sidePanel.commentsLoadMoreLabel)
+            }else{
+                this.cleanCommentsDiv(belowContentCommentsDiv, dataObject.belowContentComments)
+            }
+
+            const mainPadding = g.pdm.getMainDocumentPadding()
+
+            belowContentCommentsDiv.style.paddingLeft = `${mainPadding}px`
+            belowContentCommentsDiv.style.paddingRight = `${mainPadding}px`
+
+            if(g.readingManager.isFullScreen && !g.isMobileMode){
+                if(g.readingManager.mainDocPanels && g.readingManager.mainDocPanels.sidebarPanel && g.readingManager.mainDocPanels.sidebarPanel.side === 'left'){
+                    belowContentCommentsDiv.style.marginLeft = `${window.innerWidth * 0.2}px`  
+                }else{
+                    belowContentCommentsDiv.style.marginRight = `${window.innerWidth * 0.2}px`
+                }
+            }
+        }
 
 
         let topTextColor = 'black'
@@ -2967,7 +2995,7 @@ class PopupDocumentManager{
         }  
     }
 
-    getComments = async (commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, listenersOwner, leaveCommentUrl, replyLabel, leaveCommentLabel, page = 1) => {
+    getComments = async (commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, listenersOwner, leaveCommentUrl, replyLabel, leaveCommentLabel, page = 1, paginationMode = 'scroll', loadMoreLabel = '') => {
         if (page === 1) {
             invalidateCacheForUrl(commentsUrl)
             listenersOwner.commentsDiv = commentsDiv
@@ -2980,6 +3008,8 @@ class PopupDocumentManager{
             listenersOwner.leaveCommentUrl = leaveCommentUrl
             listenersOwner.commentsReplyLabel = replyLabel
             listenersOwner.commentsLeaveLabel = leaveCommentLabel
+            listenersOwner.paginationMode = paginationMode
+            listenersOwner.loadMoreLabel = loadMoreLabel
         }
         
         if(listenersOwner.allItemsLoaded)return
@@ -3049,7 +3079,7 @@ class PopupDocumentManager{
         this.cleanCommentsDiv(commentsDiv, listenersOwner)
        
         const refreshComments = () => {
-            this.getComments(commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, listenersOwner, leaveCommentUrl, replyLabel, leaveCommentLabel)
+            this.getComments(commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, listenersOwner, leaveCommentUrl, replyLabel, leaveCommentLabel, 1, paginationMode, loadMoreLabel)
         }
 
         const openPopupFn = (url) => {
@@ -3094,9 +3124,24 @@ class PopupDocumentManager{
 
 
 
-        g.noteDivsManager.addEventListenersToNoteComments(commentsDiv, listenersOwner)
+        if (listenersOwner.paginationMode === 'button') {
+            if (listenersOwner.loadMoreLabel && !listenersOwner.allItemsLoaded) {
+                const loadMoreBtn = document.createElement('button')
+                loadMoreBtn.className = 'swp-load-more-btn'
+                loadMoreBtn.textContent = listenersOwner.loadMoreLabel
+                loadMoreBtn.addEventListener('click', () => {
+                    this.getComments(listenersOwner.commentsDiv, listenersOwner.commentsUrl, listenersOwner.commentsTitle,
+                        listenersOwner.noCommentsMessage, listenersOwner, listenersOwner.leaveCommentUrl,
+                        listenersOwner.commentsReplyLabel, listenersOwner.commentsLeaveLabel,
+                        listenersOwner.currentPage + 1, 'button', listenersOwner.loadMoreLabel)
+                })
+                commentsDiv.appendChild(loadMoreBtn)
+            }
+        } else {
+            g.noteDivsManager.addEventListenersToNoteComments(commentsDiv, listenersOwner)
+        }
 
-      
+
     }
 
 
@@ -3244,6 +3289,19 @@ class PopupDocumentManager{
         const currentDocumentTopBar = document.getElementById("CurrentDocumentTopBar")
         currentDocumentTopBar.style.height = kLeftDivTop + 'px'
         currentDocumentTopBar.style.paddingLeft = `${mainPadding}px`
+        
+        const belowContentCommentsDiv = document.getElementById("CurrentDocumentBelowContentComments")
+        belowContentCommentsDiv.style.paddingLeft = `${mainPadding}px`
+        belowContentCommentsDiv.style.paddingRight = `${mainPadding}px`
+
+        if(g.readingManager.isFullScreen && !g.isMobileMode){
+            if(g.readingManager.mainDocPanels && g.readingManager.mainDocPanels.sidebarPanel && g.readingManager.mainDocPanels.sidebarPanel.side === 'left'){
+                belowContentCommentsDiv.style.marginLeft = `${window.innerWidth * 0.2}px`  
+            }else{
+                belowContentCommentsDiv.style.marginRight = `${window.innerWidth * 0.2}px`
+            }
+        }
+
     }
 
 

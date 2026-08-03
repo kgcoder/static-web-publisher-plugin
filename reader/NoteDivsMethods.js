@@ -446,6 +446,7 @@ class NoteDivsManager{
                 let leaveCommentUrl = ''
                 let commentsReplyLabel = ''
                 let commentsLeaveLabel = ''
+                let commentsLoadMoreLabel = ''
                 const panelsString = panelsMatch[0]
 
                 const parser = new DOMParser()
@@ -546,9 +547,10 @@ class NoteDivsManager{
                     leaveCommentUrl = sanitizeUrl(directCommentsPanel.getAttribute('leave-comment-url'))
                     commentsReplyLabel = stripHtmlTags(directCommentsPanel.getAttribute('reply-label'))
                     commentsLeaveLabel = stripHtmlTags(directCommentsPanel.getAttribute('leave-comment-label'))
+                    commentsLoadMoreLabel = stripHtmlTags(directCommentsPanel.getAttribute('load-more-label'))
 
                     sidePanelInfo = {commentsUrl, commentsTitle, noCommentsMessage,
-                                     leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel}
+                                     leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel, commentsLoadMoreLabel}
                 }
 
 

@@ -19,6 +19,7 @@ function stwbpb_settings_page() {
         'no_comments_message'       => '',
         'reply_button_label'        => '',
         'leave_comment_label'       => '',
+        'load_more_comments_label'  => '',
         'form_title'                => '',
         'replying_to_label'         => '',
         'commenting_on_label'       => '',
@@ -327,6 +328,13 @@ function stwbpb_settings_page() {
                 <input class="single-text-input" type="text" name="stwbpb_settings[leave_comment_label]" value="<?php echo esc_attr($settings['leave_comment_label']); ?>" />
             </div>
 
+            <div class="settings-option-div">
+                <label>Load more comments button label: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[load_more_comments_label]" value="<?php echo esc_attr($settings['load_more_comments_label']); ?>" />
+            </div>
+            <p class="description">Leave empty to hide the Load more button in the comments section shown below the document content; readers will then only see the first page of comments there.</p>
+
             <h2>Comment form labels</h2>
 
             <div class="settings-option-div">
@@ -458,6 +466,7 @@ function stwbpb_settings_init() {
         'no_comments_message'       => '',
         'reply_button_label'        => '',
         'leave_comment_label'       => '',
+        'load_more_comments_label'  => '',
         'form_title'                => '',
         'replying_to_label'         => '',
         'commenting_on_label'       => '',
@@ -526,6 +535,7 @@ function stwbpb_sanitize_settings($input) {
     $sanitized['no_comments_message']       = isset($input['no_comments_message'])       ? sanitize_text_field($input['no_comments_message'])       : '';
     $sanitized['reply_button_label']        = isset($input['reply_button_label'])        ? sanitize_text_field($input['reply_button_label'])        : '';
     $sanitized['leave_comment_label']       = isset($input['leave_comment_label'])       ? sanitize_text_field($input['leave_comment_label'])       : '';
+    $sanitized['load_more_comments_label']  = isset($input['load_more_comments_label'])  ? sanitize_text_field($input['load_more_comments_label'])  : '';
     $sanitized['form_title']                = isset($input['form_title'])                ? sanitize_text_field($input['form_title'])                : '';
     $sanitized['replying_to_label']         = isset($input['replying_to_label'])         ? sanitize_text_field($input['replying_to_label'])         : '';
     $sanitized['commenting_on_label']       = isset($input['commenting_on_label'])       ? sanitize_text_field($input['commenting_on_label'])       : '';
