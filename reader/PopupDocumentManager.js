@@ -29,7 +29,6 @@ export const kRightDocsTabRowHeight = 20
 export const kRightDivTopBarHeight = 20
 
 export const kVerticalPanelInFullscreenWidth = 400
-export const kVerticalPanelWidth = 300
 
 export const kDefaultPadding = 20
 
@@ -105,8 +104,6 @@ class PopupDocumentManager{
     rightSearchHeighlightObjects = []
     rightSearchIndex = 0
 
-    currentDocLeftPanelShowing = false
-    currentDocRightPanelShowing = false
     currentDocTopPanelShowing = false
     currentDocBottomPanelShowing = false
 
@@ -298,14 +295,12 @@ class PopupDocumentManager{
     
             const leftOffset = this.getMainLeftOffset()
 
-            const leftVerticalPanelWidth = this.getCurrentDocLeftVerticalPanelWidth()
-
             let leftSidebarWidth = 0
 
-            if(leftVerticalPanelWidth < 0.01 && g.readingManager.isFullScreen && !g.isMobileMode && g.readingManager.mainDocPanels && g.readingManager.mainDocPanels.sidebarPanel && g.readingManager.mainDocPanels.sidebarPanel.side === 'left'){
+            if(g.readingManager.isFullScreen && !g.isMobileMode && g.readingManager.mainDocPanels && g.readingManager.mainDocPanels.sidebarPanel && g.readingManager.mainDocPanels.sidebarPanel.side === 'left'){
                 leftSidebarWidth = window.innerWidth * kSidebarWidthToScreenWidthRatio
             }
-            const relativeX = pageX - leftOffset - leftVerticalPanelWidth - leftSidebarWidth
+            const relativeX = pageX - leftOffset - leftSidebarWidth
             
             if(g.readingManager.isFullScreen || relativeX < docWidth){
                 if( pageY > kLeftDivTop){
@@ -378,14 +373,12 @@ class PopupDocumentManager{
             }
 
     
-            const leftVerticalPanelWidth = this.getCurrentDocLeftVerticalPanelWidth()
-
             let leftSidebarWidth = 0
 
             if(g.readingManager.isFullScreen && !g.isMobileMode && g.readingManager.mainDocPanels && g.readingManager.mainDocPanels.sidebarPanel && g.readingManager.mainDocPanels.sidebarPanel.side === 'left'){
                 leftSidebarWidth = window.innerWidth * kSidebarWidthToScreenWidthRatio
             }
-            const clickX = pageX - leftOffset - leftVerticalPanelWidth - leftSidebarWidth
+            const clickX = pageX - leftOffset - leftSidebarWidth
             
             if(g.readingManager.isFullScreen || clickX < docWidth){
                 if( pageY > kLeftDivTop){
@@ -442,18 +435,8 @@ class PopupDocumentManager{
         })
     
     
-        const leftDocumentLeftPanelButton = document.getElementById("CurrentDocumentLeftPanelButton")
-        this.createOneSVGIconComponent(leftDocumentLeftPanelButton,g.iconsInfo.svgIcons.leftPanelIcon,'Reader-LeftDocLeftPanelButton')
-
-        leftDocumentLeftPanelButton.addEventListener('click', this.leftDocumentLeftPanelButtonPressed)
-        leftDocumentLeftPanelButton.style.display = 'none'
-    
-        const leftDocumentRightPanelButton = document.getElementById("CurrentDocumentRightPanelButton")
-        this.createOneSVGIconComponent(leftDocumentRightPanelButton,g.iconsInfo.svgIcons.rightPanelIcon,'Reader-LeftDocRightPanelButton')
-
-        leftDocumentRightPanelButton.addEventListener('click', this.leftDocumentRightPanelButtonPressed)
-        leftDocumentRightPanelButton.style.display = 'none'
-    
+ 
+  
         const rightDocumentSourceCodeButton = document.getElementById("RightDocumentSourceCodeButton")
         this.createOneSVGIconComponent(rightDocumentSourceCodeButton,g.iconsInfo.svgIcons.sourceCode,'Reader-RightDocSourceCodeButton')
         rightDocumentSourceCodeButton.addEventListener('click',this.rightDocumentSourceCodeButtonPressed)
@@ -464,17 +447,6 @@ class PopupDocumentManager{
 
         rightDocumentCenterCollageButton.addEventListener('click', this.rightDocCenterCollagePressed)
         rightDocumentCenterCollageButton.style.display = 'none'
-    
-        const rightDocumentLeftPanelButton = document.getElementById("RightDocumentLeftPanelButton")
-        this.createOneSVGIconComponent(rightDocumentLeftPanelButton,g.iconsInfo.svgIcons.leftPanelIcon,'Reader-RightDocLeftPanelButton')
-
-        rightDocumentLeftPanelButton.addEventListener('click',this.rightDocumentLeftPanelButtonPressed)
-    
-    
-        const rightDocumentRightPanelButton = document.getElementById("RightDocumentRightPanelButton")
-        this.createOneSVGIconComponent(rightDocumentRightPanelButton,g.iconsInfo.svgIcons.rightPanelIcon,'Reader-RightDocRightPanelButton')
-
-        rightDocumentRightPanelButton.addEventListener('click',this.rightDocumentRightPanelButtonPressed)
     
     
 
@@ -742,11 +714,6 @@ class PopupDocumentManager{
         this.updateDocumentWidth()
 
 
-        const leftDocumentLeftPanelButton = document.getElementById("CurrentDocumentLeftPanelButton")
-        leftDocumentLeftPanelButton.style.display = 'none'
-        const rightDocumentLeftPanelButton = document.getElementById("CurrentDocumentRightPanelButton")
-        rightDocumentLeftPanelButton.style.display = 'none'
-
 
         
 
@@ -940,12 +907,8 @@ class PopupDocumentManager{
             this.hidePanelsOfCurrentDocument()
         } else {
             
-            const documentLeftPanelButton = document.getElementById("CurrentDocumentLeftPanelButton")
-            const documentRightPanelButton = document.getElementById("CurrentDocumentRightPanelButton")
             const topPanelDiv = document.getElementById("CurrentDocumentTopPanel")
             const bottomPanelDiv = document.getElementById("CurrentDocumentBottomPanel")
-            const leftPanelDiv = document.getElementById("CurrentDocumentLeftPanel")
-            const rightPanelDiv = document.getElementById("CurrentDocumentRightPanel")
             const topPanelLogoLink = document.getElementById("CurrentDocumentTopPanelLogoLink")
             const topPanelLogoImage = document.getElementById("CurrentDocumentTopPanelLogo")
             const topPanelTitleSpan = document.getElementById("CurrentDocumentTopPanelTitle")
@@ -962,9 +925,8 @@ class PopupDocumentManager{
 
 
             const allDivs = {
-                documentLeftPanelButton,documentRightPanelButton,
                 topPanelDiv,topPanelLogoLink,topPanelLogoImage,topPanelTitleSpan,
-                bottomPanelDiv,bottomPanelRowDiv,topPanelOptionsRow,leftPanelDiv,rightPanelDiv,bottomMessageDiv,
+                bottomPanelDiv,bottomPanelRowDiv,topPanelOptionsRow,bottomMessageDiv,
                 dropdownMenuDiv,sandwichButtonDiv,
                 documentSidebar, documentBottomBar,
                 postNavBar, belowContentCommentsDiv
@@ -1129,11 +1091,6 @@ class PopupDocumentManager{
         if(!g.readingManager.rightNotesData.length)return
         const noteData = g.readingManager.rightNotesData[g.readingManager.selectedRightDocIndex]
         if(noteData.docType !== 'h' || !noteData.panels){
-            const rightDocumentLeftPanelButton = document.getElementById("RightDocumentLeftPanelButton")
-            const rightDocumentRightPanelButton = document.getElementById("RightDocumentRightPanelButton")
-
-            rightDocumentLeftPanelButton.style.display = 'none'
-            rightDocumentRightPanelButton.style.display = 'none'
             return
         }
 
@@ -1141,8 +1098,6 @@ class PopupDocumentManager{
         
 
         const docId = noteData.docId
-        const leftPanelDiv = document.getElementById('DocumentLeftPanel' + docId)
-        const rightPanelDiv = document.getElementById('DocumentRightPanel' + docId)
         const topPanelDiv = document.getElementById('DocumentTopPanel' + docId)
         
 
@@ -1157,8 +1112,6 @@ class PopupDocumentManager{
 
         const bottomMessageDiv = document.getElementById("DocumentBottomPanelBottomMessage" + docId)
         
-        const documentLeftPanelButton = document.getElementById("RightDocumentLeftPanelButton")
-        const documentRightPanelButton = document.getElementById("RightDocumentRightPanelButton")
 
 
 
@@ -1171,9 +1124,8 @@ class PopupDocumentManager{
         const belowContentCommentsDiv = document.getElementById("RightDocumentBelowContentComments" + docId)
 
         const allDivs = {
-            documentLeftPanelButton,documentRightPanelButton,
             topPanelDiv,topPanelLogoLink,topPanelLogoImage,topPanelTitleSpan,
-            bottomPanelDiv,bottomPanelRowDiv,topPanelOptionsRow,leftPanelDiv,rightPanelDiv,bottomMessageDiv,
+            bottomPanelDiv,bottomPanelRowDiv,topPanelOptionsRow,bottomMessageDiv,
             sandwichButtonDiv,dropdownMenuDiv,
             documentSidebar:null, documentBottomBar,
             postNavBar, belowContentCommentsDiv
@@ -1191,7 +1143,7 @@ class PopupDocumentManager{
             return
         }
 
-        if(!g.readingManager.isFullScreen || this.currentDocLeftPanelShowing || this.currentDocRightPanelShowing || g.isMobileMode){
+        if(!g.readingManager.isFullScreen || g.isMobileMode){
             sidebar.style.display = 'none'
             bottomBar.style.display = 'flex'
         }else{
@@ -1210,9 +1162,8 @@ class PopupDocumentManager{
     populatePanels(panelsInfo,allDivs,dataObject,isRight = false){
 
         const {
-            documentLeftPanelButton,documentRightPanelButton,
             topPanelDiv,topPanelLogoLink,topPanelLogoImage,topPanelTitleSpan,
-            bottomPanelDiv,bottomPanelRowDiv,topPanelOptionsRow,leftPanelDiv,rightPanelDiv,bottomMessageDiv,
+            bottomPanelDiv,bottomPanelRowDiv,topPanelOptionsRow,bottomMessageDiv,
             sandwichButtonDiv,dropdownMenuDiv,
             documentSidebar, documentBottomBar,
             postNavBar, belowContentCommentsDiv
@@ -1238,15 +1189,6 @@ class PopupDocumentManager{
             topPanelOptionsRow.removeChild(topPanelOptionsRow.firstChild)
         }
 
-      
-
-        while(leftPanelDiv.firstChild){
-            leftPanelDiv.removeChild(leftPanelDiv.firstChild)
-        }
-
-        while(rightPanelDiv.firstChild){
-            rightPanelDiv.removeChild(rightPanelDiv.firstChild)
-        }
 
 
 
@@ -1257,50 +1199,6 @@ class PopupDocumentManager{
         
 
         const {topPanel,bottomPanel,sidePanel,style} = panelsInfo
-
-        let isLeftPanelButtonVisible = false
-        let isRightPanelButtonVisible = false
-
-
-       
-
-        if(sidePanel && sidePanel.commentsUrl){
-
-
-            const isLeft = sidePanel.side === 'left'
-
-            isLeftPanelButtonVisible = isLeft
-            isRightPanelButtonVisible = !isLeft
-
-
-
-
-            if(isLeft){
-
-                let id = isRight ? 'rightDocLeftPanel' : 'leftDocLeftPanel'
-
-                if(isRight){
-                    id += dataObject.index
-                }
-
-                id += 'Comments'
-                this.addCommentsSectionToSidePanel(leftPanelDiv, id)
-
-            }else{
-                let id = isRight ? 'rightDocRightPanel' : 'leftDocRightPanel'
-
-                if(isRight){
-                    id += dataObject.index
-                }
-
-                id += 'Comments'
-                this.addCommentsSectionToSidePanel(rightPanelDiv, id)
-
-            }
-        }
-
-        documentLeftPanelButton.style.display = isLeftPanelButtonVisible ? 'flex' : 'none'
-        documentRightPanelButton.style.display = isRightPanelButtonVisible ? 'flex' : 'none'
 
         if(belowContentCommentsDiv){
             const hasComments = !!(sidePanel && sidePanel.commentsUrl)
@@ -1319,13 +1217,8 @@ class PopupDocumentManager{
             belowContentCommentsDiv.style.paddingLeft = `${mainPadding}px`
             belowContentCommentsDiv.style.paddingRight = `${mainPadding}px`
 
-            if(g.readingManager.isFullScreen && !g.isMobileMode){
-                if(g.readingManager.mainDocPanels && g.readingManager.mainDocPanels.sidebarPanel && g.readingManager.mainDocPanels.sidebarPanel.side === 'left'){
-                    belowContentCommentsDiv.style.marginLeft = `${window.innerWidth * 0.2}px`  
-                }else{
-                    belowContentCommentsDiv.style.marginRight = `${window.innerWidth * 0.2}px`
-                }
-            }
+            this.updateMainDocumentCommentsSectionMargins()
+
         }
 
 
@@ -2059,14 +1952,15 @@ class PopupDocumentManager{
 
         const currentDocumentBody = document.getElementById("CurrentDocumentBody")
 
-        if(g.readingManager.isFullScreen && g.readingManager.copyInfo && !this.currentDocLeftPanelShowing && 
-        !this.currentDocRightPanelShowing){
+        if(g.readingManager.isFullScreen && g.readingManager.copyInfo){
             currentDocumentBody.style.width = `100%`
         }else{
             currentDocumentBody.style.width = '70%'
         }
 
         this.updateMainDocumentPadding()
+        this.updateMainDocumentCommentsSectionMargins()
+
         const mainPresentationDiv = document.getElementById("CurrentDocumentMainDiv")
 
          mainPresentationDiv.style.width = '100%'
@@ -2367,15 +2261,7 @@ class PopupDocumentManager{
     //     return noteData.currentDocTopPanelShowing ? 50 : 0
     // }
 
-    getCurrentDocLeftVerticalPanelWidth(){
-        const panelWidth = g.readingManager.isFullScreen ? kVerticalPanelInFullscreenWidth : kVerticalPanelWidth
-        return this.currentDocLeftPanelShowing ? panelWidth : 0
-    }
-
-    getCurrentDocRightVerticalPanelWidth(){
-        const panelWidth = g.readingManager.isFullScreen ? kVerticalPanelInFullscreenWidth : kVerticalPanelWidth
-        return this.currentDocRightPanelShowing ? panelWidth : 0
-    }
+  
 
 
     toggleFlinksList = (dontCloseOthers = false) => {
@@ -2735,171 +2621,7 @@ class PopupDocumentManager{
         this.isFlinksListOpen = false
     }
 
-    leftDocumentLeftPanelButtonPressed = () => {
 
-        const commentsUrl = g.readingManager.mainDocPanels.sidePanel.commentsUrl
-        if (commentsUrl) {
-            const currentPageUrl = g.readingManager.mainDocData.url
-            const currentPageHostname = new URL(currentPageUrl).hostname
-            const requestedPageHostname = new URL(commentsUrl).hostname
-
-            if(requestedPageHostname !== currentPageHostname){
-                this.showOpenInNewTabAlert(currentPageUrl)
-                return
-            }
-        }
-
-        this.currentDocLeftPanelShowing = !this.currentDocLeftPanelShowing
-
-        if(this.isLeftExporting){
-            this.toggleExport()
-        }
-        if(this.isShowingInfo){
-            this.toggleInfo()
-        }
-        if(this.isLeftSourceCodeShowing){
-            this.toggleSourceCode()
-        }
-
-        const commentsDiv = document.getElementById("leftDocLeftPanelComments")
-        if (this.currentDocLeftPanelShowing) {
-            const commentsUrl = g.readingManager.mainDocPanels.sidePanel.commentsUrl
-            if (commentsUrl) {
-                const {commentsTitle, noCommentsMessage, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel} = g.readingManager.mainDocPanels.sidePanel
-
-                this.getComments(commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, this, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel)
-
-            }
-        } else {
-            this.cleanCommentsDiv(commentsDiv, this)
-        }
-
-        this.updateMainDocumentPadding()
-
-        this.updateLeftDocumentPanels()
-
-        this.updateSidebarVisibility()
-
-      
-
-        g.readingManager.applyFlinksOnTheLeft()
-
-        
-    }
-    
-    leftDocumentRightPanelButtonPressed = async () => {
-
-        const commentsUrl = g.readingManager.mainDocPanels.sidePanel.commentsUrl
-        if (commentsUrl) {
-            const currentPageUrl = g.readingManager.mainDocData.url
-            const currentPageHostname = new URL(currentPageUrl).hostname
-            const requestedPageHostname = new URL(commentsUrl).hostname
-
-            if(requestedPageHostname !== currentPageHostname){
-                this.showOpenInNewTabAlert(currentPageUrl)
-                return
-            }
-        }
-
-        this.currentDocRightPanelShowing = !this.currentDocRightPanelShowing 
-
-        this.closeAllExcept(null)
-      
-
-
-
-        const commentsDiv = document.getElementById("leftDocRightPanelComments")
-        if(this.currentDocRightPanelShowing){
-
-            const commentsUrl = g.readingManager.mainDocPanels.sidePanel.commentsUrl
-            if (commentsUrl) {
-                const {commentsTitle, noCommentsMessage, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel} = g.readingManager.mainDocPanels.sidePanel
-                this.getComments(commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, this, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel)
-            }
-        } else {
-            this.cleanCommentsDiv(commentsDiv, this)
-        }
-
-        this.updateMainDocumentPadding()
-
-        this.updateLeftDocumentPanels() 
-
-        this.updateSidebarVisibility()
-
-
-        g.readingManager.applyFlinksOnTheLeft()
-
-    }
-
-    rightDocumentLeftPanelButtonPressed = () => {
-        const noteData = g.readingManager.rightNotesData[g.readingManager.selectedRightDocIndex]
-        const commentsUrl = noteData.panels.sidePanel.commentsUrl
-        if (commentsUrl) {
-            const currentPageUrl = g.readingManager.mainDocData.url
-            const currentPageHostname = new URL(currentPageUrl).hostname
-            const requestedPageHostname = new URL(commentsUrl).hostname
-
-            if(requestedPageHostname !== currentPageHostname){
-                this.showOpenInNewTabAlert(noteData.url)
-                return
-            }
-        }
-        
-        noteData.currentDocLeftPanelShowing = !noteData.currentDocLeftPanelShowing
-
-        
-        const commentsDiv = document.getElementById("rightDocLeftPanel" + noteData.index + "Comments")
-        if(noteData.currentDocLeftPanelShowing){
-
-            const commentsUrl = noteData.panels.sidePanel.commentsUrl
-            if (commentsUrl) {
-                const {commentsTitle, noCommentsMessage, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel} = noteData.panels.sidePanel
-                this.getComments(commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, noteData, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel)
-            }
-        } else {
-            this.cleanCommentsDiv(commentsDiv, noteData)
-        }
-   
-        this.updateRightDocumentPanels(noteData)
-
-        g.readingManager.applyFlinksOnTheRight()
-
-    }
-    
-    rightDocumentRightPanelButtonPressed = () => {
-        const noteData = g.readingManager.rightNotesData[g.readingManager.selectedRightDocIndex]
-        const commentsUrl = noteData.panels.sidePanel.commentsUrl
-        if (commentsUrl) {
-            const currentPageUrl = g.readingManager.mainDocData.url
-            const currentPageHostname = new URL(currentPageUrl).hostname
-            const requestedPageHostname = new URL(commentsUrl).hostname
-
-            if(requestedPageHostname !== currentPageHostname){
-                this.showOpenInNewTabAlert(noteData.url)
-                return
-            }
-        }
-
-
-        noteData.currentDocRightPanelShowing = !noteData.currentDocRightPanelShowing 
-        
-        const commentsDiv = document.getElementById("rightDocRightPanel" + noteData.index + "Comments")
-        if(noteData.currentDocRightPanelShowing){
-
-            const commentsUrl = noteData.panels.sidePanel.commentsUrl
-            if (commentsUrl) {
-                const {commentsTitle, noCommentsMessage, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel} = noteData.panels.sidePanel
-                this.getComments(commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, noteData, leaveCommentUrl, commentsReplyLabel, commentsLeaveLabel)
-            }
-        } else {
-            this.cleanCommentsDiv(commentsDiv, noteData)
-        }
-
-        this.updateRightDocumentPanels(noteData) 
-
-        g.readingManager.applyFlinksOnTheRight()
-
-    }
 
 
     promotionButtonPressed = () => {
@@ -3248,23 +2970,18 @@ class PopupDocumentManager{
     
 
     updateLeftDocumentPanels = () => {
-        const leftPanel = document.getElementById("CurrentDocumentLeftPanel")
-        const rightPanel = document.getElementById("CurrentDocumentRightPanel")
         const topPanel = document.getElementById("CurrentDocumentTopPanel")
         const dropdownMenuDiv = document.getElementById("CurrentDocumentDropDownMenu")
         const topPanelLogoLink = document.getElementById("CurrentDocumentTopPanelLogoLink")
         const topPanelOptionsRow = document.getElementById("CurrentDocumentTopPanelOptionsRow")
         const sandwichButtonDiv = document.getElementById("LeftSandwichButton")
        
-        const leftVerticalPanelWidth = this.getCurrentDocLeftVerticalPanelWidth()
-        const rightVerticalPanelWidth = this.getCurrentDocRightVerticalPanelWidth()
-
         const allDivs = {
-            topPanel,leftPanel,rightPanel,
+            topPanel,
             dropdownMenuDiv,topPanelLogoLink,topPanelOptionsRow,sandwichButtonDiv
         }
 
-        this.updateDocumentPanels(allDivs,leftVerticalPanelWidth,rightVerticalPanelWidth,this)
+        this.updateDocumentPanels(allDivs,this)
 
     }
 
@@ -3294,39 +3011,46 @@ class PopupDocumentManager{
         belowContentCommentsDiv.style.paddingLeft = `${mainPadding}px`
         belowContentCommentsDiv.style.paddingRight = `${mainPadding}px`
 
+
+    }
+
+    updateMainDocumentCommentsSectionMargins = () => {
+        const belowContentCommentsDiv = document.getElementById("CurrentDocumentBelowContentComments")
         if(g.readingManager.isFullScreen && !g.isMobileMode){
             if(g.readingManager.mainDocPanels && g.readingManager.mainDocPanels.sidebarPanel && g.readingManager.mainDocPanels.sidebarPanel.side === 'left'){
-                belowContentCommentsDiv.style.marginLeft = `${window.innerWidth * 0.2}px`  
+                belowContentCommentsDiv.style.marginLeft = `${window.innerWidth * 0.2}px` 
+                belowContentCommentsDiv.style.marginRight = 0 
             }else{
+                belowContentCommentsDiv.style.marginLeft = 0
                 belowContentCommentsDiv.style.marginRight = `${window.innerWidth * 0.2}px`
             }
+        }else{
+            belowContentCommentsDiv.style.marginLeft = 0
+            belowContentCommentsDiv.style.marginRight = 0 
         }
 
     }
+
 
 
     updateRightDocumentPanels = (noteData) => {
         if(noteData.docType !== 'h')return
         
         const docId = noteData.docId
-        const leftPanel = document.getElementById("DocumentLeftPanel" + docId)
-        const rightPanel = document.getElementById("DocumentRightPanel" + docId)
         const topPanel = document.getElementById("DocumentTopPanel" + docId)
         const dropdownMenuDiv = document.getElementById("DocumentDropDownMenu" + docId)
         const topPanelLogoLink = document.getElementById("DocumentTopPanelLogoLink" + docId)
         const topPanelOptionsRow = document.getElementById("DocumentTopPanelOptionsRow" + docId)
         const sandwichButtonDiv = document.getElementById("SandwichButton" + docId)
        
-        const leftVerticalPanelWidth = noteData.currentDocLeftPanelShowing ? kVerticalPanelWidth : 0
-        const rightVerticalPanelWidth = noteData.currentDocRightPanelShowing ? kVerticalPanelWidth : 0
 
 
         const allDivs = {
-            topPanel,leftPanel,rightPanel,
+            topPanel,
             dropdownMenuDiv,topPanelLogoLink,topPanelOptionsRow,sandwichButtonDiv
         }
 
-        this.updateDocumentPanels(allDivs,leftVerticalPanelWidth,rightVerticalPanelWidth,noteData)
+        this.updateDocumentPanels(allDivs,noteData)
 
     }
 
@@ -3335,22 +3059,11 @@ class PopupDocumentManager{
 
 
 
-    updateDocumentPanels = (allDivs,leftPanelWidth,rightPanelWidth,dataObject) => {
-        const {topPanel,leftPanel,rightPanel,
+    updateDocumentPanels = (allDivs,dataObject) => {
+        const {topPanel,
             dropdownMenuDiv,topPanelLogoLink,topPanelOptionsRow,sandwichButtonDiv
         } = allDivs
 
-
-        
-
-
-        
-        leftPanel.style.width = `${leftPanelWidth}px`
-        rightPanel.style.width = `${rightPanelWidth}px`
-
-        leftPanel.style.display = dataObject.currentDocLeftPanelShowing ? 'flex' : 'none'
-        rightPanel.style.display = dataObject.currentDocRightPanelShowing ? 'flex' : 'none'
-  
 
         if(dataObject.currentDocTopPanelShowing){
 
@@ -3393,13 +3106,6 @@ class PopupDocumentManager{
 
     }
 
-    addCommentsSectionToSidePanel = (panelDiv, id) => {
-        const div = document.createElement('div')
-        div.id = id
-        div.className = 'StaticCommentsSection'
-        panelDiv.appendChild(div)
-
-    }
 
 
      createOneIconComponent(parent,iconPath,componentId,width = 24,height = 0){
@@ -3476,25 +3182,16 @@ class PopupDocumentManager{
 
 
     hidePanelsOfCurrentDocument() {
-        const documentLeftPanelButton = document.getElementById("CurrentDocumentLeftPanelButton")
-        const documentRightPanelButton = document.getElementById("CurrentDocumentRightPanelButton")
 
         const topPanelDiv = document.getElementById("CurrentDocumentTopPanel")
         const bottomPanelDiv = document.getElementById("CurrentDocumentBottomPanel")
-        const leftPanelDiv = document.getElementById("CurrentDocumentLeftPanel")
-        const rightPanelDiv = document.getElementById("CurrentDocumentRightPanel")
          
         this.currentDocTopPanelShowing = false
         this.currentDocBottomPanelShowing = false
-        this.currentDocLeftPanelShowing = false
-        this.currentDocRightPanelShowing = false
-        documentLeftPanelButton.style.display = 'none'
-        documentRightPanelButton.style.display = 'none'
         
         topPanelDiv.style.display = 'none'
         bottomPanelDiv.style.display = 'none'
-        leftPanelDiv.style.display = 'none'
-        rightPanelDiv.style.display = 'none'
+      
         
     }
 
@@ -3520,8 +3217,8 @@ class PopupDocumentManager{
     getMainDocumentPadding(){
         const screenWidth = window.innerWidth
         const mainPadding = this.isPaddingOn && !g.isMobileMode && 
-        g.readingManager.isFullScreen && (!g.readingManager.mainDocPanels || !g.readingManager.mainDocPanels.sidebarPanel) && !this.currentDocLeftPanelShowing && 
-        !this.currentDocRightPanelShowing ? screenWidth * 0.2 : kDefaultPadding
+        g.readingManager.isFullScreen && (!g.readingManager.mainDocPanels || !g.readingManager.mainDocPanels.sidebarPanel) 
+         ? screenWidth * 0.2 : kDefaultPadding
 
         return mainPadding
     }

@@ -41,9 +41,6 @@
   background-color: var(--accent);
 }
 
-/* .DocumentSidePanel.theme-dark {
-    background-color: var(--bg-main);
-} */
 
 .theme-dark .StaticCommentsSection{
     background-color: var(--bg-main);
@@ -172,14 +169,14 @@
 }
 
 
-.theme-dark .CancelButton {
+#ui-root.theme-dark .CancelButton {
     background-color: transparent;
     border-color: white;
     color: white;
 
 }
 
-.theme-dark .CancelButton:hover {
+#ui-root.theme-dark .CancelButton:hover {
     background-color: var(--header-footer-bg);
 
 }
@@ -451,7 +448,6 @@
 
 .theme-dark .comments-title {
     margin-top: 10px;
-    /* margin-left: 15px; */
 }
 
 .theme-dark .no-comments-text {

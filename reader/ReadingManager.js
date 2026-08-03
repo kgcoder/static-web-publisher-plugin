@@ -313,12 +313,6 @@ setupFlinksCanvasDPR(){
         const mainRowDiv = document.createElement('div')
         mainRowDiv.className = "DocumentMainRow"
 
-        const leftPanelDiv = document.createElement('div')
-        leftPanelDiv.id = 'DocumentLeftPanel' + rightDocId
-        leftPanelDiv.className = "DocumentSidePanel"
-        leftPanelDiv.style.display = 'none'
-
-        mainRowDiv.appendChild(leftPanelDiv)
 
 
         const div = document.createElement('div')
@@ -453,14 +447,6 @@ setupFlinksCanvasDPR(){
 
          noteData.scrollDiv = div
 
-
-
-        const rightPanelDiv = document.createElement('div')
-        rightPanelDiv.id = 'DocumentRightPanel' + rightDocId
-        rightPanelDiv.className = "DocumentSidePanel"
-        rightPanelDiv.style.display = 'none'
-
-        mainRowDiv.appendChild(rightPanelDiv)
          
         collectionDiv.appendChild(mainRowDiv)
 
@@ -1563,17 +1549,16 @@ setupFlinksCanvasDPR(){
 
         const textNodesArray = getTextNodesArrayFromDiv(notePresentationDiv)
 
-        let divX = g.pdm.getCurrentDocLeftVerticalPanelWidth()
-        if(divX < 0.01 && g.readingManager.isFullScreen && !g.isMobileMode){
+        let divX = 0
+        if(g.readingManager.isFullScreen && !g.isMobileMode){
             if(g.readingManager.mainDocPanels && g.readingManager.mainDocPanels.sidebarPanel && g.readingManager.mainDocPanels.sidebarPanel.side === 'left'){
                 divX = window.innerWidth * kSidebarWidthToScreenWidthRatio
             }
         }
-        const rightPanelWidth = g.pdm.getCurrentDocRightVerticalPanelWidth()
 
         const padding = g.pdm.getMainDocumentPadding()
 
-        const rightX = window.innerWidth - padding - rightPanelWidth
+        const rightX = window.innerWidth - padding
 
         const currentDocTopOffset = g.pdm.getCurrentDocTopOffset()
 
@@ -1647,10 +1632,8 @@ setupFlinksCanvasDPR(){
 
         const rightTextLength = textNodesArray.reduce((total, node) => total + node.data.length, 0);
 
-       
-        const leftPanelWidth = noteObj.currentDocLeftPanelShowing ? kVerticalPanelWidth : 0
-       
-        const divX = this.docWidth + kMiddleGap + leftPanelWidth
+              
+        const divX = this.docWidth + kMiddleGap
         const topY = kLeftDivTop + g.pdm.getRightDocTopOffset(noteObj)
 
 
@@ -2015,7 +1998,7 @@ setupFlinksCanvasDPR(){
         
         const topPanelHeight = g.pdm.getCurrentDocTopOffset()
         
-        const x = pageX - g.pdm.getCurrentDocLeftVerticalPanelWidth()
+        const x = pageX
         const y = pageY - kLeftDivTop - topPanelHeight
         if(this.mainDocType === 'c'){
             for(let flinksData of this.connections){
@@ -2038,7 +2021,7 @@ setupFlinksCanvasDPR(){
             }
         }else if(this.mainDocType === 'h'){
             const mainScrollDocDiv = document.getElementById("CurrentDocument")
-            const x = pageX - g.pdm.getCurrentDocLeftVerticalPanelWidth()
+            const x = pageX
             const y = pageY - kLeftDivTop - topPanelHeight + mainScrollDocDiv.scrollTop
         
             let touchedFlinks = []
@@ -2111,10 +2094,8 @@ setupFlinksCanvasDPR(){
 
             const flinks = flinksData.activeFlinks
             if(!flinks)return false
-
-            const leftPanelWidth = noteData.currentDocLeftPanelShowing ? kVerticalPanelWidth : 0
     
-            const noteLeftX = this.docWidth + kMiddleGap + leftPanelWidth
+            const noteLeftX = this.docWidth + kMiddleGap
         
             const x = pageX - noteLeftX
             const y = pageY - topPanelHeight - kLeftDivTop + scrollTop
@@ -2146,7 +2127,7 @@ setupFlinksCanvasDPR(){
 
         
         if(this.mainDocType === 'c'){
-            const x = pageX - g.pdm.getCurrentDocLeftVerticalPanelWidth()
+            const x = pageX
             const y = pageY - kLeftDivTop - topOffset
             for(let flinksData of this.connections){
                 if(!flinksData.activeFlinks)continue
@@ -2201,7 +2182,7 @@ setupFlinksCanvasDPR(){
             const topPanelHeight = g.pdm.getCurrentDocTopOffset()
 
             const mainScrollDocDiv = document.getElementById("CurrentDocument")
-            const x = pageX - g.pdm.getCurrentDocLeftVerticalPanelWidth()
+            const x = pageX
             const y = pageY - kLeftDivTop - topPanelHeight + mainScrollDocDiv.scrollTop //- topOffset
 
         
@@ -2345,10 +2326,8 @@ setupFlinksCanvasDPR(){
 
             const flinks = flinksData.activeFlinks
             if(!flinks)return
-
-            const leftPanelWidth = noteData.currentDocLeftPanelShowing ? kVerticalPanelWidth : 0
     
-            const noteLeftX = this.docWidth + kMiddleGap + leftPanelWidth
+            const noteLeftX = this.docWidth + kMiddleGap
         
             const topPanelHeight = g.pdm.getRightDocTopOffset(noteData)
             const x = pageX - noteLeftX
@@ -3309,7 +3288,7 @@ setupFlinksCanvasDPR(){
         
                 const textNodesArray = getTextNodesArrayFromDiv(leftDiv)
         
-                const divX = g.pdm.getCurrentDocLeftVerticalPanelWidth()
+                const divX = 0
         
                 const topPanelHeight = g.pdm.getCurrentDocTopOffset()
         
@@ -3329,9 +3308,7 @@ setupFlinksCanvasDPR(){
 
                 const rightTextLength = rightTextNodesArray.reduce((total, node) => total + node.data.length, 0);
             
-                const leftPanelWidth = noteData.currentDocLeftPanelShowing ? kVerticalPanelWidth : 0
-
-                const divX = this.docWidth + kMiddleGap + leftPanelWidth
+                const divX = this.docWidth + kMiddleGap
                 const topY = kLeftDivTop + g.pdm.getRightDocTopOffset(noteData)
 
                 this.prepareOneRightLink(floatingLink,scrollDiv,rightTextNodesArray,divX,topY,rightTextLength)
@@ -3383,13 +3360,11 @@ setupFlinksCanvasDPR(){
 
        const textNodesArray = getTextNodesArrayFromDiv(notePresentationDiv)
 
-       const verticalPanelWidth = g.pdm.getCurrentDocLeftVerticalPanelWidth()
-
        const divTop = kLeftDivTop + g.pdm.getCurrentDocTopOffset()
 
        const scrollDiv = document.getElementById("CurrentDocument")
 
-        const {rects:leftRects,isInsidePre} = g.noteDivsManager.calculateHighlightPosition(scrollDiv,textNodesArray,startIndex,length,verticalPanelWidth,divTop,kDefaultPadding)
+        const {rects:leftRects,isInsidePre} = g.noteDivsManager.calculateHighlightPosition(scrollDiv,textNodesArray,startIndex,length,0,divTop,kDefaultPadding)
         
 
         if(!leftRects.length)return
@@ -3422,12 +3397,9 @@ setupFlinksCanvasDPR(){
     createRightPartialLink(notePresentationDiv,rightScrollDiv, noteData, range){
         const {startIndex,length} = getIndexAndLengthOfSelection(notePresentationDiv,range)
         
-        const leftVerticalPanelWidth = noteData.currentDocLeftPanelShowing ? kVerticalPanelWidth : 0
-        const rightVerticalPanelWidth = noteData.currentDocRightPanelShowing ? kVerticalPanelWidth : 0
 
-
-        const divX = this.docWidth + kMiddleGap + leftVerticalPanelWidth
-        const rightX = this.docWidth * 2 + kMiddleGap - rightVerticalPanelWidth
+        const divX = this.docWidth + kMiddleGap
+        const rightX = this.docWidth * 2 + kMiddleGap
 
         const textNodesArray = getTextNodesArrayFromDiv(notePresentationDiv)
 

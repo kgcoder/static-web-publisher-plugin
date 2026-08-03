@@ -1198,11 +1198,6 @@ body.admin-bar #AllDocumentsContainer {
 
 }
 
-.js-enabled .DocumentSidePanel {
-    display: none;
-    flex-shrink: 0;
-    width: 200px;
-}
 
 
 
@@ -2049,7 +2044,7 @@ p {
 }
 
 .swp-load-more-btn {
-    display: block;
+    align-self: flex-start;
     margin: 14px auto 0;
     padding: 6px 14px;
     font-size: 13px;

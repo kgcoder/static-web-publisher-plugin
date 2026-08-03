@@ -131,8 +131,6 @@ if (!empty($stwbpb_connections_info)) {
                     <div title="Export connections" id="CurrentDocumentExportButton" class="DocumentTopBarButtonWrapper"></div>
                     <div title="Veiw source" id="CurrentDocumentSourceCodeButton" class="DocumentTopBarButtonWrapper"></div>
                     <div title="Center collage" id="CurrentDocumentCenterCollageButton" class="DocumentTopBarButtonWrapper"></div>
-                    <div title="Toggle side panel" id="CurrentDocumentRightPanelButton" class="DocumentTopBarButtonWrapper"></div>
-                    <div title="Toggle side panel" id="CurrentDocumentLeftPanelButton" class="DocumentTopBarButtonWrapper"></div>
 
                     <?php if (!empty($stwbpb_settings['show_promotion_button'])): ?>
                     <div title="Learn about Reader's Web" id="PromotionButton" class="DocumentTopBarButtonWrapper"></div>
@@ -155,8 +153,6 @@ if (!empty($stwbpb_connections_info)) {
             </div>
 
             <div id="CurrentDocumentMainRow" class="DocumentMainRow">
-
-                <div id="CurrentDocumentLeftPanel" class="DocumentSidePanel"></div>
 
                 <div id="CurrentDocument" class="DocumentColumn">
                     <div id="CurrentDocumentTopPanel" class="DocumentTopPanel"<?php if ($stwbpb_doc_type !== 'HDOC') echo ' style="display:none"'; ?>>
@@ -269,8 +265,6 @@ if (!empty($stwbpb_connections_info)) {
                     <div id="CurrentDocumentDropDownMenu" class="DocumentDropDownMenu"></div>
                 </div>
 
-                <div id="CurrentDocumentRightPanel" class="DocumentSidePanel"></div>
-
                 <div id="CurrentDocumentInfoContainer">
                     <div id="CurrentDocumentInfo"></div>
                 </div>
@@ -294,8 +288,6 @@ if (!empty($stwbpb_connections_info)) {
             <div id="RightDocumentsTabsContainer"></div>
             <div id="RightDocumentsTopBar">
                 <div title="Veiw source" id="RightDocumentSourceCodeButton" class="DocumentTopBarButtonWrapper"></div>
-                <div title="Toggle side panel" id="RightDocumentRightPanelButton" class="DocumentTopBarButtonWrapper"></div>
-                <div title="Toggle side panel" id="RightDocumentLeftPanelButton" class="DocumentTopBarButtonWrapper"></div>
                 <div title="Center collage" id="RightDocumentCenterCollageButton" class="DocumentTopBarButtonWrapper"></div>
             
                 <div class="spacer10px"></div>
