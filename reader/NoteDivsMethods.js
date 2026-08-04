@@ -15,7 +15,7 @@ https://github.com/kgcoder/readers-web-specs
 import g from "./Globals.js"
 import { getHeaderInfoFromXML, populateHeaderDiv } from "./HeaderMethods.js"
 import { absolutizeUrls, applyMediaMappings, escapeHTML, getHeaderDivFrom, getPresentationDivFrom, getTextColumnWidth, parseCopyInfoFromElement, replaceMediaTagsWithLinksInDiv, sanitizeHtml, sanitizeUrl, scrollToIdInContainer, stickBottomLineRectToTheTopOne, stripHtmlTags } from "./helpers.js"
-import { kMiddleGap, kMinDocWidthForDesktop } from "./PopupDocumentManager.js"
+import { kDefaultFontSize, kMiddleGap, kMinDocWidthForDesktop } from "./PopupDocumentManager.js"
 
 
 
@@ -918,8 +918,10 @@ class NoteDivsManager{
                 range.setEnd(textNodesArray[i], currentIndex + 1);
 
 
-                atLeastOneRectIsInsidePre = textNodesArray[i].parentElement.closest('pre, blockquote') !== null;
-                          
+                if(!atLeastOneRectIsInsidePre){
+                    atLeastOneRectIsInsidePre = textNodesArray[i].parentElement.closest('code, pre, blockquote') !== null;
+                } 
+
                 const rawRect = range.getBoundingClientRect();
               
            
@@ -992,7 +994,8 @@ class NoteDivsManager{
         const mergedLineRects = []
         for(let i = 0;i < lineRects.length;i++){
             const rect = lineRects[i]
-            if( rect.top != lastRectTop){
+            if( Math.abs(rect.top - lastRectTop) > g.pdm.fontSize / 4.0){
+
 
                 if(i !== 0){
                     mergedLineRects.push({left:lastLeft,top:lastRectTop,width:lastWidth,height:lastHeight})

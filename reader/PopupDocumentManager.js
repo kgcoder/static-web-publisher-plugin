@@ -27,6 +27,8 @@ export const kMinDocWidthForDesktop = 430
 export const kLeftDivTop = 60
 export const kRightDocsTabRowHeight = 20
 export const kRightDivTopBarHeight = 20
+export const kDefaultFontSize = 18.0
+
 
 export const kVerticalPanelInFullscreenWidth = 400
 
@@ -81,7 +83,7 @@ window.onresize = () => {
 
 class PopupDocumentManager{
 
-    fontSize = 18.0
+    fontSize = kDefaultFontSize
     current3DDoc = null
     isLeftEditing = false
     isRightEditing = false
