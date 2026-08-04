@@ -37,6 +37,12 @@ function stwbpb_send_comments_json_from_post() {
 
     $commenting_open = $post->comment_status === 'open';
 
+    $total = get_comments(array(
+        'post_id' => $post_id,
+        'status' => 'approve',
+        'count' => true,
+    ));
+
     $comments = get_comments(array(
         'post_id' => $post_id,
         'status' => 'approve',
@@ -91,5 +97,10 @@ function stwbpb_send_comments_json_from_post() {
         return $item;
     }, $comments);
 
-    wp_send_json($data);
+    wp_send_json(array(
+        'comments' => $data,
+        'total' => (int) $total,
+        'page' => $page,
+        'per_page' => $per_page,
+    ));
 }
