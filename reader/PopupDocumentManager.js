@@ -13,7 +13,7 @@ https://github.com/kgcoder/readers-web-specs
 */
 
 import g from './Globals.js'
-import { cleanConnectedDocURL, createOneIconComponent, createOneSVGIconComponent, getDataFromCondocXML, getDesiredConnectionsFromHdocDataJson, getHeaderDivFrom, getPresentationDivFrom, getTextColumnWidth, getTextFromDiv, hideUrlInTheCorner, isDotInsideFrame, isoToHumanReadableDate, removeAllChildren, sanitizeHtml, sanitizeUrl, showToastMessage, showUrlInTheCorner, stripHtmlTags } from './helpers.js'
+import { cleanConnectedDocURL, createOneIconComponent, createOneSVGIconComponent, executeAfterDelayIfPluginIsStillActive, getDataFromCondocXML, getDesiredConnectionsFromHdocDataJson, getHeaderDivFrom, getPresentationDivFrom, getTextColumnWidth, getTextFromDiv, hideUrlInTheCorner, isDotInsideFrame, isoToHumanReadableDate, removeAllChildren, sanitizeHtml, sanitizeUrl, showToastMessage, showUrlInTheCorner, stripHtmlTags } from './helpers.js'
 import PageInfoManager from './PageInfoManager.js'
 import CollageViewer from './CollageViewer.js'
 import { kColorsForFlinks, kSidebarWidthToScreenWidthRatio } from './constants.js'
@@ -629,13 +629,8 @@ class PopupDocumentManager{
         downloadAllButton.style.display = count < total ? 'flex' : 'none'
 
 
-        setTimeout(() => {
-            //testing if the extension has replaced the UI
-            const titleSpan = document.getElementById("CurrentDocumentTitleSpan0")
-            if(titleSpan){
-                this.downloadMainDocInCondoc(mainPageUrl)
-            }
-        },500)
+        executeAfterDelayIfPluginIsStillActive(() => this.downloadMainDocInCondoc(mainPageUrl))
+      
 
        
 
@@ -1204,9 +1199,12 @@ class PopupDocumentManager{
             const hasComments = !!(commentsPanel && commentsPanel.commentsUrl)
             belowContentCommentsDiv.style.display = hasComments ? 'block' : 'none'
             if(hasComments){
-                this.getComments(belowContentCommentsDiv, commentsPanel.commentsUrl, commentsPanel.commentsTitle,
-                    commentsPanel.noCommentsMessage, dataObject, commentsPanel.leaveCommentUrl,
-                    commentsPanel.commentsReplyLabel, commentsPanel.commentsLeaveLabel, 1, commentsPanel.commentsLoadMoreLabel)
+                executeAfterDelayIfPluginIsStillActive(() => 
+                     this.getComments(belowContentCommentsDiv, commentsPanel.commentsUrl, commentsPanel.commentsTitle,
+                            commentsPanel.noCommentsMessage, dataObject, commentsPanel.leaveCommentUrl,
+                            commentsPanel.commentsReplyLabel, commentsPanel.commentsLeaveLabel, 1, commentsPanel.commentsLoadMoreLabel)
+                    
+                )
             }else{
                 this.cleanCommentsDiv(belowContentCommentsDiv)
             }

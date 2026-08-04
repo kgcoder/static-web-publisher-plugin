@@ -989,3 +989,14 @@ export function addScrollEndListener(element, callback) {
         }, { passive: true });
     }
 }
+
+
+export function executeAfterDelayIfPluginIsStillActive(func,delay = 500){
+    setTimeout(() => {
+        //testing if the extension has replaced the UI
+        const titleSpan = document.getElementById("CurrentDocumentTitleSpan0")
+        if(titleSpan){
+            func()
+        }
+    },delay)
+}
