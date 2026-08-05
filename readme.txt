@@ -4,7 +4,7 @@ Donate link: https://readersweb.org/donate
 Tags: reader, connections, hdoc, static, web
 Requires at least: 5.2
 Tested up to: 7.0
-Stable tag: 5.4.0
+Stable tag: 5.4.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -124,6 +124,9 @@ Yes. You can set a global default in Settings and override it per post or page i
 
 == Changelog ==
 
+= 5.4.1 =
+Bug fix
+
 = 5.4.0 =
 Comments section was moved under the page content section. Comments format was updated. Bug fixes.
 
@@ -205,6 +208,9 @@ Initial release.
 
 
 == Upgrade Notice ==
+
+= 5.4.1 =
+No action required.
 
 = 5.4.0 =
 After installation go to Settings > Permalinks and click "Save Changes" button. In the Settings of the plugin fill in the text for "Load more comments button label". The text can be "Load more comments".
