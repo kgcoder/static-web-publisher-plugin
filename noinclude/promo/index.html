@@ -13,7 +13,10 @@
 
     html, body {
       height: 100%;
+      -webkit-overflow-scrolling: touch;
     }
+    
+
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -28,23 +31,13 @@
     .logo-row {
       display: flex;
       align-items: center;
-      gap: 10px;
       margin-bottom: 22px;
     }
 
     .logo-mark {
       width: 36px;
       height: 36px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, #4f6ef7, #7c3aed);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: -1px;
-      flex-shrink: 0;
     }
 
     .logo-name {
@@ -149,44 +142,48 @@
       text-align: center;
     }
   </style>
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YVVDENQEQZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-YVVDENQEQZ');
+</script>
+
 </head>
 <body>
 
   <div class="logo-row">
-    <div class="logo-mark">R</div>
-    <span class="logo-name">Reader's Web</span>
+    <img class="logo-mark" src="readersweb-icon.png"/>
+    <div style="width:10px"></div>
+    <a target="_blank" href="https://readersweb.org/uploads/readers-web-promo-popup.html"><span class="logo-name">Reader's Web</span></a>
+    
   </div>
 
   <h1>A better web for reading</h1>
 
   <p class="intro">
-    Reader's Web is a part of the World Wide Web where the reader, not the publisher, decides what web pages look like. From the reader's perspective all Reader's Web pages look the same regardless of what website they come from. And the reader can change the theme for all of them at once.
-
-    Advantages of Reader's Web pages:
-    The publisher doesn't have to worry about selecting a theme for their website. 
-
-    The reader can read comfortably using one theme across many websites.
-
-    New types of connections are possible like visible connections between parts of texts on two documents.
-
-    You're currently viewing a page that is a part of the Reader's Web — here's how you can get involved.
-
+    Reader's Web is an part of the World Wide Web where the reader, not the publisher, decides what web pages look like.
+    You're currently viewing a page powered by it â€” here's how you can get involved.
   </p>
 
   <div class="section">
     <h2>For website owners</h2>
     <p>
       Install the free WordPress plugin to publish pages in the Reader's Web format
-      and give your visitors a cleaner, more enjoyable reading experience. 
+      and give your visitors a cleaner, more enjoyable reading experience.
     </p>
     <div class="card-links">
-      <a class="card-link" href="https://example.com/plugin" target="_blank">
-        <span class="card-link-icon">🔌</span>
+      <a class="card-link" href="https://wordpress.org/plugins/static-web-publisher/" target="_blank">
+        <span class="card-link-icon">ðŸ”Œ</span>
         <span class="card-link-text">
           <strong>WordPress Plugin</strong>
           <span>Add Reader's Web support to your site</span>
         </span>
-        <span class="card-link-arrow">›</span>
+        <span class="card-link-arrow">â€º</span>
       </a>
     </div>
   </div>
@@ -195,17 +192,17 @@
     <h2>For readers</h2>
     <p>
       Install the browser extension to customise the reading theme across all
-      Reader's Web pages — choose your fonts, colours, and layout once and it
+      Reader's Web pages â€” choose your fonts, colours, and layout once and it
       applies everywhere.
     </p>
     <div class="card-links">
-      <a class="card-link" href="https://example.com/extension" target="_blank">
-        <span class="card-link-icon">🧩</span>
+      <a class="card-link" href="https://chromewebstore.google.com/detail/hlckcdbgknflkkciojgdbhomdnegimbm" target="_blank">
+        <span class="card-link-icon">ðŸ§©</span>
         <span class="card-link-text">
           <strong>Browser Extension</strong>
           <span>Personalise your reading experience</span>
         </span>
-        <span class="card-link-arrow">›</span>
+        <span class="card-link-arrow">â€º</span>
       </a>
     </div>
   </div>
@@ -213,9 +210,10 @@
   <hr class="divider" />
 
   <p class="footer-note">
-    Reader's Web is free and open source. Learn more at
-    <a href="https://example.com" target="_blank">readersweb.com</a>
+    Reader's Web is free and open source. <br/>
+    Learn more at <a href="https://readersweb.org" target="_blank">readersweb.org</a>
   </p>
+  <div style="height:20px;"></div>
 
 </body>
 </html>
