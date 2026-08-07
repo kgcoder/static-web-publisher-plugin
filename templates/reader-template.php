@@ -88,8 +88,6 @@ if (!empty($stwbpb_connections_info)) {
 
     <title><?php echo esc_html($title); ?></title>
 
-    <link rel="canonical" href="<?php echo esc_url($stwbpb_permalink); ?>">
-
     <?php wp_head(); ?>
 </head>
 
