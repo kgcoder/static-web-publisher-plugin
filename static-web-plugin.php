@@ -52,10 +52,23 @@ function stwbpb_activate() {
     if (!isset($settings['top_panel']) || !is_array($settings['top_panel'])) {
         $settings['top_panel'] = array();
     }
+    if (!isset($settings['bottom_panel']) || !is_array($settings['bottom_panel'])) {
+        $settings['bottom_panel'] = array();
+    }
+    $settings['top_panel'] = array_merge(array(
+        'main_link' => '',
+        'main_title' => '',
+        'logo_url' => '',
+        'links' => array()
+    ), $settings['top_panel']);
+    $settings['bottom_panel'] = array_merge(array(
+        'bottom_message' => '',
+        'sections' => array()
+    ), $settings['bottom_panel']);
     $top_panel = $settings['top_panel'];
-    $main_link = isset($top_panel['main_link']) ? trim($top_panel['main_link']) : '';
-    $main_title = isset($top_panel['main_title']) ? trim($top_panel['main_title']) : '';
-    $logo_url = isset($top_panel['logo_url']) ? trim($top_panel['logo_url']) : '';
+    $main_link = trim($top_panel['main_link']);
+    $main_title = trim($top_panel['main_title']);
+    $logo_url = trim($top_panel['logo_url']);
 
     if ($main_link === '' && $main_title === '' && $logo_url === '') {
         $settings['comments_title']            = 'Comments';

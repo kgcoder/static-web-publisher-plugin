@@ -13,40 +13,29 @@ function stwbpb_get_panels($post) {
 
     $comments_link = home_url( "/json-comments/?post={$post->ID}");
 
-    $settings = get_option('stwbpb_settings', array(
-        'removal_selectors' => '',
-        'comments_title' => '',
-        'no_comments_message' => '',
-        'top_panel' => array(
-            'main_link' => '',
-            'main_title' => '',
-            'logo_url' => '',
-            'links' => array()
-        ),
-        'bottom_panel' => array(
-            'bottom_message' => '',
-            'sections' => array()
-        ),
-    ));
+    $settings = get_option('stwbpb_settings', array());
+    if (!is_array($settings)) {
+        $settings = array();
+    }
 
-    $comments_title = $settings['comments_title'];
-    $no_comments_message = $settings['no_comments_message'];
+    $comments_title = $settings['comments_title'] ?? '';
+    $no_comments_message = $settings['no_comments_message'] ?? '';
     $reply_button_label = $settings['reply_button_label'] ?? '';
     $leave_comment_label = $settings['leave_comment_label'] ?? '';
     $load_more_comments_label = $settings['load_more_comments_label'] ?? '';
 
 
-    $top_panel = $settings['top_panel'];
-    $bottom_panel = $settings['bottom_panel'];
+    $top_panel = (isset($settings['top_panel']) && is_array($settings['top_panel'])) ? $settings['top_panel'] : array();
+    $bottom_panel = (isset($settings['bottom_panel']) && is_array($settings['bottom_panel'])) ? $settings['bottom_panel'] : array();
 
-    $main_link = $top_panel['main_link'];
-    
-    $site_name = $top_panel['main_title'];
+    $main_link = $top_panel['main_link'] ?? '';
 
-    $logo_url = $top_panel['logo_url'];
+    $site_name = $top_panel['main_title'] ?? '';
+
+    $logo_url = $top_panel['logo_url'] ?? '';
 
 
-    $bottom_message = $bottom_panel['bottom_message'];
+    $bottom_message = $bottom_panel['bottom_message'] ?? '';
 
     $show_post_nav = !empty($settings['show_post_nav']);
     $prev_post = null;
