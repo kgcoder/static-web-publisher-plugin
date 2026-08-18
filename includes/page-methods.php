@@ -58,7 +58,7 @@ function stwbpb_custom_post_endpoints_meta_box_callback($post) {
         <option value="default" <?php selected($mode_value, 'default'); ?>>Default (use global setting)</option>
         <option value="embedded_hdoc_forced" <?php selected($mode_value, 'embedded_hdoc_forced'); ?>>Embedded HDOC (forced)</option>
         <option value="embedded_hdoc" <?php selected($mode_value, 'embedded_hdoc'); ?>>Embedded HDOC</option>
-        <option value="doc_in_reader" <?php selected($mode_value, 'doc_in_reader'); ?>>Doc inside the Reader</option>
+        <option value="doc_in_reader" <?php selected($mode_value, 'doc_in_reader'); ?>>Reader UI</option>
         <option value="standalone_doc" <?php selected($mode_value, 'standalone_doc'); ?>>Standalone doc</option>
     </select>
     <br><br>
@@ -223,7 +223,7 @@ function stwbpb_get_effective_display_mode($post) {
     }
     $settings = get_option('stwbpb_settings', array());
     $key = ($post->post_type === 'page') ? 'page_mode' : 'post_mode';
-    return isset($settings[$key]) ? $settings[$key] : 'embedded_hdoc';
+    return isset($settings[$key]) ? $settings[$key] : 'embedded_hdoc_forced';
 }
 
 function stwbpb_get_effective_author_display($post) {
