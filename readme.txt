@@ -3,8 +3,8 @@ Contributors: kgcoder
 Donate link: https://readersweb.org/donate
 Tags: reader, connections, hdoc, static, web
 Requires at least: 5.2
-Tested up to: 7.0
-Stable tag: 5.4.1
+Tested up to: 7.1
+Stable tag: 5.4.2
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -124,6 +124,9 @@ Yes. You can set a global default in Settings and override it per post or page i
 
 == Changelog ==
 
+= 5.4.2 =
+Bug fixes
+
 = 5.4.1 =
 Bug fix
 
@@ -208,6 +211,9 @@ Initial release.
 
 
 == Upgrade Notice ==
+
+= 5.4.2 =
+No action required.
 
 = 5.4.1 =
 No action required.
