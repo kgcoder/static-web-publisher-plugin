@@ -1,64 +1,65 @@
-.theme-sepia {
-    --bg-main: #FBF0D9;
-    --text-main: #704214;
-    --text-secondary: #8b5e34;
-    --heading: #5a3210;
-    --accent: #a65e2e;
-    --accent-hover: #8b4b24;
-    --borders: #d4c0a1;
-    --top-bars: #ffdf99;
-    --header-footer-bg: #f8e7c3;
-    --blockquote-accent: #c97b32;
-    --blockquote-bg: #f8e9cc;
-    --code-bg: #f0e0c9;
-    --code-text: #5a3210;
-    --code-border: #d4bfa3;
-    --table-text: #2c2c2c;
-    --table-header-bg: #dcc89c;
-    --table-header-text: #2c2c2c;
-    --table-row-stripe: #f9f9f9;
-    --table-row-hover: #f6e6c2;
-    --page-backdrop: #fcf6e7;
-    --tab-inactive-bg: #c2a382;
-    --icon-tint: #281d0d;
-    --sort-button-text: #e7b485;
-    --footer-message-text: #595757;
-    --media-card-bg: #fdf3df;
-    --scrollbar-track: #f3e4cb;
-    --scrollbar-thumb-hover: #a07f5e;
+.theme-lavender {
+    --bg-main: #fefbfe;
+    --text-main: #551d72;
+    --text-secondary: #733f8f;
+    --heading: #42175b;
+    --accent: #7a3baa;
+    --accent-hover: #632f8e;
+    --borders: #d3b8da;
+    --top-bars: #f1bffa;
+    --header-footer-bg: #f7e5fa;
+    --blockquote-accent: #9a4ac5;
+    --blockquote-bg: #f9edfb;
+    --code-bg: #f2e6f6;
+    --code-text: #42175b;
+    --code-border: #d2badb;
+    --table-text: #303030;
+    --table-header-bg: #dab6e0;
+    --table-header-text: #303030;
+    --table-row-stripe: #ffffff;
+    --table-row-hover: #f5e3f9;
+    --page-backdrop: #ffffff;
+    --tab-inactive-bg: #b798c6;
+    --icon-tint: #231029;
+    --sort-button-text: #cea3e6;
+    --footer-message-text: #5e5e60;
+    --media-card-bg: #ffffff;
+    --scrollbar-track: #f5e9f8;
+    --scrollbar-thumb-hover: #926fa3;
 }
 
-.theme-sepia #AllDocumentsContainer{
+.theme-lavender #AllDocumentsContainer{
   background-color: var(--page-backdrop);
 }
 
 
-.theme-sepia #LinksListContainerDiv{
+.theme-lavender #LinksListContainerDiv{
   background-color: var(--bg-main);
 }
 
-.theme-sepia .DocumentColumn {
+.theme-lavender .DocumentColumn {
     background-color: var(--bg-main); /* dark background */
 }
 
-.theme-sepia #CurrentDocumentTopBar{
+.theme-lavender #CurrentDocumentTopBar{
+  background-color: var(--top-bars);
+  border-bottom: none;
+}
+
+.theme-lavender #RightDocumentsTopBar{
   background-color: var(--top-bars);
 }
 
-.theme-sepia #RightDocumentsTopBar{
-  background-color: var(--top-bars);
-}
-
-.theme-sepia #multiple-links-popup{
+.theme-lavender #multiple-links-popup{
   background-color: var(--bg-main);
 }
 
 
-.theme-sepia .StaticCommentsSection {
+.theme-lavender .StaticCommentsSection {
     background-color: var(--bg-main);
 }
 
-.theme-sepia .NoteDiv{
+.theme-lavender .NoteDiv{
     background-color: var(--bg-main);
     color: var(--text-main);
 }
@@ -66,36 +67,36 @@
 
 
 
-.theme-sepia .linkInputTypeSelectorButton{
+.theme-lavender .linkInputTypeSelectorButton{
   background-color: transparent;
 }
 
-.theme-sepia .linkInputTypeSelectedButton{
+.theme-lavender .linkInputTypeSelectedButton{
   background-color: #484de9;
   color: white;
 }
 
 
 
-.theme-sepia .RightDocumentTab{
+.theme-lavender .RightDocumentTab{
   background-color: var(--tab-inactive-bg);
 
 }
 
 
-.theme-sepia .RightDocumentTabSelected{
+.theme-lavender .RightDocumentTabSelected{
   background-color: var(--top-bars);
 }
 
-.theme-sepia .RightDocumentTabTitle{
+.theme-lavender .RightDocumentTabTitle{
 
 }
 
-.theme-sepia .RightDocumentTabTitleSelected{
+.theme-lavender .RightDocumentTabTitleSelected{
   color:rgba(37, 38, 39, 0.5);
 }
 
-.theme-sepia .DocumentTopPanel{
+.theme-lavender .DocumentTopPanel{
     background-color: var(--header-footer-bg);
     /* border-top: 1px solid #e0e0e0; */
     border-bottom: 1px solid var(--borders);
@@ -104,67 +105,67 @@
     font-family: var(--font-headers-family, "Helvetica Neue", Arial, sans-serif);
 }
 
-.theme-sepia .TopPanelTitle{
+.theme-lavender .TopPanelTitle{
     color: var(--heading);
 }
 
-.theme-sepia .TopPanelOptionLink{
+.theme-lavender .TopPanelOptionLink{
     color:var(--heading);
 }
 
-.theme-sepia #middle-canvas-topDiv{
+.theme-lavender #middle-canvas-topDiv{
   background-color: var(--top-bars);
 }
 
-.theme-sepia #LinksListContainerDiv{
+.theme-lavender #LinksListContainerDiv{
   background-color: var(--bg-main);
   border-width: 1px;
   border-style: solid;
   border-color: var(--borders);
 }
 
-.theme-sepia .FlinkOneEndContainer{
+.theme-lavender .FlinkOneEndContainer{
   background-color: rgba(255, 255, 255, 0.1);;
 }
 
-.theme-sepia #LinksListModificationMessage {
+.theme-lavender #LinksListModificationMessage {
   color:var(--text-main);
 }
 
-.theme-sepia .DocumentBottomPanel{
+.theme-lavender .DocumentBottomPanel{
     font-family: var(--font-headers-family, "Helvetica Neue", Arial, sans-serif);
     border-top: 1px solid var(--borders);
     background-color: var(--header-footer-bg);
     /* box-shadow: 0 -2px 4px rgba(0,0,0,0.05); */
 }
 
-.theme-sepia .RightSandwichLine{
+.theme-lavender .RightSandwichLine{
     background-color: var(--accent);
 }
 
-.theme-sepia .LeftSandwichLine{
+.theme-lavender .LeftSandwichLine{
     background-color: var(--accent);
 }
 
 
-.theme-sepia .DocumentDropDownMenu{
+.theme-lavender .DocumentDropDownMenu{
     background-color: var(--header-footer-bg);
 }
 
-.theme-sepia .FooterSectionTitle{
+.theme-lavender .FooterSectionTitle{
     color: var(--heading);
 }
-.theme-sepia .FooterOptionLink{
+.theme-lavender .FooterOptionLink{
     color:var(--heading);
 }
 
-.theme-sepia .DocumentBottomPanelBottomMessage{
+.theme-lavender .DocumentBottomPanelBottomMessage{
     color:var(--footer-message-text);
 }
 
 
-.theme-sepia #CurrentDocumentExportContainer,
-.theme-sepia #RightDocumentExportContainer{
+.theme-lavender #CurrentDocumentExportContainer,
+.theme-lavender #RightDocumentExportContainer{
   background-color: var(--bg-main);
 }
 
@@ -176,70 +177,70 @@
 
 
 
-.theme-sepia .PostNavBarSide * {
+.theme-lavender .PostNavBarSide * {
   color: var(--accent);
 }
 
 
-.theme-sepia ol,ul{
+.theme-lavender ol,ul{
     padding-inline-start: 10px;
     color: var(--text-main);
 }
 
-.theme-sepia div{
+.theme-lavender div{
     color: var(--text-main);
 }
 
-.theme-sepia .ActionButton{
+.theme-lavender .ActionButton{
   color:white;
 }
 
-.theme-sepia .LinksListSortButton {
+.theme-lavender .LinksListSortButton {
     color:var(--sort-button-text);
 }
-.theme-sepia .FlinksListSelectedSide *{
+.theme-lavender .FlinksListSelectedSide *{
   color:var(--text-main);
 }
 
-.theme-sepia #CurrentDocumentInfo{
+.theme-lavender #CurrentDocumentInfo{
   background-color: var(--bg-main);
 }
 
-.theme-sepia .InfoLinkRowDiv{
+.theme-lavender .InfoLinkRowDiv{
   /* background-color: rgb(60, 60, 60); */
 }
 
-.theme-sepia #CurrentDocumentMainCollageCanvas,
-.theme-sepia .OneCollageCanvas{
+.theme-lavender #CurrentDocumentMainCollageCanvas,
+.theme-lavender .OneCollageCanvas{
   background-color: var(--bg-main);
 }
 
-.theme-sepia .DocumentTopBarButtonWrapper,
-.theme-sepia .DocumentTopBarButtonWrapper *{
+.theme-lavender .DocumentTopBarButtonWrapper,
+.theme-lavender .DocumentTopBarButtonWrapper *{
   color:var(--icon-tint);
 }
 
-.theme-sepia .TopPanelOptionLinkSelected{
+.theme-lavender .TopPanelOptionLinkSelected{
   color:red;
 }
 
-.theme-sepia .CurrentDocumentInfoButtonCountDivIncomplete{
+.theme-lavender .CurrentDocumentInfoButtonCountDivIncomplete{
   color:red;
 }
 
-.theme-sepia .selectedIcon *{
+.theme-lavender .selectedIcon *{
   color:white;
 }
 
   /* Paragraphs */
-  .theme-sepia p {
+  .theme-lavender p {
     margin: 1em 0;
     font-size: 1.05em;
     color: var(--text-main);
   }
 
   /* Headings */
-  .theme-sepia h1, h2, h3, h4, h5, h6 {
+  .theme-lavender h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-headers-family, "Helvetica Neue", Arial, sans-serif);
     font-weight: var(--font-headers-weight, 600);
     line-height: var(--font-headers-line-height, 1.3);
@@ -247,38 +248,38 @@
     color: var(--heading);
   }
 
-  .theme-sepia h1 {
+  .theme-lavender h1 {
     font-size: 2.2em;
     /* border-bottom: 2px solid #e0e0e0; */
     padding-bottom: 0.3em;
   }
 
-  .theme-sepia h2 {
+  .theme-lavender h2 {
     font-size: 1.8em;
     margin-top: 2em;
   }
 
-  .theme-sepia h3 {
+  .theme-lavender h3 {
     font-size: 1.4em;
     margin-top: 1.5em;
   }
 
   /* Links */
-  .theme-sepia a {
+  .theme-lavender a {
     color: var(--accent);
     text-decoration: none;
   }
-  .theme-sepia a:hover {
+  .theme-lavender a:hover {
     color: var(--accent-hover);
     text-decoration: underline;
   }
 
 
-.theme-sepia a.multiple-links-popup-row{
+.theme-lavender a.multiple-links-popup-row{
     color: var(--text-main);
   }
 
-   .theme-sepia a.multiple-links-popup-row:hover{
+   .theme-lavender a.multiple-links-popup-row:hover{
     text-decoration: none;
   }
 
@@ -288,14 +289,14 @@
 
 
   /* Code snippets */
-  .theme-sepia pre,
-  .theme-sepia code {
+  .theme-lavender pre,
+  .theme-lavender code {
       font-family: var(--font-code-family, "Fira Code", monospace);
       color: var(--code-text);
       /* darker brown text */
   }
 
-  .theme-sepia pre {
+  .theme-lavender pre {
     background-color: var(--code-bg);
     border-radius: 6px;
     padding: 1em;
@@ -303,13 +304,13 @@
     overflow-x: auto;
   }
 
-  .theme-sepia code {
+  .theme-lavender code {
       background-color: var(--code-bg);
       border-radius: 3px;
   }
 
 
-  .theme-sepia blockquote {
+  .theme-lavender blockquote {
     position: relative;
     margin: 1em 0;
     padding: 1em 1.2em;
@@ -325,7 +326,7 @@
   }
 
   /* Add a decorative quote mark */
-  .theme-sepia blockquote::before {
+  .theme-lavender blockquote::before {
 
     position: absolute;
     left: 10px;
@@ -336,7 +337,7 @@
     font-family: var(--font-quotes-family, Georgia, serif);
   }
 
-  .theme-sepia blockquote ol {
+  .theme-lavender blockquote ol {
     padding-left: 10px;
     padding-right: 10px;
     list-style-position: inside;
@@ -344,7 +345,7 @@
 
 
   /* Basic table styling */
-  .theme-sepia table {
+  .theme-lavender table {
     /* width: 100%; */
     border-collapse: collapse; /* remove double borders */
     margin: 1.5em 0;
@@ -356,7 +357,7 @@
   }
 
   /* Table header */
-  .theme-sepia th {
+  .theme-lavender th {
     background-color: var(--table-header-bg);
     color: var(--table-header-text);
     font-weight: 600;
@@ -366,22 +367,22 @@
   }
 
   /* Table cells */
-  .theme-sepia td {
+  .theme-lavender td {
     padding: 10px 12px;
     border-bottom: 1px solid #ddd;
   }
 
   /* Alternating row colors */
-  .theme-sepia tr:nth-child(even) {
+  .theme-lavender tr:nth-child(even) {
     background-color: var(--table-row-stripe);
   }
 
   /* Hover effect for rows */
-  .theme-sepia tr:hover {
+  .theme-lavender tr:hover {
     background-color: var(--table-row-hover);
   }
 
-.theme-sepia .media-card {
+.theme-lavender .media-card {
     display: inline-block;
     border: 2px solid var(--accent);
     border-radius: 8px;
@@ -391,37 +392,37 @@
     transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.theme-sepia .media-card:hover {
+.theme-lavender .media-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-.theme-sepia .load-button {
+.theme-lavender .load-button {
     color:white;
     background-color: #357ABD;
 }
 
-.theme-sepia pre::-webkit-scrollbar,
-.theme-sepia .DocumentColumn::-webkit-scrollbar,
-.theme-sepia #SourceCodeTextDiv::-webkit-scrollbar,
-.theme-sepia .StaticCommentsSection::-webkit-scrollbar{
+.theme-lavender pre::-webkit-scrollbar,
+.theme-lavender .DocumentColumn::-webkit-scrollbar,
+.theme-lavender #SourceCodeTextDiv::-webkit-scrollbar,
+.theme-lavender .StaticCommentsSection::-webkit-scrollbar{
     width: 15px;
     height: 15px;
 }
 
-.theme-sepia pre::-webkit-scrollbar-track,
-.theme-sepia .DocumentColumn::-webkit-scrollbar-track,
-.theme-sepia #SourceCodeTextDiv::-webkit-scrollbar-track,
-.theme-sepia .StaticCommentsSection::-webkit-scrollbar-track{
+.theme-lavender pre::-webkit-scrollbar-track,
+.theme-lavender .DocumentColumn::-webkit-scrollbar-track,
+.theme-lavender #SourceCodeTextDiv::-webkit-scrollbar-track,
+.theme-lavender .StaticCommentsSection::-webkit-scrollbar-track{
     background: var(--scrollbar-track);
     /* slightly darker than page background */
 }
 
 
-.theme-sepia pre::-webkit-scrollbar-thumb,
-.theme-sepia .DocumentColumn::-webkit-scrollbar-thumb,
-.theme-sepia #SourceCodeTextDiv::-webkit-scrollbar-thumb,
-.theme-sepia .StaticCommentsSection::-webkit-scrollbar-thumb{
+.theme-lavender pre::-webkit-scrollbar-thumb,
+.theme-lavender .DocumentColumn::-webkit-scrollbar-thumb,
+.theme-lavender #SourceCodeTextDiv::-webkit-scrollbar-thumb,
+.theme-lavender .StaticCommentsSection::-webkit-scrollbar-thumb{
     background: var(--tab-inactive-bg);
     /* thumb color */
     border: 4px solid transparent;
@@ -432,10 +433,10 @@
     /* still rounded */
 }
 
-.theme-sepia pre::-webkit-scrollbar-thumb:hover,
-.theme-sepia .DocumentColumn::-webkit-scrollbar-thumb:hover,
-.theme-sepia #SourceCodeTextDiv::-webkit-scrollbar-thumb:hover,
-.theme-sepia .StaticCommentsSection::-webkit-scrollbar-thumb:hover{
+.theme-lavender pre::-webkit-scrollbar-thumb:hover,
+.theme-lavender .DocumentColumn::-webkit-scrollbar-thumb:hover,
+.theme-lavender #SourceCodeTextDiv::-webkit-scrollbar-thumb:hover,
+.theme-lavender .StaticCommentsSection::-webkit-scrollbar-thumb:hover{
     background: var(--scrollbar-thumb-hover);
     border: 4px solid transparent;
     /* creates the gap */
@@ -443,35 +444,35 @@
     border-radius: 10px;
 }
 
-.theme-sepia pre::-webkit-scrollbar-corner,
-.theme-sepia .DocumentColumn::-webkit-scrollbar-corner,
-.theme-sepia #SourceCodeTextDiv::-webkit-scrollbar-corner,
-.theme-sepia .StaticCommentsSection::-webkit-scrollbar-corner{
+.theme-lavender pre::-webkit-scrollbar-corner,
+.theme-lavender .DocumentColumn::-webkit-scrollbar-corner,
+.theme-lavender #SourceCodeTextDiv::-webkit-scrollbar-corner,
+.theme-lavender .StaticCommentsSection::-webkit-scrollbar-corner{
     background: var(--scrollbar-track);
     /* same as track */
 }
 
-.theme-sepia .comments-title {
+.theme-lavender .comments-title {
     margin-top: 10px;
 }
 
-.theme-sepia .no-comments-text {
+.theme-lavender .no-comments-text {
     align-self: center;
     margin-top: 15px;
     font-size: 25px;
 }
 
-.theme-sepia .swp-leave-comment-btn {
+.theme-lavender .swp-leave-comment-btn {
   color:var(--accent);
   border: 1px solid var(--accent);
 }
 
-.theme-sepia .swp-load-more-btn {
+.theme-lavender .swp-load-more-btn {
   color: var(--accent);
   border: 1px solid var(--accent);
 }
 
-.theme-sepia .swp-reply-btn{
+.theme-lavender .swp-reply-btn{
   color: var(--accent);
   opacity: 0.8;
 

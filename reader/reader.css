@@ -46,10 +46,10 @@ body {
     all:initial;
     display: block;
     flex: 1;
-        /* font-family: "Comic Sans MS", cursive; */
 
-    font-family: Arial, Helvetica, sans-serif !important;
-    line-height: 1.55;
+    font-family: var(--font-main-family, Arial, Helvetica, sans-serif) !important;
+    line-height: var(--font-main-line-height, 1.55);
+   
     height: 100vh;
     overflow-x: auto;
     overflow-y: hidden;
@@ -301,7 +301,7 @@ canvas {
 }
 
 .CommonPupupTitle {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-navigation-family, 'Inter', sans-serif);
     font-size: 24px;
     font-weight: 700;
     color: rgba(51, 53, 64, 1);
@@ -310,7 +310,7 @@ canvas {
 }
 
 .CommonPupupText {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-navigation-family, 'Inter', sans-serif);
     font-size: 18px;
     font-weight: 500;
     color: rgb(51, 53, 64);
@@ -338,7 +338,7 @@ canvas {
     justify-content: center;
     align-items: center;
     color: rgb(37, 38, 39);
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-navigation-family, 'Inter', sans-serif);
     font-size: 15px;
     font-weight: 700;
     cursor: default;
@@ -353,7 +353,7 @@ canvas {
     align-items: center;
     background-color: rgb(72, 77, 233);
     color: white;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-navigation-family, 'Inter', sans-serif);
     font-size: 15px;
     font-weight: 700;
     cursor: default;
@@ -422,7 +422,7 @@ code {
     flex: 1;
     justify-content: center;
     align-items: center;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-navigation-family, 'Inter', sans-serif);
     font-size: 14px;
     font-weight: 600;
     /* border-top-width: 1px;
@@ -476,7 +476,7 @@ code {
 }
 
 .CommonInputTitle {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-navigation-family, 'Inter', sans-serif);
     font-size: 14px;
     font-weight: 500;
     color: rgba(37, 38, 39, 0.8);
@@ -493,7 +493,7 @@ code {
     border-style: solid;
     padding-left: 16px;
     padding-right: 16px;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-navigation-family, 'Inter', sans-serif);
     font-size: 16px;
     font-weight: 500;
     outline: none;
@@ -584,7 +584,7 @@ code {
 }
 
 .fileTypeNameSpan {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-navigation-family, 'Inter', sans-serif);
     font-size: 16px;
     font-weight: 500;
     color: #252627;
@@ -593,7 +593,7 @@ code {
 }
 
 #ui-root .SimpleBlueButton {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-navigation-family, 'Inter', sans-serif);
     font-size: 16px;
     font-weight: 500;
     color: rgb(72, 77, 233);
@@ -688,7 +688,7 @@ code {
 }
 
 .SettingsSmallTitle {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-navigation-family, 'Inter', sans-serif);
     font-size: 16px;
     font-weight: 500;
     color: #252627;
@@ -1190,7 +1190,7 @@ body.admin-bar #AllDocumentsContainer {
     color: white;
     font-size: 20px;
     font-weight: 700;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-navigation-family, 'Inter', sans-serif);
     line-height: 20px;
 
 
@@ -1243,7 +1243,7 @@ body.admin-bar #AllDocumentsContainer {
 a.TopPanelOptionLink {
     font-size: 16px;
     font-weight: 400;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-navigation-family, 'Inter', sans-serif);
     /* color:white; */
     text-decoration: none;
     margin-left: 20px;
@@ -1348,7 +1348,7 @@ a.TopPanelOptionLink:hover {
     color: rgba(37, 38, 39, 0.5);
     font-size: 14px;
     font-weight: 500;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-navigation-family, 'Inter', sans-serif);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1368,7 +1368,7 @@ a.TopPanelOptionLink:hover {
     color: rgba(37, 38, 39, 0.5);
     font-size: 14px;
     font-weight: 500;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-navigation-family, 'Inter', sans-serif);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1423,7 +1423,7 @@ a.TopPanelOptionLink:hover {
     color: white;
     background-color: #484DE9;
     font-size: 12px;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-navigation-family, 'Inter', sans-serif);
     font-weight: 700;
     justify-content: center;
     align-items: center;
@@ -1538,7 +1538,8 @@ a.TopPanelOptionLink:hover {
     padding: 20px;
     resize: none;
     outline-width: 0;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: var(--font-source-view-family, 'Times New Roman', Times, serif);
+
 }
 
 .RightDocumentTextArea {
@@ -1548,7 +1549,8 @@ a.TopPanelOptionLink:hover {
     padding: 20px;
     resize: none;
     outline-width: 0;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: var(--font-source-view-family, 'Times New Roman', Times, serif);
+
 }
 
 
@@ -1685,7 +1687,7 @@ a.menu-item-link {
     flex-direction: row;
     align-items: center;
     /* margin-left: 10px; */
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-navigation-family, 'Inter', sans-serif);
     font-size: 14px;
     font-weight: 500;
 }
@@ -1760,7 +1762,7 @@ div.MenuHorizontalLine {
     color: rgba(37, 38, 39, 0.5);
     font-size: 12px;
     font-weight: 500;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-navigation-family, 'Inter', sans-serif);
     cursor: default;
 
 }
@@ -1861,7 +1863,7 @@ div.MenuHorizontalLine {
     position: absolute;
     background-color: #393636;
     color: white;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-navigation-family, 'Inter', sans-serif);
     font-size: 16px;
     font-weight: 500;
     padding: 20px;
@@ -2005,17 +2007,17 @@ p {
     padding: 6px 14px;
     font-size: 13px;
     font-weight: 400;
-    font-family: Arial, sans-serif;
+    font-family: var(--font-main-family, Arial, sans-serif);
     text-transform: none;
     cursor: pointer;
     background: transparent;
     color: #191919;
     border: 1px solid #191919;
     border-radius: 4px;
-    opacity: 0.75;
+    /* opacity: 0.75; */
 }
 .swp-leave-comment-btn:hover {
-    opacity: 1;
+    opacity: 0.8;
     background: transparent;
 
 }
@@ -2026,7 +2028,7 @@ p {
     padding: 3px 0px;
     font-size: 14px;
     font-weight: 400;
-    font-family: Arial, sans-serif;
+    font-family: var(--font-main-family, Arial, sans-serif);
     text-decoration: underline;
     text-transform: none;
     cursor: pointer;
@@ -2034,7 +2036,7 @@ p {
     color: #191919;
     border: none;
     border-radius: 4px;
-    opacity: 0.6;
+    opacity: 0.8;
 }
 .swp-reply-btn:hover {
     opacity: 1;
@@ -2047,14 +2049,14 @@ p {
     padding: 6px 14px;
     font-size: 13px;
     font-weight: 400;
-    font-family: Arial, sans-serif;
+    font-family: var(--font-main-family, Arial, sans-serif);
     text-transform: none;
     cursor: pointer;
     background: transparent;
     color: #191919;
     border: 1px solid #191919;
     border-radius: 4px;
-    opacity: 0.75;
+    /* opacity: 0.75; */
 }
 .swp-load-more-btn:hover {
     opacity: 1;

@@ -20,6 +20,7 @@ import { checkKey } from "./KeyboardManager.js";
 import { getHdocJsonAndContentFromCurrentDocument, parseHtmlPageWithEmbeddedHDoc } from "./parsers/EmbHDOCParser.js";
 import { parseCDOC } from "./parsers/CDOCParser.js";
 import { parseCondoc } from "./parsers/CondocParser.js";
+import { kFontRoleSets, setFontSet } from "./Fonts.js";
 
 let mainDocData
 let currentLocation
@@ -133,7 +134,7 @@ async function onLoad() {
 
 
 
-function loadUIAndIcons() {
+async function loadUIAndIcons() {
 
     g.flinksCanvas = document.getElementById('flinks-canvas')
     g.flinksCtx = g.flinksCanvas.getContext("2d")
@@ -145,7 +146,11 @@ function loadUIAndIcons() {
 
     document.onkeydown = checkKey
 
+    await setFontSet('terminal')
+
 }
+
+
 
 
 function dispatchReaderReady(url) {
