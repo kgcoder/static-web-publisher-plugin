@@ -4,7 +4,7 @@ Donate link: https://readersweb.org/donate
 Tags: reader, connections, hdoc, static, web
 Requires at least: 5.2
 Tested up to: 7.1
-Stable tag: 5.4.2
+Stable tag: 5.5.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -40,7 +40,9 @@ The plugin can serve your WordPress content in three new document formats and ca
 
 = Reader UI =
 
-When a post or page is set to **Reader UI** mode, the plugin replaces your WordPress theme with a built-in reader interface. This is the same interface used by the RW Reader browser extension, so the experience is consistent regardless of whether the visitor has the extension installed.
+When a post or page is set to **Reader UI** mode, the plugin replaces your WordPress theme with a built-in reader interface. This is the same interface used by the RW Reader browser extension, so the experience is consistent regardless of whether the visitor has the extension installed. 
+
+Currently, there are 11 color themes and 10 font sets, giving you 110 unique visual styles to choose from.
 
 = Comments =
 
@@ -123,6 +125,9 @@ Yes. You can set a global default in Settings and override it per post or page i
 
 
 == Changelog ==
+
+= 5.5.0 =
+More themes were added. Also font sets were added. 
 
 = 5.4.2 =
 Bug fixes
@@ -211,6 +216,9 @@ Initial release.
 
 
 == Upgrade Notice ==
+
+= 5.5.0 =
+No action required.
 
 = 5.4.2 =
 No action required.

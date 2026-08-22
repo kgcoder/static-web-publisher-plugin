@@ -3,7 +3,7 @@
 /*
 Plugin Name: Reader's Web Publisher
 Description: Publishes your posts and pages on the Reader's Web
-Version: 5.4.2
+Version: 5.5.0
 Author: Karen Grigorian
 Author URI: https://github.com/kgcoder
 License: GPLv2 or later
