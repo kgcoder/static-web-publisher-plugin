@@ -51,6 +51,7 @@ function stwbpb_settings_page() {
         'post_mode' => 'embedded_hdoc_forced',
         'republishing_policy' => 'implicit_allow',
         'reader_ui_theme' => 'light',
+        'reader_fontset' => 'default',
         'show_promotion_button' => false,
         'show_post_nav' => false,
         'post_sidebar' => 'none',
@@ -63,6 +64,24 @@ function stwbpb_settings_page() {
     $top_panel = $settings['top_panel'];
     $bottom_panel = $settings['bottom_panel'];
     $sidebar_variants = stwbpb_sidebar_variants_get_all();
+
+    // Kept in sync manually with reader/Fonts.js's kFontRoleSets (id, label,
+    // main.fontFamily, headers.fontFamily, headers.fontWeight only — the
+    // preview-relevant subset). Fonts.js can't be imported directly here: it
+    // pulls in Globals.js, which instantiates the full reader manager stack
+    // at module-load time. If kFontRoleSets changes, update this array too.
+    $reader_fontsets = array(
+        array('id' => 'default',            'label' => 'Default (sans-serif)', 'body_font' => 'Arial, Helvetica, sans-serif',                   'heading_font' => '"Helvetica Neue", Arial, sans-serif',                      'heading_weight' => 600),
+        array('id' => 'classic-serif',      'label' => 'Classic serif',        'body_font' => 'Georgia, "Times New Roman", serif',               'heading_font' => '"Helvetica Neue", Arial, sans-serif',                      'heading_weight' => 700),
+        array('id' => 'comic',              'label' => 'Comic',                'body_font' => '"Comic Sans MS", "Comic Sans", cursive',          'heading_font' => '"Comic Sans MS", "Comic Sans", cursive',                   'heading_weight' => 700),
+        array('id' => 'typewriter',         'label' => 'Typewriter',           'body_font' => '"Courier New", Courier, monospace',               'heading_font' => '"Courier New", Courier, monospace',                        'heading_weight' => 700),
+        array('id' => 'poster',             'label' => 'Poster',               'body_font' => 'Verdana, Geneva, sans-serif',                     'heading_font' => 'Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif', 'heading_weight' => null),
+        array('id' => 'elegant-script',     'label' => 'Elegant script',       'body_font' => 'Garamond, "Book Antiqua", Palatino, serif',       'heading_font' => '"Brush Script MT", "Segoe Script", cursive',               'heading_weight' => null),
+        array('id' => 'modern-minimal',     'label' => 'Modern minimal',       'body_font' => '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif', 'heading_font' => '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',          'heading_weight' => 300),
+        array('id' => 'geometric-editorial','label' => 'Geometric editorial',  'body_font' => 'Garamond, "Book Antiqua", Palatino, serif',       'heading_font' => '"Century Gothic", "Trebuchet MS", sans-serif',             'heading_weight' => 700),
+        array('id' => 'retro-poster',       'label' => 'Retro poster',         'body_font' => 'Georgia, serif',                                  'heading_font' => '"Copperplate", "Copperplate Gothic Light", fantasy',       'heading_weight' => null),
+        array('id' => 'terminal',           'label' => 'Terminal',             'body_font' => 'Consolas, "Lucida Console", Monaco, monospace',   'heading_font' => 'Consolas, "Lucida Console", Monaco, monospace',            'heading_weight' => 700),
+    );
     ?>
     <div class="wrap">
         <h1>Reader's Web Publisher Plugin Settings</h1>
@@ -119,9 +138,30 @@ function stwbpb_settings_page() {
                 <label>Reader UI theme: </label>
                 <div class="spacerW10"></div>
                 <select name="stwbpb_settings[reader_ui_theme]">
-                    <option value="light" <?php selected($settings['reader_ui_theme'], 'light'); ?>>Light</option>
-                    <option value="dark" <?php selected($settings['reader_ui_theme'], 'dark'); ?>>Dark</option>
-                    <option value="sepia" <?php selected($settings['reader_ui_theme'], 'sepia'); ?>>Sepia</option>
+                    <?php
+                    $reader_themes = array(
+                        'light' => 'Light', 'dark' => 'Dark', 'sepia' => 'Sepia',
+                        'lavender' => 'Lavender', 'matrix' => 'Matrix', 'mint' => 'Mint',
+                        'navy' => 'Navy', 'ocean' => 'Ocean', 'olive' => 'Olive',
+                        'rose' => 'Rose', 'slate' => 'Slate',
+                    );
+                    foreach ($reader_themes as $theme_id => $theme_label): ?>
+                        <option value="<?php echo esc_attr($theme_id); ?>" <?php selected($settings['reader_ui_theme'], $theme_id); ?>><?php echo esc_html($theme_label); ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="settings-option-div">
+                <label>Reader font set: </label>
+                <div class="spacerW10"></div>
+                <select name="stwbpb_settings[reader_fontset]">
+                    <?php foreach ($reader_fontsets as $fs): ?>
+                        <option value="<?php echo esc_attr($fs['id']); ?>"
+                            data-heading-font="<?php echo esc_attr($fs['heading_font']); ?>"
+                            data-heading-weight="<?php echo esc_attr($fs['heading_weight'] !== null ? $fs['heading_weight'] : 'bold'); ?>"
+                            data-body-font="<?php echo esc_attr($fs['body_font']); ?>"
+                            <?php selected($settings['reader_fontset'], $fs['id']); ?>><?php echo esc_html($fs['label']); ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
 
@@ -561,8 +601,11 @@ function stwbpb_sanitize_settings($input) {
     $allowed_rep_policies = array('implicit_allow', 'explicit_allow', 'prohibit');
     $sanitized['republishing_policy'] = isset($input['republishing_policy']) && in_array($input['republishing_policy'], $allowed_rep_policies, true) ? $input['republishing_policy'] : 'implicit_allow';
 
-    $allowed_themes = array('light', 'dark', 'sepia');
+    $allowed_themes = array('light', 'dark', 'sepia', 'lavender', 'matrix', 'mint', 'navy', 'ocean', 'olive', 'rose', 'slate');
     $sanitized['reader_ui_theme'] = isset($input['reader_ui_theme']) && in_array($input['reader_ui_theme'], $allowed_themes, true) ? $input['reader_ui_theme'] : 'light';
+
+    $allowed_fontsets = array('default', 'classic-serif', 'comic', 'typewriter', 'poster', 'elegant-script', 'modern-minimal', 'geometric-editorial', 'retro-poster', 'terminal');
+    $sanitized['reader_fontset'] = isset($input['reader_fontset']) && in_array($input['reader_fontset'], $allowed_fontsets, true) ? $input['reader_fontset'] : 'default';
 
 
     // Sanitize top_panel
@@ -662,6 +705,24 @@ function stwbpb_enqueue_scripts($hook) {
 
     if ($is_settings) {
         wp_enqueue_media(); // Enqueues the media uploader
+
+        // Enqueue the real reader theme stylesheets so the theme dropdown's
+        // swatches can use the live --bg-main/--text-main custom properties
+        // instead of duplicating hex colors.
+        $plugin_root_url  = plugin_dir_url(dirname(__FILE__));
+        $plugin_root_path = plugin_dir_path(dirname(__FILE__));
+        $theme_files = glob($plugin_root_path . 'reader/themes/*.css');
+        if ($theme_files) {
+            foreach ($theme_files as $theme_file) {
+                $theme_name = basename($theme_file, '.css');
+                wp_enqueue_style(
+                    'stwbpb-theme-preview-' . $theme_name,
+                    $plugin_root_url . 'reader/themes/' . $theme_name . '.css',
+                    array(),
+                    filemtime($theme_file)
+                );
+            }
+        }
     }
 
     wp_enqueue_script(

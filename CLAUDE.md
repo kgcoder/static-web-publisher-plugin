@@ -197,4 +197,5 @@ Standalone `.hdoc`, `.cdoc`, `.condoc` files can be placed in `ABSPATH/static-do
 - Do not use optional chaining or nullish coalescing.
 - To build code for production use this command (esbuild is installed globally):
 esbuild reader/readerStartUp.js --bundle --minify --format=esm --target=es2019 --outfile=dist/reader.bundle.min.js
+- Do not attempt to test changes in the browser yourself (e.g. via wp-cli, Playwright, or logging into wp-admin) — it doesn't work in this environment. After implementing and verifying with static checks (php -l, node --check, build steps), let the user test the result themselves.
 

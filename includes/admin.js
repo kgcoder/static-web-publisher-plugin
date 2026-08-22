@@ -331,4 +331,128 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    // Custom dropdowns for reader UI theme / font set selects
+    stwbpbInitCustomSelect(document.querySelector('select[name="stwbpb_settings[reader_ui_theme]"]'), stwbpbRenderThemeOption);
+    stwbpbInitCustomSelect(document.querySelector('select[name="stwbpb_settings[reader_fontset]"]'), stwbpbRenderFontOption);
 });
+
+// --- Custom dropdown enhancer for reader_ui_theme / reader_fontset selects ---
+// Progressively enhances a native <select> into a custom dropdown while keeping
+// the native <select> in the DOM (hidden) and in sync, so form submission via
+// options.php and stwbpb_sanitize_settings need no changes.
+const stwbpbOpenDropdownClosers = [];
+document.addEventListener('click', function () {
+    stwbpbOpenDropdownClosers.forEach(function (close) { close(); });
+});
+
+function stwbpbInitCustomSelect(selectEl, renderOption) {
+    if (!selectEl) return;
+
+    const options = Array.from(selectEl.options).map(function (opt) {
+        return { value: opt.value, label: opt.textContent, dataset: opt.dataset };
+    });
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'stwbpb-dropdown';
+
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'stwbpb-dropdown-trigger';
+
+    const panel = document.createElement('div');
+    panel.className = 'stwbpb-dropdown-panel';
+    panel.style.display = 'none';
+
+    function findOption(value) {
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].value === value) return options[i];
+        }
+        return options[0];
+    }
+
+    function renderTrigger() {
+        trigger.innerHTML = '';
+        const content = document.createElement('div');
+        content.className = 'stwbpb-dropdown-trigger-content';
+        renderOption(content, findOption(selectEl.value));
+        trigger.appendChild(content);
+        const caret = document.createElement('span');
+        caret.className = 'stwbpb-dropdown-caret';
+        caret.textContent = '▾';
+        trigger.appendChild(caret);
+    }
+
+    function closePanel() {
+        panel.style.display = 'none';
+    }
+
+    function openPanel() {
+        panel.innerHTML = '';
+        options.forEach(function (opt) {
+            const row = document.createElement('div');
+            row.className = 'stwbpb-dropdown-option';
+            renderOption(row, opt);
+            row.addEventListener('click', function () {
+                selectEl.value = opt.value;
+                selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+                renderTrigger();
+                closePanel();
+            });
+            panel.appendChild(row);
+        });
+        panel.style.display = 'block';
+    }
+
+    stwbpbOpenDropdownClosers.push(closePanel);
+
+    trigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const wasOpen = panel.style.display !== 'none';
+        stwbpbOpenDropdownClosers.forEach(function (close) { close(); });
+        if (!wasOpen) openPanel();
+    });
+
+    trigger.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closePanel();
+    });
+
+    selectEl.style.display = 'none';
+    selectEl.insertAdjacentElement('afterend', wrapper);
+    wrapper.appendChild(trigger);
+    wrapper.appendChild(panel);
+
+    renderTrigger();
+}
+
+function stwbpbRenderThemeOption(container, opt) {
+    const row = document.createElement('div');
+    row.className = 'stwbpb-option-row';
+
+    const swatch = document.createElement('div');
+    swatch.className = 'stwbpb-swatch theme-' + opt.value;
+    swatch.textContent = 'Aa';
+
+    const label = document.createElement('span');
+    label.textContent = opt.label;
+
+    row.appendChild(swatch);
+    row.appendChild(label);
+    container.appendChild(row);
+}
+
+function stwbpbRenderFontOption(container, opt) {
+    const heading = document.createElement('div');
+    heading.className = 'stwbpb-font-preview-heading';
+    heading.textContent = opt.label;
+    heading.style.fontFamily = opt.dataset.headingFont || '';
+    heading.style.fontWeight = opt.dataset.headingWeight || 'bold';
+
+    const body = document.createElement('div');
+    body.className = 'stwbpb-font-preview-body';
+    body.textContent = 'The quick brown fox jumps over the lazy dog.';
+    body.style.fontFamily = opt.dataset.bodyFont || '';
+
+    container.appendChild(heading);
+    container.appendChild(body);
+}

@@ -146,7 +146,8 @@ async function loadUIAndIcons() {
 
     document.onkeydown = checkKey
 
-    await setFontSet('terminal')
+    const fontSetId = (window.vcReaderData && window.vcReaderData.fontSet) ? window.vcReaderData.fontSet : 'default'
+    await setFontSet(fontSetId)
 
 }
 

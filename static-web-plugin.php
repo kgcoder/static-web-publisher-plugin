@@ -315,6 +315,8 @@ add_action('wp_enqueue_scripts', function () {
     if (!$post || !stwbpb_request_matches_post($post)) return;
     if (stwbpb_get_doc_effective_display_mode($post) !== 'doc_in_reader') return;
 
+    $settings = get_option('stwbpb_settings', []);
+
     $reader_url  = plugins_url('reader/', __FILE__);
     $reader_path = plugin_dir_path(__FILE__) . 'reader/';
     $dist_url    = plugins_url('dist/', __FILE__);
@@ -323,9 +325,15 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_style('swp-reader',      $reader_url . 'reader.css',       [], filemtime($reader_path . 'reader.css'));
     wp_enqueue_style('swp-export-page', $reader_url . 'ExportPage.css',   [], filemtime($reader_path . 'ExportPage.css'));
     wp_enqueue_style('swp-page-info',   $reader_url . 'PageInfo.css',     [], filemtime($reader_path . 'PageInfo.css'));
-    wp_enqueue_style('swp-theme-light', $reader_url . 'themes/light.css', [], filemtime($reader_path . 'themes/light.css'));
-    wp_enqueue_style('swp-theme-dark',  $reader_url . 'themes/dark.css',  [], filemtime($reader_path . 'themes/dark.css'));
-    wp_enqueue_style('swp-theme-sepia', $reader_url . 'themes/sepia.css', [], filemtime($reader_path . 'themes/sepia.css'));
+
+    $allowed_themes = array('light', 'dark', 'sepia', 'lavender', 'matrix', 'mint', 'navy', 'ocean', 'olive', 'rose', 'slate');
+    $theme = isset($settings['reader_ui_theme']) && in_array($settings['reader_ui_theme'], $allowed_themes, true)
+        ? $settings['reader_ui_theme'] : 'light';
+    wp_enqueue_style('swp-theme-' . $theme, $reader_url . 'themes/' . $theme . '.css', [], filemtime($reader_path . 'themes/' . $theme . '.css'));
+
+    $allowed_fontsets = array('default', 'classic-serif', 'comic', 'typewriter', 'poster', 'elegant-script', 'modern-minimal', 'geometric-editorial', 'retro-poster', 'terminal');
+    $fontset = isset($settings['reader_fontset']) && in_array($settings['reader_fontset'], $allowed_fontsets, true)
+        ? $settings['reader_fontset'] : 'default';
 
     if (defined('WP_DEBUG') && WP_DEBUG) {
         $js_url = $reader_url . 'readerStartUp.js';
@@ -337,9 +345,10 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_script('swp-reader-js', $js_url, [], $js_ver, false);
 
     wp_add_inline_script('swp-reader-js', sprintf(
-        'window.vcReaderData = { assetsUrl: %s, proxyUrl: %s };',
+        'window.vcReaderData = { assetsUrl: %s, proxyUrl: %s, fontSet: %s };',
         wp_json_encode($reader_url . 'images/'),
-        wp_json_encode(home_url('/sw-proxy/'))
+        wp_json_encode(home_url('/sw-proxy/')),
+        wp_json_encode($fontset)
     ), 'before');
 });
 
