@@ -454,8 +454,6 @@ class NoteDivsManager{
                 const xmlDoc = parser.parseFromString(panelsString, 'application/xml');
 
                 const rootElement = xmlDoc.documentElement;
-
-               // const generalPanelStyle = this.getPanelStyleFromXMLNode(rootElement)
         
                 const topPanels = rootElement.getElementsByTagName('top')
 
@@ -463,7 +461,6 @@ class NoteDivsManager{
                     let topPanelLogoUrl = ''
                     let mainLinkUrl = ''
                     let mainTitle = ''
-                    let isMainLinkStatic = false
                     const topPanel = topPanels[0]
                     const topPanelLinksInfo = []
                     for(const childNode of topPanel.childNodes){
@@ -474,9 +471,7 @@ class NoteDivsManager{
                             const logoImageUrl = sanitizeUrl(childNode.getAttribute('src'))
                             const logoHRef = sanitizeUrl(childNode.getAttribute('href'))
                             
-                            isMainLinkStatic = (childNode.hasAttribute('static') && childNode.getAttribute('static') !== 'false') ||
-                            (childNode.hasAttribute('data-static') &&  childNode.getAttribute('data-static') !== 'false')    
-
+                         
                             mainLinkUrl = logoHRef
                             topPanelLogoUrl = logoImageUrl
 
@@ -484,9 +479,6 @@ class NoteDivsManager{
                         }else if(tagName === 'site-name'){
                             const title = stripHtmlTags(childNode.textContent)
                             const titleHRef = sanitizeUrl(childNode.getAttribute('href'))
-
-                            isMainLinkStatic = (childNode.hasAttribute('static') && childNode.getAttribute('static') !== 'false') ||
-                            (childNode.hasAttribute('data-static') &&  childNode.getAttribute('data-static') !== 'false')    
 
 
                             mainLinkUrl = titleHRef
@@ -507,9 +499,8 @@ class NoteDivsManager{
                     }
 
 
-                   // const topPanelStyle = this.getPanelStyleFromXMLNode(topPanel)
 
-                    topPanelInfo = {isMainLinkStatic,mainUrl:mainLinkUrl,logo:topPanelLogoUrl,title:mainTitle,links:topPanelLinksInfo}
+                    topPanelInfo = {mainUrl:mainLinkUrl,logo:topPanelLogoUrl,title:mainTitle,links:topPanelLinksInfo}
                     
             }
 
@@ -585,7 +576,6 @@ class NoteDivsManager{
                         sectionsArray.push(sectionData)
                     }
 
-                  //  const bottomPanelStyle = this.getPanelStyleFromXMLNode(bottomPanel)
 
                     const test = bottomPanel.getElementsByTagName('bottom-message')
                     const bottomMessage = test && test.length ? stripHtmlTags(test[0].textContent) : ''
@@ -641,7 +631,6 @@ class NoteDivsManager{
                 }
 
                 panelsInfo = {
-                    //style:generalPanelStyle,
                     topPanel:topPanelInfo,
                     postNavPanel:postNavPanelInfo,
                     sidebarPanel:sidebarPanelInfo,

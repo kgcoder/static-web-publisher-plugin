@@ -1261,7 +1261,7 @@ class PopupDocumentManager{
             topPanelLogoImage.style.display = 'none'
             topPanelTitleSpan.style.display = 'none'
             if(topPanel.logo || topPanel.title){
-                let {isMainLinkStatic,logo:imageUrl,mainUrl:link,title} = topPanel
+                let {logo:imageUrl,mainUrl:link,title} = topPanel
                 if(imageUrl){
                     topPanelLogoImage.src = imageUrl
                     topPanelLogoImage.width = '150px'
@@ -1292,33 +1292,7 @@ class PopupDocumentManager{
                 dataObject.topPanelListeners = []
 
                 if(link){
-
-                    const clickHandler = () => {
-                        g.wn.openUrl(link, isMainLinkStatic)
-                    }
                     topPanelLogoLink.href = link
-
-                   // topPanelLogoLink.addEventListener('click',clickHandler)
-                   // dataObject.topPanelListeners.push({type:'click',handler:clickHandler})
-    
-                    // const mouseOverHandler = () => {
-                    //  //   showUrlInTheCorner(link)
-                    // }
-                  //  topPanelLogoLink.addEventListener('mouseover',mouseOverHandler)
-                 //   dataObject.topPanelListeners.push({type:'mouseover',handler:mouseOverHandler})
-
-
-
-                    // const mouseOutHandler = () => {
-                    //  //   hideUrlInTheCorner()
-                    // }
-
-                   // topPanelLogoLink.addEventListener('mouseout',mouseOutHandler)
-                   // dataObject.topPanelListeners.push({type:'mouseout',handler:mouseOutHandler})
-
-
-                  
-
                 }
                 topPanelLogoLink.style.cursor = !!link ? 'pointer' : 'default'
 
