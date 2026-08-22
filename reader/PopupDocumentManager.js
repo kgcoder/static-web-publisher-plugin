@@ -473,18 +473,7 @@ class PopupDocumentManager{
     }
 
 
-    updateFontSize = (diff) => {
-        this.fontSize += diff
-   
-        this.applyFontSizeToPresentationDivs()
-
-        g.readingManager.applyFlinksOnTheLeft()
-        g.readingManager.applyFlinksOnTheRight()
-
-        if(diff != 0){
-            showToastMessage(`Font size: ${this.fontSize}${this.fontSize === 18 ? ' (default)' : ''}`)
-        }
-    }
+ 
 
 
     applyFontSizeToPresentationDivs = () => {

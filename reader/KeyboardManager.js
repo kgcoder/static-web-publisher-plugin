@@ -17,17 +17,7 @@ import g from './Globals.js'
 
 export const checkKey = async (e) => {
 
-    if ((e.metaKey || e.ctrlKey) && e.key === '-') {
-        e.preventDefault()
-        g.pdm.updateFontSize(-1)   
-    }
-    if ((e.metaKey || e.ctrlKey) && e.key === '=') {
-        e.preventDefault()
-        g.pdm.updateFontSize(1)
-        
-            
-    }
-
+ 
     if(e.code === 'Escape'){
         g.readingManager.processEscape()
     }
