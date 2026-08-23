@@ -184,7 +184,7 @@ function stwbpb_custom_post_endpoints_template_redirect() {
         }
 
         $mode = $post ? stwbpb_get_doc_effective_display_mode($post) : '';
-        if ($mode !== 'doc_in_reader' && $mode !== 'standalone_doc') {
+        if ($mode !== 'doc_in_reader' && $mode !== 'standalone_doc' && $mode !== 'none') {
             ob_start(function($html) {
                 libxml_use_internal_errors(true);
                 $dom = new DOMDocument();
@@ -269,6 +269,9 @@ add_filter('the_content', function($content) {
     if (is_singular(['post', 'page'])) {
         global $post;
         if ($post && stwbpb_request_matches_post($post)) {
+            if (stwbpb_get_doc_effective_display_mode($post) === 'none') {
+                return $content;
+            }
             return '<div id="hdoc-content">' . $content . '</div>';
         }
     }
@@ -373,7 +376,7 @@ function stwbpb_output_xml() {
     $settings = get_option('stwbpb_settings', array());
 
     $mode = stwbpb_get_doc_effective_display_mode($post);
-    if ($mode === 'standalone_doc') return;
+    if ($mode === 'standalone_doc' || $mode === 'none') return;
     $type = stwbpb_get_effective_doc_type($post);
     if ($type === 'CDOC' || $type === 'CONDOC') return;
 

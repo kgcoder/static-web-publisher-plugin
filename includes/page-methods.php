@@ -60,6 +60,7 @@ function stwbpb_custom_post_endpoints_meta_box_callback($post) {
         <option value="embedded_hdoc" <?php selected($mode_value, 'embedded_hdoc'); ?>>Embedded HDOC</option>
         <option value="doc_in_reader" <?php selected($mode_value, 'doc_in_reader'); ?>>Reader UI</option>
         <option value="standalone_doc" <?php selected($mode_value, 'standalone_doc'); ?>>Standalone doc</option>
+        <option value="none" <?php selected($mode_value, 'none'); ?>>None (do not modify the page)</option>
     </select>
     <br><br>
     <label for="hdoc_author_name_display"><strong>Author's name:</strong></label><br>
@@ -171,7 +172,7 @@ function stwbpb_custom_post_endpoints_save_meta_box($post_id) {
         : '';
     update_post_meta($post_id, '_cdoc_svg', $cdoc_svg);
 
-    $allowed_modes = array('default', 'embedded_hdoc_forced', 'embedded_hdoc', 'doc_in_reader', 'standalone_doc');
+    $allowed_modes = array('default', 'embedded_hdoc_forced', 'embedded_hdoc', 'doc_in_reader', 'standalone_doc', 'none');
     $mode = isset($_POST['hdoc_display_mode']) && in_array($_POST['hdoc_display_mode'], $allowed_modes, true)
         ? sanitize_text_field(wp_unslash($_POST['hdoc_display_mode']))
         : 'default';

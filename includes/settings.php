@@ -109,6 +109,7 @@ function stwbpb_settings_page() {
                     <option value="embedded_hdoc" <?php selected($settings['page_mode'], 'embedded_hdoc'); ?>>Embedded HDOC</option>
                     <option value="doc_in_reader" <?php selected($settings['page_mode'], 'doc_in_reader'); ?>>Reader UI</option>
                     <option value="standalone_doc" <?php selected($settings['page_mode'], 'standalone_doc'); ?>>Standalone document</option>
+                    <option value="none" <?php selected($settings['page_mode'], 'none'); ?>>None (do not modify the page)</option>
                 </select>
             </div>
 
@@ -120,6 +121,7 @@ function stwbpb_settings_page() {
                     <option value="embedded_hdoc" <?php selected($settings['post_mode'], 'embedded_hdoc'); ?>>Embedded HDOC</option>
                     <option value="doc_in_reader" <?php selected($settings['post_mode'], 'doc_in_reader'); ?>>Reader UI</option>
                     <option value="standalone_doc" <?php selected($settings['post_mode'], 'standalone_doc'); ?>>Standalone document</option>
+                    <option value="none" <?php selected($settings['post_mode'], 'none'); ?>>None (do not modify the page)</option>
                 </select>
             </div>
 
@@ -594,7 +596,7 @@ function stwbpb_sanitize_settings($input) {
     $sanitized['error_comment_required']    = isset($input['error_comment_required'])    ? sanitize_text_field($input['error_comment_required'])    : '';
     $sanitized['error_save_failed']         = isset($input['error_save_failed'])         ? sanitize_text_field($input['error_save_failed'])         : '';
 
-    $allowed_modes = array('embedded_hdoc_forced', 'embedded_hdoc', 'doc_in_reader', 'standalone_doc');
+    $allowed_modes = array('embedded_hdoc_forced', 'embedded_hdoc', 'doc_in_reader', 'standalone_doc', 'none');
     $sanitized['page_mode'] = isset($input['page_mode']) && in_array($input['page_mode'], $allowed_modes, true) ? $input['page_mode'] : 'embedded_hdoc_forced';
     $sanitized['post_mode'] = isset($input['post_mode']) && in_array($input['post_mode'], $allowed_modes, true) ? $input['post_mode'] : 'embedded_hdoc_forced';
 

@@ -103,7 +103,7 @@ The [reader/](reader/) directory mirrors the extension's frontend codebase:
 - **Parsers:** `parsers/HDOCParser.js`, `parsers/EmbHDOCParser.js`, `parsers/CDOCParser.js`, `parsers/CondocParser.js`, `parsers/HtmlPageParser.js`, `parsers/PlainTextParser.js`, `parsers/ParsingManager.js`.
 - **Models:** `models/FloatingLink.js`, `models/FLEnd.js`, `models/FLTextEnd.js`, `models/FLPointEnd.js`, `models/Line.js`, `models/Crosshair.js`, `models/ImageView.js`, `models/Viewport.js`.
 - **Utilities:** `helpers.js`, `constants.js`, `Globals.js`, `NetworkManager.js`, `KeyboardManager.js`, `HeaderMethods.js`, `MultipleLinksPopupManager.js`, `Icons.js`.
-- **Styles:** `reader.css`, `ExportPage.css`, `PageInfo.css`, `hdocStyles.css`, `themes/light.css`, `themes/dark.css`, `themes/sepia.css`.
+- **Styles:** `reader.css`, `ExportPage.css`, `PageInfo.css`, `hdocStyles.css`, `themes/light.css`, `themes/dark.css`, `themes/sepia.css`, and styles for other themes.
 - **Third-party:** `dompurify/purify.es.mjs` (HTML sanitizer), `hashing/sha256-es/` (SHA-256 for floating link hashing).
 
 Global state lives in [reader/Globals.js](reader/Globals.js): `g.pdm` (PopupDocumentManager), `g.readingManager`, `g.noteDivsManager`.
@@ -114,7 +114,7 @@ The reader JS is injected as `type="module"`. A `window.vcReaderData` object is 
 
 ## Display Modes
 
-Each post or page can be served in one of four modes, configurable globally in Settings and overridable per-post in the meta box:
+Each post or page can be served in one of five modes, configurable globally in Settings and overridable per-post in the meta box. `embedded_hdoc_forced` is the default. `none` is always the last option in the dropdowns.
 
 | Mode | Behaviour |
 |------|-----------|
@@ -122,8 +122,9 @@ Each post or page can be served in one of four modes, configurable globally in S
 | `embedded_hdoc_forced` | Same as above but the `"forced": true` flag in the JSON tells the extension to always render as HDOC, even when the page is the main page shown on the left side. |
 | `doc_in_reader` | WordPress serves the full Reader UI template instead of the regular theme. The reader JS loads the embedded doc content directly but also uses `#hdoc-content` and `#hdoc-data` so the extension can extract useful information and show it in its own UI. |
 | `standalone_doc` | WordPress serves the raw document (HDOC/CDOC/CONDOC) at the post's URL with `Content-Type: text/plain`. |
+| `none` | The page is left completely untouched: no `#hdoc-content` wrapper, no `#hdoc-data` JSON, no reader template or assets. Regular WordPress rendering only. |
 
-CDOC and CONDOC posts always default to `doc_in_reader` unless explicitly set to `standalone_doc`.
+CDOC and CONDOC posts always default to `doc_in_reader` unless explicitly set to `standalone_doc` — this includes `none`, which also collapses to `doc_in_reader` for these doc types since they have no plain-page content to fall back to.
 
 ---
 
@@ -145,7 +146,7 @@ All rules use priority `top`. After adding or changing rewrite rules, go to **Se
 | Meta key | Purpose |
 |----------|---------|
 | `_doc_type` | `HDOC` (default), `CDOC`, or `CONDOC` |
-| `_hdoc_display_mode` | Per-post display mode override (`default`, `embedded_hdoc`, `embedded_hdoc_forced`, `doc_in_reader`, `standalone_doc`) |
+| `_hdoc_display_mode` | Per-post display mode override (`default`, `embedded_hdoc`, `embedded_hdoc_forced`, `doc_in_reader`, `standalone_doc`, `none`) |
 | `_hdoc_author_name_display` | `default`, `show`, or `hide` |
 | `_hdoc_publish_date_display` | `default`, `show`, or `hide` |
 | `_republishing_policy` | Per-post republishing policy override (`default`, `implicit_allow`, `explicit_allow`, `prohibit`). Resolved by `stwbpb_get_effective_republishing_policy()`. Not applied to CONDOC posts. |
