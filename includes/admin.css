@@ -117,7 +117,7 @@ button:hover {
 
 .stwbpb-dropdown {
     position: relative;
-    max-width: 320px;
+    width: 300px;
 }
 
 .stwbpb-dropdown-trigger {
