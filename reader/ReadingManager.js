@@ -1547,7 +1547,7 @@ setupFlinksCanvasDPR(){
 
         const panelsInfo = g.readingManager.mainDocPanels
         
-        const rightX = (g.isMobileMode || !g.readingManager.isFullScreen || !panelsInfo.sidebarPanel || !panelsInfo.sidebarPanel.side === 'left')  ? window.innerWidth - padding : window.innerWidth * 0.8 - padding 
+        const rightX = (g.isMobileMode || !g.readingManager.isFullScreen || !panelsInfo || !panelsInfo.sidebarPanel) ? window.innerWidth - padding : window.innerWidth * 0.8 - padding 
 
 
         const currentDocTopOffset = g.pdm.getCurrentDocTopOffset()
