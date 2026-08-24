@@ -39,6 +39,7 @@ function stwbpb_render_comment_form($post_id, $parent_id, $error, $submitted) {
     $parent_comment = ($parent_id > 0) ? get_comment($parent_id) : null;
 
     header('Content-Type: text/html; charset=UTF-8');
+    header('X-Robots-Tag: noindex, nofollow');
     ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -244,6 +245,7 @@ function stwbpb_process_comment_form($post_id, $parent_id) {
     }
 
     header('Content-Type: text/html; charset=UTF-8');
+    header('X-Robots-Tag: noindex, nofollow');
     ?>
 <!DOCTYPE html>
 <html lang="en">
