@@ -347,11 +347,16 @@ add_action('wp_enqueue_scripts', function () {
     }
     wp_enqueue_script('swp-reader-js', $js_url, [], $js_ver, false);
 
+    $open_in_new_tab_comments_label = !empty($settings['open_in_new_tab_label'])
+        ? $settings['open_in_new_tab_label']
+        : 'Open in a new tab to view comments';
+
     wp_add_inline_script('swp-reader-js', sprintf(
-        'window.vcReaderData = { assetsUrl: %s, proxyUrl: %s, fontSet: %s };',
+        'window.vcReaderData = { assetsUrl: %s, proxyUrl: %s, fontSet: %s, openInNewTabCommentsLabel: %s };',
         wp_json_encode($reader_url . 'images/'),
         wp_json_encode(home_url('/sw-proxy/')),
-        wp_json_encode($fontset)
+        wp_json_encode($fontset),
+        wp_json_encode($open_in_new_tab_comments_label)
     ), 'before');
 });
 

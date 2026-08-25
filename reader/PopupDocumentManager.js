@@ -1193,12 +1193,20 @@ class PopupDocumentManager{
             const hasComments = !!(commentsPanel && commentsPanel.commentsUrl)
             belowContentCommentsDiv.style.display = hasComments ? 'block' : 'none'
             if(hasComments){
-                executeAfterDelayIfPluginIsStillActive(() => 
-                     this.getComments(belowContentCommentsDiv, commentsPanel.commentsUrl, commentsPanel.commentsTitle,
-                            commentsPanel.noCommentsMessage, dataObject, commentsPanel.leaveCommentUrl,
-                            commentsPanel.commentsReplyLabel, commentsPanel.commentsLeaveLabel, 1, commentsPanel.commentsLoadMoreLabel)
-                    
-                )
+                const currentPageHostname = new URL(g.readingManager.mainDocData.url).hostname
+                const requestedPageHostname = new URL(commentsPanel.commentsUrl).hostname
+
+                if(requestedPageHostname !== currentPageHostname){
+                    const targetUrl = isRight ? dataObject.url : g.readingManager.mainDocData.url
+                    this.renderOpenInNewTabComments(belowContentCommentsDiv, targetUrl, commentsPanel.commentsTitle)
+                }else{
+                    executeAfterDelayIfPluginIsStillActive(() =>
+                         this.getComments(belowContentCommentsDiv, commentsPanel.commentsUrl, commentsPanel.commentsTitle,
+                                commentsPanel.noCommentsMessage, dataObject, commentsPanel.leaveCommentUrl,
+                                commentsPanel.commentsReplyLabel, commentsPanel.commentsLeaveLabel, 1, commentsPanel.commentsLoadMoreLabel)
+
+                    )
+                }
             }else{
                 this.cleanCommentsDiv(belowContentCommentsDiv)
             }
@@ -2635,44 +2643,31 @@ class PopupDocumentManager{
         document.body.appendChild(overlay)
     }
 
-    showOpenInNewTabAlert = (currentPageUrl) => {
-        const parsed = new URL(currentPageUrl)
+    renderOpenInNewTabComments = (commentsDiv, targetUrl, commentsTitle) => {
+        const parsed = new URL(targetUrl)
         parsed.hash = ''
         const cleanUrl = parsed.toString()
 
-        const overlay = document.createElement('div')
-        overlay.className = 'swp-comment-popup-overlay'
+        const label = (window.vcReaderData != null && window.vcReaderData.openInNewTabCommentsLabel)
+            ? window.vcReaderData.openInNewTabCommentsLabel
+            : 'Open in a new tab to view comments'
 
-        const dialog = document.createElement('div')
-        dialog.className = 'swp-open-tab-dialog'
+        this.cleanCommentsDiv(commentsDiv)
 
-        const msg = document.createElement('p')
-        msg.className = 'swp-open-tab-dialog__message'
-        msg.textContent = 'To view comments, open this page in another tab.'
+        if (commentsTitle) {
+            const h2 = document.createElement('h2')
+            h2.className = 'comments-title'
+            h2.textContent = commentsTitle
+            commentsDiv.appendChild(h2)
 
-        const actions = document.createElement('div')
-        actions.className = 'swp-open-tab-dialog__actions'
+        }
+
 
         const openBtn = document.createElement('button')
-        openBtn.className = 'swp-open-tab-dialog__btn swp-open-tab-dialog__btn--open'
-        openBtn.textContent = 'Open in new tab'
-        openBtn.addEventListener('click', () => {
-            window.open(cleanUrl, '_blank')
-            overlay.remove()
-        })
-
-        const cancelBtn = document.createElement('button')
-        cancelBtn.className = 'swp-open-tab-dialog__btn swp-open-tab-dialog__btn--cancel'
-        cancelBtn.textContent = 'Cancel'
-        cancelBtn.addEventListener('click', () => overlay.remove())
-
-        actions.appendChild(openBtn)
-        actions.appendChild(cancelBtn)
-        dialog.appendChild(msg)
-        dialog.appendChild(actions)
-        overlay.appendChild(dialog)
-        overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove() })
-        document.body.appendChild(overlay)
+        openBtn.className = 'swp-open-in-new-tab-btn'
+        openBtn.textContent = label
+        openBtn.addEventListener('click', () => window.open(cleanUrl, '_blank'))
+        commentsDiv.appendChild(openBtn)
     }
 
     cleanCommentsDiv(commentsDiv) {
@@ -2683,6 +2678,7 @@ class PopupDocumentManager{
     }
 
     getComments = async (commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, listenersOwner, leaveCommentUrl, replyLabel, leaveCommentLabel, page = 1, loadMoreLabel = '') => {
+
         if (page === 1) {
             invalidateCacheForUrl(commentsUrl)
             listenersOwner.commentsDiv = commentsDiv
