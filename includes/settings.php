@@ -48,8 +48,8 @@ function stwbpb_settings_page() {
             'bottom_message' => '',
             'sections' => array()
         ),
-        'page_mode' => 'embedded_hdoc_forced',
-        'post_mode' => 'embedded_hdoc_forced',
+        'page_mode' => 'none',
+        'post_mode' => 'none',
         'republishing_policy' => 'implicit_allow',
         'reader_ui_theme' => 'light',
         'reader_fontset' => 'default',
@@ -106,11 +106,11 @@ function stwbpb_settings_page() {
                 <label>Page mode: </label>
                 <div class="spacerW10"></div>
                 <select name="stwbpb_settings[page_mode]">
+                    <option value="none" <?php selected($settings['page_mode'], 'none'); ?>>None (do not modify the page)</option>
+                    <option value="doc_in_reader" <?php selected($settings['page_mode'], 'doc_in_reader'); ?>>Reader UI</option>
                     <option value="embedded_hdoc_forced" <?php selected($settings['page_mode'], 'embedded_hdoc_forced'); ?>>Embedded HDOC (forced)</option>
                     <option value="embedded_hdoc" <?php selected($settings['page_mode'], 'embedded_hdoc'); ?>>Embedded HDOC</option>
-                    <option value="doc_in_reader" <?php selected($settings['page_mode'], 'doc_in_reader'); ?>>Reader UI</option>
                     <option value="standalone_doc" <?php selected($settings['page_mode'], 'standalone_doc'); ?>>Standalone document</option>
-                    <option value="none" <?php selected($settings['page_mode'], 'none'); ?>>None (do not modify the page)</option>
                 </select>
             </div>
 
@@ -118,11 +118,11 @@ function stwbpb_settings_page() {
                 <label>Post mode: </label>
                 <div class="spacerW10"></div>
                 <select name="stwbpb_settings[post_mode]">
+                    <option value="none" <?php selected($settings['post_mode'], 'none'); ?>>None (do not modify the page)</option>
+                    <option value="doc_in_reader" <?php selected($settings['post_mode'], 'doc_in_reader'); ?>>Reader UI</option>
                     <option value="embedded_hdoc_forced" <?php selected($settings['post_mode'], 'embedded_hdoc_forced'); ?>>Embedded HDOC (forced)</option>
                     <option value="embedded_hdoc" <?php selected($settings['post_mode'], 'embedded_hdoc'); ?>>Embedded HDOC</option>
-                    <option value="doc_in_reader" <?php selected($settings['post_mode'], 'doc_in_reader'); ?>>Reader UI</option>
                     <option value="standalone_doc" <?php selected($settings['post_mode'], 'standalone_doc'); ?>>Standalone document</option>
-                    <option value="none" <?php selected($settings['post_mode'], 'none'); ?>>None (do not modify the page)</option>
                 </select>
             </div>
 
@@ -545,8 +545,8 @@ function stwbpb_settings_init() {
             'bottom_message' => '',
             'sections' => array()
         ),
-        'page_mode' => 'embedded_hdoc_forced',
-        'post_mode' => 'embedded_hdoc_forced',
+        'page_mode' => 'none',
+        'post_mode' => 'none',
         'republishing_policy' => 'implicit_allow',
         'show_post_nav' => false,
         'post_sidebar' => array('sections' => array()),
@@ -606,9 +606,9 @@ function stwbpb_sanitize_settings($input) {
     $sanitized['error_comment_required']    = isset($input['error_comment_required'])    ? sanitize_text_field($input['error_comment_required'])    : '';
     $sanitized['error_save_failed']         = isset($input['error_save_failed'])         ? sanitize_text_field($input['error_save_failed'])         : '';
 
-    $allowed_modes = array('embedded_hdoc_forced', 'embedded_hdoc', 'doc_in_reader', 'standalone_doc', 'none');
-    $sanitized['page_mode'] = isset($input['page_mode']) && in_array($input['page_mode'], $allowed_modes, true) ? $input['page_mode'] : 'embedded_hdoc_forced';
-    $sanitized['post_mode'] = isset($input['post_mode']) && in_array($input['post_mode'], $allowed_modes, true) ? $input['post_mode'] : 'embedded_hdoc_forced';
+    $allowed_modes = array('none', 'doc_in_reader', 'embedded_hdoc_forced', 'embedded_hdoc', 'standalone_doc');
+    $sanitized['page_mode'] = isset($input['page_mode']) && in_array($input['page_mode'], $allowed_modes, true) ? $input['page_mode'] : 'none';
+    $sanitized['post_mode'] = isset($input['post_mode']) && in_array($input['post_mode'], $allowed_modes, true) ? $input['post_mode'] : 'none';
 
     $allowed_rep_policies = array('implicit_allow', 'explicit_allow', 'prohibit');
     $sanitized['republishing_policy'] = isset($input['republishing_policy']) && in_array($input['republishing_policy'], $allowed_rep_policies, true) ? $input['republishing_policy'] : 'implicit_allow';
