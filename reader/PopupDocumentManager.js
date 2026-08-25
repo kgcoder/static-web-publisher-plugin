@@ -1197,7 +1197,7 @@ class PopupDocumentManager{
                 const requestedPageHostname = new URL(commentsPanel.commentsUrl).hostname
 
                 if(requestedPageHostname !== currentPageHostname){
-                    const targetUrl = isRight ? dataObject.url : g.readingManager.mainDocData.url
+                    const targetUrl = isRight ? dataObject.url : (g.readingManager.embeddedDocData ? g.readingManager.embeddedDocData.url : g.readingManager.mainDocData.url)
                     this.renderOpenInNewTabComments(belowContentCommentsDiv, targetUrl, commentsPanel.commentsTitle)
                 }else{
                     executeAfterDelayIfPluginIsStillActive(() =>
@@ -2664,7 +2664,7 @@ class PopupDocumentManager{
 
 
         const openBtn = document.createElement('button')
-        openBtn.className = 'swp-open-in-new-tab-btn'
+        openBtn.className = 'swp-leave-comment-btn'
         openBtn.textContent = label
         openBtn.addEventListener('click', () => window.open(cleanUrl, '_blank'))
         commentsDiv.appendChild(openBtn)
