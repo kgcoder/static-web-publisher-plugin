@@ -12,7 +12,7 @@ function stwbpb_build_condoc_source($post) {
 
     $connections_allowed_tags = array(
         'connections' => array(),
-        'doc'         => array('url' => true, 'title' => true, 'hash' => true),
+        'doc'         => array('url' => true, 'title' => true),
     );
 
     $connectionsSection = '';

@@ -93,7 +93,7 @@ function stwbpb_send_hdoc_for_post($post){
 
         $connections_allowed_tags = array(
             'connections' =>  array(),
-            'doc'  => array('url' => true, 'title' => true, 'hash' => true), 
+            'doc'  => array('url' => true, 'title' => true),
         );
 
 

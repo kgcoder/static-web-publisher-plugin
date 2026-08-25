@@ -202,7 +202,7 @@ function stwbpb_custom_post_endpoints_save_meta_box($post_id) {
     update_post_meta($post_id, '_republishing_policy', $rep_policy);
 
     $allowed_tags = array(
-        'doc'  => array('url' => true, 'title' => true, 'hash' => true),
+        'doc'  => array('url' => true, 'title' => true),
     );
 
     if (isset($_POST['static_web_connections_info'])) {
