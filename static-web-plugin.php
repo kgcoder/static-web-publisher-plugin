@@ -78,6 +78,8 @@ function stwbpb_activate() {
         $settings['form_title']                = 'Leave a comment';
         $settings['replying_to_label']         = 'Replying to %s';
         $settings['commenting_on_label']       = 'Commenting on: %s';
+        $settings['load_more_comments_label']  = 'Load more comments';
+        $settings['open_in_new_tab_label']     = 'Open in a new tab to view comments';
         $settings['name_label']                = 'Name';
         $settings['email_label']               = 'Email';
         $settings['comment_label']             = 'Comment';
