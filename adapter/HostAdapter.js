@@ -17,6 +17,9 @@ export default class HostAdapter {
     mainDocumentTitleSpanId = "CurrentDocumentTitleSpan-rwp"
     mainDocumentInfoButtonId = "CurrentDocumentInfoButton-rwp"
 
+    shouldBlockCrossOriginCommentsRequests = true
+    isPromotionalButtonSupported = true
+
     async fetchWebPage(url, options) {
         options = options || {}
 
@@ -42,6 +45,16 @@ export default class HostAdapter {
         }
     }
 
+    executeAfterOptionalDelay(func,delay = 500){
+        setTimeout(() => {
+            //testing if the extension has replaced the UI. This test is only needed in this plugin.
+            const titleSpan = document.getElementById(this.mainDocumentTitleSpanId)
+            if(titleSpan){
+                func()
+            }
+        },delay)
+    }
+
     // This plugin does not persist per-visitor settings today — theme/fontSet are
     // configured site-wide by the admin and server-rendered via window.vcReaderData.
     // If that changes, implement these with window.localStorage (no message relay
@@ -52,4 +65,15 @@ export default class HostAdapter {
 
     saveSetting(key, value) {
     }
+
+    
+    //UI additions ---------------
+
+
+    getOpenCommentsInNewTabLabel(){
+        return (window.vcReaderData != null && window.vcReaderData.openInNewTabCommentsLabel)
+            ? window.vcReaderData.openInNewTabCommentsLabel
+            : 'Open in a new tab to view comments'
+    }
+ 
 }

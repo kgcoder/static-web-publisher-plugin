@@ -13,7 +13,7 @@ https://github.com/kgcoder/readers-web-specs
 */
 
 import g from './Globals.js'
-import { cleanConnectedDocURL, createOneIconComponent, createOneSVGIconComponent, executeAfterDelayIfPluginIsStillActive, getDataFromCondocXML, getDesiredConnectionsFromHdocDataJson, getHeaderDivFrom, getPresentationDivFrom, getTextColumnWidth, getTextFromDiv, hideUrlInTheCorner, isDotInsideFrame, isoToHumanReadableDate, removeAllChildren, sanitizeHtml, sanitizeUrl, showToastMessage, showUrlInTheCorner, stripHtmlTags } from './helpers.js'
+import { cleanConnectedDocURL, createOneIconComponent, createOneSVGIconComponent, getDataFromCondocXML, getDesiredConnectionsFromHdocDataJson, getHeaderDivFrom, getPresentationDivFrom, getTextColumnWidth, getTextFromDiv, hideUrlInTheCorner, isDotInsideFrame, isoToHumanReadableDate, removeAllChildren, sanitizeHtml, sanitizeUrl, showToastMessage, showUrlInTheCorner, stripHtmlTags } from './helpers.js'
 import PageInfoManager from './PageInfoManager.js'
 import CollageViewer from './CollageViewer.js'
 import { getCurrentThemeName, getFlinkColorsForTheme, kColorsForFlinks, kSidebarWidthToScreenWidthRatio } from './constants.js'
@@ -452,11 +452,13 @@ class PopupDocumentManager{
     
     
 
-        const promotionButton = document.getElementById("PromotionButton")
-        if(promotionButton){
-            this.createOneSVGIconComponent(promotionButton,g.iconsInfo.svgIcons.extensionLogo,'Reader-PromotionButton')
-            promotionButton.addEventListener('click', this.promotionButtonPressed)
-
+        if(g.hostAdapter.isPromotionalButtonSupported){
+            const promotionButton = document.getElementById("PromotionButton")
+            if(promotionButton){
+                this.createOneSVGIconComponent(promotionButton,g.iconsInfo.svgIcons.extensionLogo,'Reader-PromotionButton')
+                promotionButton.addEventListener('click', this.promotionButtonPressed)
+    
+            }
         }
 
 
@@ -620,7 +622,7 @@ class PopupDocumentManager{
         downloadAllButton.style.display = count < total ? 'flex' : 'none'
 
 
-        executeAfterDelayIfPluginIsStillActive(() => this.downloadMainDocInCondoc(mainPageUrl))
+        g.hostAdapter.executeAfterOptionalDelay(() => this.downloadMainDocInCondoc(mainPageUrl))
       
 
        
@@ -1195,12 +1197,11 @@ class PopupDocumentManager{
             if(hasComments){
                 const currentPageHostname = new URL(g.readingManager.mainDocData.url).hostname
                 const requestedPageHostname = new URL(commentsPanel.commentsUrl).hostname
-
-                if(requestedPageHostname !== currentPageHostname){
+                if(g.hostAdapter.shouldBlockCrossOriginCommentsRequests && requestedPageHostname !== currentPageHostname){
                     const targetUrl = isRight ? dataObject.url : (g.readingManager.embeddedDocData ? g.readingManager.embeddedDocData.url : g.readingManager.mainDocData.url)
                     this.renderOpenInNewTabComments(belowContentCommentsDiv, targetUrl, commentsPanel.commentsTitle)
                 }else{
-                    executeAfterDelayIfPluginIsStillActive(() =>
+                    g.hostAdapter.executeAfterOptionalDelay(() =>
                          this.getComments(belowContentCommentsDiv, commentsPanel.commentsUrl, commentsPanel.commentsTitle,
                                 commentsPanel.noCommentsMessage, dataObject, commentsPanel.leaveCommentUrl,
                                 commentsPanel.commentsReplyLabel, commentsPanel.commentsLeaveLabel, 1, commentsPanel.commentsLoadMoreLabel)
@@ -2643,14 +2644,13 @@ class PopupDocumentManager{
         document.body.appendChild(overlay)
     }
 
+
     renderOpenInNewTabComments = (commentsDiv, targetUrl, commentsTitle) => {
         const parsed = new URL(targetUrl)
         parsed.hash = ''
         const cleanUrl = parsed.toString()
 
-        const label = (window.vcReaderData != null && window.vcReaderData.openInNewTabCommentsLabel)
-            ? window.vcReaderData.openInNewTabCommentsLabel
-            : 'Open in a new tab to view comments'
+        const label = g.hostAdapter.getOpenCommentsInNewTabLabel()
 
         this.cleanCommentsDiv(commentsDiv)
 
@@ -2669,6 +2669,8 @@ class PopupDocumentManager{
         openBtn.addEventListener('click', () => window.open(cleanUrl, '_blank'))
         commentsDiv.appendChild(openBtn)
     }
+
+
 
     cleanCommentsDiv(commentsDiv) {
         if (!commentsDiv) return
