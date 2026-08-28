@@ -324,6 +324,8 @@ add_action('wp_enqueue_scripts', function () {
 
     $reader_url  = plugins_url('reader/', __FILE__);
     $reader_path = plugin_dir_path(__FILE__) . 'reader/';
+    $adapter_url  = plugins_url('adapter/', __FILE__);
+    $adapter_path = plugin_dir_path(__FILE__) . 'adapter/';
     $dist_url    = plugins_url('dist/', __FILE__);
     $dist_path   = plugin_dir_path(__FILE__) . 'dist/';
 
@@ -341,8 +343,8 @@ add_action('wp_enqueue_scripts', function () {
         ? $settings['reader_fontset'] : 'default';
 
     if (defined('WP_DEBUG') && WP_DEBUG) {
-        $js_url = $reader_url . 'readerStartUp.js';
-        $js_ver = filemtime($reader_path . 'readerStartUp.js');
+        $js_url = $adapter_url . 'startup.js';
+        $js_ver = filemtime($adapter_path . 'startup.js');
     } else {
         $js_url = $dist_url . 'reader.bundle.min.js';
         $js_ver = filemtime($dist_path . 'reader.bundle.min.js');

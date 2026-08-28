@@ -65,7 +65,9 @@ The **RW Reader** Chrome extension (available on the Chrome Web Store) is the pr
 
 The entire [reader/](reader/) folder is code **copied from the extension**. It provides the same Reader UI that the extension injects into the browser. The plugin uses this code to serve the Reader UI directly as a WordPress template — so visitors without the extension can still experience the Reader's Web.
 
-The reader JS is authored as ES modules. In production (`WP_DEBUG` false) a minified bundle [dist/reader.bundle.min.js](dist/reader.bundle.min.js) is served; in development (`WP_DEBUG` true) the raw ES modules from [reader/](reader/) are served directly (entry point: [reader/readerStartUp.js](reader/readerStartUp.js)).
+The reader JS is authored as ES modules. In production (`WP_DEBUG` false) a minified bundle [dist/reader.bundle.min.js](dist/reader.bundle.min.js) is served; in development (`WP_DEBUG` true) the raw ES modules from [reader/](reader/) are served directly (entry point: [adapter/startup.js](adapter/startup.js), which wires up `HostAdapter` before loading [reader/readerStartUp.js](reader/readerStartUp.js)).
+
+[reader/](reader/) is meant to be literally identical to the extension's copy — it never talks to the host environment directly (no `window.localStorage`, no direct network-proxy calls). Instead it calls `g.hostAdapter`, an interface implemented per-project in [adapter/HostAdapter.js](adapter/HostAdapter.js): `fetchWebPage(url, options)` for cross-origin fetches (via this plugin's `/sw-proxy/` endpoint) and `getSetting`/`saveSetting` for settings persistence (currently stubs here — this plugin has no per-visitor storage; see the comment in that file). Anything genuinely different per project belongs in `adapter/`, not `reader/`.
 
 ---
 
@@ -197,6 +199,6 @@ Standalone `.hdoc`, `.cdoc`, `.condoc` files can be placed in `ABSPATH/static-do
 - A promo popup can be optionally shown via the `show_promotion_button` setting.
 - Do not use optional chaining or nullish coalescing.
 - To build code for production use this command (esbuild is installed globally):
-esbuild reader/readerStartUp.js --bundle --minify --format=esm --target=es2019 --outfile=dist/reader.bundle.min.js
+esbuild adapter/startup.js --bundle --minify --format=esm --target=es2019 --outfile=dist/reader.bundle.min.js
 - Do not attempt to test changes in the browser yourself (e.g. via wp-cli, Playwright, or logging into wp-admin) — it doesn't work in this environment. After implementing and verifying with static checks (php -l, node --check, build steps), let the user test the result themselves.
 

@@ -19,7 +19,7 @@ const currentRequests = new Set()
 const responseCache = new Map()
 
 
-export function fetchWebPage(url,isForCondoc = false) {
+export function fetchWebPage(url, options = {}) {
   if (!g.readingManager.mainDocData) return
 
   if (responseCache.has(url)) return Promise.resolve(responseCache.get(url))
@@ -27,6 +27,7 @@ export function fetchWebPage(url,isForCondoc = false) {
   currentRequests.add(url)
 
   return new Promise(async (resolve) => {
+
     const currentPageUrl = g.readingManager.mainDocData.url
     const currentPageHostname = new URL(currentPageUrl).hostname
 
@@ -45,28 +46,16 @@ export function fetchWebPage(url,isForCondoc = false) {
           currentRequests.delete(url)
           resolve({error: e, text: ''})
         }
-      } else {
-        try {
-          const proxyUrl = window.vcReaderData != null ? window.vcReaderData.proxyUrl : undefined
-          if (!proxyUrl) throw new Error('Proxy URL not configured')
-          const params = new URLSearchParams({
-            source_url: currentPageUrl.split('#')[0],
-            target_url: url,
-            ...(isForCondoc ? { for_condoc: '1' } : {}),
-          })
-          const result = await fetch(`${proxyUrl}?${params}`)
-          if (!result.ok) throw new Error(`Proxy error ${result.status}`)
-          const text = await result.text()
-          const response = {text, error: ''}
-          currentRequests.delete(url)
-          responseCache.set(url, response)
-          resolve(response)
-        } catch (e) {
-          currentRequests.delete(url)
-          resolve({error: e, text: ''})
-        }
+        return
       }
+
+      const response = await g.hostAdapter.fetchWebPage(url, { ...options, currentPageUrl })
+      currentRequests.delete(url)
+      if (!response.error) responseCache.set(url, response)
+      resolve(response)
+
     } catch (e) {
+      currentRequests.delete(url)
       resolve({error: e, text: 'Something is wrong with the URL'})
     }
   })

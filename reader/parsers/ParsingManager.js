@@ -30,7 +30,7 @@ export async function loadStaticContentFromUrl(originalUrl, isForCondoc = false,
     
 
 
-    const result = await fetchWebPage(urlToCall, isForCondoc)
+    const result = await fetchWebPage(urlToCall, { isForCondoc })
 
     if (!result) {
         if (!muteErrorMessage) {

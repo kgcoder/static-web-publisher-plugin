@@ -20,7 +20,8 @@ const Globals = {
 
     pdm: new PopupDocumentManager(),
     readingManager: new ReadingManager(),
-    noteDivsManager: new NoteDivsManager()
+    noteDivsManager: new NoteDivsManager(),
+    hostAdapter: null
 }
 
 export default Globals
