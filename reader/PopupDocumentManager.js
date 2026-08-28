@@ -159,7 +159,7 @@ class PopupDocumentManager{
 
 
     
-        const infoButton = document.getElementById("CurrentDocumentInfoButton1")
+        const infoButton = document.getElementById(g.hostAdapter.mainDocumentInfoButtonId)
         if(!infoButton){
             g.extensionTookControl = true
             return
@@ -593,7 +593,7 @@ class PopupDocumentManager{
         const optionalTitle = document.getElementById("CurrentDocumentOptionalTitleSpan")
         optionalTitle.innerText = this.mainDocTitle
 
-        const titleSpan = document.getElementById("CurrentDocumentTitleSpan0")
+        const titleSpan = document.getElementById(g.hostAdapter.mainDocumentTitleSpanId)
         titleSpan.innerText = mainPageUrl
 
         const leftTitleLink = document.getElementById("CurrentDocumentTitleLink")
@@ -733,7 +733,7 @@ class PopupDocumentManager{
 
         if (!(g.readingManager.mainCollageViewer != null ? g.readingManager.mainCollageViewer.content : undefined)) return
 
-        const titleSpan = document.getElementById("CurrentDocumentTitleSpan0")
+        const titleSpan = document.getElementById(g.hostAdapter.mainDocumentTitleSpanId)
         const optionalTitleSpan = document.getElementById("CurrentDocumentOptionalTitleSpan")
 
         const collageContent = g.readingManager.mainCollageViewer.content
@@ -849,7 +849,7 @@ class PopupDocumentManager{
         downloadAllButton.style.display = count < total ? 'flex' : 'none'
         
 
-        const titleSpan = document.getElementById("CurrentDocumentTitleSpan0")
+        const titleSpan = document.getElementById(g.hostAdapter.mainDocumentTitleSpanId)
 
         const optionalTitleSpan = document.getElementById("CurrentDocumentOptionalTitleSpan")
 
@@ -1991,7 +1991,7 @@ class PopupDocumentManager{
      
         const buttonDivWrapper = document.getElementById("CurrentDocumentInfoButtonWrapper")
 
-        const buttonDiv = document.getElementById("CurrentDocumentInfoButton1")
+        const buttonDiv = document.getElementById(g.hostAdapter.mainDocumentInfoButtonId)
 
         const countDiv = document.getElementById("CurrentDocumentInfoButtonCountDiv")
         const countText = countDiv.textContent  

@@ -119,7 +119,7 @@ if (!empty($stwbpb_connections_info)) {
                 <div id="CurrentDocumentTopBarRow">
 
                     <div id="CurrentDocumentInfoButtonWrapper" class="DocumentTopBarButtonWrapper">
-                        <div title="Page info" id="CurrentDocumentInfoButton1" class="DocumentTopBarButton" href="#">
+                        <div title="Page info" id="CurrentDocumentInfoButton-rwp" class="DocumentTopBarButton" href="#">
                             <span id="CurrentDocumentInfoButtonCountDiv" class="CurrentDocumentTopButtonCountDiv"></span>
                         </div>
                     </div>
@@ -139,7 +139,7 @@ if (!empty($stwbpb_connections_info)) {
 
                     <div class="TitleContainer">
                         <span id="CurrentDocumentOptionalTitleSpan" style="display: none;"></span>
-                        <a id="CurrentDocumentTitleLink" href="#"><span id="CurrentDocumentTitleSpan0" class="DocumentTitleSpan"></span></a>
+                        <a id="CurrentDocumentTitleLink" href="#"><span id="CurrentDocumentTitleSpan-rwp" class="DocumentTitleSpan"></span></a>
                     </div>
 
                     <div id="CurrentDocumentCopyButton" class="DocumentTopBarButtonWrapper" title="This document is a copy of another document."></div>

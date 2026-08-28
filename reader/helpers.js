@@ -986,7 +986,7 @@ export function addScrollEndListener(element, callback) {
 export function executeAfterDelayIfPluginIsStillActive(func,delay = 500){
     setTimeout(() => {
         //testing if the extension has replaced the UI
-        const titleSpan = document.getElementById("CurrentDocumentTitleSpan0")
+        const titleSpan = document.getElementById(g.hostAdapter.mainDocumentTitleSpanId)
         if(titleSpan){
             func()
         }

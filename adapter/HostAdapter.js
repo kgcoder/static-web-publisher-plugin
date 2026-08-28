@@ -14,6 +14,9 @@ https://github.com/kgcoder/readers-web-specs
 
 export default class HostAdapter {
 
+    mainDocumentTitleSpanId = "CurrentDocumentTitleSpan-rwp"
+    mainDocumentInfoButtonId = "CurrentDocumentInfoButton-rwp"
+
     async fetchWebPage(url, options) {
         options = options || {}
 
