@@ -310,4 +310,9 @@ export async function setFontSet(id) {
     const fontId = kFontRoleSets.find(s => s.id === id)?.id ?? kFontRoleSets[0].id
     applyFonts(kFontRoleSets.find(s => s.id === fontId))
     g.currentFontSet = fontId
+
+
+    g.readingManager.applyFlinksOnTheLeft()
+
+    g.readingManager.applyFlinksOnTheRight()
 }
