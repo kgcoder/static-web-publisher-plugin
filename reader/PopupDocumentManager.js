@@ -736,6 +736,7 @@ class PopupDocumentManager{
         if (!(g.readingManager.mainCollageViewer != null ? g.readingManager.mainCollageViewer.content : undefined)) return
 
         const titleSpan = document.getElementById(g.hostAdapter.mainDocumentTitleSpanId)
+        if(!titleSpan) return // for backend implementations
         const optionalTitleSpan = document.getElementById("CurrentDocumentOptionalTitleSpan")
 
         const collageContent = g.readingManager.mainCollageViewer.content
