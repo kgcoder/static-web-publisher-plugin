@@ -133,9 +133,7 @@ class PopupDocumentManager{
     loadUI = () => {     
         const allDocumentsContainer = document.getElementById("AllDocumentsContainer")
         allDocumentsContainer.style.width = `${window.innerWidth}px`
-    
-        const iconPaths = g.iconsInfo.iconPaths
-      
+          
 
         const downloadLink = document.getElementById("MainDocDownloadLink")
         if(downloadLink){
@@ -555,7 +553,7 @@ class PopupDocumentManager{
         const optionalTitleSpan = document.getElementById("RightDocumentOptionalTitleSpan")
         if(g.readingManager.rightNotesData.length === 1){
 
-            optionalTitleSpan.innerText = noteData.title ?? ''
+            optionalTitleSpan.innerText = noteData.title != null ? noteData.title : ''
            
             optionalTitleSpan.style.display = 'flex'
         }else{
@@ -733,7 +731,7 @@ class PopupDocumentManager{
 
     collageLoadedCallback = async () => {
 
-        if (!(g.readingManager.mainCollageViewer != null ? g.readingManager.mainCollageViewer.content : undefined)) return
+        if (!g.readingManager.mainCollageViewer || !g.readingManager.mainCollageViewer.content) return
 
         const titleSpan = document.getElementById(g.hostAdapter.mainDocumentTitleSpanId)
         if(!titleSpan) return // for backend implementations

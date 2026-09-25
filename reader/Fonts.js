@@ -307,8 +307,8 @@ export function applyFonts(fonts = kFontRoleSets[0]) {
 
 
 export async function setFontSet(id) {
-    const fontId = kFontRoleSets.find(s => s.id === id)?.id ?? kFontRoleSets[0].id
-    applyFonts(kFontRoleSets.find(s => s.id === fontId))
+    const foundFontSet = kFontRoleSets.find(s => s.id === id)
+    const fontId = foundFontSet ? foundFontSet.id : kFontRoleSets[0].id    applyFonts(kFontRoleSets.find(s => s.id === fontId))
     g.currentFontSet = fontId
 
 
