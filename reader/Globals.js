@@ -21,7 +21,8 @@ const Globals = {
     pdm: new PopupDocumentManager(),
     readingManager: new ReadingManager(),
     noteDivsManager: new NoteDivsManager(),
-    hostAdapter: null
+    hostAdapter: null,
+    adminBarHeight: 0
 }
 
 export default Globals
