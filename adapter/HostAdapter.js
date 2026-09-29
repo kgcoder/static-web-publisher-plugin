@@ -14,6 +14,9 @@ https://github.com/kgcoder/readers-web-specs
 
 export default class HostAdapter {
 
+    allowFontResizing = false
+    allowDynamicThemeChange = false
+
     mainDocumentTitleSpanId = "CurrentDocumentTitleSpan-rwp"
     mainDocumentInfoButtonId = "CurrentDocumentInfoButton-rwp"
 

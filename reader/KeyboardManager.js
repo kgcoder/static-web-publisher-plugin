@@ -17,6 +17,21 @@ import g from './Globals.js'
 
 export const checkKey = async (e) => {
 
+
+    if ((e.metaKey || e.ctrlKey) && e.key === '-') {
+        if(!g.hostAdapter.allowFontResizing)return
+        e.preventDefault()
+        g.pdm.updateFontSize(-1)   
+    }
+    if ((e.metaKey || e.ctrlKey) && e.key === '=') {
+        if(!g.hostAdapter.allowFontResizing)return
+        e.preventDefault()
+        g.pdm.updateFontSize(1)
+        
+            
+    }
+
+
  
     if(e.code === 'Escape'){
         g.readingManager.processEscape()
@@ -30,6 +45,18 @@ export const checkKey = async (e) => {
     }
 
 
+     if (e.key === '[' && e.ctrlKey) {
+        if(!g.hostAdapter.allowDynamicThemeChange)return
+
+        if (!g.favorites || !g.favorites.length) return
+
+        const currentIndex = g.favorites.findIndex(f => f.theme === g.currentTheme && f.fontSetId === g.currentFontSet)
+        const next = g.favorites[(currentIndex + 1) % g.favorites.length]
+
+        setTheme(next.theme, true)
+        setFontSet(next.fontSetId, true)
+
+    }
 
 
     if (e.code === "KeyL") {

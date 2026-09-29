@@ -2096,12 +2096,12 @@ setupFlinksCanvasDPR(){
 
         if(g.pdm.isShowingInfo || g.pdm.isLeftSourceCodeShowing)return
         
-        const topOffset = g.adminBarHeight
+        const topPanelHeight = g.pdm.getCurrentDocTopOffset()
 
         
         if(this.mainDocType === 'c'){
             const x = pageX
-            const y = pageY - kLeftDivTop - topOffset
+            const y = pageY - kLeftDivTop - topPanelHeight
             for(let flinksData of this.connections){
                 if(!flinksData.activeFlinks)continue
                 for(let flink of flinksData.activeFlinks){
@@ -2187,11 +2187,9 @@ setupFlinksCanvasDPR(){
             
             }
         }else if(this.mainDocType === 'h'){
-            const topPanelHeight = g.pdm.getCurrentDocTopOffset()
-
             const mainScrollDocDiv = document.getElementById("CurrentDocument")
             const x = pageX
-            const y = pageY - kLeftDivTop - topPanelHeight + mainScrollDocDiv.scrollTop //- topOffset
+            const y = pageY - kLeftDivTop - topPanelHeight + mainScrollDocDiv.scrollTop 
 
         
             let touchedFlinks = []
@@ -2286,10 +2284,7 @@ setupFlinksCanvasDPR(){
     handleTouchInRightDoc(pageX,pageY,currentlyPressedLink){
         if(this.isFullScreen)return
         
-        const topOffset = g.adminBarHeight
 
-        
-        
         const noteData = this.rightNotesData[this.selectedRightDocIndex]
 
         const flinksData = this.currentConnection
@@ -2301,7 +2296,7 @@ setupFlinksCanvasDPR(){
             const noteLeftX = this.docWidth + kMiddleGap
         
             const x = pageX - noteLeftX
-            const y = pageY - kLeftDivTop - topOffset
+            const y = pageY - kLeftDivTop - g.adminBarHeight
 
 
             for(let flink of flinksData.activeFlinks){
@@ -2339,7 +2334,7 @@ setupFlinksCanvasDPR(){
         
             const topPanelHeight = g.pdm.getRightDocTopOffset(noteData)
             const x = pageX - noteLeftX
-            const y = pageY - topPanelHeight - kLeftDivTop + scrollTop //- topOffset
+            const y = pageY - topPanelHeight - kLeftDivTop + scrollTop
     
 
 
@@ -2716,7 +2711,6 @@ setupFlinksCanvasDPR(){
         }
 
         const {rightTop,rightBottom} = flink
-        const topPanelHeight = g.pdm.getCurrentDocTopOffset()
 
         const rightTopPanelHeight = g.pdm.getRightDocTopOffset(noteData)
 
@@ -2733,14 +2727,13 @@ setupFlinksCanvasDPR(){
     }
 
     moveRightCollageInPositionForLink(flink, leftScrollTop, topPanelHeight) {
-        const topOffset = g.adminBarHeight
 
         const {leftTop,leftBottom} = flink
 
         const rightEnd = flink.rightEnds[0]
         const {x,y,radius} = rightEnd
 
-        const leftY = -topOffset - leftScrollTop + topPanelHeight + (leftTop - flink.bottomIndentHeight + leftBottom) / 2
+        const leftY = -g.adminBarHeight - leftScrollTop + topPanelHeight + (leftTop - flink.bottomIndentHeight + leftBottom) / 2
 
         const noteData = this.rightNotesData[this.selectedRightDocIndex]
 
@@ -2749,13 +2742,12 @@ setupFlinksCanvasDPR(){
 
 
     moveLeftCollageInPositionForLink(flink,rightScrollTop,topPanelHeight){
-        const topOffset = g.adminBarHeight
 
         const {rightTop,rightBottom} = flink
         const leftEnd = flink.leftEnds[0]
         const {x,y,radius} = leftEnd
 
-        const rightY = -topOffset - rightScrollTop + topPanelHeight + (rightTop + flink.topIndentHeight + rightBottom) / 2
+        const rightY = -g.adminBarHeight - rightScrollTop + topPanelHeight + (rightTop + flink.topIndentHeight + rightBottom) / 2
 
         this.mainCollageViewer.movePointToCenter(x,y,radius,rightY)
 
@@ -2766,20 +2758,17 @@ setupFlinksCanvasDPR(){
 
 
      moveLeftCollageToCenterTheDot(flink,topPanelHeight, duration = 500){
-        const topOffset = g.adminBarHeight
-        const {rightTop,rightBottom} = flink
         const leftEnd = flink.leftEnds[0]
         const {x,y,radius} = leftEnd
-        const centerY = (window.innerHeight - topOffset - topPanelHeight) / 2
+        const centerY = (window.innerHeight - g.adminBarHeight - topPanelHeight) / 2
         this.mainCollageViewer.movePointToCenter(x,y,radius,centerY, duration)
     }
 
 
     moveRightCollageToCenterTheDot(flink,topPanelHeight){
-        const topOffset = g.adminBarHeight
         const rightEnd = flink.rightEnds[0]
         const {x,y,radius} = rightEnd
-        const centerY = (window.innerHeight - topOffset - topPanelHeight) / 2
+        const centerY = (window.innerHeight - g.adminBarHeight - topPanelHeight) / 2
         const noteData = this.rightNotesData[this.selectedRightDocIndex]
         noteData.collageViewer.movePointToCenter(x,y,radius,centerY)
     }
@@ -2788,9 +2777,6 @@ setupFlinksCanvasDPR(){
 
 
     scrollMainDocInPositionForPoint(flink,rightY, topPanelHeight){
-
-        const topOffset = g.adminBarHeight
-
 
         const leftScrollDiv = document.getElementById("CurrentDocument")
 
@@ -2807,7 +2793,7 @@ setupFlinksCanvasDPR(){
 
         const currentLeftY = kLeftDivTop - leftScrollDiv.scrollTop + (leftTop - flink.bottomIndentHeight + leftBottom) / 2
 
-        const neededLeftScrollTop = -topOffset - rightY + topPanelHeight + leftScrollDiv.scrollTop + currentLeftY
+        const neededLeftScrollTop = -g.adminBarHeight - rightY + topPanelHeight + leftScrollDiv.scrollTop + currentLeftY
 
         this.animateScroll(leftScrollDiv,neededLeftScrollTop)
 
