@@ -12,16 +12,117 @@ For the official list of document types and specifications, see:
 https://github.com/kgcoder/readers-web-specs
 */
 
+import { setFontSet } from '../reader/Fonts'
+import g from '../reader/Globals.js'
+import { getHdocJsonAndContentFromCurrentDocument, parseHtmlPageWithEmbeddedHDoc } from '../reader/parsers/EmbHDOCParser.js'
+import { parseStaticContent } from "../reader/parsers/ParsingManager.js"
+import { addListenersToContainer, applyAllSavedSettings, dispatchReaderReady, loadUIAndIcons } from "../reader/readerStartUp.js"
+
 export default class HostAdapter {
 
+    
     allowFontResizing = false
     allowDynamicThemeChange = false
-
+    
     mainDocumentTitleSpanId = "CurrentDocumentTitleSpan-rwp"
     mainDocumentInfoButtonId = "CurrentDocumentInfoButton-rwp"
-
+    
     shouldBlockCrossOriginCommentsRequests = true
     isPromotionalButtonSupported = true
+    
+    constructor(){
+        this.initReader()
+    }
+    
+    
+    initReader(){
+        let currentLocation
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const mainContainer = document.getElementById("AllDocumentsContainer");
+            const mainContainerRect = mainContainer.getBoundingClientRect();
+            g.adminBarHeight = mainContainerRect.top
+        
+            currentLocation = window.location.toString()
+        
+            if (currentLocation.includes('#')) {
+                currentLocation = currentLocation.split('#')[0]
+            }
+        
+            const container = document.getElementById("ui-root")
+            
+            addListenersToContainer(container)
+        
+        
+            let isEmbeddedCdoc = false
+            let isEmbeddedCondoc = false
+            let contentString = ''
+            try {
+                const embeddedCdocScript = document.querySelector('#cdoc-source')
+                const source = JSON.parse(embeddedCdocScript.textContent).source;
+                if(source){
+                    isEmbeddedCdoc = true
+                    contentString = '<html><body>' + document.body.innerHTML + '</body></html>'
+                }
+            } catch {
+                //do nothing
+            }
+        
+            try {
+                const embeddedCondocScript = document.querySelector('#condoc-source')
+                const source = JSON.parse(embeddedCondocScript.textContent).source;
+                if(source){
+                    isEmbeddedCondoc = true
+                    contentString = '<html><body>' + document.body.innerHTML + '</body></html>'
+                }
+            } catch {
+                //do nothing
+            }
+        
+        
+            if(isEmbeddedCdoc || isEmbeddedCondoc){
+                const {dataObject,error} = await parseStaticContent(contentString,currentLocation)
+            
+                if(dataObject ){
+                    loadUIAndIcons()
+                  
+                    const fontSetId = (window.vcReaderData && window.vcReaderData.fontSet) ? window.vcReaderData.fontSet : 'default'
+                    await setFontSet(fontSetId)
+        
+                    if(isEmbeddedCdoc){
+                        await g.pdm.loadCollage(dataObject)
+                    }else{
+                        await g.pdm.showEmptyCondoc(dataObject)
+                    }
+                    dispatchReaderReady(currentLocation)
+        
+                    return
+        
+        
+                }
+            }
+        
+        
+            const {hdocDataJSON, content} = getHdocJsonAndContentFromCurrentDocument()
+        
+            const dataObject = parseHtmlPageWithEmbeddedHDoc(currentLocation, content, hdocDataJSON)
+        
+            if(dataObject ){
+                loadUIAndIcons()
+                const fontSetId = (window.vcReaderData && window.vcReaderData.fontSet) ? window.vcReaderData.fontSet : 'default'
+                await setFontSet(fontSetId)
+            }
+            await g.pdm.loadDocument(dataObject)
+            dispatchReaderReady(currentLocation)
+
+        });
+
+    }
+
+
+    getAssetsUrl(){
+       return window.vcReaderData != null ? window.vcReaderData.assetsUrl : null
+    }
 
     async fetchWebPage(url, options) {
         options = options || {}

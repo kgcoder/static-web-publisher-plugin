@@ -13,36 +13,17 @@ https://github.com/kgcoder/readers-web-specs
 */
 
 import g from "./Globals.js"
-import { addScrollEndListener, showToastMessage } from "./helpers.js";
+import { setFontSet } from "./Fonts.js";
+import { addScrollEndListener } from "./helpers.js";
 import IconsInfo from "./Icons.js";
-import { parseStaticContent } from "./parsers/ParsingManager.js";
 import { checkKey } from "./KeyboardManager.js";
-import { getHdocJsonAndContentFromCurrentDocument, parseHtmlPageWithEmbeddedHDoc } from "./parsers/EmbHDOCParser.js";
-import { parseCDOC } from "./parsers/CDOCParser.js";
-import { parseCondoc } from "./parsers/CondocParser.js";
-import { kFontRoleSets, setFontSet } from "./Fonts.js";
 
-let mainDocData
-let currentLocation
 
-document.addEventListener('DOMContentLoaded', onLoad);
 
-async function onLoad() {
 
-    const mainContainer = document.getElementById("AllDocumentsContainer");
-    const mainContainerRect = mainContainer.getBoundingClientRect();
-    g.adminBarHeight = mainContainerRect.top
+export function addListenersToContainer(container){
 
-    currentLocation = window.location.toString()
-
-    if (currentLocation.includes('#')) {
-        currentLocation = currentLocation.split('#')[0]
-    }
-
-    const container = document.getElementById("ui-root")
-    
     //snapping
-
     container.addEventListener('scroll',() => {
 
         if (g.pdm.isFlinksListOpen) {
@@ -69,72 +50,13 @@ async function onLoad() {
     addScrollEndListener(container, snapToNearestEdge);
 
 
-    let isEmbeddedCdoc = false
-    let isEmbeddedCondoc = false
-    let contentString = ''
-    try {
-            const embeddedCdocScript = document.querySelector('#cdoc-source')
-            const source = JSON.parse(embeddedCdocScript.textContent).source;
-            if(source){
-                isEmbeddedCdoc = true
-                contentString = '<html><body>' + document.body.innerHTML + '</body></html>'
-            }
-        } catch {
-            //do nothing
-        }
-
-        try {
-            const embeddedCondocScript = document.querySelector('#condoc-source')
-            const source = JSON.parse(embeddedCondocScript.textContent).source;
-            if(source){
-                isEmbeddedCondoc = true
-                contentString = '<html><body>' + document.body.innerHTML + '</body></html>'
-            }
-        } catch {
-            //do nothing
-        }
-
-
-        if(isEmbeddedCdoc || isEmbeddedCondoc){
-            const {dataObject,error} = await parseStaticContent(contentString,currentLocation)
-        
-            if(dataObject ){
-                loadUIAndIcons()
-
-                if(isEmbeddedCdoc){
-                    await g.pdm.loadCollage(dataObject)
-                }else{
-                    await g.pdm.showEmptyCondoc(dataObject)
-                }
-                dispatchReaderReady(currentLocation)
-
-                return
-
-
-            }
-        }
-
-
-    const {hdocDataJSON, content} = getHdocJsonAndContentFromCurrentDocument()
-
-    const dataObject = parseHtmlPageWithEmbeddedHDoc(currentLocation, content, hdocDataJSON)
-
-    if(dataObject ){
-        loadUIAndIcons()
-    }
-    await g.pdm.loadDocument(dataObject)
-    dispatchReaderReady(currentLocation)
-
-
-
-
 }
 
 
 
 
 
-async function loadUIAndIcons() {
+export async function loadUIAndIcons() {
 
     g.flinksCanvas = document.getElementById('flinks-canvas')
     g.flinksCtx = g.flinksCanvas.getContext("2d")
@@ -146,15 +68,48 @@ async function loadUIAndIcons() {
 
     document.onkeydown = checkKey
 
-    const fontSetId = (window.vcReaderData && window.vcReaderData.fontSet) ? window.vcReaderData.fontSet : 'default'
-    await setFontSet(fontSetId)
-
 }
 
 
+export async function applyAllSavedSettings(){
+    await useSavedTheme()
+    await useSavedFontSize()
+    await useSavedFontSet()
+    await useSavedFavorites()
+}
 
 
-function dispatchReaderReady(url) {
+async function useSavedTheme() {
+    let saved = await g.hostAdapter.getSetting('theme')
+    if (!saved) {
+        saved = "light"
+    }
+    setTheme(saved)
+    g.currentTheme = saved
+}
+
+
+export async function useSavedFontSet() {
+    const saved = await g.hostAdapter.getSetting('fontSet')
+    await setFontSet(saved, false)
+}
+
+
+async function useSavedFavorites() {
+    const saved = await g.hostAdapter.getSetting('favorites')
+    g.favorites = saved != null ? saved : []
+}
+
+
+async function useSavedFontSize() {
+    const saved = await g.hostAdapter.getSetting('fontSize')
+    if (saved) {
+        g.pdm.fontSize = saved
+    }
+}
+
+
+export function dispatchReaderReady(url) {
     if (window.swpReaderReadyFired) return
     window.swpReaderReadyFired = true
 
