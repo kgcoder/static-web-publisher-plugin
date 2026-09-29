@@ -173,6 +173,18 @@ export default class HostAdapter {
 
     reloadPage(){}
 
+
+    getCurrentThemeName() {
+        const rootEl = document.getElementById('ui-root')
+        if (!rootEl) return null
+
+        for (const className of rootEl.classList) {
+            if (className.startsWith('theme-')) return className.slice('theme-'.length)
+        }
+
+        return null
+    }
+
     
     //UI additions ---------------
 

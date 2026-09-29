@@ -16,7 +16,7 @@ import g from './Globals.js'
 import { cleanConnectedDocURL, createOneIconComponent, createOneSVGIconComponent, getDataFromCondocXML, getDesiredConnectionsFromHdocDataJson, getHeaderDivFrom, getPresentationDivFrom, getTextColumnWidth, getTextFromDiv, hideUrlInTheCorner, isDotInsideFrame, isoToHumanReadableDate, removeAllChildren, sanitizeHtml, sanitizeUrl, showToastMessage, showUrlInTheCorner, stripHtmlTags } from './helpers.js'
 import PageInfoManager from './PageInfoManager.js'
 import CollageViewer from './CollageViewer.js'
-import { getCurrentThemeName, getFlinkColorsForTheme, kColorsForFlinks, kSidebarWidthToScreenWidthRatio } from './constants.js'
+import { getFlinkColorsForTheme, kSidebarWidthToScreenWidthRatio } from './constants.js'
 import { fetchWebPage, invalidateCacheForUrl } from './NetworkManager.js'
 import ExportPageManager from './ExportPageManager.js'
 import { loadStaticContentFromUrl } from './parsers/ParsingManager.js'
@@ -1043,7 +1043,7 @@ class PopupDocumentManager{
             g.readingManager.connections.forEach(con => con.isOriginal = true)
         }
 
-        const colors = getFlinkColorsForTheme(getCurrentThemeName())
+        const colors = getFlinkColorsForTheme(g.hostAdapter.getCurrentThemeName())
 
         let j = 0
         for (let i = 0; i < g.readingManager.connections.length; i++){

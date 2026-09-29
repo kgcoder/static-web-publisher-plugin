@@ -20,7 +20,7 @@ import CollageViewer from "./CollageViewer.js";
 import { loadStaticContentFromUrl } from "./parsers/ParsingManager.js";
 import FLTextEnd from "./models/FLTextEnd.js";
 import FLPointEnd from "./models/FLPointEnd.js";
-import { getCurrentThemeName, getPartialLinkColorForTheme, getUseOutlineOnlyForTheme, kSidebarWidthToScreenWidthRatio, maxFlinksNumberBeforeOptimization } from "./constants.js";
+import { getPartialLinkColorForTheme, getUseOutlineOnlyForTheme, kSidebarWidthToScreenWidthRatio, maxFlinksNumberBeforeOptimization } from "./constants.js";
 import { showMultipleLinksPopup } from "./MultipleLinksPopupManager.js";
 const kFlinkHorizontalThickness = 5
 
@@ -1750,7 +1750,7 @@ setupFlinksCanvasDPR(){
         const lineDashForBrokenFlink = [5, 5]
         const lineWidthForOutline = 2
 
-        const useOutlineOnly = !isFlinkBroken && getUseOutlineOnlyForTheme(getCurrentThemeName()) && flinkColor
+        const useOutlineOnly = !isFlinkBroken && getUseOutlineOnlyForTheme(g.hostAdapter.getCurrentThemeName()) && flinkColor
 
         const lineDash = isFlinkBroken ? lineDashForBrokenFlink : []
         const borderColor = isFlinkBroken ? borderColorForBrokenLink : (useOutlineOnly ? flinkColor : undefined)
@@ -3390,7 +3390,7 @@ setupFlinksCanvasDPR(){
             startIndex,
             length,
             leftRects,
-            color03:getPartialLinkColorForTheme(getCurrentThemeName()),
+            color03:getPartialLinkColorForTheme(g.hostAdapter.getCurrentThemeName()),
             leftTop:leftRects[0].top,
             leftBottom:leftBottomRect.top + leftBottomRect.height
         }
@@ -3431,7 +3431,7 @@ setupFlinksCanvasDPR(){
             startIndex,
             length,
             rightRects,
-            color03:getPartialLinkColorForTheme(getCurrentThemeName()),
+            color03:getPartialLinkColorForTheme(g.hostAdapter.getCurrentThemeName()),
             rightTop:rightRects[0].top,
             rightBottom:rightBottomRect.top + rightBottomRect.height
         }
