@@ -24,6 +24,34 @@ export function timestamp() {
 }
 
 
+export async function setTheme(themeName, shouldSave = false) {
+
+    if (!themeName) return
+
+    const rootEl = document.getElementById("ui-root")
+  
+    rootEl.classList.forEach(cls => {
+         if (cls.startsWith('theme-')) {
+            rootEl.classList.remove(cls);
+        }
+    })
+    // Add the new theme class
+    rootEl.classList.add('theme-' + themeName); // e.g. "theme-dark"
+    g.currentTheme = themeName
+    
+    if (shouldSave) {
+        g.hostAdapter.saveSetting('theme', themeName)
+    }
+
+    g.readingManager.recolorConnectionsForCurrentTheme()
+
+    g.readingManager.applyFlinksOnTheLeft()
+
+    g.readingManager.applyFlinksOnTheRight()
+     
+
+}
+
 
 export function createOneIconComponent(parent,iconPath,componentId,className,width = 24,height = 0){
     const div = document.createElement('div')

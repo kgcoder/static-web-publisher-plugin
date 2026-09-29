@@ -69,6 +69,9 @@ export default class HostAdapter {
     saveSetting(key, value) {
     }
 
+
+    reloadPage(){}
+
     
     //UI additions ---------------
 
@@ -78,5 +81,9 @@ export default class HostAdapter {
             ? window.vcReaderData.openInNewTabCommentsLabel
             : 'Open in a new tab to view comments'
     }
+
+
+
+
  
 }

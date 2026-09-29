@@ -146,6 +146,15 @@ class PopupDocumentManager{
             })
         }
     
+        const closeButton = document.getElementById("CurrentDocumentCloseButton")
+        if(closeButton){
+            this.createOneSVGIconComponent(closeButton,g.iconsInfo.svgIcons.closeIcon,'Reader-CloseButton')
+    
+            closeButton.addEventListener('click', (e) => {
+                e.stopPropagation()
+                g.hostAdapter.reloadPage()
+            })
+        }
       
     
       
@@ -163,14 +172,14 @@ class PopupDocumentManager{
             return
         }
         this.createOneSVGIconComponent(infoButton,g.iconsInfo.svgIcons.infoIcon,'Reader-InfoButton')
-        if(infoButton)infoButton.addEventListener('click', this.infoButtonPressed)
+        infoButton.addEventListener('click', this.infoButtonPressed)
         
         const downloadAllButton = document.getElementById("CurrentDocumentDownloadAllDocsButton")
 
         if(!downloadAllButton)return
 
         this.createOneSVGIconComponent(downloadAllButton,g.iconsInfo.svgIcons.downloadAll,'Reader-DownloadAllButton')
-        if(downloadAllButton)downloadAllButton.addEventListener('click',g.readingManager.downloadAllPages)
+        downloadAllButton.addEventListener('click',g.readingManager.downloadAllPages)
     
         const fullScreenButton = document.getElementById("CurrentDocumentFullScreenButton")
         if(!fullScreenButton)return
@@ -466,10 +475,26 @@ class PopupDocumentManager{
 
         rightDocumentCopyButton.style.display = 'none'
 
-        
-   
+    }
 
-  
+
+    updateFontSize = (diff) => {
+        this.setFontSize(this.fontSize + diff)
+
+        if(diff != 0){
+            showToastMessage(`Font size: ${this.fontSize}${this.fontSize === kDefaultFontSize ? ' (default)' : ''}`)
+            g.hostAdapter.saveSetting('fontSize', this.fontSize)
+        }
+    }
+
+ 
+    setFontSize = (value) => {
+        this.fontSize = value
+
+        this.applyFontSizeToPresentationDivs()
+
+        g.readingManager.applyFlinksOnTheLeft()
+        g.readingManager.applyFlinksOnTheRight()
     }
 
 
@@ -2257,17 +2282,17 @@ class PopupDocumentManager{
         flinksListContainerDiv.style.width = `${isFullscreenList ? window.innerWidth : kMaxListWidth}px`
         flinksListContainerDiv.style.maxHeight = `${window.innerHeight - kLeftDivTop - 1 - g.adminBarHeight}px`
         
+        const leftOffset = this.getMainLeftOffset()
         
         if(g.isMobileMode && isFullscreenList){
-            flinksListContainerDiv.style.left = '0px'
+            flinksListContainerDiv.style.left = `${-leftOffset}px`
             flinksListContainerDiv.style.right = '0px'
         }else if(g.isMobileMode){
-            const leftOffset = this.getMainLeftOffset()
             if(leftOffset >=0){
                flinksListContainerDiv.style.left = ''
                flinksListContainerDiv.style.right = '0px'
             }else{
-                flinksListContainerDiv.style.left = '0px'
+                flinksListContainerDiv.style.left = `${-leftOffset}px`
                 flinksListContainerDiv.style.right = ''
             }
         }else{
@@ -2895,7 +2920,7 @@ class PopupDocumentManager{
         commentsDiv.appendChild(oneCommentDiv)
     }
 
-    openCommentPopup = (url, onSuccess) => {
+    openCommentPopup = (url, onSuccess, pageOrigin) => {
         const overlay = document.createElement('div')
         overlay.className = 'swp-comment-popup-overlay'
 
@@ -2906,12 +2931,22 @@ class PopupDocumentManager{
         closeBtn.className = 'swp-comment-popup-close'
         closeBtn.textContent = '✕'
         closeBtn.addEventListener('click', () => overlay.remove())
+        popup.appendChild(closeBtn)
+
+        let formOrigin
+        try { formOrigin = new URL(url).origin } catch (e) { formOrigin = null }
+
+        if (formOrigin && pageOrigin && formOrigin !== pageOrigin) {
+            const warning = document.createElement('div')
+            warning.className = 'swp-comment-popup-origin-warning'
+            warning.textContent = `Submitting to: ${new URL(url).hostname}`
+            popup.appendChild(warning)
+        }
 
         const iframe = document.createElement('iframe')
         iframe.src = url
         iframe.className = 'swp-comment-popup-iframe'
 
-        popup.appendChild(closeBtn)
         popup.appendChild(iframe)
         overlay.appendChild(popup)
         overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove() })
