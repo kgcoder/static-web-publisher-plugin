@@ -13,7 +13,8 @@ https://github.com/kgcoder/readers-web-specs
 */
 
 import g from './Globals.js'
-
+import { setTheme } from './helpers.js'
+import { setFontSet } from './Fonts.js'
 
 export const checkKey = async (e) => {
 
