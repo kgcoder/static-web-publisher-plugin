@@ -306,13 +306,16 @@ export function applyFonts(fonts = kFontRoleSets[0]) {
 }
 
 
-export async function setFontSet(id) {
+export async function setFontSet(id, shouldSave = false) {
     const foundFontSet = kFontRoleSets.find(s => s.id === id)
     const fontId = foundFontSet ? foundFontSet.id : kFontRoleSets[0].id    
     applyFonts(kFontRoleSets.find(s => s.id === fontId))
     g.currentFontSet = fontId
 
-
+    if (shouldSave) {
+        g.hostAdapter.saveSetting('fontSet', fontId)
+    }
+    
     g.readingManager.applyFlinksOnTheLeft()
 
     g.readingManager.applyFlinksOnTheRight()

@@ -12,7 +12,7 @@ For the official list of document types and specifications, see:
 https://github.com/kgcoder/readers-web-specs
 */
 
-import { setFontSet } from '../reader/Fonts'
+import { setFontSet } from '../reader/Fonts.js'
 import g from '../reader/Globals.js'
 import { getHdocJsonAndContentFromCurrentDocument, parseHtmlPageWithEmbeddedHDoc } from '../reader/parsers/EmbHDOCParser.js'
 import { parseStaticContent } from "../reader/parsers/ParsingManager.js"
