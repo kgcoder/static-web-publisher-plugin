@@ -293,41 +293,18 @@ export function parseHtmlPageWithEmbeddedHDoc(httpPageUrl, contentString, hdocDa
 export function getHdocJsonAndContentFromHtml(contentString) {
     const unsanitizedHtmlParser = new DOMParser();
     const unsanitizedHtmlDoc = unsanitizedHtmlParser.parseFromString(contentString, 'text/html');
-    let hdocDataJSON = {}
-    const dataScript = unsanitizedHtmlDoc.getElementById("hdoc-data");
-    if (dataScript) {
-        try {
-            hdocDataJSON = JSON.parse(dataScript.textContent)  
-        } catch (e) {
-            console.error('JSON parse error',e)
-        }
-    }
-
-    if (!hdocDataJSON) return false
-
-    const headerJSON = hdocDataJSON.header
-
-    if (!headerJSON)return false
-    const mainTitle = headerJSON.h1
-
-    if(!mainTitle || !mainTitle.trim())return false
-
-    let contentEl = unsanitizedHtmlDoc.querySelector('.hdoc-content')
-
-     
-    if (!contentEl)return false
-
-
-    return {hdocDataJSON, content:contentEl.innerHTML}
-    
-
-    
+    return getHdocJsonAndContentFromDocument(unsanitizedHtmlDoc)
 }
 
 
 export function getHdocJsonAndContentFromCurrentDocument() {
+    return getHdocJsonAndContentFromDocument(document)
+}
+
+
+function getHdocJsonAndContentFromDocument(doc) {
     let hdocDataJSON = {}
-    const dataScript = document.getElementById("hdoc-data");
+    const dataScript = doc.getElementById("hdoc-data");
     if (dataScript) {
         try {
             hdocDataJSON = JSON.parse(dataScript.textContent)  
@@ -345,14 +322,18 @@ export function getHdocJsonAndContentFromCurrentDocument() {
 
     if(!mainTitle || !mainTitle.trim())return false
 
-    let contentEl = document.querySelector('.hdoc-content')
+    const originalContentEl = doc.querySelector('.hdoc-content')
 
-     
-    if (!contentEl)return false
+    if (!originalContentEl)return false
 
+    // work on a copy so that the live document is never modified
+    const contentEl = originalContentEl.cloneNode(true)
+
+    const existingFlinkCanvases = contentEl.getElementsByClassName('leftDocFlinkCanvas')
+
+    while(existingFlinkCanvases.length > 0) {
+        existingFlinkCanvases[0].remove();  // Remove the first element repeatedly until none are left
+    }
 
     return {hdocDataJSON, content:contentEl.innerHTML}
-    
-
-    
 }

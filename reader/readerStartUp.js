@@ -13,12 +13,10 @@ https://github.com/kgcoder/readers-web-specs
 */
 
 import g from "./Globals.js"
+import { addScrollEndListener, setTheme } from "./helpers.js";
 import { setFontSet } from "./Fonts.js";
-import { addScrollEndListener } from "./helpers.js";
 import IconsInfo from "./Icons.js";
 import { checkKey } from "./KeyboardManager.js";
-
-
 
 
 export function addListenersToContainer(container){
@@ -52,10 +50,6 @@ export function addListenersToContainer(container){
 
 }
 
-
-
-
-
 export async function loadUIAndIcons() {
 
     g.flinksCanvas = document.getElementById('flinks-canvas')
@@ -67,6 +61,8 @@ export async function loadUIAndIcons() {
 
 
     document.onkeydown = checkKey
+
+
 
 }
 
@@ -89,7 +85,7 @@ async function useSavedTheme() {
 }
 
 
-export async function useSavedFontSet() {
+async function useSavedFontSet() {
     const saved = await g.hostAdapter.getSetting('fontSet')
     await setFontSet(saved, false)
 }
@@ -109,14 +105,10 @@ async function useSavedFontSize() {
 }
 
 
+
 export function dispatchReaderReady(url) {
     if (window.swpReaderReadyFired) return
     window.swpReaderReadyFired = true
-
     document.dispatchEvent(new CustomEvent('swpReaderReady', { detail: { url } }))
 }
-
-
-
-
 

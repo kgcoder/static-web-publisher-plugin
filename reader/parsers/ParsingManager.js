@@ -23,14 +23,14 @@ import { parsePlainTextPage } from "./PlainTextParser.js";
 
 
 
-export async function loadStaticContentFromUrl(originalUrl, isForCondoc = false, muteErrorMessage = false){
+export async function loadStaticContentFromUrl(originalUrl, fetchOptions = {}, muteErrorMessage = false){
 
 
     const urlToCall = originalUrl.split('#')[0].replace(/\?$/,'')
     
 
 
-    const result = await fetchWebPage(urlToCall, { isForCondoc })
+    const result = await fetchWebPage(urlToCall, fetchOptions)
 
     if (!result) {
         if (!muteErrorMessage) {
@@ -50,6 +50,13 @@ export async function loadStaticContentFromUrl(originalUrl, isForCondoc = false,
         
         return
     }
+
+
+
+
+
+
+
 
     const {dataObject,error:parsingErrorMessage} = await parseStaticContent(text,originalUrl)
     
@@ -130,13 +137,11 @@ export async function loadStaticContentFromUrl(originalUrl, isForCondoc = false,
 
 
 export async function parseStaticContent(contentString, originalUrl, savedParsingRules) {
-    
     const condocMatch = contentString.match(/<condoc\b[^>]*>([\s\S]*?)<\/condoc>/im)
     const collageMatch = contentString.match(/<cdoc\b[^>]*>([\s\S]*?)<\/cdoc>/im)
     const hdocMatch = contentString.match(/<hdoc\b[^>]*>([\s\S]*?)<\/hdoc>/im)
 
     const htmlMatch = contentString.match(/<html\b[^>]*>([\s\S]*?)<\/html>/im)
-
 
     if (condocMatch) {
         contentString = condocMatch[0]
@@ -158,6 +163,7 @@ export async function parseStaticContent(contentString, originalUrl, savedParsin
             const dataObject = parseHtmlPageWithEmbeddedHDoc(originalUrl, content, hdocDataJSON)  
             return {dataObject, error:!dataObject ? 'Something is wrong with the embedded HDOC' : null}          
         }
+
 
         const unsanitizedHtmlParser = new DOMParser();
         const unsanitizedHtmlDoc = unsanitizedHtmlParser.parseFromString(contentString, 'text/html');
@@ -187,6 +193,8 @@ export async function parseStaticContent(contentString, originalUrl, savedParsin
         } catch {
             //do nothing
         }
+
+
 
         if(savedParsingRules){
 

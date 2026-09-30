@@ -20,7 +20,7 @@ import CollageViewer from "./CollageViewer.js";
 import { loadStaticContentFromUrl } from "./parsers/ParsingManager.js";
 import FLTextEnd from "./models/FLTextEnd.js";
 import FLPointEnd from "./models/FLPointEnd.js";
-import { getPartialLinkColorForTheme, getUseOutlineOnlyForTheme, kSidebarWidthToScreenWidthRatio, maxFlinksNumberBeforeOptimization } from "./constants.js";
+import { getFlinkColorsForTheme, getPartialLinkColorForTheme, getUseOutlineOnlyForTheme, kSidebarWidthToScreenWidthRatio, maxFlinksNumberBeforeOptimization } from "./constants.js";
 import { showMultipleLinksPopup } from "./MultipleLinksPopupManager.js";
 const kFlinkHorizontalThickness = 5
 
@@ -79,7 +79,6 @@ class ReadingManager {
         if(noteData.collageViewer){
             noteData.collageViewer.frame(dt)
         }
-   
     }
         
         
@@ -99,6 +98,7 @@ setupFlinksCanvasDPR(){
 
     g.flinksCtx.scale(dpr, dpr)
 }
+
 
 
      removeFlinksFromMainDiv(){
@@ -164,12 +164,10 @@ setupFlinksCanvasDPR(){
 
     }
 
-    downloadOnePage = async (url, hideSpinner = false) => {
+    downloadOnePage = async (url, hideSpinner = false, isUserSpecifiedUrl = false) => {
         if(!hideSpinner)g.pdm.showMainDocSpinner()
+        const dataObject = await loadStaticContentFromUrl(url, { isUserSpecifiedUrl })
 
-        const dataObject = await loadStaticContentFromUrl(url)
-
-    
         if(!dataObject){
             showToastMessage("Something is wrong")
             if(!hideSpinner)g.pdm.hideMainDocSpinner()
@@ -222,24 +220,17 @@ setupFlinksCanvasDPR(){
             }
                         
                         
-                
-
-                   
+                        
+                        
 
             g.pdm.showTab(g.readingManager.rightNotesData.length - 1)
-        
             g.readingManager.redrawFlinks()
 
             g.pdm.applyFontSizeToPresentationDivs()
 
             g.readingManager.addListenerToCurrentRightDoc()
 
-
             g.readingManager.applyFlinksOnTheRight(false)
-
-
-      
-
 
             const {total,count} = g.pdm.configureConnectionsCountOnInfoButton()
 
@@ -289,7 +280,6 @@ setupFlinksCanvasDPR(){
         noteData.docId = rightDocId
         const mainRowDiv = document.createElement('div')
         mainRowDiv.className = "DocumentMainRow"
-
 
 
         const div = document.createElement('div')
@@ -368,6 +358,8 @@ setupFlinksCanvasDPR(){
 
 
 
+
+
          const presentationDiv = document.createElement('div')
          presentationDiv.className = "RightDocumentPresentationDiv PresentationDiv"
         // presentationDiv.style.width = `${this.docWidth}px`
@@ -435,20 +427,27 @@ setupFlinksCanvasDPR(){
         
          const result = g.noteDivsManager.populateDivWithTextFromDoc(div,noteData.xmlString,noteData.url,true)
          if(result){
-            const {isEditable,title,panels, lang, copyInfo} = result
-            noteData.isEditable = isEditable
-            noteData.title = title
-            noteData.panels = panels
-    
-            if(copyInfo){
+             const {isEditable,title,panels,copyInfo,lang} = result
+             noteData.isEditable = isEditable
+             noteData.title = title
+             noteData.panels = panels
+
+
+             if(copyInfo){
                 noteData.copyInfo = copyInfo
-    
+
                 const currentDocumentCopyButton = document.getElementById("RightDocumentCopyButton")
                 currentDocumentCopyButton.style.display = 'flex'
-            }
+
+
+
+
+             }
+
+
+
 
          }
-
          g.noteDivsManager.addEventListenersToNote(div, noteData, rightDocId)
 
 
@@ -514,7 +513,6 @@ setupFlinksCanvasDPR(){
 
     showTab = (index) => {
 
-
         this.selectedRightDocIndex = index
 
         for(let i = 0; i< this.rightNotesData.length;i++){
@@ -530,7 +528,6 @@ setupFlinksCanvasDPR(){
             }
 
 
-           
             const tab = this.rightTabDivs[i]
             textContainer.style.display = index === i ? 'flex' : 'none'
             if(this.rightNotesData.length > 1){
@@ -567,7 +564,7 @@ setupFlinksCanvasDPR(){
             g.pdm.populatePanelsOfOneRightDoc()
         }
 
-      
+
         this.changesInReadingModeExist = true
         
    
@@ -612,10 +609,11 @@ setupFlinksCanvasDPR(){
         const mainDocRightX = this.docWidth
         const rightMinX = mainDocRightX + kMiddleGap
 
+        
 
-     
+
+
         const mainContainerTopOffset = g.adminBarHeight
-
 
 
         const mainDocScrollDiv = document.getElementById("CurrentDocument")
@@ -627,7 +625,7 @@ setupFlinksCanvasDPR(){
      } else if (!isLeftText && this.mainCollageViewer && !!this.mainCollageViewer.viewport) {
          this.drawAllPointsOnLeftCollage(mainContainerTopOffset)
          if (isRightText) {
-             this.drawPointToTextFlinks(noteObj,mainContainerTopOffset)   
+             this.drawPointToTextFlinks(noteObj,mainContainerTopOffset)
          } 
         return
     }else if(!isLeftText || !isRightText){
@@ -1116,7 +1114,9 @@ setupFlinksCanvasDPR(){
             tabDiv.style.width = `${tabWidth}px`
             tabDiv.style.top = 0
             tabDiv.style.left = `${i * tabWidth}px`
+         
 
+          
 
             tabsContainerDiv.appendChild(tabDiv)
             const currentIndex = i            
@@ -1138,20 +1138,20 @@ setupFlinksCanvasDPR(){
             tabDiv.appendChild(tabCircleDiv)
 
             const noteTitleSpan = document.createElement('span')
-
             noteTitleSpan.className = 'RightDocumentTabTitle'
             noteTitleSpan.innerText = noteData.title
+
 
 
             noteData.titleSpan = noteTitleSpan
 
             tabDiv.appendChild(noteTitleSpan)
 
+
             if(isSelected){
                 tabDiv.classList.add('RightDocumentTabSelected')
                 noteTitleSpan.classList.add('RightDocumentTabTitleSelected')
             }
-
         }
 
         if (docCount > 1) {
@@ -1207,13 +1207,12 @@ setupFlinksCanvasDPR(){
             if(g.readingManager.mainDocData && g.readingManager.mainDocData.docType === 'condoc' && !g.readingManager.embeddedDocData)return
 
             if (!this.isFullScreen) {
-
                 this.checkIfFlinksAreBroken()
                 this.fixRightFlinksAutomaticallyIfNeeded()
                 this.prepareRightLinks()
                 this.addFlinksToRightDiv()
-                this.redrawFlinks()
 
+                this.redrawFlinks()
 
                 const flinksData = g.readingManager.currentConnection
                 flinksData.flinksUpdateNeeded = false
@@ -1313,6 +1312,27 @@ setupFlinksCanvasDPR(){
             })
     }
 
+    recolorConnectionsForCurrentTheme() {
+        if (!this.connections || !this.connections.length) return
+
+        const colors = getFlinkColorsForTheme(g.hostAdapter.getCurrentThemeName())
+
+        for (const connection of this.connections) {
+            if (typeof connection.colorIndex !== 'number') continue
+            connection.color = colors[connection.colorIndex % colors.length]
+
+            if (!connection.activeFlinks) continue
+            for (const flink of connection.activeFlinks) {
+                flink.color = connection.color
+                flink.color05 = addTransparencyToHexColor(connection.color, 0.5)
+                flink.color03 = addTransparencyToHexColor(connection.color, 0.3)
+            }
+        }
+
+        this.removeLeftPartialLink()
+        this.removeRightPartialLink()
+    }
+
 
     checkIfFlinksWereChangedOnTheLeftSide = () => {
         if(this.mainDocType !== 'h')return
@@ -1386,13 +1406,13 @@ setupFlinksCanvasDPR(){
         let secondDiv
         for(const flinksData of this.connections){
             if(!flinksData.activeFlinks)continue
-
+            
             const noteData = this.getNoteDataByUrl(flinksData.url)
 
 
             let secondDocType
             if (noteData) {
-                secondDiv = noteData.scrollDiv
+                secondDiv = noteData.scrollDiv 
                 secondDocType = noteData.docType
             }
 
@@ -1401,13 +1421,13 @@ setupFlinksCanvasDPR(){
                 const secondPresentationDiv = getPresentationDivFrom(secondDiv)
                 rightText = getTextFromDiv(secondPresentationDiv)
             }
-
+    
             flinksData.leftSideIsBroken = false
             flinksData.rightSideIsBroken = false
 
             for(let flink of flinksData.activeFlinks){
-
-
+    
+       
                 this.checkIfFlinkIsBroken(flink,secondDiv,this.mainDocType, secondDocType,leftText,rightText)
   
                 if (flink.leftSideIsBroken || flink.leftEndOutOfBounds) {
@@ -1512,7 +1532,6 @@ setupFlinksCanvasDPR(){
         const notePresentationDiv = document.getElementById("CurrentDocumentMainDiv")
 
         const textNodesArray = getTextNodesArrayFromDiv(notePresentationDiv)
-
         let divX = 0
         if(g.readingManager.isFullScreen && !g.isMobileMode){
             if(g.readingManager.mainDocPanels && g.readingManager.mainDocPanels.sidebarPanel && g.readingManager.mainDocPanels.sidebarPanel.side === 'left'){
@@ -1523,9 +1542,8 @@ setupFlinksCanvasDPR(){
         const padding = g.pdm.getMainDocumentPadding()
 
         const panelsInfo = g.readingManager.mainDocPanels
-        
-        const rightX = (g.isMobileMode || !g.readingManager.isFullScreen || !panelsInfo || !panelsInfo.sidebarPanel) ? window.innerWidth - padding : window.innerWidth * 0.8 - padding 
 
+        const rightX = (g.isMobileMode || !g.readingManager.isFullScreen || !panelsInfo || !panelsInfo.sidebarPanel) ? window.innerWidth - padding : window.innerWidth * 0.8 - padding 
 
         const currentDocTopOffset = g.pdm.getCurrentDocTopOffset()
 
@@ -1534,8 +1552,7 @@ setupFlinksCanvasDPR(){
         const fullTextLength = textNodesArray.reduce((total, node) => total + node.data.length, 0);
 
 
-      
-     
+           
         for(let flinksData of this.connections){
             if (!flinksData.activeFlinks)continue
             
@@ -1564,7 +1581,7 @@ setupFlinksCanvasDPR(){
             return
         }
 
-        
+    
         const {rects:leftRects,isInsidePre} = g.noteDivsManager.calculateHighlightPosition(noteScrollDiv,textNodesArray,leftEnd.index,leftEnd.length,divX,topY,padding, rightX)
 
         if(leftRects.length){
@@ -1599,7 +1616,8 @@ setupFlinksCanvasDPR(){
 
         const rightTextLength = textNodesArray.reduce((total, node) => total + node.data.length, 0);
 
-              
+       
+       
         const divX = this.docWidth + kMiddleGap
         const topY = kLeftDivTop + g.pdm.getRightDocTopOffset(noteObj)
 
@@ -1626,6 +1644,7 @@ setupFlinksCanvasDPR(){
  
 
         const {rects:rightRects,isInsidePre} = g.noteDivsManager.calculateHighlightPosition(rightScrollDiv,textNodesArray,rightEnd.index,rightEnd.length,divX,topY, kDefaultPadding)
+
       
         if(rightRects.length){
             flink.isRightEndInsidePre = isInsidePre
@@ -1943,6 +1962,7 @@ setupFlinksCanvasDPR(){
             mainScrollDocDiv.addEventListener("scroll", mainDocScrollEvent);
             addScrollEndListener(mainScrollDocDiv, () => this.addFlinksToLeftDiv());
 
+
             g.noteDivsManager.addEventListenersToNote(mainScrollDocDiv, g.readingManager, this.mainDocId)
             
         } else if (this.mainDocType === 'c') {
@@ -2028,7 +2048,7 @@ setupFlinksCanvasDPR(){
 
 
 
-    isFlinkUnderMouseInRightDoc(pageX,pageY){
+     isFlinkUnderMouseInRightDoc(pageX,pageY){
         if(this.isFullScreen)return false
         const noteData = this.rightNotesData[this.selectedRightDocIndex]
 
@@ -2092,12 +2112,13 @@ setupFlinksCanvasDPR(){
     }
 
 
+
+
     async handleTouchInMainDoc(pageX,pageY,currentlyPressedLink){
 
         if(g.pdm.isShowingInfo || g.pdm.isLeftSourceCodeShowing)return
         
         const topPanelHeight = g.pdm.getCurrentDocTopOffset()
-
         
         if(this.mainDocType === 'c'){
             const x = pageX
@@ -2108,44 +2129,44 @@ setupFlinksCanvasDPR(){
                     const leftEnd = flink.leftEnds[0]
                     const {x:dotAbsX,y:dotAbsY,radius} = leftEnd
                     const collageViewer = this.mainCollageViewer
-                     const relCoordinates = collageViewer.getRelativePoint(dotAbsX,dotAbsY) 
+                    const relCoordinates = collageViewer.getRelativePoint(dotAbsX,dotAbsY) 
                     if(!relCoordinates)continue
                     const {xRel, yRel} = relCoordinates
                     const distance = Math.sqrt(Math.pow(xRel - x, 2) + Math.pow(yRel - y, 2))
                     if(distance < Math.min(radius * collageViewer.k,10)){
+                        
                         const noteDataIndex = this.getNoteIndexByUrl(flinksData.url)
 
                         if (noteDataIndex === -1) {
-
-
+                              
                             await g.readingManager.downloadOnePage(flinksData.url)
 
-
+                        
                             setTimeout(() => {
                                 g.readingManager.moveLeftCollageToCenterTheDot(flink, kLeftDivTop, 0)
-
+                                
                                 const noteData = this.rightNotesData[this.rightNotesData.length - 1]
-                                if (noteData.docType === 'h') {
+                                if (noteData.docType === 'h') { 
                                     const rightDotTopPanelHeight = g.pdm.getRightDocTopOffset(noteData)
                                     const secondScrollDiv = noteData.scrollDiv
-
-
+    
+                                 
                                     setTimeout(() => {
-
-
-                                        const relCoordinates = collageViewer.getRelativePoint(dotAbsX,dotAbsY)
+    
+    
+                                        const relCoordinates = collageViewer.getRelativePoint(dotAbsX,dotAbsY) 
                                         const {yRel} = relCoordinates
-
+    
                                         g.readingManager.scrollRightDocInPositionForPoint(flink,yRel + kLeftDivTop, secondScrollDiv,rightDotTopPanelHeight)
                                     },100)
-
+                                    
                                 }
                             },300)
-
+                            
 
                             return
                         }
-
+                        
                         const noteData = this.rightNotesData[noteDataIndex]
 
                         if(noteData.docType === 'c'){
@@ -2160,7 +2181,7 @@ setupFlinksCanvasDPR(){
                                 shouldDelayRightScroll = true
 
                                 g.readingManager.moveLeftCollageToCenterTheDot(flink, kLeftDivTop, 0)
-
+                               
                             }
 
 
@@ -2174,11 +2195,11 @@ setupFlinksCanvasDPR(){
                             const rightDotTopPanelHeight = g.pdm.getRightDocTopOffset(noteData)
                             const secondScrollDiv = noteData.scrollDiv
                             setTimeout(() => {
-                                const relCoordinates = collageViewer.getRelativePoint(dotAbsX,dotAbsY)
+                                const relCoordinates = collageViewer.getRelativePoint(dotAbsX,dotAbsY) 
                                 const {yRel} = relCoordinates
                                 this.scrollRightDocInPositionForPoint(flink,yRel + kLeftDivTop, secondScrollDiv,rightDotTopPanelHeight)
                             },shouldDelayRightScroll ? 400 : 0)
-
+                            
                         }
                         return
                     }
@@ -2189,8 +2210,7 @@ setupFlinksCanvasDPR(){
         }else if(this.mainDocType === 'h'){
             const mainScrollDocDiv = document.getElementById("CurrentDocument")
             const x = pageX
-            const y = pageY - kLeftDivTop - topPanelHeight + mainScrollDocDiv.scrollTop 
-
+            const y = pageY - kLeftDivTop - topPanelHeight + mainScrollDocDiv.scrollTop
         
             let touchedFlinks = []
             for(let flinksData of this.connections){
@@ -2279,12 +2299,11 @@ setupFlinksCanvasDPR(){
     }
 
 
+  
 
 
     handleTouchInRightDoc(pageX,pageY,currentlyPressedLink){
         if(this.isFullScreen)return
-        
-
         const noteData = this.rightNotesData[this.selectedRightDocIndex]
 
         const flinksData = this.currentConnection
@@ -2581,9 +2600,9 @@ setupFlinksCanvasDPR(){
             await g.readingManager.downloadOnePage(flinksData.url)
             setTimeout(() => {
                 g.readingManager.scrollMainDocToShowFlink(flink,0)
-
+                
                 const noteData = this.rightNotesData[this.rightNotesData.length - 1]
-
+    
                 setTimeout(() => {
                     if(noteData){
                         if (noteData.docType === 'c') {
@@ -2592,7 +2611,7 @@ setupFlinksCanvasDPR(){
                             const secondScrollDiv = noteData.scrollDiv
                             this.scrollRightDocInPositionForLink(flink,mainScrollDocDiv.scrollTop,secondScrollDiv,noteData)
                         }
-
+        
                     }
 
                 },100)
@@ -2611,7 +2630,7 @@ setupFlinksCanvasDPR(){
             },300)
             shouldDelayRightScroll = true
         }
-
+        
         if (noteData.docType === 'c') {
 
             if(this.selectedRightDocIndex !== noteDataIndex){
@@ -2625,7 +2644,7 @@ setupFlinksCanvasDPR(){
 
 
         }else if(noteData.docType === 'h'){
-
+        
 
             if(this.selectedRightDocIndex !== noteDataIndex){
                 g.pdm.showTab(noteDataIndex)
@@ -2636,7 +2655,7 @@ setupFlinksCanvasDPR(){
             setTimeout(() => {
                 this.scrollRightDocInPositionForLink(flink,mainScrollDocDiv.scrollTop,secondScrollDiv,noteData)
             },shouldDelayRightScroll ? 400 : 0)
-
+            
         }
     }
 
@@ -2727,7 +2746,6 @@ setupFlinksCanvasDPR(){
     }
 
     moveRightCollageInPositionForLink(flink, leftScrollTop, topPanelHeight) {
-
         const {leftTop,leftBottom} = flink
 
         const rightEnd = flink.rightEnds[0]
@@ -2742,7 +2760,6 @@ setupFlinksCanvasDPR(){
 
 
     moveLeftCollageInPositionForLink(flink,rightScrollTop,topPanelHeight){
-
         const {rightTop,rightBottom} = flink
         const leftEnd = flink.leftEnds[0]
         const {x,y,radius} = leftEnd
@@ -2754,10 +2771,7 @@ setupFlinksCanvasDPR(){
     }
 
 
-
-
-
-     moveLeftCollageToCenterTheDot(flink,topPanelHeight, duration = 500){
+    moveLeftCollageToCenterTheDot(flink,topPanelHeight, duration = 500){
         const leftEnd = flink.leftEnds[0]
         const {x,y,radius} = leftEnd
         const centerY = (window.innerHeight - g.adminBarHeight - topPanelHeight) / 2
@@ -2772,7 +2786,6 @@ setupFlinksCanvasDPR(){
         const noteData = this.rightNotesData[this.selectedRightDocIndex]
         noteData.collageViewer.movePointToCenter(x,y,radius,centerY)
     }
-
 
 
 
@@ -2829,7 +2842,6 @@ setupFlinksCanvasDPR(){
     }
 
     scrollMainDocToShowFlink(flink, duration = 300){
-
         const leftScrollDiv = document.getElementById("CurrentDocument")
 
         if(flink.leftEndOutOfBounds){
@@ -2858,7 +2870,7 @@ setupFlinksCanvasDPR(){
 
       animateScroll(scrollableDiv,targetScrollTop, duration = 300) {
         // Animation duration in milliseconds
-
+      
         const startTime = performance.now();
         const startScrollTop = scrollableDiv.scrollTop;
       
@@ -3264,6 +3276,7 @@ setupFlinksCanvasDPR(){
 
             
             floatingLink = new FloatingLink([leftEnd],[rightEnd],false) 
+            floatingLink.isLeftEndInsidePre = this.partialLeftLink.isInsidePre
 
         }else{
 
@@ -3278,6 +3291,7 @@ setupFlinksCanvasDPR(){
             new FLPointEnd(this.partialRightLink.x,this.partialRightLink.y,this.partialRightLink.radius)
 
             floatingLink = new FloatingLink([leftEnd],[rightEnd],false)
+            floatingLink.isRightEndInsidePre = this.partialRightLink.isInsidePre
 
         }
 
@@ -3301,6 +3315,11 @@ setupFlinksCanvasDPR(){
                 const textNodesArray = getTextNodesArrayFromDiv(leftDiv)
         
                 const divX = 0
+
+                const padding = g.pdm.getMainDocumentPadding()
+
+                const rightX = window.innerWidth - padding
+
         
                 const topPanelHeight = g.pdm.getCurrentDocTopOffset()
         
@@ -3310,7 +3329,7 @@ setupFlinksCanvasDPR(){
                 const fullTextLength = textNodesArray.reduce((total, node) => total + node.data.length, 0);
 
 
-                this.prepareOneLeftLink(floatingLink,noteScrollDiv,textNodesArray,divX,topY,fullTextLength)
+                this.prepareOneLeftLink(floatingLink,noteScrollDiv,textNodesArray,divX,topY,rightX,padding,fullTextLength)
                 
             }
             
@@ -3326,6 +3345,7 @@ setupFlinksCanvasDPR(){
                 this.prepareOneRightLink(floatingLink,scrollDiv,rightTextNodesArray,divX,topY,rightTextLength)
     
             }
+
     
             
             
@@ -3349,6 +3369,8 @@ setupFlinksCanvasDPR(){
                 floatingLink.isRightSideDrawn = true
             }
 
+
+
         }
 
        
@@ -3366,7 +3388,7 @@ setupFlinksCanvasDPR(){
     }
 
 
-        createLeftPartialLink(notePresentationDiv,range){
+    createLeftPartialLink(notePresentationDiv,range){
 
        const {startIndex,length} = getIndexAndLengthOfSelection(notePresentationDiv,range)
 
@@ -3409,7 +3431,6 @@ setupFlinksCanvasDPR(){
     createRightPartialLink(notePresentationDiv,rightScrollDiv, noteData, range){
         const {startIndex,length} = getIndexAndLengthOfSelection(notePresentationDiv,range)
         
-
         const divX = this.docWidth + kMiddleGap
         const rightX = this.docWidth * 2 + kMiddleGap
 
@@ -3446,6 +3467,8 @@ setupFlinksCanvasDPR(){
         this.addOneHightlightToDiv(notePresentationDiv,'something','rightDocPartialLinkCanvas',fillColor,this.partialRightLink.color03,isFlinkBroken,top,height,this.partialRightLink.rightRects,isInsidePre)
 
     }
+
+  
 
 
     removeLeftPartialLink(){

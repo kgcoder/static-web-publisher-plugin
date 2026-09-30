@@ -16,8 +16,8 @@ import g from './Globals.js'
 import { setTheme } from './helpers.js'
 import { setFontSet } from './Fonts.js'
 
-export const checkKey = async (e) => {
 
+export const checkKey = async (e) => {
 
     if ((e.metaKey || e.ctrlKey) && e.key === '-') {
         if(!g.hostAdapter.allowFontResizing)return
@@ -32,8 +32,6 @@ export const checkKey = async (e) => {
             
     }
 
-
- 
     if(e.code === 'Escape'){
         g.readingManager.processEscape()
     }
@@ -44,9 +42,8 @@ export const checkKey = async (e) => {
             g.pdm.toggleFullScreen()
         }
     }
+    if (e.key === '[' && e.ctrlKey) {
 
-
-     if (e.key === '[' && e.ctrlKey) {
         if(!g.hostAdapter.allowDynamicThemeChange)return
 
         if (!g.favorites || !g.favorites.length) return
@@ -58,6 +55,7 @@ export const checkKey = async (e) => {
         setFontSet(next.fontSetId, true)
 
     }
+
 
 
     if (e.code === "KeyL") {

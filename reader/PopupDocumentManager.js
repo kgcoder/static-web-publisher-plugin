@@ -29,8 +29,8 @@ export const kRightDocsTabRowHeight = 20
 export const kRightDivTopBarHeight = 20
 export const kDefaultFontSize = 18.0
 
-
 export const kVerticalPanelInFullscreenWidth = 400
+
 
 export const kDefaultPadding = 20
 
@@ -66,6 +66,7 @@ window.onresize = () => {
     middleSpaceDiv.style.top = '60px'
     middleSpaceDiv.style.width = `${kMiddleGap}px`
     middleSpaceDiv.style.bottom = 0
+
     
     if (g.readingManager.mainCollageViewer) {
         g.readingManager.mainCollageViewer.updateCanvasSize(g.readingManager.docWidth, kLeftDivTop, 0)
@@ -133,8 +134,8 @@ class PopupDocumentManager{
     loadUI = () => {     
         const allDocumentsContainer = document.getElementById("AllDocumentsContainer")
         allDocumentsContainer.style.width = `${window.innerWidth}px`
-          
-
+    
+      
         const downloadLink = document.getElementById("MainDocDownloadLink")
         if(downloadLink){
             downloadLink.addEventListener('click', (e) => {
@@ -146,6 +147,8 @@ class PopupDocumentManager{
             })
         }
     
+      
+      
         const closeButton = document.getElementById("CurrentDocumentCloseButton")
         if(closeButton){
             this.createOneSVGIconComponent(closeButton,g.iconsInfo.svgIcons.closeIcon,'Reader-CloseButton')
@@ -155,9 +158,6 @@ class PopupDocumentManager{
                 g.hostAdapter.reloadPage()
             })
         }
-      
-    
-      
     
         const leftSandwichButtonDiv = document.getElementById("LeftSandwichButton")
     
@@ -175,7 +175,6 @@ class PopupDocumentManager{
         infoButton.addEventListener('click', this.infoButtonPressed)
         
         const downloadAllButton = document.getElementById("CurrentDocumentDownloadAllDocsButton")
-
         if(!downloadAllButton)return
 
         this.createOneSVGIconComponent(downloadAllButton,g.iconsInfo.svgIcons.downloadAll,'Reader-DownloadAllButton')
@@ -184,17 +183,16 @@ class PopupDocumentManager{
         const fullScreenButton = document.getElementById("CurrentDocumentFullScreenButton")
         if(!fullScreenButton)return
         this.createOneSVGIconComponent(fullScreenButton,g.iconsInfo.svgIcons.fullscreenOffIcon,'Reader-FullscreenButton')
+
         fullScreenButton.addEventListener('click', this.fullScreenButtonPressed)
         fullScreenButton.style.display = 'none'
-        
     
         const exportButton = document.getElementById("CurrentDocumentExportButton")
         if(!exportButton)return
         this.createOneSVGIconComponent(exportButton,g.iconsInfo.svgIcons.exportIcon,'Reader-ExportButton')
+
         exportButton.addEventListener('click', this.exportButtonPressed)
         exportButton.style.display = 'none'
-
-        
 
         const sourceCodeButton = document.getElementById("CurrentDocumentSourceCodeButton")
         if(!sourceCodeButton)return
@@ -207,7 +205,6 @@ class PopupDocumentManager{
 
         centerCollageButton.addEventListener('click',this.leftDocCenterCollagePressed)
         centerCollageButton.style.display = 'none'
-
 
         const currentDocumentCopyButton = document.getElementById("CurrentDocumentCopyButton")
         this.createOneSVGIconComponent(currentDocumentCopyButton,g.iconsInfo.svgIcons.copyIcon)
@@ -298,6 +295,7 @@ class PopupDocumentManager{
 
             this.movementEvent = e
 
+
             const {pageX,pageY} = e
 
             const docWidth = g.readingManager.docWidth
@@ -323,9 +321,10 @@ class PopupDocumentManager{
                     
                 }
             }else if(relativeX > docWidth + kMiddleGap){
-                const rightTop = 50 
+                const rightTop = 50
                 if(pageY > rightTop){
                     const showPointer = g.readingManager.isFlinkUnderMouseInRightDoc(relativeX,pageY)
+                    
                     const noteData = g.readingManager.rightNotesData[g.readingManager.selectedRightDocIndex]
                     if(noteData.collageViewer){
                         noteData.collageViewer.showPointerForFlink = showPointer
@@ -337,7 +336,10 @@ class PopupDocumentManager{
             }
 
 
+
+
         });
+
 
         
 
@@ -349,9 +351,9 @@ class PopupDocumentManager{
     
             const docWidth = g.readingManager.docWidth
     
-
             const leftOffset = this.getMainLeftOffset()
-            
+
+
             if (this.isFlinksListOpen) {
                 const flinksListDiv = document.getElementById("LinksListContainerDiv")
                 const rect = flinksListDiv.getBoundingClientRect()
@@ -381,7 +383,6 @@ class PopupDocumentManager{
             
             }
 
-    
             let leftSidebarWidth = 0
 
             if(g.readingManager.isFullScreen && !g.isMobileMode && g.readingManager.mainDocPanels && g.readingManager.mainDocPanels.sidebarPanel && g.readingManager.mainDocPanels.sidebarPanel.side === 'left'){
@@ -444,8 +445,7 @@ class PopupDocumentManager{
         })
     
     
- 
-  
+    
         const rightDocumentSourceCodeButton = document.getElementById("RightDocumentSourceCodeButton")
         this.createOneSVGIconComponent(rightDocumentSourceCodeButton,g.iconsInfo.svgIcons.sourceCode,'Reader-RightDocSourceCodeButton')
         rightDocumentSourceCodeButton.addEventListener('click',this.rightDocumentSourceCodeButtonPressed)
@@ -457,8 +457,7 @@ class PopupDocumentManager{
         rightDocumentCenterCollageButton.addEventListener('click', this.rightDocCenterCollagePressed)
         rightDocumentCenterCollageButton.style.display = 'none'
     
-    
-
+        
         if(g.hostAdapter.isPromotionalButtonSupported){
             const promotionButton = document.getElementById("PromotionButton")
             if(promotionButton){
@@ -467,17 +466,19 @@ class PopupDocumentManager{
     
             }
         }
-
+    
 
         const rightDocumentCopyButton = document.getElementById("RightDocumentCopyButton")
         this.createOneSVGIconComponent(rightDocumentCopyButton,g.iconsInfo.svgIcons.copyIcon)
         rightDocumentCopyButton.addEventListener('click', this.rightCopyButtonPressed)
 
         rightDocumentCopyButton.style.display = 'none'
+   
 
+  
     }
 
-
+    
     updateFontSize = (diff) => {
         this.setFontSize(this.fontSize + diff)
 
@@ -487,7 +488,7 @@ class PopupDocumentManager{
         }
     }
 
- 
+    
     setFontSize = (value) => {
         this.fontSize = value
 
@@ -496,9 +497,6 @@ class PopupDocumentManager{
         g.readingManager.applyFlinksOnTheLeft()
         g.readingManager.applyFlinksOnTheRight()
     }
-
-
- 
 
 
     applyFontSizeToPresentationDivs = () => {
@@ -528,7 +526,7 @@ class PopupDocumentManager{
 
 
 
-      showTab = (index) => {
+    showTab = (index) => {
         g.readingManager.showTab(index)
 
         const noteData = g.readingManager.rightNotesData[index]
@@ -597,7 +595,6 @@ class PopupDocumentManager{
     }
 
 
-
       async showEmptyCondoc(dataObject) {
         
         this.prepareConnectionsForDocument(dataObject)
@@ -614,6 +611,7 @@ class PopupDocumentManager{
 
         this.mainDocTitle = condocTitle
         this.mainDocType = 'condoc'
+
 
         const optionalTitle = document.getElementById("CurrentDocumentOptionalTitleSpan")
         optionalTitle.innerText = this.mainDocTitle
@@ -646,19 +644,14 @@ class PopupDocumentManager{
 
 
         g.hostAdapter.executeAfterOptionalDelay(() => this.downloadMainDocInCondoc(mainPageUrl))
-      
-
        
 
     }
 
 
     async downloadMainDocInCondoc(mainPageUrl, successCallback) {
-        g.pdm.showMainDocSpinner()
-
-  
-
-        const embeddedDataObject = await loadStaticContentFromUrl(mainPageUrl, true)
+         g.pdm.showMainDocSpinner()
+        const embeddedDataObject = await loadStaticContentFromUrl(mainPageUrl, { isForCondoc: true })
         g.pdm.hideMainDocSpinner()
         
 
@@ -718,12 +711,13 @@ class PopupDocumentManager{
       
         const canvas = document.getElementById("CurrentDocumentMainCollageCanvas")
 
-
         
         g.readingManager.mainCollageViewer = new CollageViewer(dataObject.xmlString,dataObject.url,-1,'main',canvas,0,kLeftDivTop,window.innerWidth, this.collageLoadedCallback)
 
         this.updateDocumentWidth()
 
+
+       
 
 
         
@@ -757,7 +751,7 @@ class PopupDocumentManager{
     collageLoadedCallback = async () => {
 
         if (!g.readingManager.mainCollageViewer || !g.readingManager.mainCollageViewer.content) return
-
+        
         const titleSpan = document.getElementById(g.hostAdapter.mainDocumentTitleSpanId)
         if(!titleSpan) return // for backend implementations
         const optionalTitleSpan = document.getElementById("CurrentDocumentOptionalTitleSpan")
@@ -844,7 +838,7 @@ class PopupDocumentManager{
 
         const div = document.getElementById("CurrentDocument")
 
-     
+           
         const result = g.noteDivsManager.populateDivWithTextFromDoc(div,dataObject.xmlString,dataObject.url)
         if (!result) {
             
@@ -854,16 +848,15 @@ class PopupDocumentManager{
         const {panels,title, lang, copyInfo} = result
         
 
+
         if(copyInfo){
             const currentDocumentCopyButton = document.getElementById("CurrentDocumentCopyButton")
             currentDocumentCopyButton.style.display = 'flex'
         }
-        
       
         if (!isEmbedded) {
             this.prepareConnectionsForDocument(dataObject)       
         }
-
     
         this.mainDocTitle = title
 
@@ -874,11 +867,12 @@ class PopupDocumentManager{
 
         downloadAllButton.style.display = count < total ? 'flex' : 'none'
         
-
+  
         const titleSpan = document.getElementById(g.hostAdapter.mainDocumentTitleSpanId)
 
         const optionalTitleSpan = document.getElementById("CurrentDocumentOptionalTitleSpan")
 
+      
         if(copyInfo){
             if(copyInfo.original){
                 optionalTitleSpan.innerText = title
@@ -910,10 +904,6 @@ class PopupDocumentManager{
 
 
 
-
-
-
-
         //======panels
         if (!panels) {
             this.hidePanelsOfCurrentDocument()
@@ -935,24 +925,27 @@ class PopupDocumentManager{
             const postNavBar = document.getElementById("CurrentDocumentPostNavBar")
             const belowContentCommentsDiv = document.getElementById("CurrentDocumentBelowContentComments")
 
-
+      
             const allDivs = {
                 topPanelDiv,topPanelLogoLink,topPanelLogoImage,topPanelTitleSpan,
                 bottomPanelDiv,bottomPanelRowDiv,topPanelOptionsRow,bottomMessageDiv,
                 dropdownMenuDiv,sandwichButtonDiv,
                 documentSidebar, documentBottomBar,
                 postNavBar, belowContentCommentsDiv
-
+                
             }
 
             g.readingManager.mainDocPanels = panels
             this.populatePanels(panels,allDivs,this,false)
 
+
+
+
+
         }    
 
+
         this.updateSidebarVisibility()
-
-
         
         const mainDiv = document.getElementById("AllDocumentsContainer")
         const mainPresentationDiv = document.getElementById("CurrentDocumentMainDiv")
@@ -990,6 +983,7 @@ class PopupDocumentManager{
 
 
     }
+
 
 
     openCopyInfoPopup = (copyInfo) => {
@@ -1102,9 +1096,10 @@ class PopupDocumentManager{
 
 
     populatePanelsOfOneRightDoc(){
-        
+
         if(!g.readingManager.rightNotesData.length)return
         const noteData = g.readingManager.rightNotesData[g.readingManager.selectedRightDocIndex]
+
         if(noteData.docType !== 'h' || !noteData.panels){
             return
         }
@@ -1149,11 +1144,14 @@ class PopupDocumentManager{
         this.populatePanels(noteData.panels,allDivs,noteData,true)
     }
 
+
     updateSidebarVisibility = () => {
         const sidebar = document.getElementById("CurrentDocumentSidebar")
         const bottomBar = document.getElementById("CurrentDocumentBottomBar")
 
-        if(!g.readingManager.mainDocPanels || !g.readingManager.mainDocPanels.sidebarPanel){            sidebar.style.display = 'none'
+
+        if(!g.readingManager.mainDocPanels || !g.readingManager.mainDocPanels.sidebarPanel){
+            sidebar.style.display = 'none'
             bottomBar.style.display = 'none'
             return
         }
@@ -1171,6 +1169,11 @@ class PopupDocumentManager{
 
             sidebar.style.display = 'flex'
             bottomBar.style.display = 'none'
+
+
+
+
+
         }
     }
 
@@ -1203,6 +1206,7 @@ class PopupDocumentManager{
         while(topPanelOptionsRow.firstChild){
             topPanelOptionsRow.removeChild(topPanelOptionsRow.firstChild)
         }
+
 
 
 
@@ -1242,7 +1246,7 @@ class PopupDocumentManager{
             belowContentCommentsDiv.style.paddingRight = `${mainPadding}px`
 
             this.updateMainDocumentCommentsSectionMargins()
-
+          
         }
 
 
@@ -1433,6 +1437,7 @@ class PopupDocumentManager{
 
     }
 
+
     populateSidebar(div, sidebarInfo) {
         removeAllChildren(div)
 
@@ -1544,7 +1549,6 @@ class PopupDocumentManager{
         removeAllChildren(div)
         if(!postNavPanelInfo)return
 
-
         const leftDiv = document.createElement('div')
         leftDiv.className = 'PostNavBarSide'
         leftDiv.style.justifyContent = 'flex-start'
@@ -1589,9 +1593,8 @@ class PopupDocumentManager{
         div.style.display = postNavPanelInfo.prev || postNavPanelInfo.next ? 'flex' : 'none'
 
 
+
     }
-
-
 
 
     addLinksToTopPanel(linksData,topTextColor,allDivs,dataObject,isRight){
@@ -1644,9 +1647,6 @@ class PopupDocumentManager{
                   linkNode = clone
                   dropdownMenuDiv.appendChild(clone); 
                 }
-
-
-
 
             }
 
@@ -1713,7 +1713,6 @@ class PopupDocumentManager{
         }
     }
 
-
     rightDocCenterCollagePressed = (e) => {
         e.stopPropagation()
 
@@ -1723,6 +1722,7 @@ class PopupDocumentManager{
         }
         
     }
+
 
     leftCopyButtonPressed = (e) => {
         e.stopPropagation()
@@ -1743,6 +1743,8 @@ class PopupDocumentManager{
             this.openCopyInfoPopup(noteData.copyInfo)
         }
     }
+
+
 
     closeAllExcept(except) {
         
@@ -1821,8 +1823,7 @@ class PopupDocumentManager{
     toggleSourceCode = (dontCloseOthers = false) => {
 
         if(!dontCloseOthers)this.closeAllExcept(this.toggleSourceCode)
-        
-
+         
         this.isLeftSourceCodeShowing = !this.isLeftSourceCodeShowing
         
         const buttonDiv = document.getElementById("CurrentDocumentSourceCodeButton")
@@ -1855,7 +1856,8 @@ class PopupDocumentManager{
         const buttonDiv = document.getElementById("RightDocumentSourceCodeButton")
   
         if(!this.isRightSourceCodeShowing) buttonDiv.classList.remove('selectedIcon')
-        else buttonDiv.classList.add('selectedIcon')        
+        else buttonDiv.classList.add('selectedIcon')
+
         buttonDiv.style.backgroundColor = this.isRightSourceCodeShowing ? 'rgb(72, 77, 233)' : 'transparent'
 
 
@@ -1931,7 +1933,7 @@ class PopupDocumentManager{
         g.readingManager.docWidth = docWidth
         const allDocumentsContainer = document.getElementById("AllDocumentsContainer")
 
- 
+    
         allDocumentsContainer.style.height = `${window.innerHeight - g.adminBarHeight}px`
         allDocumentsContainer.style.width = `${g.readingManager.isFullScreen ? screenWidth : docWidth * 2 + kMiddleGap}px`
         const oneDocumentContainer = document.getElementById("OneDocumentContainer")
@@ -1950,7 +1952,8 @@ class PopupDocumentManager{
 
         const currentDocumentBody = document.getElementById("CurrentDocumentBody")
 
-        if(g.readingManager.isFullScreen && g.readingManager.copyInfo){
+        if(g.readingManager.isFullScreen && g.readingManager.copyInfo
+        ){
             currentDocumentBody.style.width = `100%`
         }else{
             currentDocumentBody.style.width = '70%'
@@ -1961,6 +1964,7 @@ class PopupDocumentManager{
 
         const mainPresentationDiv = document.getElementById("CurrentDocumentMainDiv")
 
+        
          mainPresentationDiv.style.width = '100%'
 
         const fullScreenButton = document.getElementById("CurrentDocumentFullScreenButton")
@@ -1975,6 +1979,7 @@ class PopupDocumentManager{
 
 
         this.updateLeftDocumentPanels()
+
 
         this.updateSidebarVisibility()
 
@@ -2099,11 +2104,13 @@ class PopupDocumentManager{
     async updateConnectedDocumentsVisibility() {
         const allRightDocumentsContainer = document.getElementById("AllRightDocumentsContainer")
         
-        const screenWidth = window.innerWidth
+
+         const screenWidth = window.innerWidth
 
         const docWidth = g.readingManager.docWidth
         const rightDocLeft = docWidth + kMiddleGap
 
+   
         allRightDocumentsContainer.style.width = `${docWidth}px`
         allRightDocumentsContainer.style.left = `${rightDocLeft}px`
         allRightDocumentsContainer.style.display = !g.readingManager.isFullScreen ? 'flex' : 'none'
@@ -2135,6 +2142,9 @@ class PopupDocumentManager{
        
         }
 
+
+
+      
 
        
 
@@ -2210,21 +2220,18 @@ class PopupDocumentManager{
         const middleSpaceDiv = document.getElementById("middle-space-div")
         middleSpaceDiv.style.display = 'none'
 
+
     }
 
 
     getCurrentDocTopOffset() {
-    
+        
         if (g.readingManager.mainDocType === 'c') {
             return this.currentDocTopPanelShowing ? g.adminBarHeight + 50 : g.adminBarHeight
         }
 
-
-
         const parent = document.getElementById("CurrentDocument");
         const child = document.getElementById("CurrentDocumentMainDiv");
-
-
 
       
         const parentRect = parent.getBoundingClientRect();
@@ -2237,17 +2244,14 @@ class PopupDocumentManager{
 
 
     getRightDocTopOffset(noteData) {
-   
         if (noteData.docType === 'c') {
             return noteData.currentDocTopPanelShowing ? g.adminBarHeight + 50 : g.adminBarHeight
         }
-
         
         const parent = noteData.scrollDiv
         const child = getPresentationDivFrom(parent)
 
       
-
         const parentRect = parent.getBoundingClientRect();
         const childRect = child.getBoundingClientRect();
 
@@ -2260,7 +2264,6 @@ class PopupDocumentManager{
     //     return noteData.currentDocTopPanelShowing ? 50 : 0
     // }
 
-  
 
 
     toggleFlinksList = (dontCloseOthers = false) => {
@@ -2289,8 +2292,8 @@ class PopupDocumentManager{
             flinksListContainerDiv.style.right = '0px'
         }else if(g.isMobileMode){
             if(leftOffset >=0){
-               flinksListContainerDiv.style.left = ''
-               flinksListContainerDiv.style.right = '0px'
+                flinksListContainerDiv.style.left = ''
+                flinksListContainerDiv.style.right = '0px'
             }else{
                 flinksListContainerDiv.style.left = `${-leftOffset}px`
                 flinksListContainerDiv.style.right = ''
@@ -2299,7 +2302,7 @@ class PopupDocumentManager{
             flinksListContainerDiv.style.left = `${g.readingManager.docWidth + kMiddleGap / 2 - flinksContainerWidth / 2}px`
             flinksListContainerDiv.style.right = ''
         }
-        
+
         const topRowContainer = document.getElementById("LinksListTopRow")
         
         
@@ -2316,6 +2319,7 @@ class PopupDocumentManager{
         originalLinksButton.style.display = flinksWereModified ? 'flex' : 'none'
         originalLinksRightSpacer.style.display = flinksWereModified ? 'flex' : 'none'
 
+
         const topRowLeftContainer = document.getElementById("LinksListTopRowLeftSortButtonContainer")
         const topRowRightContainer = document.getElementById("LinksListTopRowRightSortButtonContainer")
 
@@ -2328,6 +2332,7 @@ class PopupDocumentManager{
             topRowLeftContainer.classList.add("FlinksListSelectedSide")
 
         }
+
 
         flinksListContainerDiv.style.display = 'flex'
 
@@ -2364,7 +2369,7 @@ class PopupDocumentManager{
 
 
 
-         if(shouldShowTopRow){
+        if(shouldShowTopRow){
             removeAllChildren(topRowLeftContainer)
     
             const leftSortButton = createOneSVGIconComponent(topRowLeftContainer,g.iconsInfo.svgIcons.triangleIcon,'','LinksListSortButton')
@@ -2584,14 +2589,13 @@ class PopupDocumentManager{
 
         }
 
-
-
         this.limitFlinksScrollDivHeight(flinksListContainerDiv, flinksScrollDiv)
 
         this.isFlinksListOpen = true
 
 
     }
+
 
     // Old WebKit lays out flex children against the container's unclamped
     // content height when the container is only constrained by max-height,
@@ -2620,9 +2624,7 @@ class PopupDocumentManager{
         this.isFlinksListOpen = false
     }
 
-
-
-
+ 
     promotionButtonPressed = () => {
         this.openPromotionPopup()
     }
@@ -2693,8 +2695,7 @@ class PopupDocumentManager{
         openBtn.addEventListener('click', () => window.open(cleanUrl, '_blank'))
         commentsDiv.appendChild(openBtn)
     }
-
-
+    
 
     cleanCommentsDiv(commentsDiv) {
         if (!commentsDiv) return
@@ -2704,7 +2705,6 @@ class PopupDocumentManager{
     }
 
     getComments = async (commentsDiv, commentsUrl, commentsTitle, noCommentsMessage, listenersOwner, leaveCommentUrl, replyLabel, leaveCommentLabel, page = 1, loadMoreLabel = '') => {
-
         if (page === 1) {
             invalidateCacheForUrl(commentsUrl)
             listenersOwner.commentsDiv = commentsDiv
@@ -2846,7 +2846,7 @@ class PopupDocumentManager{
             })
             commentsDiv.appendChild(loadMoreBtn)
         }
-       
+        
 
 
     }
@@ -2946,7 +2946,7 @@ class PopupDocumentManager{
         const iframe = document.createElement('iframe')
         iframe.src = url
         iframe.className = 'swp-comment-popup-iframe'
-
+     
         popup.appendChild(iframe)
         overlay.appendChild(popup)
         overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove() })
@@ -2978,7 +2978,10 @@ class PopupDocumentManager{
 
         this.updateDocumentPanels(allDivs,this)
 
+
+
     }
+
 
     updateMainDocumentPadding = () => {
         const mainPresentationDiv = document.getElementById("CurrentDocumentMainDiv")
@@ -3001,13 +3004,13 @@ class PopupDocumentManager{
         const currentDocumentTopBar = document.getElementById("CurrentDocumentTopBar")
         currentDocumentTopBar.style.height = kLeftDivTop + 'px'
         currentDocumentTopBar.style.paddingLeft = `${mainPadding}px`
-        
+
         const belowContentCommentsDiv = document.getElementById("CurrentDocumentBelowContentComments")
         belowContentCommentsDiv.style.paddingLeft = `${mainPadding}px`
         belowContentCommentsDiv.style.paddingRight = `${mainPadding}px`
 
-
     }
+
 
     updateMainDocumentCommentsSectionMargins = () => {
         const belowContentCommentsDiv = document.getElementById("CurrentDocumentBelowContentComments")
@@ -3026,8 +3029,6 @@ class PopupDocumentManager{
 
     }
 
-
-
     updateRightDocumentPanels = (noteData) => {
         if(noteData.docType !== 'h')return
         
@@ -3039,13 +3040,14 @@ class PopupDocumentManager{
         const sandwichButtonDiv = document.getElementById("SandwichButton" + docId)
        
 
-
         const allDivs = {
             topPanel,
             dropdownMenuDiv,topPanelLogoLink,topPanelOptionsRow,sandwichButtonDiv
         }
 
         this.updateDocumentPanels(allDivs,noteData)
+
+      
 
     }
 
@@ -3059,6 +3061,8 @@ class PopupDocumentManager{
             dropdownMenuDiv,topPanelLogoLink,topPanelOptionsRow,sandwichButtonDiv
         } = allDivs
 
+
+  
 
         if(dataObject.currentDocTopPanelShowing){
 
@@ -3100,6 +3104,9 @@ class PopupDocumentManager{
         dropdownMenu.style.display = noteData.isShowingDropdownMenu ? 'flex' : 'none'
 
     }
+
+
+
 
 
 
@@ -3148,6 +3155,7 @@ class PopupDocumentManager{
                 image.style.width = '100%'
             }
             image.style.height = 'auto'
+            
 
            
         
@@ -3186,8 +3194,7 @@ class PopupDocumentManager{
         
         topPanelDiv.style.display = 'none'
         bottomPanelDiv.style.display = 'none'
-      
-        
+       
     }
 
 

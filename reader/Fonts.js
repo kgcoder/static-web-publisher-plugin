@@ -305,18 +305,27 @@ export function applyFonts(fonts = kFontRoleSets[0]) {
     }
 }
 
+// Turns any stored/incoming value into a currently-valid kFontRoleSets id, never throwing.
+// Handles both a since-deleted id and a legacy numeric index from before font sets had ids.
+export function resolveFontSetId(value) {
+    const found = typeof value === 'number' ? kFontRoleSets[value] : kFontRoleSets.find(s => s.id === value)
+    return found ? found.id : kFontRoleSets[0].id
+}
 
 export async function setFontSet(id, shouldSave = false) {
     const foundFontSet = kFontRoleSets.find(s => s.id === id)
-    const fontId = foundFontSet ? foundFontSet.id : kFontRoleSets[0].id    
+    const fontId = foundFontSet ? foundFontSet.id : kFontRoleSets[0].id
     applyFonts(kFontRoleSets.find(s => s.id === fontId))
     g.currentFontSet = fontId
 
     if (shouldSave) {
         g.hostAdapter.saveSetting('fontSet', fontId)
     }
-    
+
     g.readingManager.applyFlinksOnTheLeft()
 
     g.readingManager.applyFlinksOnTheRight()
+
 }
+
+

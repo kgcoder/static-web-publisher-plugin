@@ -15,7 +15,6 @@ https://github.com/kgcoder/readers-web-specs
 import { getXMLFromHeaderInfo } from "../HeaderMethods.js"
 import { escapeXml, getBaseFromHtmlDoc, getBaseOuterXML, getH1TitleFromDoc, getProtocolAndDomainFromUrl, removeTitleFromContent, sanitizeHtml, showToastMessage, stripHtmlTags } from "../helpers.js"
 
-
 export function getSelectorsFromConfigString(configString){
     const actions = getActionsFromConfigString(configString)
 
@@ -73,9 +72,9 @@ export function getActionsFromConfigString(configString){
     }
     
 
-    const _cAction = actions.find(item => item.action === 'c')
-    const selector = _cAction != null ? _cAction.text : undefined
-
+    const selectorAction = actions.find(item => item.action === 'c')
+    const selector = selectorAction ? selectorAction.text : undefined
+    
     if (!selector) {
         showToastMessage('Something is wrong with the parsing config of the URL')
         return false
@@ -202,6 +201,7 @@ export function parseHtmlStringWithConfig(htmlString,configString,cleanUrl,proto
     if (headerInfo.h1Text) headerInfo.h1Text = stripHtmlTags(headerInfo.h1Text)
     if (headerInfo.authorName) headerInfo.authorName = stripHtmlTags(headerInfo.authorName)
     if (headerInfo.publicationDate) headerInfo.publicationDate = stripHtmlTags(headerInfo.publicationDate)
+
 
     const dataObject = {html:content,headerInfo,base,xmlString,connectedDocsData:[],type:'text',url:`${cleanUrl}#pr=${configString}`,docSubtype:3,docType:'h'}
 
