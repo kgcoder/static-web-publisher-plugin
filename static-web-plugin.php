@@ -330,6 +330,8 @@ add_action('wp_enqueue_scripts', function () {
     $dist_path   = plugin_dir_path(__FILE__) . 'dist/';
 
     wp_enqueue_style('swp-reader',      $reader_url . 'reader.css',       [], filemtime($reader_path . 'reader.css'));
+    wp_enqueue_style('swp-adapter',      $adapter_url . 'reader.css',       [], filemtime($adapter_path . 'reader.css'));
+
     wp_enqueue_style('swp-export-page', $reader_url . 'ExportPage.css',   [], filemtime($reader_path . 'ExportPage.css'));
     wp_enqueue_style('swp-page-info',   $reader_url . 'PageInfo.css',     [], filemtime($reader_path . 'PageInfo.css'));
 

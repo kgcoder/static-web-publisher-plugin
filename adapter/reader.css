@@ -1,0 +1,27 @@
+html {
+    overflow-y: hidden !important;
+}
+
+@media screen and (max-width: 600px) {
+    #wpadminbar {
+        position: fixed !important;
+        top: 0 !important;
+    }
+}
+
+#ui-root {
+    display: block;
+    height: 100vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+#CurrentDocumentTopPanel{
+    display: flex;
+}
+
+
+#CurrentDocumentBottomPanel {
+    display: flex;
+}
+
