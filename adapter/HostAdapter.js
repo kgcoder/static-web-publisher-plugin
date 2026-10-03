@@ -26,6 +26,7 @@ export default class HostAdapter {
     
     mainDocumentTitleSpanId = "CurrentDocumentTitleSpan-rwp"
     mainDocumentInfoButtonId = "CurrentDocumentInfoButton-rwp"
+    currentDocumentCloseButtonId = "shouldn't-exist"
     
     shouldBlockCrossOriginCommentsRequests = true
     isPromotionalButtonSupported = true
