@@ -27,25 +27,22 @@ The admin JS/CSS in [includes/admin.js](../../includes/admin.js) and [includes/a
 
 ## Reader (Frontend)
 
-The [reader/](../../reader/) folder is code **copied from the RW Reader extension**. It provides the same Reader UI that the extension injects into the browser, so visitors without the extension can still experience the Reader's Web.
+The [reader/](../../reader/) folder is the shared [rw-reader-ui](https://github.com/kgcoder/rw-reader-ui) git submodule, also used by the RW Reader extension. It provides the same Reader UI that the extension injects into the browser, so visitors without the extension can still experience the Reader's Web. Its modules, global state (`g.*`) and document subtypes are documented in [reader/docs/architecture.md](../../reader/docs/architecture.md).
 
-The reader JS is authored as ES modules. In production (`WP_DEBUG` false) a minified bundle [dist/reader.bundle.min.js](../../dist/reader.bundle.min.js) is served; in development (`WP_DEBUG` true) the raw ES modules from [reader/](../../reader/) are served directly (entry point: [adapter/startup.js](../../adapter/startup.js), which wires up `HostAdapter` before loading [reader/readerStartUp.js](../../reader/readerStartUp.js)).
+The reader JS is authored as ES modules. In production (`WP_DEBUG` false) a minified bundle [dist/reader.bundle.min.js](../../dist/reader.bundle.min.js) is served; in development (`WP_DEBUG` true) the raw ES modules are served directly. The entry point is [adapter/startup.js](../../adapter/startup.js), which sets `g.hostAdapter` and imports [reader/readerStartUp.js](../../reader/readerStartUp.js). The reader JS is injected as `type="module"`.
 
-[reader/](../../reader/) never talks to the host environment directly (no `window.localStorage`, no direct network-proxy calls). Instead it calls `g.hostAdapter`, an interface implemented per-project in [adapter/HostAdapter.js](../../adapter/HostAdapter.js): `fetchWebPage(url, options)` for cross-origin fetches (via this plugin's `/sw-proxy/` endpoint) and `getSetting`/`saveSetting` for settings persistence (currently stubs here — this plugin has no per-visitor storage; see the comment in that file).
+## Adapter
 
-Contents:
+[reader/](../../reader/) never talks to the host environment directly. Instead it calls `g.hostAdapter`, whose interface is documented in [reader/docs/host-adapter.md](../../reader/docs/host-adapter.md). This plugin's implementation is [adapter/HostAdapter.js](../../adapter/HostAdapter.js):
 
-- **Entry:** [reader/readerStartUp.js](../../reader/readerStartUp.js) — detects embedded CDOC/CONDOC vs. embedded HDOC and routes to the appropriate parser and loader.
-- **Core managers:** `PopupDocumentManager.js`, `ReadingManager.js`, `NoteDivsMethods.js`, `CollageViewer.js`, `CollageDataLoader.js`, `PageInfoManager.js`, `ExportPageManager.js`.
-- **Parsers:** `parsers/HDOCParser.js`, `parsers/EmbHDOCParser.js`, `parsers/CDOCParser.js`, `parsers/CondocParser.js`, `parsers/HtmlPageParser.js`, `parsers/PlainTextParser.js`, `parsers/ParsingManager.js`.
-- **Models:** `models/FloatingLink.js`, `models/FLEnd.js`, `models/FLTextEnd.js`, `models/FLPointEnd.js`, `models/Line.js`, `models/Crosshair.js`, `models/ImageView.js`, `models/Viewport.js`.
-- **Utilities:** `helpers.js`, `constants.js`, `Globals.js`, `NetworkManager.js`, `KeyboardManager.js`, `HeaderMethods.js`, `MultipleLinksPopupManager.js`, `Icons.js`.
-- **Styles:** `reader.css`, `ExportPage.css`, `PageInfo.css`, `hdocStyles.css`, `themes/light.css`, `themes/dark.css`, `themes/sepia.css`, and styles for other themes.
-- **Third-party:** `dompurify/purify.es.mjs` (HTML sanitizer), `hashing/sha256-es/` (SHA-256 for floating link hashing).
+- `initReader()` runs on `DOMContentLoaded`. It sets `g.adminBarHeight`, detects an embedded CDOC/CONDOC (`#cdoc-source` / `#condoc-source`) or falls back to the embedded HDOC in the page, applies the admin-configured font set and loads the document.
+- `fetchWebPage(url, options)` goes through this plugin's `/sw-proxy/` endpoint.
+- `getSetting`/`saveSetting` are stubs: this plugin has no per-visitor storage (theme and font set are site-wide, see the comment in that file).
+- DOM ids use a `-rwp` suffix so they don't collide with the extension's reader when the extension takes over a page.
 
-Global state lives in [reader/Globals.js](../../reader/Globals.js): `g.pdm` (PopupDocumentManager), `g.readingManager`, `g.noteDivsManager`.
+Host-specific reader styles are in [adapter/reader.css](../../adapter/reader.css).
 
-The reader JS is injected as `type="module"`. A `window.vcReaderData` object is set before the module loads, containing `assetsUrl` (path to `reader/images/`) and `proxyUrl` (the `/sw-proxy/` endpoint URL).
+A `window.vcReaderData` object is set before the module loads, containing `assetsUrl` (path to `reader/images/`), `proxyUrl` (the `/sw-proxy/` endpoint URL), `fontSet` and `openInNewTabCommentsLabel`.
 
 ## Content Processing
 
