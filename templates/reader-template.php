@@ -84,7 +84,6 @@ if (!empty($stwbpb_connections_info)) {
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>document.documentElement.classList.add('js-enabled');</script>
 
     <title><?php echo esc_html($title); ?></title>
 
@@ -223,9 +222,12 @@ if (!empty($stwbpb_connections_info)) {
 
                     <div id="CurrentDocumentBottomBar" class="BottomBar"></div>
 
-                    <div id="CurrentDocumentPostNavBar" class="PostNavBar"<?php if ($stwbpb_doc_type !== 'HDOC') echo ' style="display:none"'; ?>><?php
-                    if ($stwbpb_doc_type === 'HDOC' && !empty($stwbpb_seo_panels['post_nav'])) {
-                        $stwbpb_pn = $stwbpb_seo_panels['post_nav'];
+                    <?php
+                    $stwbpb_pn = ($stwbpb_doc_type === 'HDOC' && !empty($stwbpb_seo_panels['post_nav'])) ? $stwbpb_seo_panels['post_nav'] : null;
+                    $stwbpb_pn_visible = $stwbpb_pn && (!empty($stwbpb_pn['prev']) || !empty($stwbpb_pn['next']));
+                    ?>
+                    <div id="CurrentDocumentPostNavBar" class="PostNavBar"<?php if ($stwbpb_pn_visible) echo ' style="display:flex"'; ?>><?php
+                    if ($stwbpb_pn) {
                         echo '<div class="PostNavBarSide" style="justify-content:flex-start">';
                         if (!empty($stwbpb_pn['prev'])) {
                             echo '<a href="' . esc_url($stwbpb_pn['prev']['href']) . '">' . esc_html($stwbpb_pn['prev']['title']) . '</a>';
