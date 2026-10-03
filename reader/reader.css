@@ -726,6 +726,15 @@ code {
     display: flex;
 }
 
+/* Old WebKit (iOS 12 Safari) ignores min-height:auto here and shrinks these
+   items to the scroll container's height, so content overlaps the elements below. */
+#CurrentDocumentInnerRow,
+.BelowContentComments,
+.BottomBar,
+.PostNavBar {
+    flex-shrink: 0;
+}
+
 #CurrentDocumentBody{
     display: flex;
     flex: 1;
