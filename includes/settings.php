@@ -125,6 +125,8 @@ function stwbpb_settings_page() {
                     <option value="standalone_doc" <?php selected($settings['post_mode'], 'standalone_doc'); ?>>Standalone document</option>
                 </select>
             </div>
+            <p class="description">Reader UI mode replaces your theme's templates, so code added directly to your theme's header.php or footer.php (for example, an analytics snippet) is not loaded on those pages. Add such code through the wp_head / wp_footer hooks instead, e.g. in your child theme's functions.php or with a code-snippets plugin. Plugins like Site Kit already do this.</p>
+            <div style="height:20px"></div>
 
             <div class="settings-option-div">
                 <label>Republishing policy: </label>

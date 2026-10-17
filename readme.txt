@@ -60,6 +60,12 @@ You can also place standalone `.hdoc`, `.cdoc`, and `.condoc` files directly in 
 
 Standard WordPress analytics tools work normally on Embedded HDOC and Reader UI pages. When the RW Reader extension is active and replaces the page UI, existing analytics scripts continue to run: page view events are already sent before the extension takes over, and session-level tracking continues uninterrupted.
 
+**Note:** Reader UI mode replaces your theme's templates, so code typed directly into your theme's `header.php` or `footer.php` does not run on Reader UI pages. Only code added through the `wp_head` / `wp_footer` hooks is included. Analytics plugins such as Site Kit already use these hooks. If you add a tracking snippet by hand, put it in your (child) theme's `functions.php` or a code-snippets plugin instead:
+
+`add_action('wp_footer', function () { ?>`
+`    <!-- your analytics snippet -->`
+`<?php });`
+
 For analytics code that needs to run **after the Reader UI is fully initialized**, the plugin dispatches a `swpReaderReady` event on `document`. You can listen for it in any custom script:
 
 `document.addEventListener('swpReaderReady', function(e) {`
@@ -113,7 +119,7 @@ Yes. The proxy at `/sw-proxy/` only fetches URLs that are explicitly listed as c
 
 = Can I use my existing analytics with this plugin? =
 
-Yes. Standard WordPress analytics tools work on all pages. On **Reader UI** pages they load via the normal WordPress head hooks. On **Embedded HDOC** pages visited through the RW Reader extension, analytics scripts initialize before the extension takes over the UI and continue tracking the session afterward. For analytics that need to run after the reader finishes rendering, listen for the `swpReaderReady` event on `document`.
+Yes. Standard WordPress analytics tools work on all pages. On **Reader UI** pages they load via the normal `wp_head` and `wp_footer` hooks. Code pasted directly into `header.php` or `footer.php` is skipped, so add it through `functions.php` or a plugin instead. On **Embedded HDOC** pages visited through the RW Reader extension, analytics scripts initialize before the extension takes over the UI and continue tracking the session afterward. For analytics that need to run after the reader finishes rendering, listen for the `swpReaderReady` event on `document`.
 
 = What is the difference between Embedded HDOC and Embedded HDOC (forced)? =
 
