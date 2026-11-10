@@ -99,7 +99,7 @@ function stwbpb_settings_page() {
 
             <h2>Main settings</h2>
    
-            <div id="removal-selectors-option" class="settings-option-div" style="display:block;">
+            <div id="removal-selectors-option" class="settings-option-div">
                 <label>Elements to remove (specify selectors separated by commas): </label>
                 <div class="spacerW10"></div>
                 <input class="single-text-input" type="text" name="stwbpb_settings[removal_selectors]" value="<?php echo esc_attr($settings['removal_selectors']); ?>" />
@@ -129,7 +129,6 @@ function stwbpb_settings_page() {
                 </select>
             </div>
             <p class="description">Reader UI mode replaces your theme's templates, so code added directly to your theme's header.php or footer.php (for example, an analytics snippet) is not loaded on those pages. Add such code through the wp_head / wp_footer hooks instead, e.g. in your child theme's functions.php or with a code-snippets plugin. Plugins like Site Kit already do this.</p>
-            <div style="height:20px"></div>
 
             <div class="settings-option-div">
                 <label>Republishing policy: </label>
@@ -141,7 +140,6 @@ function stwbpb_settings_page() {
                 </select>
             </div>
             <p class="description">This is the default for all posts and pages (individual posts can override it). Allowing republishing lets other Reader's Web sites host a stable copy of your content if the original page is moved or removed, so links to it don't break. "Implicitly allow" (the default) permits this without adding any tag to the document; "Explicitly allow" states the same permission in the document itself. You can revoke this permission at any time by asking a site hosting a copy to take it down. Choose "Prohibit" to opt out entirely.</p>
-            <div style="height:20px"></div>
             <div class="settings-option-div">
                 <label>Reader UI theme: </label>
                 <div class="spacerW10"></div>

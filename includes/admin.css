@@ -103,6 +103,50 @@ button:hover {
     /* justify-content: space-between; */
 }
 
+/* Fixed-width label column so every field starts at the same x position. */
+.settings-option-div > label {
+    flex: 0 0 260px;
+    line-height: 1.4;
+}
+
+/* Text inputs fill the rest of the row; selects get one common width
+   (matching the custom theme/font dropdowns built in admin.js). */
+.settings-option-div > input[type="text"] {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.settings-option-div > select {
+    width: 300px;
+    max-width: 100%;
+}
+
+.settings-option-div > input[type="checkbox"] {
+    margin: 0;
+}
+
+/* Field descriptions line up under the field, not under the label
+   (260px label + 10px spacer). */
+.settings-option-div + p.description {
+    margin: -4px 0 16px 270px;
+}
+
+@media (max-width: 782px) {
+    .settings-option-div {
+        flex-wrap: wrap;
+    }
+    .settings-option-div > label {
+        flex-basis: 100%;
+        margin-bottom: 4px;
+    }
+    .settings-option-div > .spacerW10 {
+        display: none;
+    }
+    .settings-option-div + p.description {
+        margin-left: 0;
+    }
+}
+
 .red-text{
     color:red;
 }
