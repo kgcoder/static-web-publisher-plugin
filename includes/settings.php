@@ -54,6 +54,9 @@ function stwbpb_settings_page() {
         'reader_ui_theme' => 'light',
         'reader_fontset' => 'default',
         'show_promotion_button' => false,
+        'show_rw_badge' => false,
+        'rw_badge_text' => STWBPB_RW_BADGE_DEFAULT_TEXT,
+        'rw_badge_popup_text' => STWBPB_RW_BADGE_DEFAULT_POPUP_TEXT,
         'show_post_nav' => false,
         'post_sidebar' => 'none',
         'page_sidebar' => 'none',
@@ -174,6 +177,24 @@ function stwbpb_settings_page() {
                 <label>Help promote Reader's Web by including a promo popup</label>
                 <div class="spacerW10"></div>
                 <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[show_promotion_button]" value="1" <?php echo !empty($settings['show_promotion_button']) ? 'checked' : ''; ?>/>
+            </div>
+
+            <div class="settings-option-div">
+                <label>Show a "This page is part of Reader's Web" link at the bottom of the content (Embedded HDOC (forced) mode only)</label>
+                <div class="spacerW10"></div>
+                <input class="single-checkbox-input" type="checkbox" name="stwbpb_settings[show_rw_badge]" value="1" <?php echo !empty($settings['show_rw_badge']) ? 'checked' : ''; ?>/>
+            </div>
+
+            <div class="settings-option-div">
+                <label>Text of that link: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[rw_badge_text]" value="<?php echo esc_attr($settings['rw_badge_text']); ?>" />
+            </div>
+
+            <div class="settings-option-div">
+                <label>Text in the popup: </label>
+                <div class="spacerW10"></div>
+                <input class="single-text-input" type="text" name="stwbpb_settings[rw_badge_popup_text]" value="<?php echo esc_attr($settings['rw_badge_popup_text']); ?>" />
             </div>
 
             <h2>Header info (pages)</h2>
@@ -550,6 +571,9 @@ function stwbpb_settings_init() {
         'page_mode' => 'none',
         'post_mode' => 'none',
         'republishing_policy' => 'implicit_allow',
+        'show_rw_badge' => false,
+        'rw_badge_text' => STWBPB_RW_BADGE_DEFAULT_TEXT,
+        'rw_badge_popup_text' => STWBPB_RW_BADGE_DEFAULT_POPUP_TEXT,
         'show_post_nav' => false,
         'post_sidebar' => array('sections' => array()),
     ));
@@ -576,6 +600,9 @@ function stwbpb_sanitize_settings($input) {
 
     $sanitized['show_promotion_button'] = boolval($input['show_promotion_button'] ?? false);
     $sanitized['show_post_nav'] = boolval($input['show_post_nav'] ?? false);
+    $sanitized['show_rw_badge'] = boolval($input['show_rw_badge'] ?? false);
+    $sanitized['rw_badge_text']       = isset($input['rw_badge_text'])       ? sanitize_text_field($input['rw_badge_text'])       : '';
+    $sanitized['rw_badge_popup_text'] = isset($input['rw_badge_popup_text']) ? sanitize_text_field($input['rw_badge_popup_text']) : '';
 
     $sanitized['removal_selectors'] = isset($input['removal_selectors']) ? sanitize_text_field($input['removal_selectors']) : '';
 

@@ -17,6 +17,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
 
+require_once plugin_dir_path(__FILE__) . 'includes/rw-badge.php';
 require_once plugin_dir_path(__FILE__) . 'includes/page-methods.php';
 require_once plugin_dir_path(__FILE__) . 'includes/comments-json.php';
 require_once plugin_dir_path(__FILE__) . 'includes/comment-form.php';
@@ -94,6 +95,8 @@ function stwbpb_activate() {
         $settings['error_invalid_email']       = 'Please enter a valid email address.';
         $settings['error_comment_required']    = 'Please enter a comment.';
         $settings['error_save_failed']         = 'Could not save your comment. Please try again.';
+        $settings['rw_badge_text']             = STWBPB_RW_BADGE_DEFAULT_TEXT;
+        $settings['rw_badge_popup_text']       = STWBPB_RW_BADGE_DEFAULT_POPUP_TEXT;
         $settings['top_panel']['main_title']   = get_bloginfo('name');
         $settings['top_panel']['main_link']    = home_url();
 
@@ -273,6 +276,9 @@ add_filter('the_content', function($content) {
         if ($post && stwbpb_request_matches_post($post)) {
             if (stwbpb_get_doc_effective_display_mode($post) === 'none') {
                 return $content;
+            }
+            if (is_array($settings) && stwbpb_should_show_rw_badge($post, $settings)) {
+                $content .= stwbpb_get_rw_badge_html($settings);
             }
             return '<div id="hdoc-content">' . $content . '</div>';
         }

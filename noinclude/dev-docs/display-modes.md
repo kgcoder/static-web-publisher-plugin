@@ -5,7 +5,7 @@ Each post or page can be served in one of five modes, configurable globally in S
 | Mode | Behaviour |
 |------|-----------|
 | `embedded_hdoc` | Regular WordPress HTML page with `#hdoc-content` wrapper and `#hdoc-data` JSON injected into the footer. Compatible clients detect the embedded HDOC automatically. Rendered as an HDOC only when it is loaded as a connected document on the right side. |
-| `embedded_hdoc_forced` | Same as above but the `"forced": true` flag in the JSON tells the extension to always render as HDOC, even when the page is the main page shown on the left side. |
+| `embedded_hdoc_forced` | Same as above but the `"forced": true` flag in the JSON tells the extension to always render as HDOC, even when the page is the main page shown on the left side. If `show_rw_badge` is enabled, a "This page is part of Reader's Web" link (class `hdoc-remove`) is appended to the bottom of the content; see `includes/rw-badge.php`. |
 | `doc_in_reader` | WordPress serves the full Reader UI template instead of the regular theme. The reader JS loads the embedded doc content directly but also uses `#hdoc-content` and `#hdoc-data` so the extension can extract useful information and show it in its own UI. |
 | `standalone_doc` | WordPress serves the raw document (HDOC/CDOC/CONDOC) at the post's URL with `Content-Type: text/plain`. |
 | `none` | The page is left completely untouched: no `#hdoc-content` wrapper, no `#hdoc-data` JSON, no reader template or assets. Regular WordPress rendering only. |
