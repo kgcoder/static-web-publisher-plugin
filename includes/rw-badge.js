@@ -46,7 +46,9 @@
         link.className = 'stwbpb-rw-badge-popup-link';
         link.href = STORE_URL;
         link.target = '_blank';
-        link.rel = 'noopener';
+        // nofollow: search engines must not treat this badge link (shown on every
+        // site using the plugin) as an endorsement / widget link scheme.
+        link.rel = 'noopener nofollow';
         link.textContent = 'Get RW Reader for Chrome';
 
         popup.appendChild(closeBtn);
