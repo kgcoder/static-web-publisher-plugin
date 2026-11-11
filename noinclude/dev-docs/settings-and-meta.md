@@ -20,7 +20,9 @@ Connection URLs are cached in transients (`swp_connections_{post_id}`) and inval
 
 Stored as a PHP array in the `stwbpb_settings` WordPress option.
 
-Key fields: `page_mode`, `post_mode`, `republishing_policy` (`implicit_allow` / `explicit_allow` / `prohibit`; default `implicit_allow`), `page_author_name`, `page_publish_date`, `post_author_name`, `post_publish_date`, `removal_selectors`, `side_panel_on_the_left`, `comments_title`, `no_comments_message`, `reply_button_label`, `leave_comment_label`, `top_panel` (main_link, main_title, logo_url, links[]), `bottom_panel` (bottom_message, sections[]), `show_promotion_button`, `show_rw_badge` (default false), `rw_badge_text`, `rw_badge_popup_text` (both prefilled on first activation and defaulted via `STWBPB_RW_BADGE_DEFAULT_*` constants in `includes/rw-badge.php`).
+Key fields: `page_mode`, `post_mode`, `republishing_policy` (`implicit_allow` / `explicit_allow` / `prohibit`; default `implicit_allow`), `page_author_name`, `page_publish_date`, `post_author_name`, `post_publish_date`, `removal_selectors`, `side_panel_on_the_left`, `comments_title`, `no_comments_message`, `reply_button_label`, `leave_comment_label`, `top_panel` (main_link, main_title, logo_url, links[]), `bottom_panel` (bottom_message, sections[]), `show_promotion_button`, `show_rw_badge` (default false), `rw_badge_text`, `rw_badge_popup_text`.
+
+User-editable UI texts (comment labels/messages, badge texts) default to `STWBPB_<KEY>_DEFAULT` constants in `includes/default-texts.php`; `stwbpb_get_default_texts()` lists them. An empty saved value means "use the default": always read them with `stwbpb_get_text($settings, $key)`, and the settings page shows the default in place of an empty value.
 
 ## Republishing Policy
 

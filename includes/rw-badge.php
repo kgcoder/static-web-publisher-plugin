@@ -9,9 +9,6 @@ if (!defined('ABSPATH')) {
 // The extension's store URL is deliberately NOT in the page markup (so search
 // engines don't see it); rw-badge.js creates the link only when the popup opens.
 
-define('STWBPB_RW_BADGE_DEFAULT_TEXT', "This page is part of Reader's Web");
-define('STWBPB_RW_BADGE_DEFAULT_POPUP_TEXT', "This page is part of Reader's Web. To view it properly, install the RW Reader extension and reload this page.");
-
 function stwbpb_should_show_rw_badge($post, $settings) {
     if (empty($settings['show_rw_badge'])) return false;
     if (!$post) return false;
@@ -20,8 +17,8 @@ function stwbpb_should_show_rw_badge($post, $settings) {
 }
 
 function stwbpb_get_rw_badge_html($settings) {
-    $text = !empty($settings['rw_badge_text']) ? $settings['rw_badge_text'] : STWBPB_RW_BADGE_DEFAULT_TEXT;
-    $popup_text = !empty($settings['rw_badge_popup_text']) ? $settings['rw_badge_popup_text'] : STWBPB_RW_BADGE_DEFAULT_POPUP_TEXT;
+    $text = stwbpb_get_text($settings, 'rw_badge_text');
+    $popup_text = stwbpb_get_text($settings, 'rw_badge_popup_text');
 
     // Kept in sync manually with extensionLogo in reader/Icons.js (clipPath id
     // renamed so it can't collide with anything on the theme's page).

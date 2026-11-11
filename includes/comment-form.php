@@ -24,13 +24,13 @@ function stwbpb_render_comment_form($post_id, $parent_id, $error, $submitted) {
     $default_body  = $submitted['comment'] ?? '';
 
     $cf_settings               = get_option('stwbpb_settings', []);
-    $form_title                = !empty($cf_settings['form_title'])                ? $cf_settings['form_title']                : 'Leave a comment';
-    $replying_to_label         = !empty($cf_settings['replying_to_label'])         ? $cf_settings['replying_to_label']         : 'Replying to %s';
-    $commenting_on_label       = !empty($cf_settings['commenting_on_label'])       ? $cf_settings['commenting_on_label']       : 'Commenting on: %s';
-    $name_label                = !empty($cf_settings['name_label'])                ? $cf_settings['name_label']                : 'Name';
-    $email_label               = !empty($cf_settings['email_label'])               ? $cf_settings['email_label']               : 'Email';
-    $comment_label             = !empty($cf_settings['comment_label'])             ? $cf_settings['comment_label']             : 'Comment';
-    $submit_button_label       = !empty($cf_settings['submit_button_label'])       ? $cf_settings['submit_button_label']       : 'Post comment';
+    $form_title                = stwbpb_get_text($cf_settings, 'form_title');
+    $replying_to_label         = stwbpb_get_text($cf_settings, 'replying_to_label');
+    $commenting_on_label       = stwbpb_get_text($cf_settings, 'commenting_on_label');
+    $name_label                = stwbpb_get_text($cf_settings, 'name_label');
+    $email_label               = stwbpb_get_text($cf_settings, 'email_label');
+    $comment_label             = stwbpb_get_text($cf_settings, 'comment_label');
+    $submit_button_label       = stwbpb_get_text($cf_settings, 'submit_button_label');
 
     $nonce = wp_create_nonce('swp_comment_form');
 
@@ -156,16 +156,16 @@ button[type="submit"]:hover { background: #111; }
 
 function stwbpb_process_comment_form($post_id, $parent_id) {
     $cf_settings               = get_option('stwbpb_settings', []);
-    $submitted_title           = !empty($cf_settings['submitted_title'])           ? $cf_settings['submitted_title']           : 'Comment submitted';
-    $thank_you_message         = !empty($cf_settings['thank_you_message'])         ? $cf_settings['thank_you_message']         : 'Thank you for your comment!';
-    $awaiting_approval_message = !empty($cf_settings['awaiting_approval_message']) ? $cf_settings['awaiting_approval_message'] : 'It will appear once approved.';
-    $error_security            = !empty($cf_settings['error_security'])            ? $cf_settings['error_security']            : 'Security check failed. Please try again.';
-    $error_closed              = !empty($cf_settings['error_closed'])              ? $cf_settings['error_closed']              : 'Commenting is closed for this post.';
-    $error_invalid_parent      = !empty($cf_settings['error_invalid_parent'])      ? $cf_settings['error_invalid_parent']      : 'Invalid parent comment.';
-    $error_name_required       = !empty($cf_settings['error_name_required'])       ? $cf_settings['error_name_required']       : 'Please enter your name.';
-    $error_invalid_email       = !empty($cf_settings['error_invalid_email'])       ? $cf_settings['error_invalid_email']       : 'Please enter a valid email address.';
-    $error_comment_required    = !empty($cf_settings['error_comment_required'])    ? $cf_settings['error_comment_required']    : 'Please enter a comment.';
-    $error_save_failed         = !empty($cf_settings['error_save_failed'])         ? $cf_settings['error_save_failed']         : 'Could not save your comment. Please try again.';
+    $submitted_title           = stwbpb_get_text($cf_settings, 'submitted_title');
+    $thank_you_message         = stwbpb_get_text($cf_settings, 'thank_you_message');
+    $awaiting_approval_message = stwbpb_get_text($cf_settings, 'awaiting_approval_message');
+    $error_security            = stwbpb_get_text($cf_settings, 'error_security');
+    $error_closed              = stwbpb_get_text($cf_settings, 'error_closed');
+    $error_invalid_parent      = stwbpb_get_text($cf_settings, 'error_invalid_parent');
+    $error_name_required       = stwbpb_get_text($cf_settings, 'error_name_required');
+    $error_invalid_email       = stwbpb_get_text($cf_settings, 'error_invalid_email');
+    $error_comment_required    = stwbpb_get_text($cf_settings, 'error_comment_required');
+    $error_save_failed         = stwbpb_get_text($cf_settings, 'error_save_failed');
 
     // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Verified with wp_verify_nonce.
     $nonce = isset($_POST['swp_nonce']) ? wp_unslash($_POST['swp_nonce']) : '';

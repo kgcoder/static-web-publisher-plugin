@@ -17,6 +17,7 @@ if (!defined('ABSPATH')) {
 }
 
 require_once plugin_dir_path(__FILE__) . 'includes/rw-badge.php';
+require_once plugin_dir_path(__FILE__) . 'includes/default-texts.php';
 require_once plugin_dir_path(__FILE__) . 'includes/page-methods.php';
 require_once plugin_dir_path(__FILE__) . 'includes/comments-json.php';
 require_once plugin_dir_path(__FILE__) . 'includes/comment-form.php';
@@ -71,31 +72,6 @@ function stwbpb_activate() {
     $logo_url = trim($top_panel['logo_url']);
 
     if ($main_link === '' && $main_title === '' && $logo_url === '') {
-        $settings['comments_title']            = 'Comments';
-        $settings['no_comments_message']       = 'No comments yet';
-        $settings['reply_button_label']        = 'Reply';
-        $settings['leave_comment_label']       = 'Leave a comment';
-        $settings['form_title']                = 'Leave a comment';
-        $settings['replying_to_label']         = 'Replying to %s';
-        $settings['commenting_on_label']       = 'Commenting on: %s';
-        $settings['load_more_comments_label']  = 'Load more comments';
-        $settings['open_in_new_tab_label']     = 'Open in a new tab to view comments';
-        $settings['name_label']                = 'Name';
-        $settings['email_label']               = 'Email';
-        $settings['comment_label']             = 'Comment';
-        $settings['submit_button_label']       = 'Post comment';
-        $settings['submitted_title']           = 'Comment submitted';
-        $settings['thank_you_message']         = 'Thank you for your comment!';
-        $settings['awaiting_approval_message'] = 'It will appear once approved.';
-        $settings['error_security']            = 'Security check failed. Please try again.';
-        $settings['error_closed']              = 'Commenting is closed for this post.';
-        $settings['error_invalid_parent']      = 'Invalid parent comment.';
-        $settings['error_name_required']       = 'Please enter your name.';
-        $settings['error_invalid_email']       = 'Please enter a valid email address.';
-        $settings['error_comment_required']    = 'Please enter a comment.';
-        $settings['error_save_failed']         = 'Could not save your comment. Please try again.';
-        $settings['rw_badge_text']             = STWBPB_RW_BADGE_DEFAULT_TEXT;
-        $settings['rw_badge_popup_text']       = STWBPB_RW_BADGE_DEFAULT_POPUP_TEXT;
         $settings['top_panel']['main_title']   = get_bloginfo('name');
         $settings['top_panel']['main_link']    = home_url();
 
@@ -358,9 +334,7 @@ add_action('wp_enqueue_scripts', function () {
     }
     wp_enqueue_script('swp-reader-js', $js_url, [], $js_ver, false);
 
-    $open_in_new_tab_comments_label = !empty($settings['open_in_new_tab_label'])
-        ? $settings['open_in_new_tab_label']
-        : 'Open in a new tab to view comments';
+    $open_in_new_tab_comments_label = stwbpb_get_text($settings, 'open_in_new_tab_label');
 
     wp_add_inline_script('swp-reader-js', sprintf(
         'window.vcReaderData = { assetsUrl: %s, proxyUrl: %s, fontSet: %s, openInNewTabCommentsLabel: %s };',

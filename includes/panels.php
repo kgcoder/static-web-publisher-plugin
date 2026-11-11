@@ -18,11 +18,11 @@ function stwbpb_get_panels($post) {
         $settings = array();
     }
 
-    $comments_title = $settings['comments_title'] ?? '';
-    $no_comments_message = $settings['no_comments_message'] ?? '';
-    $reply_button_label = $settings['reply_button_label'] ?? '';
-    $leave_comment_label = $settings['leave_comment_label'] ?? '';
-    $load_more_comments_label = $settings['load_more_comments_label'] ?? '';
+    $comments_title = stwbpb_get_text($settings, 'comments_title');
+    $no_comments_message = stwbpb_get_text($settings, 'no_comments_message');
+    $reply_button_label = stwbpb_get_text($settings, 'reply_button_label');
+    $leave_comment_label = stwbpb_get_text($settings, 'leave_comment_label');
+    $load_more_comments_label = stwbpb_get_text($settings, 'load_more_comments_label');
 
 
     $top_panel = (isset($settings['top_panel']) && is_array($settings['top_panel'])) ? $settings['top_panel'] : array();
