@@ -11,6 +11,13 @@
     gap: 0.5em;
     
     cursor: pointer;
+    text-decoration: none;
+    border-bottom:none;
+}
+
+
+.stwbpb-rw-badge-link:hover {
+    text-decoration: underline;
 }
 
 
